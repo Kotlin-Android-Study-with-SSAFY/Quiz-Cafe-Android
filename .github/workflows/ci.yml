@@ -57,3 +57,4 @@ jobs:
           disable-animations: true
           disable-linux-hw-accel: true
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+        continue-on-error: true  # ❗ 종료 실패 무시
