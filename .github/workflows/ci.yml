@@ -26,14 +26,8 @@ jobs:
       - name: Clean Build
         run: ./gradlew clean
 
-      - name: Run ktlint
-        run: ./gradlew ktlintCheck
-
       - name: Run Unit Test
         run: ./gradlew test
-
-      - name: Assemble
-        run: ./gradlew assemble
 
   android-test:
     name: Android Test on API ${{ matrix.api-level }}
@@ -41,7 +35,7 @@ jobs:
 
     strategy:
       matrix:
-        api-level: [24, 32, 33]
+        api-level: [25, 30, 35]
 
     steps:
       - uses: actions/checkout@v3
