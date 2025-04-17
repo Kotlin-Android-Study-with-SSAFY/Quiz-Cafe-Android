@@ -1,0 +1,40 @@
+[
+  {
+    "name": "⚙\uFE0F Setting",
+    "color": "a2eeef",
+    "description": "개발 환경 세팅"
+  },
+  {
+    "name": "✨ Feature",
+    "color": "a2eeef",
+    "description": "기능 개발"
+  },
+  {
+    "name": "🌏 Deploy",
+    "color": "C2E0C6",
+    "description": "배포 관련"
+  },
+  {
+    "name": "✅ Test",
+    "color": "ccffc4",
+    "description": "test 관련(storybook, jest...)"
+  },
+  {
+    "name": "🔨 Refactor",
+    "color": "f29a4e",
+    "description": "코드 리팩토링"
+  },
+  {
+    "name": "📃 Docs",
+    "color": "1D76DB",
+    "description": "문서 작성 및 수정 (README.md 등)"
+  },{
+  "name": "🐞 Bug",
+  "color": "d73a4a",
+  "description": "버그 제보 및 수정"
+  },{
+  "name": "1\uFE0F⃣  Ver 1",
+  "color": "c5def5",
+  "description": "Version 1 개발"
+  }
+]
