@@ -1,19 +1,10 @@
 package com.android.quizcafe.core.designsystem
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,9 +25,7 @@ fun QuizCafeButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary
-        ),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
         contentPadding = contentPadding,
         content = content,
     )
@@ -51,22 +40,15 @@ fun QuizCafeButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
 ) {
     QuizCafeButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
-            ButtonDefaults.ButtonWithIconContentPadding
-        } else {
-            ButtonDefaults.ContentPadding
-        }
+        contentPadding = if (leadingIcon != null) ButtonDefaults.ButtonWithIconContentPadding else ButtonDefaults.ContentPadding
     ) {
-        QuizCafeButtonContent(
-            text = text,
-            leadingIcon = leadingIcon,
-        )
+        QuizCafeButtonContent(text = text, leadingIcon = leadingIcon)
     }
 }
 
@@ -85,18 +67,11 @@ fun QuizCafeOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ),
+        colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.onBackground),
         border = BorderStroke(
             width = QuizCafeButtonDefaults.OutlinedButtonBorderWidth,
-            color = if (enabled) {
-                MaterialTheme.colorScheme.outline
-            } else {
-                MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA
-                )
-            }
+            color = if (enabled) MaterialTheme.colorScheme.outline
+            else MaterialTheme.colorScheme.onSurface.copy(alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA)
         ),
         contentPadding = contentPadding,
         content = content,
@@ -112,22 +87,15 @@ fun QuizCafeOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
 ) {
     QuizCafeOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        contentPadding = if (leadingIcon != null) {
-            ButtonDefaults.ButtonWithIconContentPadding
-        } else {
-            ButtonDefaults.ContentPadding
-        }
+        contentPadding = if (leadingIcon != null) ButtonDefaults.ButtonWithIconContentPadding else ButtonDefaults.ContentPadding
     ) {
-        QuizCafeButtonContent(
-            text = text,
-            leadingIcon = leadingIcon,
-        )
+        QuizCafeButtonContent(text = text, leadingIcon = leadingIcon)
     }
 }
 
@@ -145,9 +113,7 @@ fun QuizCafeTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
+        colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.onPrimary),
         content = content
     )
 }
@@ -161,17 +127,14 @@ fun QuizCafeTextButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
 ) {
     QuizCafeTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
     ) {
-        QuizCafeButtonContent(
-            text = text,
-            leadingIcon = leadingIcon,
-        )
+        QuizCafeButtonContent(text = text, leadingIcon = leadingIcon)
     }
 }
 
@@ -181,21 +144,13 @@ fun QuizCafeTextButton(
 @Composable
 private fun QuizCafeButtonContent(
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: (@Composable () -> Unit)? = null,
 ) {
-    if (leadingIcon != null) {
-        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
-            leadingIcon()
-        }
+    leadingIcon?.let {
+        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) { it() }
     }
     Box(
-        Modifier.padding(
-            start = if (leadingIcon != null) {
-                ButtonDefaults.IconSpacing
-            } else {
-                0.dp
-            }
-        )
+        Modifier.padding(start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp)
     ) {
         text()
     }
@@ -209,7 +164,7 @@ object QuizCafeButtonDefaults {
     val OutlinedButtonBorderWidth = 1.dp
 }
 
-// -------- 미리보기 --------
+// -------- Preview Code --------
 
 @Preview
 @Composable
@@ -222,16 +177,11 @@ fun PreviewQuizCafeButton() {
 @Preview
 @Composable
 fun PreviewQuizCafeButtonWithIcon() {
-    QuizCafeButton(
-        onClick = {},
-        text = { Text("아이콘 버튼") },
-        leadingIcon = {
-            Icon(
-                imageVector = androidx.compose.material.icons.Icons.Default.Favorite,
-                contentDescription = null
-            )
-        }
-    )
+    QuizCafeButton(onClick = {}, text = { Text("아이콘 버튼") }, leadingIcon = {
+        Icon(
+            imageVector = Icons.Default.Favorite, contentDescription = null
+        )
+    })
 }
 
 @Preview
