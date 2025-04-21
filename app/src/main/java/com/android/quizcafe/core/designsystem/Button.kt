@@ -27,20 +27,21 @@ import androidx.compose.ui.unit.dp
  * @param onClick 버튼 클릭 이벤트
  * @param modifier Modifier를 통해 크기/마진 조절
  * @param enabled 버튼 활성화 여부
- * @param text 텍스트 컴포저블. 없으면 아이콘만 있는 버튼으로 동작
- * @param leadingIcon 텍스트 앞 아이콘. 없으면 텍스트만 표시됨
- * @param contentPadding 콘텐츠 패딩. 기본값은 아이콘 유무에 따라 자동 결정됨
+ * @param text 텍스트 컴포저블 (필수)
+ * @param leadingIcon 텍스트 앞에 위치할 아이콘 (옵션)
+ * @param contentPadding 콘텐츠 패딩
  */
 @Composable
 fun QuizCafeButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: (@Composable () -> Unit)? = null,
+    text: @Composable () -> Unit,
     leadingIcon: (@Composable () -> Unit)? = null,
-    contentPadding: PaddingValues = when {
-        leadingIcon != null && text != null -> ButtonDefaults.ButtonWithIconContentPadding
-        else -> ButtonDefaults.ContentPadding
+    contentPadding: PaddingValues = if (leadingIcon != null) {
+        ButtonDefaults.ButtonWithIconContentPadding
+    } else {
+        ButtonDefaults.ContentPadding
     }
 ) {
     Button(
@@ -97,7 +98,7 @@ fun QuizCafeTextButton(
         modifier = modifier,
         enabled = enabled,
         colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.primary // 또는 onBackground
+            contentColor = MaterialTheme.colorScheme.primary
         ),
         content = content
     )
@@ -108,7 +109,7 @@ fun QuizCafeTextButton(
  */
 @Composable
 private fun QuizCafeButtonContent(
-    text: (@Composable () -> Unit)?,
+    text: @Composable () -> Unit,
     leadingIcon: (@Composable () -> Unit)?,
 ) {
     Row(
@@ -120,12 +121,10 @@ private fun QuizCafeButtonContent(
             }
         }
 
-        text?.let {
-            Box(
-                Modifier.padding(start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp)
-            ) {
-                it()
-            }
+        Box(
+            Modifier.padding(start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp)
+        ) {
+            text()
         }
     }
 }
@@ -154,14 +153,6 @@ fun PreviewQuizCafeButton_IconWithText() {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewQuizCafeButton_IconOnly() {
-    QuizCafeButton(onClick = {}, text = null, leadingIcon = {
-        Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
-    })
-}
-
-@Preview(showBackground = true)
-@Composable
 fun PreviewQuizCafeOutlinedButton() {
     QuizCafeOutlinedButton(onClick = {}) {
         Text("외곽선 버튼")
@@ -175,4 +166,3 @@ fun PreviewQuizCafeTextButton() {
         Text("텍스트 버튼")
     }
 }
-
