@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.designsystem
+package com.android.quizcafe.core.designsystem.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
