@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 /**
  * QuizCafe의 기본 버튼입니다.
@@ -140,29 +141,41 @@ object QuizCafeButtonDefaults {
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuizCafeButton_TextOnly() {
-    QuizCafeButton(onClick = {}, text = { Text("기본 버튼") })
+    QuizCafeTheme {
+        QuizCafeButton(onClick = {}, text = { Text("기본 버튼") })
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuizCafeButton_IconWithText() {
-    QuizCafeButton(onClick = {}, text = { Text("아이콘 버튼") }, leadingIcon = {
-        Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
-    })
+    QuizCafeTheme {
+        QuizCafeButton(
+            onClick = {},
+            text = { Text("아이콘 버튼") },
+            leadingIcon = {
+                Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+            }
+        )
+    }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuizCafeOutlinedButton() {
-    QuizCafeOutlinedButton(onClick = {}) {
-        Text("외곽선 버튼")
+    QuizCafeTheme {
+        QuizCafeOutlinedButton(onClick = {}) {
+            Text("외곽선 버튼")
+        }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewQuizCafeTextButton() {
-    QuizCafeTextButton(onClick = {}) {
-        Text("텍스트 버튼")
+    QuizCafeTheme {
+        QuizCafeTextButton(onClick = {}) {
+            Text("텍스트 버튼")
+        }
     }
 }
