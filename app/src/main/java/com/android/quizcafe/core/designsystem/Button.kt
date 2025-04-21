@@ -150,13 +150,9 @@ fun PreviewQuizCafeButton_TextOnly() {
 @Composable
 fun PreviewQuizCafeButton_IconWithText() {
     QuizCafeTheme {
-        QuizCafeButton(
-            onClick = {},
-            text = { Text("아이콘 버튼") },
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
-            }
-        )
+        QuizCafeButton(onClick = {}, text = { Text("아이콘 버튼") }, leadingIcon = {
+            Icon(imageVector = Icons.Default.Favorite, contentDescription = null)
+        })
     }
 }
 
