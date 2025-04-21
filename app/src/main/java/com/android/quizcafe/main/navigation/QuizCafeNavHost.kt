@@ -18,18 +18,19 @@ fun QuizCafeNavHost(
 ) {
     val navController = rememberNavController()
     NavHost(
-        navController  = navController,
+        navController = navController,
         startDestination = AuthRoute.Graph.route
     ) {
         authGraph(navController)
         mainGraph(navController)
     }
 }
+
 // 1. 로그인 및 회원가입
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
         startDestination = AuthRoute.startDestination,
-        route            = AuthRoute.Graph.route
+        route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {
             LoginScreen(
@@ -41,11 +42,12 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         }
     }
 }
+
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     navigation(
         startDestination = MainRoute.startDestination,
-        route            = MainRoute.Graph.route
+        route = MainRoute.Graph.route
     ) {
         composable(MainRoute.Quiz.route) {
             //QuizScreen()
