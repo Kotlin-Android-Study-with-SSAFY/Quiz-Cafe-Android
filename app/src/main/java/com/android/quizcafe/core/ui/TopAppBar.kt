@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.android.quizcafe.core.designsystem
+package com.android.quizcafe.core.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
