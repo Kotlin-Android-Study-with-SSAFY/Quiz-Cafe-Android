@@ -5,7 +5,7 @@ package com.android.quizcafe.core.designsystem
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +17,6 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -81,31 +80,43 @@ fun QuizCafeTopAppBar(
 }
 
 /**
- * 앱 전역에서 사용할 수 있도록 공통 아이콘을 묶은 객체입니다.
- */
-object QuizCafeIcons {
-    val ArrowBack: ImageVector = Icons.Filled.ArrowBack
-    val MoreVert: ImageVector = Icons.Filled.MoreVert
-}
-
-/**
  * QuizCafeTopAppBar의 프리뷰.
  * Android Studio Preview에서 테마와 함께 확인 가능
  */
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "기본형 앱바")
 @Composable
-private fun QuizCafeTopAppBarPreview() {
+private fun Preview_DefaultTopAppBar() {
     QuizCafeTheme {
         QuizCafeTopAppBar(
-            title = TopAppBarTitle.Resource(android.R.string.untitled),
+            title = TopAppBarTitle.Text("기본 타이틀")
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "네비게이션 아이콘 포함")
+@Composable
+private fun Preview_NavigationIconTopAppBar() {
+    QuizCafeTheme {
+        QuizCafeTopAppBar(
+            title = TopAppBarTitle.Text("뒤로가기 포함"),
             navigationIcon = {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = QuizCafeIcons.ArrowBack, contentDescription = "뒤로가기")
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
                 }
-            },
+            }
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "액션 아이콘 포함")
+@Composable
+private fun Preview_ActionIconTopAppBar() {
+    QuizCafeTheme {
+        QuizCafeTopAppBar(
+            title = TopAppBarTitle.Text("메뉴 포함"),
             actions = {
                 IconButton(onClick = {}) {
-                    Icon(imageVector = QuizCafeIcons.MoreVert, contentDescription = "메뉴")
+                    Icon(Icons.Filled.MoreVert, contentDescription = "메뉴")
                 }
             }
         )
