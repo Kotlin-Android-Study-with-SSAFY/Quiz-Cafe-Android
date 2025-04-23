@@ -154,9 +154,10 @@ object QuizCafeButtonDefaults {
     val OutlinedButtonBorderWidth = 1.dp
 }
 
-//////////////////////////
-// ▶ Preview 영역
-//////////////////////////
+
+/**
+ * Preview 영역
+ */
 
 @Preview(showBackground = true, name = "텍스트 버튼 - 기본")
 @Composable

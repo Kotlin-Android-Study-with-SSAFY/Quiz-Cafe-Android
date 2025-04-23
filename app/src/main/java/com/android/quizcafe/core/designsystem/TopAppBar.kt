@@ -4,6 +4,8 @@ package com.android.quizcafe.core.designsystem
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -20,12 +22,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 /**
  * 앱바의 타이틀을 구성할 수 있는 타입.
- * - Text: 일반 텍스트 전달
- * - Resource: string 리소스 ID를 통한 전달
  */
 sealed class TopAppBarTitle {
     data class Text(val value: String) : TopAppBarTitle()
@@ -33,14 +34,15 @@ sealed class TopAppBarTitle {
 }
 
 /**
- * QuizCafe의 공통 CenterAligned TopAppBar 컴포저블입니다.
+ * QuizCafe의 공통 CenterAligned TopAppBar 컴포저블.
  *
- * @param title 앱바 중앙 타이틀 (Text or Resource 기반)
- * @param modifier Modifier for outer layout control
- * @param testTag UI 테스트용 태그
- * @param colors 앱바 색상 커스터마이징 (Material3 기본 제공)
- * @param navigationIcon 왼쪽 네비게이션 아이콘 슬롯 (null이면 비표시)
- * @param actions 오른쪽 액션 아이콘 영역 (null이면 비표시)
+ * @param title 타이틀 텍스트 또는 리소스 ID
+ * @param modifier 외부 Modifier
+ * @param testTag 테스트 식별 태그
+ * @param colors 앱바 색상 지정
+ * @param navigationIcon 왼쪽 네비게이션 아이콘 (nullable)
+ * @param actions 오른쪽 액션 영역 (nullable)
+ * @param alignTitleToStart navigationIcon 및 actions가 없는 경우 좌측 정렬 여부 (기본 false)
  */
 @Composable
 fun QuizCafeTopAppBar(
@@ -50,45 +52,56 @@ fun QuizCafeTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
+    alignTitleToStart: Boolean = false, // 조건부 좌측 정렬 플래그
 ) {
     CenterAlignedTopAppBar(
         title = {
-            // title 타입에 따라 분기 처리
+            val alignment = if (alignTitleToStart && navigationIcon == null && actions == null) {
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp) // 강제 좌측 정렬 유사
+            } else {
+                Modifier
+            }
+
             when (title) {
                 is TopAppBarTitle.Text -> Text(
                     text = title.value,
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = alignment
                 )
 
                 is TopAppBarTitle.Resource -> Text(
                     text = stringResource(id = title.id),
-                    style = MaterialTheme.typography.titleLarge
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = alignment
                 )
             }
         },
-        navigationIcon = {
-            // 네비게이션 아이콘이 있을 경우만 표시
-            navigationIcon?.invoke()
-        },
-        actions = {
-            // 우측 액션 아이콘 영역
-            actions?.invoke(this)
-        },
+        navigationIcon = { navigationIcon?.invoke() },
+        actions = { actions?.invoke(this) },
         colors = colors,
         modifier = modifier.testTag(testTag)
     )
 }
 
-/**
- * QuizCafeTopAppBar의 프리뷰.
- * Android Studio Preview에서 테마와 함께 확인 가능
- */
 @Preview(showBackground = true, name = "기본형 앱바")
 @Composable
 private fun Preview_DefaultTopAppBar() {
     QuizCafeTheme {
         QuizCafeTopAppBar(
             title = TopAppBarTitle.Text("기본 타이틀")
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "좌측 정렬 앱바")
+@Composable
+private fun Preview_LeftAlignedTopAppBar() {
+    QuizCafeTheme {
+        QuizCafeTopAppBar(
+            title = TopAppBarTitle.Text("좌측 정렬"),
+            alignTitleToStart = true
         )
     }
 }
