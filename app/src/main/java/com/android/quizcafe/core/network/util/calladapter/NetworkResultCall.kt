@@ -1,31 +1,31 @@
 package com.android.quizcafe.core.network.util.calladapter
-import com.android.quizcafe.core.network.model.ApiResult
+import com.android.quizcafe.core.network.model.NetworkResult
 import okhttp3.Request
 import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ApiResultCall<T : Any>(
+class NetworkResultCall<T : Any>(
     private val call: Call<T>
-) : Call<ApiResult<T>> {
+) : Call<NetworkResult<T>> {
 
-    override fun enqueue(callback: Callback<ApiResult<T>>) {
+    override fun enqueue(callback: Callback<NetworkResult<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val apiResult = handleApi { response }
-                callback.onResponse(this@ApiResultCall, Response.success(apiResult))
+                callback.onResponse(this@NetworkResultCall, Response.success(apiResult))
             }
 
             override fun onFailure(call: Call<T>, t: Throwable) {
-                val apiResult = ApiResult.Exception<T>(t)
-                callback.onResponse(this@ApiResultCall, Response.success(apiResult))
+                val networkResult = NetworkResult.Exception<T>(t)
+                callback.onResponse(this@NetworkResultCall, Response.success(networkResult))
             }
         })
     }
 
-    override fun execute(): Response<ApiResult<T>> = throw NotImplementedError()
-    override fun clone(): Call<ApiResult<T>> = ApiResultCall(call.clone())
+    override fun execute(): Response<NetworkResult<T>> = throw NotImplementedError()
+    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(call.clone())
     override fun request(): Request = call.request()
     override fun timeout(): Timeout = call.timeout()
     override fun isExecuted(): Boolean = call.isExecuted
