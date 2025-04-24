@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 
 
 @Composable
-fun LoginScreen(){
-    Column (
-        modifier =  Modifier.fillMaxSize(),
+fun LoginScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
-    ){
+    ) {
         Text("Login Screen")
     }
 }

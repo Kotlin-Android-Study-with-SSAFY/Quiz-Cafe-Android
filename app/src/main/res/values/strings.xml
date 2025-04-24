@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">QuizCafe</string>
+
+    <string name="password_visibility_toggle">비밀번호 보기 토글</string>
+    <string name="clear_text">입력 지우기</string>
+    <string name="error_icon">에러 아이콘</string>
+
 </resources>
