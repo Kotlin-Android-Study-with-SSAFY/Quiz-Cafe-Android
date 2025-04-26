@@ -36,17 +36,19 @@ fun QuizCafeIconToggleButton(
         onCheckedChange = onCheckedChange,
         modifier = modifier,
         enabled = enabled,
-        colors = IconButtonDefaults.iconToggleButtonColors(
-            checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
-            checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-            disabledContainerColor = if (checked) {
-                MaterialTheme.colorScheme.onBackground.copy(
-                    alpha = QuizCafeIconButtonDefaults.DISABLED_ICON_BUTTON_CONTAINER_ALPHA,
-                )
-            } else {
-                Color.Transparent
-            }
-        ),
+        colors =
+            IconButtonDefaults.iconToggleButtonColors(
+                checkedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                checkedContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                disabledContainerColor =
+                    if (checked) {
+                        MaterialTheme.colorScheme.onBackground.copy(
+                            alpha = QuizCafeIconButtonDefaults.DISABLED_ICON_BUTTON_CONTAINER_ALPHA,
+                        )
+                    } else {
+                        Color.Transparent
+                    },
+            ),
     ) {
         if (checked) checkedIcon() else icon()
     }
@@ -69,15 +71,15 @@ fun QuizCafeIconToggleButtonPreview_Checked() {
             icon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "즐겨찾기 해제"
+                    contentDescription = "즐겨찾기 해제",
                 )
             },
             checkedIcon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "즐겨찾기"
+                    contentDescription = "즐겨찾기",
                 )
-            }
+            },
         )
     }
 }
@@ -92,15 +94,15 @@ fun QuizCafeIconToggleButtonPreview_Unchecked() {
             icon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "즐겨찾기 해제"
+                    contentDescription = "즐겨찾기 해제",
                 )
             },
             checkedIcon = {
                 Icon(
                     imageVector = Icons.Default.Favorite,
-                    contentDescription = "즐겨찾기"
+                    contentDescription = "즐겨찾기",
                 )
-            }
+            },
         )
     }
 }

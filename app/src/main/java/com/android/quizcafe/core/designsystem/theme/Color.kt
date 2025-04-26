@@ -6,11 +6,11 @@ val primaryLight = Color(0xFFAFCAFF)
 val onPrimaryLight = Color(0xFFFFFFFF)
 val primaryContainerLight = Color(0xFFAFCAFF)
 val onPrimaryContainerLight = Color(0xFF395482)
-val secondaryLight = Color(0xFFAFEEFF)   // #AFEEFF
+val secondaryLight = Color(0xFFAFEEFF) // #AFEEFF
 val onSecondaryLight = Color(0xFFFFFFFF)
 val secondaryContainerLight = Color(0xFFD6E0F7)
 val onSecondaryContainerLight = Color(0xFF596377)
-val tertiaryLight = Color(0xFFF9DB78)    // #F9DB78
+val tertiaryLight = Color(0xFFF9DB78) // #F9DB78
 val onTertiaryLight = Color(0xFFFFFFFF)
 val tertiaryContainerLight = Color(0xFFAFCAFF)
 val onTertiaryContainerLight = Color(0xFF395482)
@@ -73,9 +73,3 @@ val surfaceContainerLowDark = Color(0xFF1A1B1F)
 val surfaceContainerDark = Color(0xFF1E2023)
 val surfaceContainerHighDark = Color(0xFF292A2D)
 val surfaceContainerHighestDark = Color(0xFF343538)
-
-
-
-
-
-

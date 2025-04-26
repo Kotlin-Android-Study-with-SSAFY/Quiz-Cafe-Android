@@ -9,14 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
 @Composable
-fun QuizCafeApp(
-    modifier: Modifier = Modifier
-){
-    Column (
-        modifier =  Modifier.fillMaxSize(),
+fun QuizCafeApp(modifier: Modifier = Modifier) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
         Text("hello world!")
     }
 }

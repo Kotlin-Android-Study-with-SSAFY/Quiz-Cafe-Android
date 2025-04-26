@@ -30,7 +30,10 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
  */
 sealed class TopAppBarTitle {
     data class Text(val value: String) : TopAppBarTitle()
-    data class Resource(@StringRes val id: Int) : TopAppBarTitle()
+
+    data class Resource(
+        @StringRes val id: Int,
+    ) : TopAppBarTitle()
 }
 
 /**
@@ -56,32 +59,35 @@ fun QuizCafeTopAppBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            val alignment = if (alignTitleToStart && navigationIcon == null && actions == null) {
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp) // 강제 좌측 정렬 유사
-            } else {
-                Modifier
-            }
+            val alignment =
+                if (alignTitleToStart && navigationIcon == null && actions == null) {
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp) // 강제 좌측 정렬 유사
+                } else {
+                    Modifier
+                }
 
             when (title) {
-                is TopAppBarTitle.Text -> Text(
-                    text = title.value,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = alignment
-                )
+                is TopAppBarTitle.Text ->
+                    Text(
+                        text = title.value,
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = alignment,
+                    )
 
-                is TopAppBarTitle.Resource -> Text(
-                    text = stringResource(id = title.id),
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = alignment
-                )
+                is TopAppBarTitle.Resource ->
+                    Text(
+                        text = stringResource(id = title.id),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = alignment,
+                    )
             }
         },
         navigationIcon = { navigationIcon?.invoke() },
         actions = { actions?.invoke(this) },
         colors = colors,
-        modifier = modifier.testTag(testTag)
+        modifier = modifier.testTag(testTag),
     )
 }
 
@@ -90,7 +96,7 @@ fun QuizCafeTopAppBar(
 private fun Preview_DefaultTopAppBar() {
     QuizCafeTheme {
         QuizCafeTopAppBar(
-            title = TopAppBarTitle.Text("기본 타이틀")
+            title = TopAppBarTitle.Text("기본 타이틀"),
         )
     }
 }
@@ -101,7 +107,7 @@ private fun Preview_LeftAlignedTopAppBar() {
     QuizCafeTheme {
         QuizCafeTopAppBar(
             title = TopAppBarTitle.Text("좌측 정렬"),
-            alignTitleToStart = true
+            alignTitleToStart = true,
         )
     }
 }
@@ -116,7 +122,7 @@ private fun Preview_NavigationIconTopAppBar() {
                 IconButton(onClick = {}) {
                     Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "뒤로가기")
                 }
-            }
+            },
         )
     }
 }
@@ -131,7 +137,7 @@ private fun Preview_ActionIconTopAppBar() {
                 IconButton(onClick = {}) {
                     Icon(Icons.Filled.MoreVert, contentDescription = "메뉴")
                 }
-            }
+            },
         )
     }
 }

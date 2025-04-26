@@ -43,8 +43,12 @@ fun QuizCafeButton(
     text: @Composable () -> Unit,
     leadingIcon: (@Composable () -> Unit)? = null,
     shape: Shape = RoundedCornerShape(8.dp),
-    contentPadding: PaddingValues = if (leadingIcon != null)
-        ButtonDefaults.ButtonWithIconContentPadding else ButtonDefaults.ContentPadding,
+    contentPadding: PaddingValues =
+        if (leadingIcon != null) {
+            ButtonDefaults.ButtonWithIconContentPadding
+        } else {
+            ButtonDefaults.ContentPadding
+        },
 ) {
     Button(
         onClick = onClick,
@@ -79,20 +83,24 @@ fun QuizCafeOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        border = BorderStroke(
-            width = QuizCafeButtonDefaults.OutlinedButtonBorderWidth,
-            color = if (enabled)
-                MaterialTheme.colorScheme.outline
-            else
-                MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA
-                )
-        ),
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground
-        ),
+        border =
+            BorderStroke(
+                width = QuizCafeButtonDefaults.OutlinedButtonBorderWidth,
+                color =
+                    if (enabled) {
+                        MaterialTheme.colorScheme.outline
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(
+                            alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
+                        )
+                    },
+            ),
+        colors =
+            ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.onBackground,
+            ),
         contentPadding = contentPadding,
-        content = content
+        content = content,
     )
 }
 
@@ -115,10 +123,11 @@ fun QuizCafeTextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.primary
-        ),
-        content = content
+        colors =
+            ButtonDefaults.textButtonColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+            ),
+        content = content,
     )
 }
 
@@ -137,9 +146,10 @@ private fun QuizCafeButtonContent(
             }
         }
         Box(
-            modifier = Modifier.padding(
-                start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp
-            )
+            modifier =
+                Modifier.padding(
+                    start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp,
+                ),
         ) {
             text()
         }
@@ -154,7 +164,6 @@ object QuizCafeButtonDefaults {
     val OutlinedButtonBorderWidth = 1.dp
 }
 
-
 /**
  * Preview 영역
  */
@@ -165,7 +174,7 @@ fun Preview_QuizCafeButton_TextOnly() {
     QuizCafeTheme {
         QuizCafeButton(
             onClick = {},
-            text = { Text("기본 버튼") }
+            text = { Text("기본 버튼") },
         )
     }
 }
@@ -177,7 +186,7 @@ fun Preview_QuizCafeButton_DefaultShape() {
         QuizCafeButton(
             onClick = {},
             text = { Text("적용") },
-            shape = ButtonDefaults.shape
+            shape = ButtonDefaults.shape,
         )
     }
 }
@@ -191,7 +200,7 @@ fun Preview_QuizCafeButton_IconWithText() {
             text = { Text("아이콘 버튼") },
             leadingIcon = {
                 Icon(Icons.Filled.Favorite, contentDescription = null)
-            }
+            },
         )
     }
 }
