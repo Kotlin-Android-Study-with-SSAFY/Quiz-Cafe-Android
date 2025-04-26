@@ -1,17 +1,40 @@
 name: Android CI
-
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "develop"
+
+permissions:
+  packages: read
+  contents: read
+  pull-requests: write
+  checks: write
 
 jobs:
-  build:
+  ktlint:
+    name: Check Kotlin Format
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: ktlint and Add comments to a Pull Request
+        uses: ScaCap/action-ktlint@master
+        #        continue-on-error: false
+        with:
+          filter_mode: file
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+
+
+  build:
+    name: Build Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
@@ -23,8 +46,42 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Clean Build
-        run: ./gradlew clean
+      - name: Clean and Build
+        run: ./gradlew clean assembleDebug
 
-      - name: Run Unit Tests
-        run: ./gradlew test
+  test:
+    name: Run Unit Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone repo
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Run Test
+        run: ./gradlew testDebugUnitTest
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+          files: |
+            **/test-results/**/TEST-*.xml
+            **/androidTest-results/**/TEST-*.xml
+
+      - name: Add comments to a Pull Request
+        uses: mikepenz/action-junit-report@v4
+        if: always()
+        with:
+          report_paths: |
+            **/test-results/**/TEST-*.xml
+            **/androidTest-results/**/TEST-*.xml
