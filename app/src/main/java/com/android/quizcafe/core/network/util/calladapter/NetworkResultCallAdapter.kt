@@ -11,6 +11,6 @@ class NetworkResultCallAdapter(
     override fun responseType(): Type = resultType
 
     override fun adapt(call: Call<Type>): Call<NetworkResult<Type>> {
-        return NetworkResultCall(call)
+        return NetworkResultCall(call, resultType)
     }
 }

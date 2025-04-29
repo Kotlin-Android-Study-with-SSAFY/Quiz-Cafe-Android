@@ -1,5 +1,7 @@
 package com.android.quizcafe.core.network.model
 
+import com.android.quizcafe.core.common.network.HttpStatus
+
 /**
  * API 호출 결과를 표현하는 sealed class.
  * - Success: 성공적으로 데이터를 받아온 경우
@@ -42,7 +44,14 @@ suspend fun <T : Any> NetworkResult<T>.onErrorOrException(
     if (this is NetworkResult.Error<T>) {
         executable(code, message)
     }else if (this is NetworkResult.Exception<T>) {
-        // TODO : 이 부분 어떻게 할 것인지 얘기해봐야함
-        executable(999, e.message)
+        executable(HttpStatus.UNKNOWN, e.message)
+    }
+}
+
+fun <T : Any> NetworkResult<T>.log(tag: String = "NetworkResult") : String{
+    return when (this) {
+        is NetworkResult.Success -> ("[$tag] Success: data=$data")
+        is NetworkResult.Error -> ("[$tag] Error: code=$code, message=$message")
+        is NetworkResult.Exception -> ("[$tag] Exception: ${e::class.simpleName}: ${e.message}")
     }
 }

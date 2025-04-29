@@ -5,15 +5,17 @@ import okio.Timeout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.lang.reflect.Type
 
 class NetworkResultCall<T : Any>(
-    private val call: Call<T>
+    private val call: Call<T>,
+    private val resultType : Type
 ) : Call<NetworkResult<T>> {
 
     override fun enqueue(callback: Callback<NetworkResult<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
-                val apiResult = handleApi { response }
+                val apiResult = handleApi(resultType) { response }
                 callback.onResponse(this@NetworkResultCall, Response.success(apiResult))
             }
 
@@ -25,7 +27,7 @@ class NetworkResultCall<T : Any>(
     }
 
     override fun execute(): Response<NetworkResult<T>> = throw NotImplementedError()
-    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(call.clone())
+    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(call.clone(),resultType)
     override fun request(): Request = call.request()
     override fun timeout(): Timeout = call.timeout()
     override fun isExecuted(): Boolean = call.isExecuted
