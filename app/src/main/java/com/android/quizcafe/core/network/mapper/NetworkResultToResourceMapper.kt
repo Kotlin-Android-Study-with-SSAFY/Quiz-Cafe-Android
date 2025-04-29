@@ -40,10 +40,10 @@ fun <T : Any>(suspend() -> NetworkResult<T>).toResourceFlow() : Flow<Resource<T>
                 emit(Resource.Failure(errorMessage = message ?: DEFAULT_ERROR_MESSAGE, code = code))
             }
             .onException { e ->
-                when(e){
+                emit(when(e){
                     is ConnectException -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.NETWORK_DISCONNECTED)
                     else -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.UNKNOWN)
-                }
+                })
             }
     } ?: Resource.Failure(errorMessage = "time out", code = HttpStatus.REQUEST_TIMEOUT)
 }.flowOn(Dispatchers.IO)
