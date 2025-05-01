@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.designsystem
+package com.android.quizcafe.core.designsystem.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
