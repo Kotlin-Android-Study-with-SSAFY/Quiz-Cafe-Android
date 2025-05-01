@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -19,10 +20,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.primaryLight
+import com.android.quizcafe.core.designsystem.theme.surfaceDimLight
 
 /**
  * 기본 버튼 컴포저블 - QuizCafe의 대표적인 Primary 버튼.
@@ -40,18 +44,23 @@ fun QuizCafeButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
     leadingIcon: (@Composable () -> Unit)? = null,
     shape: Shape = RoundedCornerShape(8.dp),
+    colors: ButtonColors = ButtonDefaults.buttonColors(
+        containerColor = primaryLight,
+        contentColor = Color.Black,
+        disabledContainerColor = surfaceDimLight
+    ),
     contentPadding: PaddingValues = if (leadingIcon != null)
         ButtonDefaults.ButtonWithIconContentPadding else ButtonDefaults.ContentPadding,
+    text: @Composable () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         shape = shape,
-        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        colors = colors,
         contentPadding = contentPadding,
     ) {
         QuizCafeButtonContent(text = text, leadingIcon = leadingIcon)
