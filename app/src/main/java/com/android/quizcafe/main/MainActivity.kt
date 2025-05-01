@@ -9,7 +9,9 @@ import com.android.quizcafe.core.designsystem.QuizCafeTheme
 import com.android.quizcafe.main.navigation.QuizCafeNavHost
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.main.ui.QuizCafeApp
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

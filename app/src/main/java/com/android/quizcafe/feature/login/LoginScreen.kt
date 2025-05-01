@@ -1,21 +1,247 @@
 package com.android.quizcafe.feature.login
 
+import android.widget.Toast
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.QuizCafeButton
+import com.android.quizcafe.core.designsystem.theme.Typography
+import com.android.quizcafe.core.designsystem.theme.errorLight
+import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
+import com.android.quizcafe.core.designsystem.theme.primaryLight
+import com.android.quizcafe.feature.login.LoginContract.LoginEffect
+import com.android.quizcafe.feature.login.LoginContract.LoginIntent
+import com.android.quizcafe.feature.login.LoginContract.LoginViewState
 
 @Composable
-fun LoginScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
+fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+
+    val state by viewModel.state.collectAsState()
+
+    val imeBottomPx = WindowInsets.ime.getBottom(LocalDensity.current)
+    val imeBottomDp = with(LocalDensity.current) { imeBottomPx.toDp() }
+
+    val animatedPadding by animateDpAsState(
+        targetValue = imeBottomDp,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "AnimatedImePadding"
+    )
+
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                LoginEffect.NavigateToHome -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.success_login), Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+                LoginEffect.NavigateToSignUp -> {
+                    // TODO: 회원가입 Navigate
+                }
+
+                is LoginEffect.ShowErrorDialog -> {
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+    }
+    LazyColumn (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp).padding(bottom = animatedPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Login Screen")
+        item {
+            QuizCafeLogo()
+            QuizCafeTextField(
+                label = "ID",
+                value = state.email,
+                onValueChange = { viewModel.onIntent(LoginIntent.UpdatedEmail(it)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+            QuizCafeTextField(
+                label = "PW",
+                value = state.password,
+                onValueChange = { viewModel.onIntent(LoginIntent.UpdatedPassword(it)) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                isPassword = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+            LoginButton(
+                onClick = {
+                    viewModel.onIntent(LoginIntent.ClickLogin)
+                },
+                state = state
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            BottomTextOptions()
+
+            Spacer(modifier = Modifier.height(40.dp))
+
+        }
     }
 }
+
+
+@Composable
+fun QuizCafeLogo() {
+    Image(
+        painter = painterResource(id = R.drawable.quizcafelogo),
+        contentDescription = "QuizCafe Logo",
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .height(140.dp)
+    )
+}
+
+@Composable
+fun QuizCafeTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    label: String? = null,
+    isPassword: Boolean = false,
+    errorMessage: String? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        if (label != null) {
+            Text(label, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(4.dp))
+        }
+
+        TextField(
+            value = value,
+            onValueChange = onValueChange,
+            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+            modifier = if (errorMessage != null) modifier.border(
+                1.dp,
+                Color.Red,
+                RoundedCornerShape(10.dp)
+            ) else modifier,
+            colors = TextFieldDefaults.colors(
+                focusedTextColor = Color.Black,
+                unfocusedTextColor = Color.DarkGray,
+                focusedContainerColor = primaryContainerLight,
+                unfocusedContainerColor = primaryContainerLight,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                cursorColor = primaryLight
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            keyboardOptions = keyboardOptions,
+            textStyle = TextStyle(fontSize = 16.sp)
+        )
+
+        if (errorMessage != null) {
+            Spacer(Modifier.height(4.dp))
+            Text(
+                text = errorMessage,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(4.dp),
+                color = errorLight,
+                style = Typography.labelSmall,
+            )
+        }
+    }
+}
+
+@Composable
+fun LoginButton(onClick: () -> Unit, state: LoginViewState) {
+    QuizCafeButton(
+        onClick = onClick,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        enabled = state.isLoginEnabled
+    ) {
+        Text(text = stringResource(R.string.login), fontWeight = FontWeight.Bold)
+    }
+}
+
+@Composable
+fun BottomTextOptions() {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.End
+    ) {
+        Text(
+            text = stringResource(R.string.forgot_password),
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = stringResource(R.string.signup),
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+//@Preview(showBackground = true, widthDp = 360, heightDp = 720)
+//@Composable
+//fun LoginScreenPreview() {
+//    QuizCafeTheme {
+//        LoginScreen()
+//    }
+//}
