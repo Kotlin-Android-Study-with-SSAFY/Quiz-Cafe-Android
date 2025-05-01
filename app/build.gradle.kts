@@ -52,7 +52,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
     ksp(libs.hilt.ext.compiler)
@@ -61,9 +61,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp.mockwebserver)
-
-
-
     testImplementation(libs.junit)
     testImplementation("org.json:json:20220924")
     androidTestImplementation(libs.androidx.junit)
