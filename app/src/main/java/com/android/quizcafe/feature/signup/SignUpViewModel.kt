@@ -111,16 +111,19 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
     private fun SignUpViewState.recalculate(): SignUpViewState {
         val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
+        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
+
         val isEmailValid = email.isNotBlank() && email.matches(emailRegex)
         val isCodeValid = verificationCode.length == 6
-        val isPasswordValid = password.isNotBlank()
+        val isPasswordValid = password.isNotBlank() && password.matches(passwordRegex)
         val isPasswordConfirmed = passwordConfirm.isNotBlank() && password == passwordConfirm
 
         return this.copy(
             isNextEnabled = if (isCodeSent) isEmailValid && isCodeValid else isEmailValid,
             isSignUpEnabled = isPasswordValid && isPasswordConfirmed,
             emailErrorMessage = if(!isEmailValid) "이메일 형식이 올바르지 않습니다." else null,
-            passwordErrorMessage = if(passwordConfirm.isNotBlank() && !isPasswordConfirmed) "비밀번호가 일치하지 않습니다." else null
+            passwordErrorMessage = if (password.isNotBlank() && !isPasswordValid) "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다." else null,
+            passwordConfirmErrorMessage = if(passwordConfirm.isNotBlank() && !isPasswordConfirmed) "비밀번호가 일치하지 않습니다." else null
         )
     }
 }

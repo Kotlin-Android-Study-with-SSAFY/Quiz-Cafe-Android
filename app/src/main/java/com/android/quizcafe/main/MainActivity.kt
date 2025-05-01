@@ -4,11 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.navigation.compose.rememberNavController
-import com.android.quizcafe.core.designsystem.QuizCafeTheme
-import com.android.quizcafe.main.navigation.QuizCafeNavHost
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.main.ui.QuizCafeApp
+import com.android.quizcafe.main.navigation.QuizCafeNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +14,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            QuizCafeNavHost()
+            QuizCafeTheme{
+                QuizCafeNavHost()
+            }
         }
     }
 }

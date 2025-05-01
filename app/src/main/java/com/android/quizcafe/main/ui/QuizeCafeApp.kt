@@ -9,5 +9,5 @@ import com.android.quizcafe.feature.signup.SignUpScreen
 fun QuizCafeApp(
     modifier: Modifier = Modifier
 ){
-    LoginScreen()
+//    LoginScreen()
 }

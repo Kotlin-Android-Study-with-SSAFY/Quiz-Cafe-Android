@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +34,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -46,19 +46,26 @@ import com.android.quizcafe.core.designsystem.theme.Typography
 import com.android.quizcafe.core.designsystem.theme.errorLight
 import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
 import com.android.quizcafe.core.designsystem.theme.primaryLight
+import com.android.quizcafe.core.designsystem.theme.surfaceBrightLight
 import com.android.quizcafe.feature.login.LoginContract.LoginEffect
 import com.android.quizcafe.feature.login.LoginContract.LoginIntent
 import com.android.quizcafe.feature.login.LoginContract.LoginViewState
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
+fun LoginScreen(
+    navigateToSignUp: () -> Unit,
+    navigateToHome: () -> Unit,
+    viewModel: LoginViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsState()
 
+    // 키보드 크기 계산
     val imeBottomPx = WindowInsets.ime.getBottom(LocalDensity.current)
     val imeBottomDp = with(LocalDensity.current) { imeBottomPx.toDp() }
 
+    // 키보드 올라올 때 패딩 애니메이션 적용
     val animatedPadding by animateDpAsState(
         targetValue = imeBottomDp,
         animationSpec = tween(
@@ -72,6 +79,7 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 LoginEffect.NavigateToHome -> {
+                    navigateToHome()
                     Toast.makeText(
                         context,
                         context.getString(R.string.success_login), Toast.LENGTH_SHORT
@@ -79,7 +87,7 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
                 }
 
                 LoginEffect.NavigateToSignUp -> {
-                    // TODO: 회원가입 Navigate
+                    navigateToSignUp()
                 }
 
                 is LoginEffect.ShowErrorDialog -> {
@@ -131,7 +139,7 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            BottomTextOptions()
+            BottomTextOptions(viewModel)
 
             Spacer(modifier = Modifier.height(40.dp))
 
@@ -156,6 +164,7 @@ fun QuizCafeTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     label: String? = null,
     isPassword: Boolean = false,
     errorMessage: String? = null,
@@ -163,7 +172,7 @@ fun QuizCafeTextField(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if (label != null) {
-            Text(label, fontWeight = FontWeight.Bold)
+            Text(label)
             Spacer(modifier = Modifier.height(4.dp))
         }
 
@@ -176,13 +185,16 @@ fun QuizCafeTextField(
                 Color.Red,
                 RoundedCornerShape(10.dp)
             ) else modifier,
+            enabled = enabled,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,
                 unfocusedTextColor = Color.DarkGray,
+                disabledContainerColor = surfaceBrightLight,
                 focusedContainerColor = primaryContainerLight,
                 unfocusedContainerColor = primaryContainerLight,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
                 cursorColor = primaryLight
             ),
             shape = RoundedCornerShape(8.dp),
@@ -214,12 +226,12 @@ fun LoginButton(onClick: () -> Unit, state: LoginViewState) {
             .height(48.dp),
         enabled = state.isLoginEnabled
     ) {
-        Text(text = stringResource(R.string.login), fontWeight = FontWeight.Bold)
+        Text(text = stringResource(R.string.login))
     }
 }
 
 @Composable
-fun BottomTextOptions() {
+fun BottomTextOptions(viewModel: LoginViewModel) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
@@ -233,7 +245,7 @@ fun BottomTextOptions() {
         Text(
             text = stringResource(R.string.signup),
             fontSize = 14.sp,
-            fontWeight = FontWeight.Bold
+            modifier = Modifier.clickable { viewModel.onIntent(LoginIntent.ClickSignUp) }
         )
     }
 }

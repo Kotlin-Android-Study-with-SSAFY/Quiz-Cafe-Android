@@ -55,7 +55,10 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel()) {
+fun SignUpScreen(
+    viewModel: SignUpViewModel = hiltViewModel(),
+    navigateToLogin: () -> Unit,
+) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     var step by remember { mutableIntStateOf(0) }
@@ -71,6 +74,7 @@ fun SignUpScreen(viewModel: SignUpViewModel = hiltViewModel()) {
                     Toast.makeText(context, context.getString(R.string.error_message), Toast.LENGTH_SHORT).show()
                 }
                 is SignUpEffect.NavigateToLoginScreen -> {
+                    navigateToLogin()
                     Toast.makeText(context, context.getString(R.string.success_signup), Toast.LENGTH_SHORT).show()
                 }
             }
@@ -145,7 +149,8 @@ fun EmailInputContent(viewModel: SignUpViewModel, state: SignUpViewState, innerP
                 value = state.email,
                 onValueChange = { viewModel.onIntent(SignUpIntent.UpdatedEmail(it)) },
                 errorMessage = state.emailErrorMessage,
-                focusRequester = focusRequester
+                focusRequester = focusRequester,
+                enabled = !state.isCodeSent
             )
 
             if (state.isCodeSent) {
@@ -177,7 +182,8 @@ fun PasswordInputContent(viewModel: SignUpViewModel, state: SignUpViewState, inn
                 value = state.password,
                 onValueChange = { viewModel.onIntent(SignUpIntent.UpdatedPassword(it)) },
                 isPassword = true,
-                focusRequester = focusRequester
+                focusRequester = focusRequester,
+                errorMessage = state.passwordErrorMessage
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -186,7 +192,7 @@ fun PasswordInputContent(viewModel: SignUpViewModel, state: SignUpViewState, inn
                 value = state.passwordConfirm,
                 onValueChange = { viewModel.onIntent(SignUpIntent.UpdatedPasswordConfirm(it)) },
                 isPassword = true,
-                errorMessage = state.passwordErrorMessage
+                errorMessage = state.passwordConfirmErrorMessage
             )
         }
     )
@@ -221,6 +227,7 @@ fun LabeledInputField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,
+    enabled: Boolean = true,
     errorMessage: String? = null,
     isPassword: Boolean = false,
     focusRequester: FocusRequester? = null
@@ -235,7 +242,8 @@ fun LabeledInputField(
             .height(56.dp)
             .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier),
         isPassword = isPassword,
-        errorMessage = errorMessage
+        errorMessage = errorMessage,
+        enabled = enabled
     )
 }
 
@@ -244,13 +252,19 @@ fun VerificationInputField(
     state: SignUpViewState,
     onValueChanged: (String) -> Unit
 ) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(Unit) {
+        delay(100)
+        focusRequester.requestFocus()
+    }
+
     QuizCafeTextField(
         value = state.verificationCode,
         onValueChange = onValueChanged,
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
-            .focusTarget(),
+            .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
     Spacer(modifier = Modifier.height(40.dp))

@@ -10,6 +10,7 @@ class SignUpContract {
 
         val emailErrorMessage: String? = null,
         val passwordErrorMessage: String? = null,
+        val passwordConfirmErrorMessage: String? = null,
         val verificationCodeErrorMessage: String? = null,
 
         val isCodeSent: Boolean = false,
