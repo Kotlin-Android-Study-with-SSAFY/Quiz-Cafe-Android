@@ -4,11 +4,7 @@ import android.widget.Toast
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,37 +13,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
-import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
-import com.android.quizcafe.core.designsystem.theme.Typography
-import com.android.quizcafe.core.designsystem.theme.errorLight
-import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
-import com.android.quizcafe.core.designsystem.theme.primaryLight
-import com.android.quizcafe.core.designsystem.theme.surfaceBrightLight
 
 @Composable
 fun LoginScreen(
@@ -98,10 +77,11 @@ fun LoginScreen(
             }
         }
     }
-    LazyColumn (
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp).padding(bottom = animatedPadding),
+            .padding(horizontal = 16.dp)
+            .padding(bottom = animatedPadding),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -140,52 +120,7 @@ fun LoginScreen(
             BottomTextOptions(viewModel)
 
             Spacer(modifier = Modifier.height(40.dp))
-
         }
     }
 }
 
-
-@Composable
-fun QuizCafeLogo() {
-    Image(
-        painter = painterResource(id = R.drawable.quizcafelogo),
-        contentDescription = stringResource(R.string.quizcafe_logo),
-        modifier = Modifier
-            .padding(top = 20.dp)
-            .height(140.dp)
-    )
-}
-
-@Composable
-fun LoginButton(onClick: () -> Unit, state: LoginViewState) {
-    QuizCafeButton(
-        onClick = onClick,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp),
-        enabled = state.isLoginEnabled
-    ) {
-        Text(text = stringResource(R.string.login))
-    }
-}
-
-@Composable
-fun BottomTextOptions(viewModel: LoginViewModel) {
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.End
-    ) {
-        Text(
-            text = stringResource(R.string.forgot_password),
-            fontSize = 14.sp,
-            color = Color.Gray
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            text = stringResource(R.string.signup),
-            fontSize = 14.sp,
-            modifier = Modifier.clickable { viewModel.onIntent(LoginIntent.ClickSignUp) }
-        )
-    }
-}
