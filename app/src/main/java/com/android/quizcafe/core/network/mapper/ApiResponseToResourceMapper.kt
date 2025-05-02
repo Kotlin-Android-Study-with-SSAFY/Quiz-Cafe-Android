@@ -55,7 +55,7 @@ fun <T : Any> apiResponseToResourceFlow(call : suspend() -> NetworkResult<ApiRes
 }.flowOn(Dispatchers.IO)
 
 
-private fun handleNetworkException(e: Throwable): Resource.Failure {
+fun handleNetworkException(e: Throwable): Resource.Failure {
     return when (e) {
         is ConnectException -> Resource.Failure(
             errorMessage = "네트워크 연결을 확인해주세요.",
