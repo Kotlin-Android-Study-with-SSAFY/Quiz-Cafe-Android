@@ -2,10 +2,10 @@ package com.android.quizcafe.core.data.remote.datasource
 
 import com.android.quizcafe.core.data.model.auth.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SendCodeRequestDto
-import com.android.quizcafe.core.data.model.auth.request.SignInRequestDto
+import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SignUpRequestDto
 import com.android.quizcafe.core.data.model.auth.request.VerifyCodeRequestDto
-import com.android.quizcafe.core.data.model.auth.response.SignInResponseDto
+import com.android.quizcafe.core.data.model.auth.response.LoginResponseDto
 import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
@@ -24,8 +24,8 @@ class AuthRemoteDataSource @Inject constructor(
     suspend fun signUp(request : SignUpRequestDto) : NetworkResult<ApiResponse<Unit>> =
         authService.signUp(request)
 
-    suspend fun signIn(request: SignInRequestDto) : NetworkResult<ApiResponse<SignInResponseDto>> =
-        authService.signIn(request)
+    suspend fun login(request: LoginRequestDto) : NetworkResult<ApiResponse<LoginResponseDto>> =
+        authService.login(request)
 
     suspend fun resetPassword(request : ResetPasswordRequestDto) : NetworkResult<ApiResponse<Unit>> =
         authService.resetPassword(email = request.email)

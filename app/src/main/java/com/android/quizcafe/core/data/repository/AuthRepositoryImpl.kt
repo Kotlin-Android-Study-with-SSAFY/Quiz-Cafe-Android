@@ -6,7 +6,7 @@ import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
-import com.android.quizcafe.core.domain.model.auth.request.SignInRequest
+import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
 import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
@@ -37,10 +37,10 @@ class AuthRepositoryImpl @Inject constructor(
         apiResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
 
 
-    override suspend fun signIn(request: SignInRequest): Flow<Resource<Unit>> = flow {
+    override suspend fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         withTimeoutOrNull(30_000L) {
-            remoteDataSource.signIn(request.toDto())
+            remoteDataSource.login(request.toDto())
                 .onSuccess {
                     // TODO : accessToken 저장 로직 구현
                     emit( Resource.Success(null))
