@@ -1,9 +1,13 @@
 package com.android.quizcafe.feature.signup
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,8 +23,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -32,17 +38,23 @@ import androidx.compose.ui.unit.sp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
+import com.android.quizcafe.core.designsystem.theme.onSurfaceVariantLight
 import kotlinx.coroutines.delay
 
 
 @Composable
 fun BottomActionButton(state: SignUpViewState, onClick: () -> Unit) {
     Column(
-        modifier = Modifier.fillMaxWidth().imePadding().navigationBarsPadding()
+        modifier = Modifier
+            .fillMaxWidth()
+            .imePadding()
+            .navigationBarsPadding()
     ) {
         QuizCafeButton(
             onClick = onClick,
-            modifier = Modifier.fillMaxWidth().height(56.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp),
             enabled = if (state.isSuccessVerification) state.isSignUpEnabled else state.isNextEnabled
         ) {
             Text(stringResource(R.string.next))
@@ -51,7 +63,11 @@ fun BottomActionButton(state: SignUpViewState, onClick: () -> Unit) {
 }
 
 @Composable
-fun EmailInputContent(viewModel: SignUpViewModel, state: SignUpViewState, innerPadding: PaddingValues) {
+fun EmailInputContent(
+    viewModel: SignUpViewModel,
+    state: SignUpViewState,
+    innerPadding: PaddingValues
+) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         delay(100)
@@ -75,18 +91,54 @@ fun EmailInputContent(viewModel: SignUpViewModel, state: SignUpViewState, innerP
 
             if (state.isCodeSent) {
                 Spacer(modifier = Modifier.height(32.dp))
-                Text(stringResource(R.string.verification_code), fontSize = 14.sp)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(stringResource(R.string.verification_code), fontSize = 20.sp)
+                    Text(
+                        stringResource(R.string.resend),
+                        modifier = Modifier.clickable {
+                            viewModel.onIntent(SignUpIntent.ClickSendCode)
+                        },
+                        fontSize = 16.sp,
+                        color = onSurfaceVariantLight
+                    )
+                }
+
                 Spacer(modifier = Modifier.height(8.dp))
                 VerificationInputField(state) {
                     viewModel.onIntent(SignUpIntent.UpdatedVerificationCode(it))
                 }
+
+                VerificationTimer(viewModel)
             }
         }
     )
 }
 
+@SuppressLint("DefaultLocale")
 @Composable
-fun PasswordInputContent(viewModel: SignUpViewModel, state: SignUpViewState, innerPadding: PaddingValues) {
+fun VerificationTimer(viewModel: SignUpViewModel) {
+    val time by viewModel.timeLeft.collectAsState()
+    val formatted = String.format("%02d:%02d", time / 60, time % 60)
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = formatted,
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(4.dp)
+        )
+    }
+}
+
+@Composable
+fun PasswordInputContent(
+    viewModel: SignUpViewModel,
+    state: SignUpViewState,
+    innerPadding: PaddingValues
+) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         delay(100)
@@ -132,7 +184,10 @@ fun TitleWithAnimation(
     val animatedSectionPadding by animateDpAsState(if (isKeyboardVisible) 32.dp else 80.dp)
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(scrollState)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(innerPadding)
+            .verticalScroll(scrollState)
     ) {
         Spacer(modifier = Modifier.height(animatedTitlePadding))
         Text(title, fontSize = 32.sp)
@@ -152,11 +207,10 @@ fun LabeledInputField(
     isPassword: Boolean = false,
     focusRequester: FocusRequester? = null
 ) {
-    Text(label, fontSize = 14.sp)
-    Spacer(modifier = Modifier.height(8.dp))
     QuizCafeTextField(
         value = value,
         onValueChange = onValueChange,
+        label = label,
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -187,5 +241,4 @@ fun VerificationInputField(
             .focusRequester(focusRequester),
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
-    Spacer(modifier = Modifier.height(40.dp))
 }

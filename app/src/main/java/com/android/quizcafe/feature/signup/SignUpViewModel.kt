@@ -3,6 +3,7 @@ package com.android.quizcafe.feature.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,23 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
     private val _effect = MutableSharedFlow<SignUpEffect>()
     val effect: SharedFlow<SignUpEffect> = _effect.asSharedFlow()
+
+    private val _timeLeft = MutableStateFlow(180)
+    val timeLeft: StateFlow<Int> = _timeLeft
+
+    private var timerJob: Job? = null
+
+    private fun startTimer() {
+        timerJob?.cancel()  // 기존 루틴 중지
+        _timeLeft.value = 180
+
+        timerJob = viewModelScope.launch {
+            while (_timeLeft.value > 0) {
+                delay(1000)
+                _timeLeft.value -= 1
+            }
+        }
+    }
 
     fun onIntent(intent: SignUpIntent) {
         _state.value = reduce(_state.value, intent)
@@ -91,6 +109,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
             SignUpIntent.SuccessCodeVerification -> state.copy(isLoading = false, isSuccessVerification = true)
             SignUpIntent.SuccessSignUp -> state.copy(isLoading = false)
             SignUpIntent.SuccessSendCode -> {
+                startTimer()
                 state.copy(isLoading = false, isCodeSent = true)
             }
 
