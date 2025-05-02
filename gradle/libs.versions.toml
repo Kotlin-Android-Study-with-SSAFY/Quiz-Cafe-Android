@@ -15,7 +15,7 @@ retrofit = "2.11.0"
 okhttp = "4.12.0"
 kotlinxSerializationJson = "1.8.0"
 kotlinxSerializationPlugin = "2.0.0"  # 코틀린 버전과 일치
-
+kotlinxCoroutines = "1.10.1"
 
 
 [libraries]
@@ -41,6 +41,7 @@ retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "conv
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

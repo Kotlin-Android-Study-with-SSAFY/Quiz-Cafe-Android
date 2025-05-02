@@ -62,10 +62,9 @@ dependencies {
     implementation(libs.okhttp.logging)
     implementation(libs.okhttp.mockwebserver)
 
-
-
     testImplementation(libs.junit)
     testImplementation("org.json:json:20220924")
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
