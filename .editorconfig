@@ -1,11 +1,29 @@
 root = true
 
-[*]
+[*.{kt,kts}]
 charset = utf-8
 end_of_line = lf
 indent_style = space
 indent_size = 4
 insert_final_newline = true
-max_line_length = 120
 tab_width = 4
-disabled_rules = no-wildcard-imports,import-ordering,comment-spacing
+max_line_length = off
+
+ktlint_code_style = android_studio
+
+# 비활성화 규칙
+ktlint_standard_import-ordering = disabled
+ktlint_standard_max-line-length = disabled
+ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_comment-spacing = disabled
+ktlint_standard_annotation = disabled
+ktlint_standard_trailing-comma-on-declaration-site = disabled
+ktlint_standard_trailing-comma-on-call-site = disabled
+
+# 줄바꿈 설정
+ktlint_chain_method_rule_force_multiline_when_chain_operator_count_greater_or_equal_than = 3
+ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 3
+
+# Compose 관련 설정
+ktlint_function_naming_ignore_when_annotated_with = Composable
+compose_allowed_state_holder_names = .*ViewModel,.*ViewState

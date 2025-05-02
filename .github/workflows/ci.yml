@@ -21,9 +21,7 @@ jobs:
 
       - name: ktlint and Add comments to a Pull Request
         uses: ScaCap/action-ktlint@master
-        #        continue-on-error: false
         with:
-          filter_mode: file
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
 
