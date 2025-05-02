@@ -3,8 +3,6 @@ package com.android.quizcafe.feature.signup
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -27,19 +25,14 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private val _timeLeft = MutableStateFlow(180)
     val timeLeft: StateFlow<Int> = _timeLeft
 
-    private var timerJob: Job? = null
-
-    private fun startTimer() {
-        timerJob?.cancel()  // 기존 루틴 중지
-        _timeLeft.value = 180
-
-        timerJob = viewModelScope.launch {
-            while (_timeLeft.value > 0) {
-                delay(1000)
-                _timeLeft.value -= 1
-            }
+    private val countdownTimer = CountdownTimer(
+        coroutineScope = viewModelScope,
+        seconds = 180,
+        onTick = { remaining ->
+            _timeLeft.value = remaining
+            _state.update { it.copy(remainingSeconds = remaining) }
         }
-    }
+    )
 
     fun onIntent(intent: SignUpIntent) {
         _state.value = reduce(_state.value, intent)
@@ -83,7 +76,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
             SignUpIntent.SuccessSendCode -> {
                 // TODO: 상태 변경 수정
-                startCountdown()
+                countdownTimer.start()
             }
 
             else -> Unit
@@ -93,43 +86,61 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private fun reduce(state: SignUpViewState, intent: SignUpIntent): SignUpViewState {
         return when (intent) {
             is SignUpIntent.UpdatedEmail -> state.copy(email = intent.email).recalculate()
-            is SignUpIntent.UpdatedVerificationCode -> state.copy(verificationCode = intent.code.take(6)).recalculate()
+            is SignUpIntent.UpdatedVerificationCode -> state.copy(
+                verificationCode = intent.code.take(
+                    6
+                )
+            ).recalculate()
 
             is SignUpIntent.UpdatedPassword -> state.copy(password = intent.password).recalculate()
-            is SignUpIntent.UpdatedPasswordConfirm -> state.copy(passwordConfirm = intent.password).recalculate()
+            is SignUpIntent.UpdatedPasswordConfirm -> state.copy(passwordConfirm = intent.password)
+                .recalculate()
 
-            SignUpIntent.ClickVerifyCode -> state.copy(isLoading = true, isCodeSent = true, verificationCodeErrorMessage = null)
+            SignUpIntent.ClickVerifyCode -> state.copy(
+                isLoading = true,
+                isCodeSent = true,
+                verificationCodeErrorMessage = null
+            )
+
             SignUpIntent.ClickSignUp -> state.copy(isLoading = true, errorMessage = null)
-            SignUpIntent.ClickSendCode -> state.copy(isCodeSent = true, remainingSeconds = 180, isNextEnabled = false, errorMessage = null)
+            SignUpIntent.ClickSendCode -> state.copy(
+                isCodeSent = true,
+                remainingSeconds = 180,
+                isNextEnabled = false,
+                errorMessage = null
+            )
 
-            is SignUpIntent.FailCodeVerification -> state.copy(isLoading = false, verificationCodeErrorMessage = "코드가 올바르지 않습니다.")
-            is SignUpIntent.FailSendCode -> state.copy(isLoading = false, errorMessage = "오류가 발생했습니다\n다시 시도해 주세요.")
-            is SignUpIntent.FailSignUp -> state.copy(isLoading = false, errorMessage = "오류가 발생했습니다\n다시 시도해 주세요.")
+            is SignUpIntent.FailCodeVerification -> state.copy(
+                isLoading = false,
+                verificationCodeErrorMessage = "코드가 올바르지 않습니다."
+            )
 
-            SignUpIntent.SuccessCodeVerification -> state.copy(isLoading = false, isSuccessVerification = true)
+            is SignUpIntent.FailSendCode -> state.copy(
+                isLoading = false,
+                errorMessage = "오류가 발생했습니다\n다시 시도해 주세요."
+            )
+
+            is SignUpIntent.FailSignUp -> state.copy(
+                isLoading = false,
+                errorMessage = "오류가 발생했습니다\n다시 시도해 주세요."
+            )
+
+            SignUpIntent.SuccessCodeVerification -> state.copy(
+                isLoading = false,
+                isSuccessVerification = true
+            )
+
             SignUpIntent.SuccessSignUp -> state.copy(isLoading = false)
-            SignUpIntent.SuccessSendCode -> {
-                startTimer()
-                state.copy(isLoading = false, isCodeSent = true)
-            }
+            SignUpIntent.SuccessSendCode -> state.copy(isLoading = false, isCodeSent = true)
 
-        }
-    }
 
-    private fun startCountdown() {
-        viewModelScope.launch {
-            while (_state.value.remainingSeconds > 0) {
-                delay(1000L)
-                _state.update {
-                    it.copy(remainingSeconds = it.remainingSeconds - 1)
-                }
-            }
         }
     }
 
     private fun SignUpViewState.recalculate(): SignUpViewState {
         val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
-        val passwordRegex = Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
+        val passwordRegex =
+            Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
 
         val isEmailValid = email.isNotBlank() && email.matches(emailRegex)
         val isCodeValid = verificationCode.length == 6
@@ -139,9 +150,14 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         return this.copy(
             isNextEnabled = if (isCodeSent) isEmailValid && isCodeValid else isEmailValid,
             isSignUpEnabled = isPasswordValid && isPasswordConfirmed,
-            emailErrorMessage = if(!isEmailValid) "이메일 형식이 올바르지 않습니다." else null,
+            emailErrorMessage = if (!isEmailValid) "이메일 형식이 올바르지 않습니다." else null,
             passwordErrorMessage = if (password.isNotBlank() && !isPasswordValid) "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다." else null,
-            passwordConfirmErrorMessage = if(passwordConfirm.isNotBlank() && !isPasswordConfirmed) "비밀번호가 일치하지 않습니다." else null
+            passwordConfirmErrorMessage = if (passwordConfirm.isNotBlank() && !isPasswordConfirmed) "비밀번호가 일치하지 않습니다." else null
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        countdownTimer.cancel()
     }
 }
