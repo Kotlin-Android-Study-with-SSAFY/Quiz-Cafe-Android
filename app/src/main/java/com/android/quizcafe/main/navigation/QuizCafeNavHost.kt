@@ -1,12 +1,62 @@
 package com.android.quizcafe.main.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
+import com.android.quizcafe.feature.login.LoginScreen
+import com.android.quizcafe.main.navigation.routes.AuthRoute
+import com.android.quizcafe.main.navigation.routes.MainRoute
 
 
 @Composable
 fun QuizCafeNavHost(
-    modifier: Modifier = Modifier
-){
-    // TODO : Navigation 의존성 추가 및 NavHost, NavGraph 설정
+    startDestination: String = AuthRoute.startDestination
+) {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = AuthRoute.Graph.route
+    ) {
+        authGraph(navController)
+        mainGraph(navController)
+    }
+}
+
+// 1. 로그인 및 회원가입
+fun NavGraphBuilder.authGraph(navController: NavHostController) {
+    navigation(
+        startDestination = AuthRoute.startDestination,
+        route = AuthRoute.Graph.route
+    ) {
+        composable(AuthRoute.Login.route) {
+            LoginScreen(
+
+            )
+        }
+        composable(AuthRoute.Signup.route) {
+            //SignupScreen()
+        }
+    }
+}
+
+// 메인 탭
+fun NavGraphBuilder.mainGraph(navController: NavHostController) {
+    navigation(
+        startDestination = MainRoute.startDestination,
+        route = MainRoute.Graph.route
+    ) {
+        composable(MainRoute.Quiz.route) {
+            //QuizScreen()
+        }
+        composable(MainRoute.MyPage.route) {
+            //MyPageScreen()
+        }
+        composable(MainRoute.Workbook.route) {
+            //WorkbookScreen()
+        }
+    }
 }
