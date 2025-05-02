@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.datastore
 
 
+import com.android.quizcafe.core.common.network.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -10,13 +11,14 @@ import javax.inject.Inject
 
 
 class AuthManager @Inject constructor(
-    private val authDataStore: AuthDataStore
+    private val authDataStore: AuthDataStore,
+    @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     @Volatile
     private var cachedToken: String? = null
 
     init {
-        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+        applicationScope.launch {
             authDataStore.accessTokenFlow.collect { token ->
                 cachedToken = token
             }
