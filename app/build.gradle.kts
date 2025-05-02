@@ -63,6 +63,8 @@ dependencies {
     implementation(libs.okhttp.mockwebserver)
     testImplementation(libs.junit)
     testImplementation("org.json:json:20220924")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation ("androidx.datastore:datastore-preferences:1.1.4")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

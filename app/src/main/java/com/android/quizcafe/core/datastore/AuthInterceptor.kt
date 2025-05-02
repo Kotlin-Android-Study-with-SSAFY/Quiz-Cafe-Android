@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.dataStore
+package com.android.quizcafe.core.datastore
 
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -9,12 +9,15 @@ class AuthInterceptor @Inject constructor(
     private val authManager: AuthManager
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token: String = runBlocking {
-            authManager.getAccessToken()
-        }
+        val token = authManager.getToken()
 
-        val request = chain.request().newBuilder().header("Authorization", "Bearer $token").build()
-
+        val request = chain.request().newBuilder()
+            .apply {
+                if (!token.isNullOrEmpty()) {
+                    addHeader("Authorization", "Bearer $token")
+                }
+            }
+            .build()
         return chain.proceed(request)
     }
 }
