@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.signup
+package com.android.quizcafe.feature.util
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
