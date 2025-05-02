@@ -39,7 +39,7 @@ fun QuizCafeTextField(
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if (label != null) {
-            Text(label)
+            Text(label, fontSize = 20.sp)
             Spacer(modifier = Modifier.height(4.dp))
         }
 

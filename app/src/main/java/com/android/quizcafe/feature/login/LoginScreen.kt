@@ -87,6 +87,8 @@ fun LoginScreen(
     ) {
         item {
             QuizCafeLogo()
+        }
+        item {
             QuizCafeTextField(
                 label = "ID",
                 value = state.email,
@@ -95,8 +97,9 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(56.dp)
             )
-
             Spacer(modifier = Modifier.height(20.dp))
+        }
+        item {
             QuizCafeTextField(
                 label = "PW",
                 value = state.password,
@@ -107,18 +110,19 @@ fun LoginScreen(
                 isPassword = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
             )
-
             Spacer(modifier = Modifier.height(24.dp))
+        }
+        item {
             LoginButton(
                 onClick = {
                     viewModel.onIntent(LoginIntent.ClickLogin)
                 },
                 state = state
             )
-
             Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
             BottomTextOptions(viewModel)
-
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
