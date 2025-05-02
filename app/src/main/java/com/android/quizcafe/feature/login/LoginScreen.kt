@@ -150,7 +150,7 @@ fun LoginScreen(
 fun QuizCafeLogo() {
     Image(
         painter = painterResource(id = R.drawable.quizcafelogo),
-        contentDescription = "QuizCafe Logo",
+        contentDescription = stringResource(R.string.quizcafe_logo),
         modifier = Modifier
             .padding(top = 20.dp)
             .height(140.dp)

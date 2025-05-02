@@ -19,5 +19,6 @@
     <string name="success_login">로그인에 성공했습니다.</string>
     <string name="login">로그인</string>
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
+    <string name="quizcafe_logo">QuizCafe Logo</string>
 
 </resources>
