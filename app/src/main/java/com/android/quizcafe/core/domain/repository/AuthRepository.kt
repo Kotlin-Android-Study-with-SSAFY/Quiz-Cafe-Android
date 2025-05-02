@@ -1,7 +1,10 @@
 package com.android.quizcafe.core.domain.repository
 
+import com.android.quizcafe.core.data.model.auth.response.SignInResponseDto
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.SignInRequest
 import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
 import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import kotlinx.coroutines.flow.Flow
@@ -14,4 +17,8 @@ interface AuthRepository {
     suspend fun verifyCode(request : VerifyCodeRequest) : Flow<Resource<Unit>>
 
     suspend fun signUp(request : SignUpRequest) : Flow<Resource<Unit>>
+
+    suspend fun signIn(request: SignInRequest) : Flow<Resource<Unit>>
+
+    suspend fun resetPassword(request: ResetPasswordRequest) : Flow<Resource<Unit>>
 }

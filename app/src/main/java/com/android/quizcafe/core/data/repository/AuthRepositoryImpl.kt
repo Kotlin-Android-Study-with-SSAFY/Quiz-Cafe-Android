@@ -4,6 +4,7 @@ import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
 import com.android.quizcafe.core.domain.model.auth.request.SignInRequest
 import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
@@ -35,6 +36,7 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun signUp(request: SignUpRequest): Flow<Resource<Unit>> =
         apiResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
 
+
     override suspend fun signIn(request: SignInRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         withTimeoutOrNull(30_000L) {
@@ -53,4 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
             errorMessage = "요청 시간이 초과되었습니다.",
             code = HttpStatus.REQUEST_TIMEOUT))
     }.flowOn(Dispatchers.IO)
+
+    override suspend fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
+        apiResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
 }

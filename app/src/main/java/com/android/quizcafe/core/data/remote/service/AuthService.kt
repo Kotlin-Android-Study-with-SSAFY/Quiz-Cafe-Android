@@ -33,4 +33,7 @@ interface AuthService {
         @Body request: SignInRequestDto
     ) : NetworkResult<ApiResponse<SignInResponseDto>>
 
+    suspend fun resetPassword(
+        @Query("email") email : String
+    ) : NetworkResult<ApiResponse<Unit>>
 }
