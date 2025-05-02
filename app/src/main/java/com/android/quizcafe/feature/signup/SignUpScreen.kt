@@ -41,27 +41,46 @@ fun SignUpScreen(
             when (effect) {
                 is SignUpEffect.NavigateToPasswordInput -> {
                     step = 1
-                    Toast.makeText(context, context.getString(R.string.success_email_verification), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.success_email_verification),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 is SignUpEffect.ShowErrorDialog -> {
-                    Toast.makeText(context, context.getString(R.string.error_message), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.error_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
                 is SignUpEffect.NavigateToLoginScreen -> {
                     navigateToLogin()
-                    Toast.makeText(context, context.getString(R.string.success_signup), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.success_signup),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
 
     Scaffold(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
         topBar = {
             QuizCafeTopAppBar(
                 title = TopAppBarTitle.Text(stringResource(R.string.signup)),
                 navigationIcon = {
                     IconButton(onClick = { /* TODO */ }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.navigate_up))
+                        Icon(
+                            Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.navigate_up)
+                        )
                     }
                 }
             )

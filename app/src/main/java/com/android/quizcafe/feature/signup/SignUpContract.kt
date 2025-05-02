@@ -29,13 +29,13 @@ sealed class SignUpIntent {
     data class UpdatedPassword(val password: String) : SignUpIntent()
     data class UpdatedPasswordConfirm(val password: String) : SignUpIntent()
 
-    object ClickSendCode : SignUpIntent()
-    object ClickVerifyCode : SignUpIntent()
-    object ClickSignUp : SignUpIntent()
+    data object ClickSendCode : SignUpIntent()
+    data object ClickVerifyCode : SignUpIntent()
+    data object ClickSignUp : SignUpIntent()
 
-    object SuccessSendCode : SignUpIntent()
-    object SuccessCodeVerification : SignUpIntent()
-    object SuccessSignUp : SignUpIntent()
+    data object SuccessSendCode : SignUpIntent()
+    data object SuccessCodeVerification : SignUpIntent()
+    data object SuccessSignUp : SignUpIntent()
 
     data class FailSendCode(val errorMessage: String? = null) : SignUpIntent()
     data class FailCodeVerification(val errorMessage: String? = null) : SignUpIntent()
@@ -44,6 +44,6 @@ sealed class SignUpIntent {
 
 sealed class SignUpEffect {
     data class ShowErrorDialog(val message: String) : SignUpEffect()
-    object NavigateToLoginScreen : SignUpEffect()
-    object NavigateToPasswordInput : SignUpEffect()
+    data object NavigateToLoginScreen : SignUpEffect()
+    data object NavigateToPasswordInput : SignUpEffect()
 }

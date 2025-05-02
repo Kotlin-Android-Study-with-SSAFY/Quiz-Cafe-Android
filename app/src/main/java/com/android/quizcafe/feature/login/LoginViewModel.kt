@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(): ViewModel() {
+class LoginViewModel @Inject constructor() : ViewModel() {
 
     private val _state = MutableStateFlow(LoginViewState())
     val state: StateFlow<LoginViewState> = _state.asStateFlow()
@@ -25,7 +25,7 @@ class LoginViewModel @Inject constructor(): ViewModel() {
     fun onIntent(intent: LoginIntent) {
         _state.value = reduce(_state.value, intent)
 
-        when(intent) {
+        when (intent) {
             LoginIntent.ClickSignUp -> {
                 viewModelScope.launch {
                     _effect.emit(LoginEffect.NavigateToSignUp)
@@ -52,8 +52,13 @@ class LoginViewModel @Inject constructor(): ViewModel() {
 
     private fun reduce(state: LoginViewState, intent: LoginIntent): LoginViewState {
         return when (intent) {
-            is LoginIntent.UpdatedEmail -> state.copy(email = intent.email, errorMessage = null).recalculate()
-            is LoginIntent.UpdatedPassword -> state.copy(password = intent.password, errorMessage = null).recalculate()
+            is LoginIntent.UpdatedEmail -> state.copy(email = intent.email, errorMessage = null)
+                .recalculate()
+
+            is LoginIntent.UpdatedPassword -> state.copy(
+                password = intent.password,
+                errorMessage = null
+            ).recalculate()
 
             LoginIntent.ClickLogin -> state.copy(isLoading = true, errorMessage = null)
             LoginIntent.ClickSignUp -> state.copy(isLoading = false)
