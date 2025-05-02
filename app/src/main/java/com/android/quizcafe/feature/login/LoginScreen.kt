@@ -47,9 +47,6 @@ import com.android.quizcafe.core.designsystem.theme.errorLight
 import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
 import com.android.quizcafe.core.designsystem.theme.primaryLight
 import com.android.quizcafe.core.designsystem.theme.surfaceBrightLight
-import com.android.quizcafe.feature.login.LoginContract.LoginEffect
-import com.android.quizcafe.feature.login.LoginContract.LoginIntent
-import com.android.quizcafe.feature.login.LoginContract.LoginViewState
 
 @Composable
 fun LoginScreen(
