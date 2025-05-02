@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.network.mapper
 
-import androidx.compose.ui.input.key.Key.Companion.H
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.network.model.NetworkResult
@@ -16,13 +15,13 @@ import java.net.ConnectException
 
 const val DEFAULT_ERROR_MESSAGE = "default error message"
 
-suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource() : Resource<T>{
-    return withTimeoutOrNull(30_000L){
-        when(val result = this@toResource()){
+suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource(): Resource<T> {
+    return withTimeoutOrNull(30_000L) {
+        when (val result = this@toResource()) {
             is NetworkResult.Success -> Resource.Success(result.data)
-            is NetworkResult.Error -> Resource.Failure(errorMessage = result.message ?: DEFAULT_ERROR_MESSAGE , code = result.code)
+            is NetworkResult.Error -> Resource.Failure(errorMessage = result.message ?: DEFAULT_ERROR_MESSAGE, code = result.code)
             is NetworkResult.Exception -> {
-                when(result.e){
+                when (result.e) {
                     is ConnectException -> Resource.Failure(errorMessage = result.e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.NETWORK_DISCONNECTED)
                     else -> Resource.Failure(errorMessage = result.e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.UNKNOWN)
                 }
@@ -31,19 +30,21 @@ suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource() : Resource<T
     } ?: Resource.Failure(errorMessage = "time out", code = HttpStatus.REQUEST_TIMEOUT)
 }
 
-fun <T : Any>(suspend() -> NetworkResult<T>).toResourceFlow() : Flow<Resource<T>> = flow{
+fun <T : Any> (suspend() -> NetworkResult<T>).toResourceFlow(): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
-    withTimeoutOrNull(30_000L){
+    withTimeoutOrNull(30_000L) {
         this@toResourceFlow()
             .onSuccess { emit(Resource.Success(it)) }
-            .onError{ code, message ->
+            .onError { code, message ->
                 emit(Resource.Failure(errorMessage = message ?: DEFAULT_ERROR_MESSAGE, code = code))
             }
             .onException { e ->
-                emit(when(e){
-                    is ConnectException -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.NETWORK_DISCONNECTED)
-                    else -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.UNKNOWN)
-                })
+                emit(
+                    when (e) {
+                        is ConnectException -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.NETWORK_DISCONNECTED)
+                        else -> Resource.Failure(errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE, code = HttpStatus.UNKNOWN)
+                    }
+                )
             }
     } ?: Resource.Failure(errorMessage = "time out", code = HttpStatus.REQUEST_TIMEOUT)
 }.flowOn(Dispatchers.IO)

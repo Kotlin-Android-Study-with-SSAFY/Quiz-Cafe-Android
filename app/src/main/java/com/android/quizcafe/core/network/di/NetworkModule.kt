@@ -24,7 +24,7 @@ object NetworkModule {
     @Named("default")
     fun provideDefaultRetrofit(
         @Named("default")okHttpClient: OkHttpClient
-    ) : Retrofit {
+    ): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit.Builder()

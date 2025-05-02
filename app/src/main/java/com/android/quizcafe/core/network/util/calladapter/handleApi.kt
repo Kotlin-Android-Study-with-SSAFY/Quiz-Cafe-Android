@@ -16,17 +16,17 @@ fun <T : Any> handleApi(
         val body = response.body()
         if (response.isSuccessful && body != null) {
             NetworkResult.Success(body)
-        }else if(response.isSuccessful && body == null){
-            if(resultType == Unit::class){
+        } else if (response.isSuccessful && body == null) {
+            if (resultType == Unit::class) {
                 @Suppress("UNCHECKED_CAST")
                 NetworkResult.Success(Unit as T)
-            }else{
+            } else {
                 NetworkResult.Error(
                     code = HttpStatus.INTERNAL_SERVER_ERROR,
                     message = "Server returned invalid null body"
                 )
             }
-        }else{
+        } else {
             handleErrorResponse(response)
         }
     } catch (e: HttpException) {
@@ -52,4 +52,3 @@ private fun extractErrorMessage(errorBody: String): String {
     }
     return json.getString("message")
 }
-

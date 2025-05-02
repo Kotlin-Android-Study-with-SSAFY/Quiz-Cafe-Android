@@ -84,21 +84,21 @@ fun QuizCafeOutlinedButton(
         modifier = modifier,
         enabled = enabled,
         border =
-            BorderStroke(
-                width = QuizCafeButtonDefaults.OutlinedButtonBorderWidth,
-                color =
-                    if (enabled) {
-                        MaterialTheme.colorScheme.outline
-                    } else {
-                        MaterialTheme.colorScheme.onSurface.copy(
-                            alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
-                        )
-                    },
-            ),
+        BorderStroke(
+            width = QuizCafeButtonDefaults.OutlinedButtonBorderWidth,
+            color =
+            if (enabled) {
+                MaterialTheme.colorScheme.outline
+            } else {
+                MaterialTheme.colorScheme.onSurface.copy(
+                    alpha = QuizCafeButtonDefaults.DISABLED_OUTLINED_BUTTON_BORDER_ALPHA,
+                )
+            },
+        ),
         colors =
-            ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            ),
+        ButtonDefaults.outlinedButtonColors(
+            contentColor = MaterialTheme.colorScheme.onBackground,
+        ),
         contentPadding = contentPadding,
         content = content,
     )
@@ -124,9 +124,9 @@ fun QuizCafeTextButton(
         modifier = modifier,
         enabled = enabled,
         colors =
-            ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-            ),
+        ButtonDefaults.textButtonColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+        ),
         content = content,
     )
 }
@@ -147,9 +147,9 @@ private fun QuizCafeButtonContent(
         }
         Box(
             modifier =
-                Modifier.padding(
-                    start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp,
-                ),
+            Modifier.padding(
+                start = if (leadingIcon != null) ButtonDefaults.IconSpacing else 0.dp,
+            ),
         ) {
             text()
         }

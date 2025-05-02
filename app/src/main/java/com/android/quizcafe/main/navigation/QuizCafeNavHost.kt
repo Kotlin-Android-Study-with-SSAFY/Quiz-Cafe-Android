@@ -32,9 +32,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {
-            LoginScreen(
-
-            )
+            LoginScreen()
         }
         composable(AuthRoute.Signup.route) {
             //SignupScreen()
