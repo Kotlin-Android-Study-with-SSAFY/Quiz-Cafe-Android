@@ -3,6 +3,7 @@ package com.android.quizcafe
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import com.android.quizcafe.core.datastore.AuthDataStore
 import com.android.quizcafe.core.datastore.AuthManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -33,7 +34,7 @@ class AuthManagerTest {
         )
 
         // 3) AuthManager 생성 (init 블록이 바로 collect 시작)
-        authManager = AuthManager(dataStore)
+        authManager = AuthManager(AuthDataStore(dataStore))
     }
 
     @After
