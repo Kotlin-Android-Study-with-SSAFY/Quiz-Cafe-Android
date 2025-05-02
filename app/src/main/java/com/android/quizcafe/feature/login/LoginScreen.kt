@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
@@ -44,12 +45,9 @@ fun LoginScreen(
 
     // 키보드 올라올 때 패딩 애니메이션 적용
     val animatedPadding by animateDpAsState(
-        targetValue = imeBottomDp,
-        animationSpec = tween(
-            durationMillis = 400,
-            easing = FastOutSlowInEasing
-        ),
-        label = "AnimatedImePadding"
+        targetValue = imeBottomDp, animationSpec = tween(
+            durationMillis = 400, easing = FastOutSlowInEasing
+        ), label = "AnimatedImePadding"
     )
 
     LaunchedEffect(Unit) {
@@ -58,8 +56,7 @@ fun LoginScreen(
                 LoginEffect.NavigateToHome -> {
                     navigateToHome()
                     Toast.makeText(
-                        context,
-                        context.getString(R.string.success_login), Toast.LENGTH_SHORT
+                        context, context.getString(R.string.success_login), Toast.LENGTH_SHORT
                     ).show()
                 }
 
@@ -69,9 +66,7 @@ fun LoginScreen(
 
                 is LoginEffect.ShowErrorDialog -> {
                     Toast.makeText(
-                        context,
-                        context.getString(R.string.error_message),
-                        Toast.LENGTH_SHORT
+                        context, context.getString(R.string.error_message), Toast.LENGTH_SHORT
                     ).show()
                 }
             }
@@ -116,8 +111,7 @@ fun LoginScreen(
             LoginButton(
                 onClick = {
                     viewModel.onIntent(LoginIntent.ClickLogin)
-                },
-                state = state
+                }, state = state
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -126,4 +120,10 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoginScreenPreview() {
+    LoginScreen(navigateToSignUp = { }, navigateToHome = {})
 }
