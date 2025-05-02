@@ -1,6 +1,6 @@
-package com.android.quizcafe.core.data.model.auth
+package com.android.quizcafe.core.data.model.auth.request
 
-import com.android.quizcafe.core.domain.model.auth.VerifyCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import kotlinx.serialization.SerialName
 
 data class VerifyCodeRequestDto(

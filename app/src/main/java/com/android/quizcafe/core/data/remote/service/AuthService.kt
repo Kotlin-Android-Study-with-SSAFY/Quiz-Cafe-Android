@@ -1,8 +1,8 @@
 package com.android.quizcafe.core.data.remote.service
 
-import com.android.quizcafe.core.data.model.auth.SignUpRequestDto
-import com.android.quizcafe.core.data.model.auth.VerifyCodeRequestDto
-import com.android.quizcafe.core.domain.model.auth.SignUpRequest
+import com.android.quizcafe.core.data.model.auth.request.SignInRequestDto
+import com.android.quizcafe.core.data.model.auth.request.SignUpRequestDto
+import com.android.quizcafe.core.data.model.auth.request.VerifyCodeRequestDto
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.Body
@@ -27,5 +27,9 @@ interface AuthService {
         @Body request: SignUpRequestDto
     ) : NetworkResult<ApiResponse<Unit>>
 
+    @POST("auth/sign-in")
+    suspend fun signIn(
+        @Body request: SignInRequestDto
+    ) : NetworkResult<ApiResponse<Unit>>
 
 }

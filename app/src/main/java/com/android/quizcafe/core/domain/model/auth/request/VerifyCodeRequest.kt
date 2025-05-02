@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.domain.model.auth
+package com.android.quizcafe.core.domain.model.auth.request
 
 data class VerifyCodeRequest(
     val email : String,

@@ -4,7 +4,7 @@ import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
 import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.data.repository.AuthRepositoryImpl
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.auth.SendCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
 import com.android.quizcafe.core.domain.usecase.auth.SendCodeUseCase
 import com.android.quizcafe.core.domain.usecase.auth.SignUpUseCase

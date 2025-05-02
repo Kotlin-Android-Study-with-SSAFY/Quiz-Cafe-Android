@@ -1,9 +1,9 @@
 package com.android.quizcafe.core.domain.repository
 
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.auth.SendCodeRequest
-import com.android.quizcafe.core.domain.model.auth.SignUpRequest
-import com.android.quizcafe.core.domain.model.auth.VerifyCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
+import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import kotlinx.coroutines.flow.Flow
 
 
