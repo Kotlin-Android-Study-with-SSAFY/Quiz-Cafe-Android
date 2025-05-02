@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
+import com.android.quizcafe.core.designsystem.QuizCafeTextField
 import com.android.quizcafe.core.designsystem.theme.Typography
 import com.android.quizcafe.core.designsystem.theme.errorLight
 import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
@@ -157,64 +158,6 @@ fun QuizCafeLogo() {
 }
 
 @Composable
-fun QuizCafeTextField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    label: String? = null,
-    isPassword: Boolean = false,
-    errorMessage: String? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        if (label != null) {
-            Text(label)
-            Spacer(modifier = Modifier.height(4.dp))
-        }
-
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-            modifier = if (errorMessage != null) modifier.border(
-                1.dp,
-                Color.Red,
-                RoundedCornerShape(10.dp)
-            ) else modifier,
-            enabled = enabled,
-            colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.DarkGray,
-                disabledContainerColor = surfaceBrightLight,
-                focusedContainerColor = primaryContainerLight,
-                unfocusedContainerColor = primaryContainerLight,
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent,
-                cursorColor = primaryLight
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-            keyboardOptions = keyboardOptions,
-            textStyle = TextStyle(fontSize = 16.sp)
-        )
-
-        if (errorMessage != null) {
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = errorMessage,
-                modifier = Modifier
-                    .align(Alignment.End)
-                    .padding(4.dp),
-                color = errorLight,
-                style = Typography.labelSmall,
-            )
-        }
-    }
-}
-
-@Composable
 fun LoginButton(onClick: () -> Unit, state: LoginViewState) {
     QuizCafeButton(
         onClick = onClick,
@@ -246,11 +189,3 @@ fun BottomTextOptions(viewModel: LoginViewModel) {
         )
     }
 }
-
-//@Preview(showBackground = true, widthDp = 360, heightDp = 720)
-//@Composable
-//fun LoginScreenPreview() {
-//    QuizCafeTheme {
-//        LoginScreen()
-//    }
-//}
