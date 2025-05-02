@@ -64,7 +64,8 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation("org.json:json:20220924")
-    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation (libs.kotlinx.coroutines.test)
+    testImplementation (libs.androidx.datastore.preferences)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -73,4 +74,7 @@ dependencies {
     kspAndroidTest(libs.hilt.compiler)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // DataStore
+    implementation (libs.androidx.datastore.preferences)
 }
