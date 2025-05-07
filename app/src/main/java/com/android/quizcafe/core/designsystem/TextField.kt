@@ -14,16 +14,18 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.android.quizcafe.core.designsystem.theme.Typography
 import com.android.quizcafe.core.designsystem.theme.errorLight
 import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
 import com.android.quizcafe.core.designsystem.theme.primaryLight
+import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.surfaceBrightLight
 
 @Composable
@@ -82,4 +84,28 @@ fun QuizCafeTextField(
             )
         }
     }
+}
+
+@Composable
+fun LabeledInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    enabled: Boolean = true,
+    errorMessage: String? = null,
+    isPassword: Boolean = false,
+    focusRequester: FocusRequester? = null
+) {
+    QuizCafeTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = label,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(56.dp)
+            .then(if (focusRequester != null) Modifier.focusRequester(focusRequester) else Modifier),
+        isPassword = isPassword,
+        errorMessage = errorMessage,
+        enabled = enabled
+    )
 }
