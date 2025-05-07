@@ -39,7 +39,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
-        withTimeoutOrNull(30_000L) {
+        withTimeoutOrNull(3_000L) {
             remoteDataSource.login(request.toDto())
                 .onSuccess {
                     // TODO : accessToken 저장 로직 구현

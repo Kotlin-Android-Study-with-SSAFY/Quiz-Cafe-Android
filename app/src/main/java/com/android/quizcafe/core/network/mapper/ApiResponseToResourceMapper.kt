@@ -18,7 +18,7 @@ import java.net.SocketTimeoutException
 
 
 suspend fun <T : Any> apiResponseToResource(call : suspend () -> NetworkResult<ApiResponse<T>>): Resource<T> {
-    return withTimeoutOrNull(30_000L) {
+    return withTimeoutOrNull(3_000L) {
         when (val result = call()) {
             is NetworkResult.Success -> Resource.Success(result.data.data)
             is NetworkResult.Error -> Resource.Failure(
@@ -35,7 +35,7 @@ suspend fun <T : Any> apiResponseToResource(call : suspend () -> NetworkResult<A
 
 fun <T : Any> apiResponseToResourceFlow(call : suspend() -> NetworkResult<ApiResponse<T>>): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
-    withTimeoutOrNull(30_000L) {
+    withTimeoutOrNull(3_000L) {
         call()
             .onSuccess {
                 emit( Resource.Success(it.data))}
