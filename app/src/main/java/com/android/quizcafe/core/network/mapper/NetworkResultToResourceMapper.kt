@@ -30,7 +30,7 @@ suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource(): Resource<T>
     } ?: Resource.Failure(errorMessage = "time out", code = HttpStatus.REQUEST_TIMEOUT)
 }
 
-fun <T : Any> (suspend() -> NetworkResult<T>).toResourceFlow(): Flow<Resource<T>> = flow {
+fun <T : Any> (suspend () -> NetworkResult<T>).toResourceFlow(): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
     withTimeoutOrNull(30_000L) {
         this@toResourceFlow()
