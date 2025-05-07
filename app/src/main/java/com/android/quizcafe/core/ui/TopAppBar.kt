@@ -55,7 +55,7 @@ fun QuizCafeTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     navigationIcon: (@Composable () -> Unit)? = null,
     actions: (@Composable RowScope.() -> Unit)? = null,
-    alignTitleToStart: Boolean = false, // 조건부 좌측 정렬 플래그
+    alignTitleToStart: Boolean = false,
 ) {
     CenterAlignedTopAppBar(
         title = {
