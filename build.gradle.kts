@@ -8,3 +8,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.kotlin.serialization) apply false
 }
+
+ktlint {
+    version.set("1.5.0")
+}
