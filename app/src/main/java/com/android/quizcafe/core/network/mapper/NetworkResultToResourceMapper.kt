@@ -15,9 +15,9 @@ import java.net.ConnectException
 
 const val DEFAULT_ERROR_MESSAGE = "default error message"
 
-suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource(): Resource<T> {
-    return withTimeoutOrNull(30_000L) {
-        when (val result = this@toResource()) {
+suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource() : Resource<T>{
+    return withTimeoutOrNull(3_000L){
+        when(val result = this@toResource()){
             is NetworkResult.Success -> Resource.Success(result.data)
             is NetworkResult.Error -> Resource.Failure(errorMessage = result.message ?: DEFAULT_ERROR_MESSAGE, code = result.code)
             is NetworkResult.Exception -> {
@@ -32,7 +32,7 @@ suspend fun <T : Any> (suspend () -> NetworkResult<T>).toResource(): Resource<T>
 
 fun <T : Any> (suspend () -> NetworkResult<T>).toResourceFlow(): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
-    withTimeoutOrNull(30_000L) {
+    withTimeoutOrNull(3_000L){
         this@toResourceFlow()
             .onSuccess { emit(Resource.Success(it)) }
             .onError { code, message ->
