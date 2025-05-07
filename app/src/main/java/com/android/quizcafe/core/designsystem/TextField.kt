@@ -80,7 +80,7 @@ fun QuizCafeTextField(
                     .align(Alignment.End)
                     .padding(4.dp),
                 color = errorLight,
-                style = Typography.labelSmall,
+                style = quizCafeTypography().labelSmall,
             )
         }
     }
