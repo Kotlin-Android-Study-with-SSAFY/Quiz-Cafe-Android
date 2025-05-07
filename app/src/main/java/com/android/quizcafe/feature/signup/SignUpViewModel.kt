@@ -23,14 +23,10 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     private val _effect = MutableSharedFlow<SignUpEffect>()
     val effect: SharedFlow<SignUpEffect> = _effect.asSharedFlow()
 
-    private val _timeLeft = MutableStateFlow(180)
-    val timeLeft: StateFlow<Int> = _timeLeft
-
     private val countdownTimer = CountdownTimer(
         coroutineScope = viewModelScope,
         seconds = 180,
         onTick = { remaining ->
-            _timeLeft.value = remaining
             _state.update { it.copy(remainingSeconds = remaining) }
         }
     )
@@ -73,11 +69,6 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
                 viewModelScope.launch {
                     _effect.emit(SignUpEffect.NavigateToLoginScreen)
                 }
-            }
-
-            SignUpIntent.SuccessSendCode -> {
-                // TODO: 상태 변경 수정
-                countdownTimer.start()
             }
 
             else -> Unit
@@ -132,7 +123,10 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
             )
 
             SignUpIntent.SuccessSignUp -> state.copy(isLoading = false)
-            SignUpIntent.SuccessSendCode -> state.copy(isLoading = false, isCodeSent = true)
+            SignUpIntent.SuccessSendCode -> {
+                countdownTimer.start()
+                state.copy(isLoading = false, isCodeSent = true)
+            }
 
 
         }
