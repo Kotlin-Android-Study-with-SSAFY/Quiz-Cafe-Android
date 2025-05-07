@@ -6,10 +6,9 @@ import com.android.quizcafe.core.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
 class SignUpUseCase @Inject constructor(
     private val authRepository: AuthRepository
-){
-    suspend operator fun invoke(request : SignUpRequest) : Flow<Resource<Unit>> =
+) {
+    suspend operator fun invoke(request: SignUpRequest): Flow<Resource<Unit>> =
         authRepository.signUp(request)
 }

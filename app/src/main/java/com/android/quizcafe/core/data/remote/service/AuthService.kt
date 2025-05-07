@@ -14,27 +14,26 @@ interface AuthService {
 
     @POST("auth/verification-code/send")
     suspend fun sendCode(
-        @Query("email") email : String
-    ) : NetworkResult<ApiResponse<Unit>>
+        @Query("email") email: String
+    ): NetworkResult<ApiResponse<Unit>>
 
     @POST("auth/verification-code/verify")
     suspend fun verifyCode(
-        @Body request : VerifyCodeRequestDto
-    ) : NetworkResult<ApiResponse<Unit>>
-
+        @Body request: VerifyCodeRequestDto
+    ): NetworkResult<ApiResponse<Unit>>
 
     @POST("auth/sign-up")
     suspend fun signUp(
         @Body request: SignUpRequestDto
-    ) : NetworkResult<ApiResponse<Unit>>
+    ): NetworkResult<ApiResponse<Unit>>
 
     @POST("auth/sign-in")
     suspend fun login(
         @Body request: LoginRequestDto
-    ) : NetworkResult<ApiResponse<LoginResponseDto>>
+    ): NetworkResult<ApiResponse<LoginResponseDto>>
 
     @POST("auth/password/reset")
     suspend fun resetPassword(
-        @Query("email") email : String
-    ) : NetworkResult<ApiResponse<Unit>>
+        @Query("email") email: String
+    ): NetworkResult<ApiResponse<Unit>>
 }

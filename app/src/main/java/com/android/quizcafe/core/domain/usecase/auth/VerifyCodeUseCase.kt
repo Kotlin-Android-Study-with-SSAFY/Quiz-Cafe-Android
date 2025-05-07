@@ -9,6 +9,6 @@ import javax.inject.Inject
 class VerifyCodeUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(request : VerifyCodeRequest) : Flow<Resource<Unit>> =
+    suspend operator fun invoke(request: VerifyCodeRequest): Flow<Resource<Unit>> =
         authRepository.verifyCode(request)
 }

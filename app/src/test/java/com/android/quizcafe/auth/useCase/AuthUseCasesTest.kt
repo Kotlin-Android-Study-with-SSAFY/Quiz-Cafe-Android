@@ -35,7 +35,6 @@ class AuthUseCasesTest {
     private lateinit var verifyCodeUseCase: VerifyCodeUseCase
     private lateinit var signUpUseCase: SignUpUseCase
 
-
     @Before
     fun setUp() {
         mockWebServer = MockWebServer()

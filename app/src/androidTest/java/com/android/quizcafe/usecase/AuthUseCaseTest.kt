@@ -19,28 +19,26 @@ import org.junit.Rule
 import org.junit.Test
 import javax.inject.Inject
 
-
 @HiltAndroidTest
 class AuthUseCaseTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-
     @BindValue
-    val mockWebServer : MockWebServer = MockWebServer()
+    val mockWebServer: MockWebServer = MockWebServer()
 
     @Inject
-    lateinit var sendCodeUseCase : SendCodeUseCase
+    lateinit var sendCodeUseCase: SendCodeUseCase
 
     @Before
-    fun setUp(){
+    fun setUp() {
         mockWebServer.start(port = 8080)
         hiltRule.inject()
     }
 
     @After
-    fun tearDown(){
+    fun tearDown() {
         mockWebServer.shutdown()
     }
 
@@ -86,5 +84,4 @@ class AuthUseCaseTest {
         assertEquals(400, (results[1] as Resource.Failure).code)
         assertEquals("유효하지 않은 이메일 형식", (results[1] as Resource.Failure).errorMessage)
     }
-
 }

@@ -1,14 +1,9 @@
 package com.android.quizcafe.core.datastore
 
-
 import com.android.quizcafe.core.common.network.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 
 class AuthManager @Inject constructor(
     private val authDataStore: AuthDataStore,

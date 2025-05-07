@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class SendCodeUseCase @Inject constructor(
     private val authRepository: AuthRepository,
-){
-    suspend operator fun invoke(request : SendCodeRequest) : Flow<Resource<Unit>> =
+) {
+    suspend operator fun invoke(request: SendCodeRequest): Flow<Resource<Unit>> =
         authRepository.sendCode(request = request)
 }
