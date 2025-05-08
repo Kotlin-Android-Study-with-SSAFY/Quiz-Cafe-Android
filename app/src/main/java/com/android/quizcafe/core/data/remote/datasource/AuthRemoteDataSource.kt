@@ -15,8 +15,8 @@ class AuthRemoteDataSource @Inject constructor(
     private val authService: AuthService
 ) {
 
-    suspend fun sendCode(request: SendCodeRequestDto): NetworkResult<ApiResponse<Unit>> =
-        authService.sendCode(email = request.email)
+    suspend fun sendCode(request: SendCodeRequestDto) : NetworkResult<ApiResponse<Unit>> =
+        authService.sendCode(request)
 
     suspend fun verifyCode(request: VerifyCodeRequestDto): NetworkResult<ApiResponse<Unit>> =
         authService.verifyCode(request)
