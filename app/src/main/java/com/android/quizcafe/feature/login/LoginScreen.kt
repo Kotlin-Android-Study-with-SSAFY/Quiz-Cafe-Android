@@ -31,9 +31,12 @@ fun LoginScreen(
 
     // 키보드 올라올 때 패딩 애니메이션 적용
     val animatedPadding by animateDpAsState(
-        targetValue = imeBottomDp, animationSpec = tween(
-            durationMillis = 400, easing = FastOutSlowInEasing
-        ), label = "AnimatedImePadding"
+        targetValue = imeBottomDp,
+        animationSpec = tween(
+            durationMillis = 400,
+            easing = FastOutSlowInEasing
+        ),
+        label = "AnimatedImePadding"
     )
 
     LazyColumn(
@@ -59,7 +62,8 @@ fun LoginScreen(
             LoginButton(
                 onClick = {
                     onIntent(LoginIntent.ClickLogin)
-                }, state = state
+                },
+                state = state
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

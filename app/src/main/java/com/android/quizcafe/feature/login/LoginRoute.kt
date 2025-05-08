@@ -24,7 +24,9 @@ fun LoginRoute(
                 LoginEffect.NavigateToHome -> {
                     navigateToHome()
                     Toast.makeText(
-                        context, context.getString(R.string.success_login), Toast.LENGTH_SHORT
+                        context,
+                        context.getString(R.string.success_login),
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
 
@@ -34,7 +36,9 @@ fun LoginRoute(
 
                 is LoginEffect.ShowErrorDialog -> {
                     Toast.makeText(
-                        context, context.getString(R.string.error_message), Toast.LENGTH_SHORT
+                        context,
+                        context.getString(R.string.error_message),
+                        Toast.LENGTH_SHORT
                     ).show()
                 }
             }

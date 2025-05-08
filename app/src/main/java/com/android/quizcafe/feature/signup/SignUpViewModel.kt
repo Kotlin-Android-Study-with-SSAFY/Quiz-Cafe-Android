@@ -127,8 +127,6 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
                 countdownTimer.start()
                 state.copy(isLoading = false, isCodeSent = true)
             }
-
-
         }
     }
 

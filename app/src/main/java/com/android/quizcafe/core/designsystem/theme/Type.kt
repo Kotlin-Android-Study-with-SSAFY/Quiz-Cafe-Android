@@ -19,7 +19,6 @@ fun quizCafeDefaultFont(): FontFamily {
     }
 }
 
-
 @Composable
 fun quizCafeTypography(): Typography {
     val fontFamily = quizCafeDefaultFont()

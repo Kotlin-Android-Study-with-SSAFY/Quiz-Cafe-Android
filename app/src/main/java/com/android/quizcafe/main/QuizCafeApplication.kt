@@ -12,6 +12,6 @@ import androidx.datastore.preferences.preferencesDataStore
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "auth_prefs")
 
 @HiltAndroidApp
-class QuizCafeApplication : Application(){
+class QuizCafeApplication : Application() {
     // TODO:  Application 수준에서 설정해줄 것들 추가하기 ex. Timber
 }

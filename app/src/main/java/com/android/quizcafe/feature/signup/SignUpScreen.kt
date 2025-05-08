@@ -98,7 +98,6 @@ fun SignUpEmailVerificationPreview() {
     QuizCafeTheme {
         SignUpScreen(0, SignUpViewState()) {}
     }
-
 }
 
 @Preview(showBackground = true)

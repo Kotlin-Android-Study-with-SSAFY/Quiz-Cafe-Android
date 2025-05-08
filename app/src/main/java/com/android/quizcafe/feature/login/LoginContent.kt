@@ -24,7 +24,6 @@ import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
-
 @Composable
 fun QuizCafeLogo() {
     Image(
@@ -61,8 +60,6 @@ fun PasswordInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit)
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
     )
 }
-
-
 
 @Composable
 fun LoginButton(state: LoginViewState, onClick: () -> Unit) {

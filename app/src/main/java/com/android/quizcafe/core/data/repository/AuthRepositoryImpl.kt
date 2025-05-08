@@ -25,8 +25,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remoteDataSource : AuthRemoteDataSource,
-    private val authManager : AuthManager
+    private val remoteDataSource: AuthRemoteDataSource,
+    private val authManager: AuthManager
 ) : AuthRepository {
 
     override suspend fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
@@ -43,8 +43,8 @@ class AuthRepositoryImpl @Inject constructor(
         withTimeoutOrNull(3_000L) {
             remoteDataSource.login(request.toDto())
                 .onSuccess { response ->
-                    response.data?.let{ it ->
-                        emit( Resource.Success(Unit))
+                    response.data?.let { it ->
+                        emit(Resource.Success(Unit))
                         authManager.saveAccessToken(it.accessToken)
                     } ?: emit(Resource.Failure(errorMessage = "LoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
                 }
