@@ -101,7 +101,7 @@ fun QuizCafeOutlinedButton(
             contentColor = MaterialTheme.colorScheme.onBackground
         ),
         contentPadding = contentPadding,
-        content = content
+        content = content,
     )
 }
 
