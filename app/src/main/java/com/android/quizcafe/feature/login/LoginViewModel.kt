@@ -1,7 +1,12 @@
 package com.android.quizcafe.feature.login
 
+
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
+import com.android.quizcafe.core.domain.usecase.auth.LoginUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +18,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+    private val loginUseCase: LoginUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginViewState())
     val state: StateFlow<LoginViewState> = _state.asStateFlow()
@@ -33,9 +40,21 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
             LoginIntent.ClickLogin -> {
                 viewModelScope.launch {
-                    // TODO: 로그인 요청
-                    onIntent(LoginIntent.SuccessLogin)
-//                    onIntent(LoginIntent.FailLogin)
+                    loginUseCase(LoginRequest(
+                        email = state.value.email,
+                        password = state.value.password
+                    )).collect{
+                        when(it){
+                            is Resource.Success -> {
+                                Log.d("signup","SendCode Success")
+                                onIntent(LoginIntent.SuccessLogin)
+                            }
+                            is Resource.Loading -> Log.d("signup","Loading")
+                            is Resource.Failure -> Log.d("signup", "SendCode Fail")
+                        }
+                    }
+
+
                 }
             }
 
