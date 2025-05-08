@@ -12,7 +12,6 @@ import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
-
 @Composable
 fun QuizCafeNavHost(
     startDestination: String = AuthRoute.startDestination

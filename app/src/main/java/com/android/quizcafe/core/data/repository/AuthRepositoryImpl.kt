@@ -25,39 +25,44 @@ import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remoteDataSource : AuthRemoteDataSource,
-    private val authManager : AuthManager
+    private val remoteDataSource: AuthRemoteDataSource,
+    private val authManager: AuthManager
 ) : AuthRepository {
 
     override suspend fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
         apiResponseToResourceFlow { remoteDataSource.sendCode(request.toDto()) }
 
     override suspend fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>> =
-        apiResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto())}
+        apiResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto()) }
 
     override suspend fun signUp(request: SignUpRequest): Flow<Resource<Unit>> =
         apiResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
-
 
     override suspend fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         withTimeoutOrNull(3_000L) {
             remoteDataSource.login(request.toDto())
                 .onSuccess { response ->
-                    response.data?.let{ it ->
-                        emit( Resource.Success(Unit))
+                    response.data?.let { it ->
+                        emit(Resource.Success(Unit))
                         authManager.saveAccessToken(it.accessToken)
                     } ?: emit(Resource.Failure(errorMessage = "LoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
                 }
                 .onError { code, message ->
-                    emit(Resource.Failure(
-                        errorMessage = message ?: DEFAULT_ERROR_MESSAGE,
-                        code = code))
+                    emit(
+                        Resource.Failure(
+                            errorMessage = message ?: DEFAULT_ERROR_MESSAGE,
+                            code = code
+                        )
+                    )
                 }
-                .onException { e-> emit(handleNetworkException(e)) }
-        } ?: emit(Resource.Failure(
-            errorMessage = "요청 시간이 초과되었습니다.",
-            code = HttpStatus.REQUEST_TIMEOUT))
+                .onException { e -> emit(handleNetworkException(e)) }
+        } ?: emit(
+            Resource.Failure(
+                errorMessage = "요청 시간이 초과되었습니다.",
+                code = HttpStatus.REQUEST_TIMEOUT
+            )
+        )
     }.flowOn(Dispatchers.IO)
 
     override suspend fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =

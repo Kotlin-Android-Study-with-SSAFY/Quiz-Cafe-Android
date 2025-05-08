@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginRequestDto(
     @SerialName("loginEmail")
-    val email : String,
-    val password : String
+    val email: String,
+    val password: String
 )
 
 fun LoginRequest.toDto() =

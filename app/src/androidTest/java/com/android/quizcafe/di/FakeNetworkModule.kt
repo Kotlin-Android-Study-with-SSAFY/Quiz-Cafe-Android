@@ -1,6 +1,5 @@
 package com.android.quizcafe.di
 
-import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.network.di.NetworkModule
 import com.android.quizcafe.core.network.util.calladapter.NetworkResultCallAdapterFactory
 import com.android.quizcafe.core.network.util.convertor.NullOnEmptyConverterFactory
@@ -16,7 +15,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import javax.inject.Named
 import javax.inject.Singleton
-
 
 @Module
 @TestInstallIn(
@@ -49,9 +47,11 @@ object FakeNetworkModule {
     @Named("default")
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY // 테스트에서 HTTP 로깅
-            })
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY // 테스트에서 HTTP 로깅
+                }
+            )
             .build()
     }
 }

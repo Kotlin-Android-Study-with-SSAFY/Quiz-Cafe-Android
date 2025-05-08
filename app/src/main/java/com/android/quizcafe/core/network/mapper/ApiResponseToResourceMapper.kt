@@ -15,9 +15,7 @@ import kotlinx.coroutines.withTimeoutOrNull
 import java.net.ConnectException
 import java.net.SocketTimeoutException
 
-
-
-suspend fun <T : Any> apiResponseToResource(call : suspend () -> NetworkResult<ApiResponse<T>>): Resource<T> {
+suspend fun <T : Any> apiResponseToResource(call: suspend () -> NetworkResult<ApiResponse<T>>): Resource<T> {
     return withTimeoutOrNull(3_000L) {
         when (val result = call()) {
             is NetworkResult.Success -> Resource.Success(result.data.data)
@@ -33,19 +31,22 @@ suspend fun <T : Any> apiResponseToResource(call : suspend () -> NetworkResult<A
     )
 }
 
-fun <T : Any> apiResponseToResourceFlow(call : suspend() -> NetworkResult<ApiResponse<T>>): Flow<Resource<T>> = flow {
+fun <T : Any> apiResponseToResourceFlow(call: suspend () -> NetworkResult<ApiResponse<T>>): Flow<Resource<T>> = flow {
     emit(Resource.Loading)
     withTimeoutOrNull(3_000L) {
         call()
             .onSuccess {
-                emit( Resource.Success(it.data))}
-            .onError { code, message ->
-                emit(Resource.Failure(
-                    errorMessage = message ?: DEFAULT_ERROR_MESSAGE,
-                    code = code
-                ))
+                emit(Resource.Success(it.data))
             }
-            .onException { e->  emit(handleNetworkException(e)) }
+            .onError { code, message ->
+                emit(
+                    Resource.Failure(
+                        errorMessage = message ?: DEFAULT_ERROR_MESSAGE,
+                        code = code
+                    )
+                )
+            }
+            .onException { e -> emit(handleNetworkException(e)) }
     } ?: emit(
         Resource.Failure(
             errorMessage = "요청 시간이 초과되었습니다.",
@@ -53,7 +54,6 @@ fun <T : Any> apiResponseToResourceFlow(call : suspend() -> NetworkResult<ApiRes
         )
     )
 }.flowOn(Dispatchers.IO)
-
 
 fun handleNetworkException(e: Throwable): Resource.Failure {
     return when (e) {

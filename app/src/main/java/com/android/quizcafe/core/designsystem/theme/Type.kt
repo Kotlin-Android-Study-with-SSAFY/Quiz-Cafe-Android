@@ -19,7 +19,6 @@ fun quizCafeDefaultFont(): FontFamily {
     }
 }
 
-// Set of Material typography styles to start with
 @Composable
 fun quizCafeTypography(): Typography {
     val fontFamily = quizCafeDefaultFont()

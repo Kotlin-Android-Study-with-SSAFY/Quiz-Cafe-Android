@@ -12,7 +12,6 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Singleton
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 object AuthModule {
@@ -22,7 +21,7 @@ object AuthModule {
     fun provideAuthManger(
         authDataStore: AuthDataStore,
         @ApplicationScope applicationScope: CoroutineScope
-    ) : AuthManager = AuthManager(authDataStore, applicationScope)
+    ): AuthManager = AuthManager(authDataStore, applicationScope)
 
     @Provides
     @Singleton

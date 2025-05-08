@@ -34,7 +34,6 @@ import com.android.quizcafe.core.designsystem.theme.onSurfaceVariantLight
 import com.android.quizcafe.core.ui.AnimatedTitleWithBody
 import kotlinx.coroutines.delay
 
-
 @Composable
 fun EmailInputContent(
     state: SignUpViewState,
@@ -46,7 +45,6 @@ fun EmailInputContent(
         delay(100)
         focusRequester.requestFocus()
     }
-
 
     AnimatedTitleWithBody(
         title = stringResource(R.string.verify_email),
@@ -174,4 +172,3 @@ fun VerificationInputFieldPreview() {
         }
     }
 }
-

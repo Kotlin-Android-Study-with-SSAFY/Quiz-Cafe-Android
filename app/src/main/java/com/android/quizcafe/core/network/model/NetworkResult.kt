@@ -9,9 +9,9 @@ import com.android.quizcafe.core.common.network.HttpStatus
  * - Exception: 네트워크 오류 등 예외가 발생한 경우
  */
 sealed class NetworkResult<T : Any> {
-    class Success<T: Any>(val data: T) : NetworkResult<T>()
-    class Error<T: Any>(val code: Int, val message: String?) : NetworkResult<T>()
-    class Exception<T: Any>(val e: Throwable) : NetworkResult<T>()
+    class Success<T : Any>(val data: T) : NetworkResult<T>()
+    class Error<T : Any>(val code: Int, val message: String?) : NetworkResult<T>()
+    class Exception<T : Any>(val e: Throwable) : NetworkResult<T>()
 }
 
 suspend fun <T : Any> NetworkResult<T>.onSuccess(
@@ -43,12 +43,12 @@ suspend fun <T : Any> NetworkResult<T>.onErrorOrException(
 ): NetworkResult<T> = apply {
     if (this is NetworkResult.Error<T>) {
         executable(code, message)
-    }else if (this is NetworkResult.Exception<T>) {
+    } else if (this is NetworkResult.Exception<T>) {
         executable(HttpStatus.UNKNOWN, e.message)
     }
 }
 
-fun <T : Any> NetworkResult<T>.log(tag: String = "NetworkResult") : String{
+fun <T : Any> NetworkResult<T>.log(tag: String = "NetworkResult"): String {
     return when (this) {
         is NetworkResult.Success -> ("[$tag] Success: data=$data")
         is NetworkResult.Error -> ("[$tag] Error: code=$code, message=$message")

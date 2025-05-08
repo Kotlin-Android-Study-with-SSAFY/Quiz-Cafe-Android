@@ -49,11 +49,15 @@ fun QuizCafeTextField(
             value = value,
             onValueChange = onValueChange,
             visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-            modifier = if (errorMessage != null) modifier.border(
-                1.dp,
-                Color.Red,
-                RoundedCornerShape(10.dp)
-            ) else modifier,
+            modifier = if (errorMessage != null) {
+                modifier.border(
+                    1.dp,
+                    Color.Red,
+                    RoundedCornerShape(10.dp)
+                )
+            } else {
+                modifier
+            },
             enabled = enabled,
             colors = TextFieldDefaults.colors(
                 focusedTextColor = Color.Black,

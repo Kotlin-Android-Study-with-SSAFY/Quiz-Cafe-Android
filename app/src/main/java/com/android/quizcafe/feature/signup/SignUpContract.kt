@@ -5,21 +5,17 @@ data class SignUpViewState(
     val verificationCode: String = "",
     val password: String = "",
     val passwordConfirm: String = "",
-
     val emailErrorMessage: String? = null,
     val passwordErrorMessage: String? = null,
     val passwordConfirmErrorMessage: String? = null,
     val verificationCodeErrorMessage: String? = null,
-
     val isCodeSent: Boolean = false,
     val isVerificationCodeValid: Boolean = false,
     val remainingSeconds: Int = 180,
-
     val isNextEnabled: Boolean = false,
     val isSignUpEnabled: Boolean = false,
     val isLoading: Boolean = false,
     val isSuccessVerification: Boolean = false,
-
     val errorMessage: String? = null
 )
 

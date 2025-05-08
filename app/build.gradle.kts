@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.ktlint)
 }
 
 android {
@@ -66,8 +67,8 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation("org.json:json:20220924")
-    testImplementation (libs.kotlinx.coroutines.test)
-    testImplementation (libs.androidx.datastore.preferences)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.androidx.datastore.preferences)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -78,5 +79,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // DataStore
-    implementation (libs.androidx.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
 }

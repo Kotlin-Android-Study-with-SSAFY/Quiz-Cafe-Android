@@ -3,10 +3,8 @@ package com.android.quizcafe.feature.login
 data class LoginViewState(
     val email: String = "",
     val password: String = "",
-
     val isLoginEnabled: Boolean = false,
     val isLoading: Boolean = false,
-
     val errorMessage: String? = null,
 )
 

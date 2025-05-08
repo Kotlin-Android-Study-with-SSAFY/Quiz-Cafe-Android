@@ -55,7 +55,6 @@ class NetworkResultCallAdapterTest {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
 
-
         apiService = Retrofit.Builder()
             .baseUrl(mockWebServer.url("/"))
             .addConverterFactory(NullOnEmptyConverterFactory)
@@ -125,7 +124,6 @@ class NetworkResultCallAdapterTest {
         assertTrue(result is NetworkResult.Exception)
         assertTrue((result as NetworkResult.Exception).e is IllegalStateException)
         assertNotNull(result.e.message)
-
     }
 
     @Test
@@ -133,7 +131,7 @@ class NetworkResultCallAdapterTest {
         // Given
         val mockResponse = MockResponse()
             .setResponseCode(200)
-            .setSocketPolicy(SocketPolicy.NO_RESPONSE)  // 강제 타임아웃
+            .setSocketPolicy(SocketPolicy.NO_RESPONSE) // 강제 타임아웃
         mockWebServer.enqueue(mockResponse)
 
         // When
@@ -144,7 +142,6 @@ class NetworkResultCallAdapterTest {
         assertNotNull((result as NetworkResult.Exception).e)
     }
 
-
     @Test
     fun `응답 본문이 null이고 T가 Unit 타입일 때 Success를 반환한다`() = runBlocking {
         // Given
@@ -153,7 +150,7 @@ class NetworkResultCallAdapterTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = apiService.getUnitResponse()  // 반환 타입: NetworkResult<Unit>
+        val result = apiService.getUnitResponse() // 반환 타입: NetworkResult<Unit>
 
         // Then
         assertTrue(result is NetworkResult.Success)
@@ -173,7 +170,7 @@ class NetworkResultCallAdapterTest {
         println("result : ${result.log()}")
         // Then
         assertTrue(result is NetworkResult.Error)
-        assertEquals(500,(result as NetworkResult.Error).code)
+        assertEquals(500, (result as NetworkResult.Error).code)
     }
 
     /**
@@ -188,12 +185,10 @@ class NetworkResultCallAdapterTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = apiService.getUnitResponse()  // 반환 타입: NetworkResult<Unit>
+        val result = apiService.getUnitResponse() // 반환 타입: NetworkResult<Unit>
 
         // Then
         assertTrue(result is NetworkResult.Success)
         assertEquals(Unit, (result as NetworkResult.Success).data)
     }
-
-
 }

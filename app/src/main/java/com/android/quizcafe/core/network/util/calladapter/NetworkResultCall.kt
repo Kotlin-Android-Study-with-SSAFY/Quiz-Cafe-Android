@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 
 class NetworkResultCall<T : Any>(
     private val call: Call<T>,
-    private val resultType : Type
+    private val resultType: Type
 ) : Call<NetworkResult<T>> {
 
     override fun enqueue(callback: Callback<NetworkResult<T>>) {
@@ -27,10 +27,12 @@ class NetworkResultCall<T : Any>(
     }
 
     override fun execute(): Response<NetworkResult<T>> = throw NotImplementedError()
-    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(call.clone(),resultType)
+    override fun clone(): Call<NetworkResult<T>> = NetworkResultCall(call.clone(), resultType)
     override fun request(): Request = call.request()
     override fun timeout(): Timeout = call.timeout()
     override fun isExecuted(): Boolean = call.isExecuted
     override fun isCanceled(): Boolean = call.isCanceled
-    override fun cancel() { call.cancel() }
+    override fun cancel() {
+        call.cancel()
+    }
 }
