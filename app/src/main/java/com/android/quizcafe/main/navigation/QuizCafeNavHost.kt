@@ -11,6 +11,7 @@ import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
+import com.android.quizcafe.main.ui.MainScreen
 
 @Composable
 fun QuizCafeNavHost(
@@ -58,6 +59,7 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     ) {
         composable(MainRoute.Quiz.route) {
             //QuizScreen()
+            MainScreen()
         }
         composable(MainRoute.MyPage.route) {
             //MyPageScreen()
