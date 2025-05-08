@@ -107,7 +107,7 @@ fun QuizCafeTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = Typography,
-        content = content,
+        typography = quizCafeTypography(),
+        content = content
     )
 }

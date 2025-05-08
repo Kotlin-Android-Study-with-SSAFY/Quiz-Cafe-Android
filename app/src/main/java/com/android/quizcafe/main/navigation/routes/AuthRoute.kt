@@ -3,15 +3,15 @@ package com.android.quizcafe.main.navigation.routes
 import com.android.quizcafe.main.navigation.NavRoute
 
 sealed interface AuthRoute : NavRoute {
-    object Graph : MainRoute {
+    data object Graph : MainRoute {
         override val route = "auth"
     }
 
-    object Login : AuthRoute {
+    data object Login : AuthRoute {
         override val route = "${Graph.route}/login"
     }
 
-    object Signup : AuthRoute {
+    data object Signup : AuthRoute {
         override val route = "${Graph.route}/signup"
     }
 

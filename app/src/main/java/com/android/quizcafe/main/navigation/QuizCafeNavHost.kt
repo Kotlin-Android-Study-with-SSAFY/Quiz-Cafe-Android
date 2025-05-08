@@ -7,7 +7,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.android.quizcafe.feature.login.LoginScreen
+import com.android.quizcafe.feature.login.LoginRoute
+import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
@@ -32,10 +33,19 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {
-            LoginScreen()
+            LoginRoute(
+                navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
+                navigateToHome = {
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
+                }
+            )
         }
         composable(AuthRoute.Signup.route) {
-            //SignupScreen()
+            SignUpRoute(
+                navigateToLogin = {
+                    navController.navigateAndClearBackStack(AuthRoute.Login.route, AuthRoute.Signup.route)
+                }
+            )
         }
     }
 }

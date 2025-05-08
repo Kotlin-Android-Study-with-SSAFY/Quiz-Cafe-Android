@@ -3,10 +3,11 @@ package com.android.quizcafe.core.data.repository
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
+import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
-import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
 import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
@@ -24,7 +25,8 @@ import kotlinx.coroutines.withTimeoutOrNull
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remoteDataSource: AuthRemoteDataSource
+    private val remoteDataSource : AuthRemoteDataSource,
+    private val authManager : AuthManager
 ) : AuthRepository {
 
     override suspend fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
@@ -40,9 +42,11 @@ class AuthRepositoryImpl @Inject constructor(
         emit(Resource.Loading)
         withTimeoutOrNull(3_000L) {
             remoteDataSource.login(request.toDto())
-                .onSuccess {
-                    // TODO : accessToken 저장 로직 구현
-                    emit(Resource.Success(null))
+                .onSuccess { response ->
+                    response.data?.let{ it ->
+                        emit( Resource.Success(Unit))
+                        authManager.saveAccessToken(it.accessToken)
+                    } ?: emit(Resource.Failure(errorMessage = "LoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
                 }
                 .onError { code, message ->
                     emit(
