@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.main
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
