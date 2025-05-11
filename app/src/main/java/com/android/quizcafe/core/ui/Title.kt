@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.android.quizcafe.core.designsystem.theme.outlineVariantLight
+import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 
 @Composable
 fun AnimatedTitleWithBody(
@@ -45,4 +48,16 @@ fun AnimatedTitleWithBody(
         content()
         Spacer(modifier = Modifier.height(40.dp))
     }
+}
+
+// TopAppBar를 사용하지 않는 underline Title
+@Composable
+fun TitleWithUnderLine(title: String) {
+    Spacer(Modifier.height(60.dp))
+    Text(
+        text = title,
+        style = quizCafeTypography().titleLarge
+    )
+    Spacer(Modifier.height(16.dp))
+    HorizontalDivider(thickness = 1.dp, color = outlineVariantLight)
 }
