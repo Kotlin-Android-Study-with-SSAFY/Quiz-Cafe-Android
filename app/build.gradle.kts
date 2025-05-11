@@ -21,7 +21,7 @@ android {
 
         testInstrumentationRunner = "com.android.quizcafe.QuizCafeTestRunner"
 
-        buildConfigField("String", "BASE_URL", getProperty("BASE_URL"))
+        buildConfigField("String", "BASE_URL", "\"${getProperty("BASE_URL")}\"")
     }
 
     buildTypes {

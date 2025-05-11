@@ -45,7 +45,7 @@ class LoginViewModel @Inject constructor(
                             password = state.value.password
                         )
                     ).collect {
-                        when(it){
+                        when(it) {
                             is Resource.Success -> {
                                 Log.d("signup", "SendCode Success")
                                 onIntent(LoginIntent.SuccessLogin)
@@ -54,8 +54,6 @@ class LoginViewModel @Inject constructor(
                             is Resource.Failure -> Log.d("signup", "SendCode Fail")
                         }
                     }
-
-
                 }
             }
 

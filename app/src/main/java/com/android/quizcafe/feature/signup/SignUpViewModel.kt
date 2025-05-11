@@ -49,32 +49,34 @@ class SignUpViewModel @Inject constructor(
         when (intent) {
             SignUpIntent.ClickSignUp -> {
                 viewModelScope.launch {
-                   signUpUseCase(SignUpRequest(
-                        email =  state.value.email,
-                        password = state.value.password,
-                        nickName = "testman"
-                   )).collect{
-                       when(it){
+                   signUpUseCase(
+                       SignUpRequest(
+                           email =  state.value.email,
+                           password = state.value.password,
+                           nickName = "testman"
+                       )
+                   ).collect {
+                       when(it) {
                            is Resource.Success -> {
-                               Log.d("signup","SignUp Success")
+                               Log.d("signup", "SignUp Success")
                                onIntent(SignUpIntent.SuccessSignUp)
                            }
-                           is Resource.Loading -> Log.d("signup","Loading")
+                           is Resource.Loading -> Log.d("signup", "Loading")
                            is Resource.Failure -> Log.d("signup", "SignUp Fail")
                        }
                    }
-
-
                 }
             }
 
             SignUpIntent.ClickVerifyCode -> {
                 viewModelScope.launch {
-                    verifyCodeUseCase(VerifyCodeRequest(
-                        email = state.value.email,
-                        code = state.value.verificationCode
-                    )).collect{
-                        when(it){
+                    verifyCodeUseCase(
+                        VerifyCodeRequest(
+                            email = state.value.email,
+                            code = state.value.verificationCode
+                        )
+                    ).collect {
+                        when(it) {
                             is Resource.Success -> {
                                 Log.d("signup", "VerifyCode Success")
                                 onIntent(SignUpIntent.SuccessCodeVerification)
@@ -94,7 +96,7 @@ class SignUpViewModel @Inject constructor(
                             type = "SIGN_UP"
                         )
                     ).collect {
-                        when(it){
+                        when(it) {
                             is Resource.Success -> {
                                 Log.d("signup", "SendCode Success")
                                 onIntent(SignUpIntent.SuccessSendCode)
