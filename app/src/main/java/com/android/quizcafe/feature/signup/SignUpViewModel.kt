@@ -76,10 +76,10 @@ class SignUpViewModel @Inject constructor(
                     )).collect{
                         when(it){
                             is Resource.Success -> {
-                                Log.d("signup","VerifyCode Success")
+                                Log.d("signup", "VerifyCode Success")
                                 onIntent(SignUpIntent.SuccessCodeVerification)
                             }
-                            is Resource.Loading -> Log.d("signup","Loading")
+                            is Resource.Loading -> Log.d("signup", "Loading")
                             is Resource.Failure -> Log.d("signup", "VerifyCode Fail")
                         }
                     }
@@ -88,16 +88,18 @@ class SignUpViewModel @Inject constructor(
 
             SignUpIntent.ClickSendCode -> {
                 viewModelScope.launch {
-                    sendCodeUseCase(SendCodeRequest(
-                        email = state.value.email,
-                        type = "SIGN_UP"
-                    )).collect{
+                    sendCodeUseCase(
+                        SendCodeRequest(
+                            email = state.value.email,
+                            type = "SIGN_UP"
+                        )
+                    ).collect {
                         when(it){
                             is Resource.Success -> {
-                                Log.d("signup","SendCode Success")
+                                Log.d("signup", "SendCode Success")
                                 onIntent(SignUpIntent.SuccessSendCode)
                             }
-                            is Resource.Loading -> Log.d("signup","Loading")
+                            is Resource.Loading -> Log.d("signup", "Loading")
                             is Resource.Failure -> Log.d("signup", "SendCode Fail")
                         }
                     }

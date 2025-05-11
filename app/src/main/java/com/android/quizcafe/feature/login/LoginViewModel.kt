@@ -1,6 +1,5 @@
 package com.android.quizcafe.feature.login
 
-
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,16 +39,18 @@ class LoginViewModel @Inject constructor(
 
             LoginIntent.ClickLogin -> {
                 viewModelScope.launch {
-                    loginUseCase(LoginRequest(
-                        email = state.value.email,
-                        password = state.value.password
-                    )).collect{
+                    loginUseCase(
+                        LoginRequest(
+                            email = state.value.email,
+                            password = state.value.password
+                        )
+                    ).collect {
                         when(it){
                             is Resource.Success -> {
-                                Log.d("signup","SendCode Success")
+                                Log.d("signup", "SendCode Success")
                                 onIntent(LoginIntent.SuccessLogin)
                             }
-                            is Resource.Loading -> Log.d("signup","Loading")
+                            is Resource.Loading -> Log.d("signup", "Loading")
                             is Resource.Failure -> Log.d("signup", "SendCode Fail")
                         }
                     }

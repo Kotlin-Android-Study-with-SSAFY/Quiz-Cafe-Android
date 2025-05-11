@@ -21,7 +21,7 @@ android {
 
         testInstrumentationRunner = "com.android.quizcafe.QuizCafeTestRunner"
 
-        buildConfigField("String","BASE_URL",getProperty("BASE_URL"))
+        buildConfigField("String", "BASE_URL", getProperty("BASE_URL"))
     }
 
     buildTypes {
@@ -86,6 +86,6 @@ dependencies {
 }
 
 fun getProperty(propertyKey: String): String {
-    val properties = com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(project.rootDir,providers)
+    val properties = com.android.build.gradle.internal.cxx.configure.gradleLocalProperties(project.rootDir, providers)
     return properties.getProperty(propertyKey) ?: throw GradleException("Property $propertyKey not found in local.properties")
 }

@@ -83,8 +83,6 @@ object NetworkModule {
             .build()
     }
 
-
-
     @Provides
     @Singleton
     @Named("token")

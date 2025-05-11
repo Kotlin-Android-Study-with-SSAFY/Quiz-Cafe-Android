@@ -15,7 +15,7 @@ interface AuthService {
 
     @POST("auth/verification-code/send")
     suspend fun sendCode(
-        @Body request : SendCodeRequestDto
+        @Body request: SendCodeRequestDto
     ) : NetworkResult<ApiResponse<Unit>>
 
     @POST("auth/verification-code/verify")

@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SendCodeRequestDto(
     @SerialName("toMail")
-    val email : String,
-    val type : String
+    val email: String,
+    val type: String
 )
 
 fun SendCodeRequest.toDto() =
