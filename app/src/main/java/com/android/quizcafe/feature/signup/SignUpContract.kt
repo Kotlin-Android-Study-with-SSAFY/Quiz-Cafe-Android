@@ -1,5 +1,7 @@
 package com.android.quizcafe.feature.signup
 
+import com.android.quizcafe.core.ui.base.Contract
+
 data class SignUpViewState(
     val email: String = "",
     val verificationCode: String = "",
@@ -17,13 +19,14 @@ data class SignUpViewState(
     val isLoading: Boolean = false,
     val isSuccessVerification: Boolean = false,
     val errorMessage: String? = null
-)
+): Contract.ViewState
 
-sealed class SignUpIntent {
+sealed class SignUpIntent: Contract.ViewIntent {
     data class UpdatedEmail(val email: String) : SignUpIntent()
     data class UpdatedVerificationCode(val code: String) : SignUpIntent()
     data class UpdatedPassword(val password: String) : SignUpIntent()
     data class UpdatedPasswordConfirm(val password: String) : SignUpIntent()
+    data class UpdatedTimer(val remainingSeconds: Int): SignUpIntent()
 
     data object ClickSendCode : SignUpIntent()
     data object ClickVerifyCode : SignUpIntent()
@@ -38,7 +41,7 @@ sealed class SignUpIntent {
     data class FailSignUp(val errorMessage: String? = null) : SignUpIntent()
 }
 
-sealed class SignUpEffect {
+sealed class SignUpEffect: Contract.ViewEffect {
     data class ShowErrorDialog(val message: String) : SignUpEffect()
     data object NavigateToLoginScreen : SignUpEffect()
     data object NavigateToPasswordInput : SignUpEffect()
