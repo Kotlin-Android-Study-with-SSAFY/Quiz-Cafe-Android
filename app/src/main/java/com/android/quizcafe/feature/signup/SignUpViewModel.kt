@@ -49,14 +49,14 @@ class SignUpViewModel @Inject constructor(
         when (intent) {
             SignUpIntent.ClickSignUp -> {
                 viewModelScope.launch {
-                   signUpUseCase(
-                       SignUpRequest(
+                    signUpUseCase(
+                        SignUpRequest(
                            email =  state.value.email,
                            password = state.value.password,
                            nickName = "testman"
                        )
-                   ).collect {
-                       when(it) {
+                    ).collect {
+                       when (it) {
                            is Resource.Success -> {
                                Log.d("signup", "SignUp Success")
                                onIntent(SignUpIntent.SuccessSignUp)
@@ -64,7 +64,7 @@ class SignUpViewModel @Inject constructor(
                            is Resource.Loading -> Log.d("signup", "Loading")
                            is Resource.Failure -> Log.d("signup", "SignUp Fail")
                        }
-                   }
+                    }
                 }
             }
 
@@ -76,7 +76,7 @@ class SignUpViewModel @Inject constructor(
                             code = state.value.verificationCode
                         )
                     ).collect {
-                        when(it) {
+                        when (it) {
                             is Resource.Success -> {
                                 Log.d("signup", "VerifyCode Success")
                                 onIntent(SignUpIntent.SuccessCodeVerification)
@@ -96,7 +96,7 @@ class SignUpViewModel @Inject constructor(
                             type = "SIGN_UP"
                         )
                     ).collect {
-                        when(it) {
+                        when (it) {
                             is Resource.Success -> {
                                 Log.d("signup", "SendCode Success")
                                 onIntent(SignUpIntent.SuccessSendCode)
