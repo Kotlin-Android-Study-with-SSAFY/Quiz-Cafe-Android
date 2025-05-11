@@ -8,10 +8,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
 import com.android.quizcafe.feature.login.LoginRoute
+import com.android.quizcafe.feature.main.mypage.MyPageScreen
+import com.android.quizcafe.feature.main.quiz.QuizRoute
+import com.android.quizcafe.feature.main.workbook.WorkbookScreen
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
-import com.android.quizcafe.main.ui.MainScreen
 
 @Composable
 fun QuizCafeNavHost(
@@ -20,7 +22,7 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route
+        startDestination = MainRoute.Graph.route
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -58,14 +60,14 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         route = MainRoute.Graph.route
     ) {
         composable(MainRoute.Quiz.route) {
-            //QuizScreen()
-            MainScreen()
+            QuizRoute()
         }
         composable(MainRoute.MyPage.route) {
-            //MyPageScreen()
+            MyPageScreen()
         }
         composable(MainRoute.Workbook.route) {
-            //WorkbookScreen()
+            WorkbookScreen()
         }
     }
 }
+

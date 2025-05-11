@@ -22,4 +22,12 @@
     <string name="quizcafe_logo">QuizCafe Logo</string>
     <string name="resend">재전송</string>
 
+    <!-- Feature Card Titles -->
+    <string name="feature_title_solve_quiz">문제 풀기</string>
+    <string name="feature_title_create_quiz">문제 생성</string>
+
+    <!-- Feature Card Descriptions -->
+    <string name="feature_desc_solve_quiz">혼자 원하는 카테고리를 선택해서 학습해요.</string>
+    <string name="feature_desc_create_quiz">내가 원하는 문제들을 모아 문제집을 만들어요.</string>
+
 </resources>
