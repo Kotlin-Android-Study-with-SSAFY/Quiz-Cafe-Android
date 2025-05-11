@@ -59,7 +59,10 @@ class AuthUseCaseTest {
         )
 
         val results = mutableListOf<Resource<Unit>>()
-        sendCodeUseCase.invoke(SendCodeRequest("test@example.com")).collect(results::add)
+        sendCodeUseCase.invoke(SendCodeRequest(
+            email = "test@example.com",
+            type = "SIGN_UP"
+        )).collect(results::add)
 
         println("result : ${results[1]}")
         assertEquals(2, results.size)
@@ -77,7 +80,10 @@ class AuthUseCaseTest {
         )
 
         val results = mutableListOf<Resource<Unit>>()
-        sendCodeUseCase.invoke(SendCodeRequest("invalid-email")).collect(results::add)
+        sendCodeUseCase.invoke(SendCodeRequest(
+            email = "invalid-email",
+            type = "SIGN_UP"
+        )).collect(results::add)
 
         assertTrue(results[0] is Resource.Loading)
         assertTrue(results[1] is Resource.Failure)
