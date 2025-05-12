@@ -55,8 +55,23 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     navigation(
-        startDestination = MainRoute.startDestination,
+        startDestination = MainRoute.Graph.route,
         route = MainRoute.Graph.route
+    ) {
+        composable(MainRoute.Quiz.route) {
+            QuizRoute()
+        }
+    }
+}
+
+@Composable
+fun MainBottomNavHost(
+    startDestination: String = MainRoute.Quiz.route
+) {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = startDestination
     ) {
         composable(MainRoute.Quiz.route) {
             QuizRoute()
