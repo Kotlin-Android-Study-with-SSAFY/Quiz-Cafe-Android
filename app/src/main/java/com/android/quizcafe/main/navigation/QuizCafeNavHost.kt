@@ -63,6 +63,14 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         composable(MainRoute.Home.route) {
             HomeRoute()
         }
+    }
+}
+
+fun NavGraphBuilder.homeGraph(navController: NavHostController) {
+    navigation(
+        startDestination =MainRoute.Quiz.route,
+        route = MainRoute.Graph.route
+    ){
         composable(MainRoute.Quiz.route) {
             QuizRoute()
         }
@@ -74,4 +82,3 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         }
     }
 }
-
