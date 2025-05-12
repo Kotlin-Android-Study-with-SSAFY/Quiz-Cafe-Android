@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-
 @Composable
 fun OxOptionButton(
     modifier: Modifier = Modifier,
@@ -98,7 +97,6 @@ private fun OxOptionButtonPreview() {
                         .height(80.dp)
                 )
             }
-
         }
     }
 }

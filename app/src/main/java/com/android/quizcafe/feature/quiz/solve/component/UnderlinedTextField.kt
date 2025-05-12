@@ -26,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-
 @Composable
 fun UnderlinedTextField(
     value: String,
@@ -125,7 +124,6 @@ private fun UnderlinedTextFieldPreview() {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(16.dp)
         ) {
-
             UnderlinedTextField(
                 value = "정답전 입력",
                 onValueChange = {},
