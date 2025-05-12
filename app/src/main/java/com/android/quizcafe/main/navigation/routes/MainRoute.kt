@@ -7,10 +7,6 @@ sealed interface MainRoute : NavRoute {
         override val route = "main"
     }
 
-    data object Home: MainRoute {
-        override val route = "${Graph.route}/home"
-    }
-
     data object Quiz : MainRoute {
         override val route = "${Graph.route}/quiz"
     }
@@ -24,6 +20,6 @@ sealed interface MainRoute : NavRoute {
     }
 
     companion object {
-        val startDestination = Home.route
+        val startDestination = Quiz.route
     }
 }

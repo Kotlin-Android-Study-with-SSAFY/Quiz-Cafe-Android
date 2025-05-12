@@ -22,8 +22,7 @@ fun QuizCafeNavHost(
 ) {
     val navController = rememberNavController()
     NavHost(
-        navController = navController,
-        startDestination = MainRoute.Graph.route
+        navController = navController, startDestination = AuthRoute.Graph.route
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -60,17 +59,6 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         startDestination = MainRoute.startDestination,
         route = MainRoute.Graph.route
     ) {
-        composable(MainRoute.Home.route) {
-            HomeRoute()
-        }
-    }
-}
-
-fun NavGraphBuilder.homeGraph(navController: NavHostController) {
-    navigation(
-        startDestination =MainRoute.Quiz.route,
-        route = MainRoute.Graph.route
-    ){
         composable(MainRoute.Quiz.route) {
             QuizRoute()
         }
