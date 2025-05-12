@@ -11,6 +11,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.quizcafe.core.ui.QuizCafeTopAppBar
 import com.android.quizcafe.core.ui.TopAppBarTitle
+import com.android.quizcafe.main.navigation.mainGraph
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +47,7 @@ fun HomeScreen() {
             navController = navController,
             startDestination = MainRoute.Graph.route
         ) {
-
+            mainGraph(navController = navController)
         }
     }
 }
