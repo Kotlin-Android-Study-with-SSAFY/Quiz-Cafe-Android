@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
+import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
-
 
 @Composable
 fun QuizBookCardList(quizBooks: List<QuizBook>) {
@@ -49,7 +48,7 @@ fun QuizBookCard(quizBook: QuizBook) {
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = onPrimaryLight),
         onClick = {
             // TODO: 문제집 상세 화면으로 이동
         }
@@ -74,7 +73,7 @@ fun QuizBookCard(quizBook: QuizBook) {
 }
 
 @Composable
-fun QuizBookListHeader(size: Int) {
+fun QuizBookListHeader(size: Int, onFilterClick: () -> Unit) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -84,7 +83,7 @@ fun QuizBookListHeader(size: Int) {
             stringResource(R.string.quiz_count_description, size),
             style = quizCafeTypography().labelLarge
         )
-        QuizBookFilterButton(stringResource(R.string.all)) {}
+        QuizBookFilterButton(stringResource(R.string.filter)) { onFilterClick() }
     }
 }
 
@@ -94,7 +93,7 @@ fun QuizBookHeader(difficulty: String, totalQuizzes: Int) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("${stringResource(R.string.difficulty)} : $difficulty", color = Color.Gray)
+        Text("${stringResource(R.string.difficulty)} : $difficulty", color = outlineLight)
         Text("$totalQuizzes ${stringResource(R.string.question)}")
     }
 }
@@ -118,7 +117,7 @@ fun QuizBookFooter(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(ownerName, color = Color.Gray)
+        Text(ownerName, color = outlineLight)
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
@@ -140,7 +139,6 @@ fun QuizBookFooter(
     }
 }
 
-
 @Composable
 fun QuizBookFilterButton(
     text: String,
@@ -150,7 +148,7 @@ fun QuizBookFilterButton(
         onClick = onClick,
         shape = RoundedCornerShape(50),
         color = onPrimaryLight,
-        border = BorderStroke(1.dp, Color.Gray)
+        border = BorderStroke(1.dp, outlineLight)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -214,6 +212,6 @@ fun QuizBookCardListPreview() {
 @Composable
 fun QuizBookListHeaderPreview() {
     QuizCafeTheme {
-        QuizBookListHeader(2)
+        QuizBookListHeader(2) {}
     }
 }

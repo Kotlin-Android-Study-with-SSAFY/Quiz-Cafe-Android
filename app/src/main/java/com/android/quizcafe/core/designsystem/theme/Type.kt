@@ -48,7 +48,7 @@ fun quizCafeTypography(): Typography {
         labelSmall = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Medium,
-            fontSize = 11.sp,
+            fontSize = 12.sp,
             lineHeight = 16.sp,
             letterSpacing = 0.5.sp
         ),

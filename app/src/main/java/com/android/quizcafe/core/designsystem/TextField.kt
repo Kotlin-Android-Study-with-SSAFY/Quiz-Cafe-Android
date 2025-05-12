@@ -23,9 +23,11 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.android.quizcafe.core.designsystem.theme.errorLight
+import com.android.quizcafe.core.designsystem.theme.onSurfaceVariantLight
 import com.android.quizcafe.core.designsystem.theme.primaryContainerLight
 import com.android.quizcafe.core.designsystem.theme.primaryLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
+import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceBrightLight
 
 @Composable
@@ -60,8 +62,8 @@ fun QuizCafeTextField(
             },
             enabled = enabled,
             colors = TextFieldDefaults.colors(
-                focusedTextColor = Color.Black,
-                unfocusedTextColor = Color.DarkGray,
+                focusedTextColor = scrimLight,
+                unfocusedTextColor = onSurfaceVariantLight,
                 disabledContainerColor = surfaceBrightLight,
                 focusedContainerColor = primaryContainerLight,
                 unfocusedContainerColor = primaryContainerLight,
