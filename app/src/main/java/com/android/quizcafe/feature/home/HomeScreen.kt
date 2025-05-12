@@ -1,22 +1,17 @@
 package com.android.quizcafe.feature.home
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.quizcafe.core.ui.QuizCafeTopAppBar
 import com.android.quizcafe.core.ui.TopAppBarTitle
-import com.android.quizcafe.feature.home.mypage.MyPageScreen
-import com.android.quizcafe.feature.home.quiz.QuizRoute
-import com.android.quizcafe.feature.home.workbook.WorkbookScreen
+import com.android.quizcafe.main.navigation.homeGraph
 import com.android.quizcafe.main.navigation.navigateSingleTopTo
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
@@ -30,15 +25,22 @@ fun HomeScreen() {
     val currentRoute = navBackStackEntry?.destination?.route ?: MainRoute.Quiz.route
     val selectedIndex = tabRoutes.indexOfFirst { it.route == currentRoute }.coerceAtLeast(0)
 
+    val appBarTitle = when (currentRoute) {
+        MainRoute.Quiz.route -> "Quiz Cafe"
+        MainRoute.Workbook.route -> "저장한 문제집"
+        MainRoute.MyPage.route -> ""
+        else -> ""
+    }
+
     Scaffold(
         topBar = {
             QuizCafeTopAppBar(
-                title = TopAppBarTitle.Text("Quiz Cafe"),
+                title = TopAppBarTitle.Text(appBarTitle),
                 alignTitleToStart = true
             )
         },
         bottomBar = {
-            BottomNavigation(
+            BottomNavigationBar(
                 selectedIndex = selectedIndex,
                 onItemSelected = { index ->
                     val targetRoute = tabRoutes[index].route
@@ -49,8 +51,12 @@ fun HomeScreen() {
             )
         }
     ) { innerPadding ->
-        Box(Modifier.padding(innerPadding)){
-            NavGraphBuilder.mainGraph(navController)
+        NavHost(
+            modifier = Modifier.padding(innerPadding),
+            navController = navController,
+            startDestination = MainRoute.Graph.route
+        ) {
+            homeGraph(navController)
         }
     }
 }
