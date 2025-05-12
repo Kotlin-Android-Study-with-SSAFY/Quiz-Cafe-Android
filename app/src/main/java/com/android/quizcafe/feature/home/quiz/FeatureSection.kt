@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.home.quiz
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -32,23 +33,35 @@ import com.android.quizcafe.core.designsystem.theme.SolveQuizCardColor
 
 @Composable
 fun FeatureSection() {
-
     val featureItems = listOf(
         FeatureItem(R.string.feature_title_solve_quiz, R.string.feature_desc_solve_quiz, SolveQuizCardColor),
-        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor)
+        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor),
+        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor) // 테스트용 3번째
     )
+
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-        featureItems.chunked(2).forEach { rowItems ->
-            Row(modifier = Modifier.fillMaxWidth()) {
+        val chunks = featureItems.chunked(2)
+
+        chunks.forEach { rowItems ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(160.dp)
+            ) {
                 rowItems.forEachIndexed { index, item ->
                     FeatureCard(
                         title = stringResource(item.titleResId),
                         description = stringResource(item.descResId),
                         backgroundColor = item.backgroundColor
                     )
-                    if (index == 0 && rowItems.size > 1) {
+                    if (index == 0) {
                         Spacer(modifier = Modifier.width(4.dp))
                     }
+                }
+
+                // 홀수일 때 오른쪽 빈공간 채우기
+                if (rowItems.size == 1) {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
             Spacer(modifier = Modifier.height(4.dp))
@@ -66,6 +79,7 @@ fun RowScope.FeatureCard(
     Card(
         modifier = Modifier
             .weight(1f)
+            .fillMaxHeight()
             .padding(4.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(16.dp),
@@ -73,8 +87,10 @@ fun RowScope.FeatureCard(
         colors = CardDefaults.cardColors(containerColor = backgroundColor)
     ) {
         Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = title,
@@ -112,7 +128,9 @@ fun PreviewFeatureCard() {
     QuizCafeTheme {
         Row(modifier = Modifier.padding(8.dp)) {
             FeatureCard(
-                title = "문제 풀기", description = "원하는 카테고리를 선택해서 학습해요.", backgroundColor = Color(185, 234, 217, 255)
+                title = "문제 풀기",
+                description = "원하는 카테고리를 선택해서 학습해요.",
+                backgroundColor = Color(185, 234, 217, 255)
             )
         }
     }

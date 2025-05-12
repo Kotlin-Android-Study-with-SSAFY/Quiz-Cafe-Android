@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.home.quiz
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,10 +1,12 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.home.quiz
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -15,14 +17,17 @@ fun QuizScreen(
     state: QuizViewState,
     onIntent: (QuizIntent) -> Unit
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        QuizHistorySection(historyList = state.historyList)
-        Spacer(modifier = Modifier.height(20.dp))
-        FeatureSection()
+        item { QuizHistorySection(historyList = state.historyList) }
+        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item { FeatureSection() }
     }
+
 }
 
 
@@ -33,14 +38,13 @@ fun QuizScreenPreview() {
         QuizScreen(
             state = QuizViewState(
                 historyList = listOf(
-                    QuizHistory("1시간 전", "오인성의 컴파일러 퀴즈", 15, 20)
+                    QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
+                    QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
+                    QuizHistory("04/01", "재용이의 안드로이드", 19, 20)
                 )
             ),
             onIntent = {}
         )
     }
 }
-
-
-
 

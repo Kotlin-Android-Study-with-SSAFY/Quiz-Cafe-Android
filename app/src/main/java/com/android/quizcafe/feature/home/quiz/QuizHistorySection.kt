@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.home.quiz
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +57,7 @@ fun QuizHistorySection(historyList: List<QuizHistory>) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(280.dp),
+                .height(288.dp),
             contentPadding = PaddingValues(top = 12.dp, bottom = 12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
