@@ -7,4 +7,58 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <!-- Primary -->
+    <color name="primary_1">#FFFCEE</color>
+    <color name="primary_2">#FFF8D6</color>
+    <color name="primary_3">#FFF3B5</color>
+    <color name="primary_4">#FEED93</color>
+    <color name="primary_5">#FEE773</color>
+    <color name="primary_6">#FEE254</color>
+    <color name="primary_7">#D8C047</color>
+    <color name="primary_8">#B4A03C</color>
+    <color name="primary_9">#918130</color>
+    <color name="primary_10">#726E26</color>
+
+    <!-- Secondary -->
+    <color name="secondary_50">#EADFF1</color>
+    <color name="secondary_100">#BCCAFF</color>
+    <color name="secondary_200">#9FAEFF</color>
+    <color name="secondary_300">#7389FF</color>
+    <color name="secondary_400">#5872FF</color>
+    <color name="secondary_500">#2E4FFF</color>
+    <color name="secondary_600">#2A4EE8</color>
+    <color name="secondary_700">#213B8F</color>
+    <color name="secondary_800">#192B5C</color>
+    <color name="secondary_900">#13216B</color>
+
+    <!-- Neutral -->
+    <color name="neutral_1">#FFFFFF</color>
+    <color name="neutral_2">#FDFDFD</color>
+    <color name="neutral_3">#F6F6F6</color>
+    <color name="neutral_4">#F2F2F2</color>
+    <color name="neutral_5">#DEDEDE</color>
+    <color name="neutral_6">#C8C8C8</color>
+    <color name="neutral_7">#9C9C9C</color>
+    <color name="neutral_8">#6F6F6F</color>
+    <color name="neutral_9">#5E5E5E</color>
+    <color name="neutral_10">#434343</color>
+    <color name="neutral_11">#3D3D3D</color>
+    <color name="neutral_12">#343434</color>
+    <color name="neutral_13">#222222</color>
+
+    <!-- Component-specific -->
+    <color name="component_1">#F6F6F6</color>
+    <color name="component_2">#F2F2F2</color>
+    <color name="component_3">#DEDEDE</color>
+    <color name="component_4">#C8C8C8</color>
+
+    <!-- Error -->
+    <color name="error_0">#FFC9C9</color>
+    <color name="error_1">#EC221F</color>
+    <color name="error_2">#FDFDFD</color>
+
+    <color name="green_2">#BAEAB8</color>
+
 </resources>
