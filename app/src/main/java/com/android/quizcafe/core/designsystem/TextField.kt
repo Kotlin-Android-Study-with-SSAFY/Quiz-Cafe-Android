@@ -120,3 +120,19 @@ fun LabeledInputField(
 }
 
 @Preview(showBackground = true)
+@Composable
+fun LabeledInputFieldPreview() {
+    Column {
+        LabeledInputField(
+            label = "label",
+            value = "text",
+            onValueChange = {}
+        )
+        LabeledInputField(
+            label = "label",
+            value = "text",
+            onValueChange = {},
+            errorMessage = "error"
+        )
+    }
+}
