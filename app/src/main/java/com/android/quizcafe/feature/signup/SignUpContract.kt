@@ -19,14 +19,14 @@ data class SignUpViewState(
     val isLoading: Boolean = false,
     val isSuccessVerification: Boolean = false,
     val errorMessage: String? = null
-): BaseContract.ViewState
+) : BaseContract.ViewState
 
-sealed class SignUpIntent: BaseContract.ViewIntent {
+sealed class SignUpIntent : BaseContract.ViewIntent {
     data class UpdatedEmail(val email: String) : SignUpIntent()
     data class UpdatedVerificationCode(val code: String) : SignUpIntent()
     data class UpdatedPassword(val password: String) : SignUpIntent()
     data class UpdatedPasswordConfirm(val password: String) : SignUpIntent()
-    data class UpdatedTimer(val remainingSeconds: Int): SignUpIntent()
+    data class UpdatedTimer(val remainingSeconds: Int) : SignUpIntent()
 
     data object ClickSendCode : SignUpIntent()
     data object ClickVerifyCode : SignUpIntent()
@@ -41,7 +41,7 @@ sealed class SignUpIntent: BaseContract.ViewIntent {
     data class FailSignUp(val errorMessage: String? = null) : SignUpIntent()
 }
 
-sealed class SignUpEffect: BaseContract.ViewEffect {
+sealed class SignUpEffect : BaseContract.ViewEffect {
     data class ShowErrorDialog(val message: String) : SignUpEffect()
     data object NavigateToLoginScreen : SignUpEffect()
     data object NavigateToPasswordInput : SignUpEffect()

@@ -17,7 +17,7 @@ abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContra
     val state: StateFlow<State>
         get() = _state.asStateFlow()
 
-    private val _intent: MutableSharedFlow<Intent> = MutableSharedFlow()
+    private val intent: MutableSharedFlow<Intent> = MutableSharedFlow()
 
     private val _effect: MutableSharedFlow<Effect> = MutableSharedFlow()
     val effect: SharedFlow<Effect>
@@ -25,7 +25,7 @@ abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContra
 
     init {
         viewModelScope.launch {
-            _intent.collect { intent ->
+            intent.collect { intent ->
                 val newState = reduce(_state.value, intent)
                 _state.value = newState
 
@@ -36,7 +36,7 @@ abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContra
 
     fun sendIntent(intent: Intent) {
         viewModelScope.launch {
-            _intent.emit(intent)
+            this@BaseViewModel.intent.emit(intent)
         }
     }
 
@@ -48,4 +48,3 @@ abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContra
         _effect.emit(effect)
     }
 }
-

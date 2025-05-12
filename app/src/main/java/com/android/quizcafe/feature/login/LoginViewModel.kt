@@ -1,13 +1,11 @@
 package com.android.quizcafe.feature.login
 
 import android.util.Log
-import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.usecase.auth.LoginUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,35 +18,29 @@ class LoginViewModel @Inject constructor(
     override suspend fun handleIntent(intent: LoginIntent) {
         when (intent) {
             LoginIntent.ClickSignUp -> {
-                viewModelScope.launch {
-                    emitEffect(LoginEffect.NavigateToSignUp)
-                }
+                emitEffect(LoginEffect.NavigateToSignUp)
             }
 
             LoginIntent.ClickLogin -> {
-                viewModelScope.launch {
-                    loginUseCase(
-                        LoginRequest(
-                            email = state.value.email,
-                            password = state.value.password
-                        )
-                    ).collect {
-                        when (it) {
-                            is Resource.Success -> {
-                                Log.d("signup", "SendCode Success")
-                                sendIntent(LoginIntent.SuccessLogin)
-                            }
-                            is Resource.Loading -> Log.d("signup", "Loading")
-                            is Resource.Failure -> Log.d("signup", "SendCode Fail")
+                loginUseCase(
+                    LoginRequest(
+                        email = state.value.email,
+                        password = state.value.password
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "SendCode Success")
+                            sendIntent(LoginIntent.SuccessLogin)
                         }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "SendCode Fail")
                     }
                 }
             }
 
             LoginIntent.SuccessLogin -> {
-                viewModelScope.launch {
-                    emitEffect(LoginEffect.NavigateToHome)
-                }
+                emitEffect(LoginEffect.NavigateToHome)
             }
 
             else -> Unit

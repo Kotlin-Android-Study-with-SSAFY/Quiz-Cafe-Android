@@ -12,7 +12,6 @@ import com.android.quizcafe.core.domain.usecase.auth.VerifyCodeUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import com.android.quizcafe.feature.util.CountdownTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,7 +19,7 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     private val verifyCodeUseCase: VerifyCodeUseCase
-): BaseViewModel<SignUpViewState, SignUpIntent, SignUpEffect>(
+) : BaseViewModel<SignUpViewState, SignUpIntent, SignUpEffect>(
     initialState = SignUpViewState()
 ) {
 
@@ -35,76 +34,66 @@ class SignUpViewModel @Inject constructor(
     override suspend fun handleIntent(intent: SignUpIntent) {
         when (intent) {
             SignUpIntent.ClickSignUp -> {
-                viewModelScope.launch {
-                    signUpUseCase(
-                        SignUpRequest(
-                           email =  state.value.email,
-                           password = state.value.password,
-                           nickName = "jw"
-                       )
-                    ).collect {
-                       when (it) {
-                           is Resource.Success -> {
-                               Log.d("signup", "SignUp Success")
-                               sendIntent(SignUpIntent.SuccessSignUp)
-                           }
-                           is Resource.Loading -> Log.d("signup", "Loading")
-                           is Resource.Failure -> Log.d("signup", "SignUp Fail")
-                       }
+                signUpUseCase(
+                    SignUpRequest(
+                        email = state.value.email,
+                        password = state.value.password,
+                        nickName = "jw"
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "SignUp Success")
+                            sendIntent(SignUpIntent.SuccessSignUp)
+                        }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "SignUp Fail")
                     }
                 }
             }
 
             SignUpIntent.ClickVerifyCode -> {
-                viewModelScope.launch {
-                    verifyCodeUseCase(
-                        VerifyCodeRequest(
-                            email = state.value.email,
-                            code = state.value.verificationCode
-                        )
-                    ).collect {
-                        when (it) {
-                            is Resource.Success -> {
-                                Log.d("signup", "VerifyCode Success")
-                                sendIntent(SignUpIntent.SuccessCodeVerification)
-                            }
-                            is Resource.Loading -> Log.d("signup", "Loading")
-                            is Resource.Failure -> Log.d("signup", "VerifyCode Fail")
+                verifyCodeUseCase(
+                    VerifyCodeRequest(
+                        email = state.value.email,
+                        code = state.value.verificationCode
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "VerifyCode Success")
+                            sendIntent(SignUpIntent.SuccessCodeVerification)
                         }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "VerifyCode Fail")
                     }
                 }
             }
 
             SignUpIntent.ClickSendCode -> {
-                viewModelScope.launch {
-                    sendCodeUseCase(
-                        SendCodeRequest(
-                            email = state.value.email,
-                            type = "SIGN_UP"
-                        )
-                    ).collect {
-                        when (it) {
-                            is Resource.Success -> {
-                                Log.d("signup", "SendCode Success")
-                                sendIntent(SignUpIntent.SuccessSendCode)
-                            }
-                            is Resource.Loading -> Log.d("signup", "Loading")
-                            is Resource.Failure -> Log.d("signup", "SendCode Fail")
+                sendCodeUseCase(
+                    SendCodeRequest(
+                        email = state.value.email,
+                        type = "SIGN_UP"
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "SendCode Success")
+                            sendIntent(SignUpIntent.SuccessSendCode)
                         }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "SendCode Fail")
                     }
                 }
             }
 
             SignUpIntent.SuccessCodeVerification -> {
-                viewModelScope.launch {
-                    emitEffect(SignUpEffect.NavigateToPasswordInput)
-                }
+                emitEffect(SignUpEffect.NavigateToPasswordInput)
             }
 
             SignUpIntent.SuccessSignUp -> {
-                viewModelScope.launch {
-                    emitEffect(SignUpEffect.NavigateToLoginScreen)
-                }
+                emitEffect(SignUpEffect.NavigateToLoginScreen)
             }
 
             else -> Unit
