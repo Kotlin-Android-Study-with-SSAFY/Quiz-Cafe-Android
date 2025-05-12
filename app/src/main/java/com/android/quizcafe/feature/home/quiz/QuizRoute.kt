@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.home.quiz
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext

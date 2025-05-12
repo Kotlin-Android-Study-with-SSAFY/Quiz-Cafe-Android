@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.workbook
+package com.android.quizcafe.feature.home.mypage
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,21 +11,21 @@ import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
-fun WorkbookScreen() {
+fun MyPageScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text("워크북페이지 화면입니다.")
+        Text("마이페이지 화면입니다.")
     }
 }
+
 
 @Preview(showBackground = true)
 @Composable
-fun WorkbookScreenPreview() {
+fun MyPageScreenPreview() {
     QuizCafeTheme {
-        WorkbookScreen()
+        MyPageScreen()
     }
 }
-
