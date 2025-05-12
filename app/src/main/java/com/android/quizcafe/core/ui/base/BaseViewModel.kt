@@ -10,16 +10,14 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<State: Contract.ViewState, Intent: Contract.ViewIntent, Effect: Contract.ViewEffect>(
+abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContract.ViewIntent, Effect : BaseContract.ViewEffect>(
     initialState: State,
-): ViewModel(){
+) : ViewModel() {
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)
     val state: StateFlow<State>
         get() = _state.asStateFlow()
 
     private val _intent: MutableSharedFlow<Intent> = MutableSharedFlow()
-    val intent: SharedFlow<Intent>
-        get() = _intent.asSharedFlow()
 
     private val _effect: MutableSharedFlow<Effect> = MutableSharedFlow()
     val effect: SharedFlow<Effect>
@@ -27,7 +25,7 @@ abstract class BaseViewModel<State: Contract.ViewState, Intent: Contract.ViewInt
 
     init {
         viewModelScope.launch {
-            intent.collect { intent ->
+            _intent.collect { intent ->
                 val newState = reduce(_state.value, intent)
                 _state.value = newState
 
