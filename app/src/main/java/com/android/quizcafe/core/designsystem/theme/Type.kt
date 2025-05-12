@@ -34,7 +34,14 @@ fun quizCafeTypography(): Typography {
         titleLarge = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 22.sp,
+            fontSize = 28.sp,
+            lineHeight = 28.sp,
+            letterSpacing = 0.sp
+        ),
+        titleMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 20.sp,
             lineHeight = 28.sp,
             letterSpacing = 0.sp
         ),
