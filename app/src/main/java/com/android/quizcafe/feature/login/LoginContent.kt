@@ -36,11 +36,11 @@ fun QuizCafeLogo() {
 }
 
 @Composable
-fun EmailInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
+fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "ID",
         value = state.email,
-        onValueChange = { onIntent(LoginIntent.UpdatedEmail(it)) },
+        onValueChange = { sendIntent(LoginIntent.UpdatedEmail(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -48,11 +48,11 @@ fun EmailInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
 }
 
 @Composable
-fun PasswordInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
+fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "PW",
         value = state.password,
-        onValueChange = { onIntent(LoginIntent.UpdatedPassword(it)) },
+        onValueChange = { sendIntent(LoginIntent.UpdatedPassword(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
@@ -75,7 +75,7 @@ fun LoginButton(state: LoginViewState, onClick: () -> Unit) {
 }
 
 @Composable
-fun BottomTextOptions(onIntent: (LoginIntent) -> Unit) {
+fun BottomTextOptions(sendIntent: (LoginIntent) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
@@ -89,7 +89,7 @@ fun BottomTextOptions(onIntent: (LoginIntent) -> Unit) {
         Text(
             text = stringResource(R.string.signup),
             fontSize = 14.sp,
-            modifier = Modifier.clickable { onIntent(LoginIntent.ClickSignUp) }
+            modifier = Modifier.clickable { sendIntent(LoginIntent.ClickSignUp) }
         )
     }
 }
