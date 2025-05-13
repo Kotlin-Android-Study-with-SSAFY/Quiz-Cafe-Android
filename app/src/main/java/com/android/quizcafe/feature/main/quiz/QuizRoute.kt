@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.home.quiz
+package com.android.quizcafe.feature.main.quiz
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable

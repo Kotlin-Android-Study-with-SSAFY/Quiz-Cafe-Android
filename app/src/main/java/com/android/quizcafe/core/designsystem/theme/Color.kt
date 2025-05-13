@@ -74,5 +74,7 @@ val surfaceContainerDark = Color(0xFF1E2023)
 val surfaceContainerHighDark = Color(0xFF292A2D)
 val surfaceContainerHighestDark = Color(0xFF343538)
 
-val SolveQuizCardColor = Color(0xFFB9EAD9)
+val OxQuizCardColor = Color(0xFFB9EAD9)
 val CreateQuizCardColor = Color(0xFFD8C7FF)
+val QuizCardColorShortAnswer = Color(0xFFFFC9C9)
+val QuizCardColorMultipleChoice = Color(0xFFFDFFB6)

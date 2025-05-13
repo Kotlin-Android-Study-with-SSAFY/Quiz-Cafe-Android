@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.home.workbook
+package com.android.quizcafe.feature.main.workbook
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

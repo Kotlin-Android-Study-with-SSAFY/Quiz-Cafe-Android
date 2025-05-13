@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.home.quiz
+package com.android.quizcafe.feature.main.quiz
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -27,15 +27,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.CreateQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.OxQuizCardColor
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.designsystem.theme.SolveQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorMultipleChoice
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorShortAnswer
 
 
 @Composable
 fun FeatureSection() {
     val featureItems = listOf(
-        FeatureItem(R.string.feature_title_solve_quiz, R.string.feature_desc_solve_quiz, SolveQuizCardColor),
-        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor),
+        FeatureItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
+        FeatureItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
+        FeatureItem(R.string.feature_title_short_answer_quiz, R.string.feature_desc_short_answer_quiz, QuizCardColorShortAnswer),
         FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor) // 테스트용 3번째
     )
 

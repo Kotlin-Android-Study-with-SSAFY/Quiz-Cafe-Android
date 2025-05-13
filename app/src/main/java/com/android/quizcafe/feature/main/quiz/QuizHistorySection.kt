@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.home.quiz
+package com.android.quizcafe.feature.main.quiz
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
