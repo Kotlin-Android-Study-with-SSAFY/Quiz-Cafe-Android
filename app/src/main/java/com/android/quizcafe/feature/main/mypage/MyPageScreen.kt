@@ -21,7 +21,6 @@ fun MyPageScreen() {
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MyPageScreenPreview() {
