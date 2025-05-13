@@ -7,10 +7,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
-import com.android.quizcafe.feature.home.mypage.MyPageRoute
-import com.android.quizcafe.feature.home.quiz.QuizRoute
-import com.android.quizcafe.feature.home.workbook.WorkBookRoute
 import com.android.quizcafe.feature.login.LoginRoute
+import com.android.quizcafe.feature.main.MainScreen
+import com.android.quizcafe.feature.main.mypage.MyPageRoute
+import com.android.quizcafe.feature.main.quiz.QuizRoute
+import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
@@ -21,7 +22,7 @@ fun QuizCafeNavHost(
 ) {
     val navController = rememberNavController()
     NavHost(
-        navController = navController, startDestination = AuthRoute.Graph.route
+        navController = navController, startDestination = startDestination
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -55,32 +56,44 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     navigation(
-        startDestination = MainRoute.Graph.route,
+        startDestination = MainRoute.Quiz.route,
         route = MainRoute.Graph.route
     ) {
         composable(MainRoute.Quiz.route) {
-            QuizRoute()
+            MainScreen()
         }
     }
 }
 
 @Composable
 fun MainBottomNavHost(
+    navController: NavHostController,
     startDestination: String = MainRoute.Quiz.route
 ) {
-    val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
         composable(MainRoute.Quiz.route) {
-            QuizRoute()
+            QuizRoute(
+//                navigateToDetail = { id ->
+//                    navController.navigateSingleTopTo("")
+//                }
+            )
         }
         composable(MainRoute.Workbook.route) {
-            WorkBookRoute()
+            WorkBookRoute(
+//                onItemClick = { id ->
+//                    navController.navigateSingleTopTo("")
+//                }
+            )
         }
         composable(MainRoute.MyPage.route) {
-            MyPageRoute()
+            MyPageRoute(
+//                navigateToSetting = {
+//                    navController.navigateSingleTopTo()
+//                }
+            )
         }
     }
 }

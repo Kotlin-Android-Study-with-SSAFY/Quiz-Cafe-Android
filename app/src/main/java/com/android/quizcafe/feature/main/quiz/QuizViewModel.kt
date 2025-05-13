@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.home.quiz
+package com.android.quizcafe.feature.main.quiz
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
