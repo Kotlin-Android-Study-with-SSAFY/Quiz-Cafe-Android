@@ -12,42 +12,42 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.blue_300
+import com.android.quizcafe.core.designsystem.theme.error_02
+import com.android.quizcafe.core.designsystem.theme.neutral06
+import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
+
 @Composable
 fun OxOptionButton(
     modifier: Modifier = Modifier,
-    answerState: AnswerState = AnswerState.Normal,
+    answerState: AnswerState = AnswerState.DEFAULT,
+    iconPaint : Int,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
 ) {
-    val (containerColor, contentColor, border) = when (answerState) {
-        AnswerState.Normal -> Triple(
-            colorResource(R.color.component_4),
-            colorResource(R.color.neutral_1),
-            null
+    val (containerColor, contentColor) = when (answerState) {
+        AnswerState.DEFAULT -> Pair(
+            neutral06,
+            onPrimaryLight,
         )
 
-        AnswerState.Selected -> Triple(
-            colorResource(R.color.secondary_400),
-            colorResource(R.color.neutral_1),
-            null
+        AnswerState.SELECTED -> Pair(
+            blue_300,
+            onPrimaryLight,
         )
 
-        AnswerState.Correct -> Triple(
-            colorResource(R.color.secondary_400),
-            colorResource(R.color.neutral_1),
-            null
+        AnswerState.CORRECT -> Pair(
+            blue_300,
+            onPrimaryLight,
         )
 
-        AnswerState.Incorrect -> Triple(
-            colorResource(R.color.component_4),
-            colorResource(R.color.neutral_1),
-            BorderStroke(8.dp, colorResource(R.color.error_1))
+        AnswerState.INCORRECT -> Pair(
+            neutral06,
+            onPrimaryLight,
         )
     }
 
@@ -60,9 +60,15 @@ fun OxOptionButton(
         modifier = modifier
             .size(width = 184.dp, height = 184.dp),
         shape = RoundedCornerShape(10.dp),
-        border = border
+        border = if(answerState == AnswerState.INCORRECT) BorderStroke(8.dp, color = error_02) else null
     ) {
-        content()
+        Icon(
+            painter = painterResource(iconPaint),
+            contentDescription = "O",
+            modifier = Modifier
+                .width(80.dp)
+                .height(80.dp)
+        )
     }
 }
 
@@ -72,31 +78,17 @@ private fun OxOptionButtonPreview() {
     QuizCafeTheme {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OxOptionButton(
-                answerState = AnswerState.Normal,
+                answerState = AnswerState.DEFAULT,
                 onClick = {},
-                modifier = Modifier,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_ox_option_o),
-                    contentDescription = "O",
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(80.dp)
-                )
-            }
+                iconPaint = R.drawable.ic_ox_option_o,
+                modifier = Modifier
+            )
             OxOptionButton(
-                answerState = AnswerState.Correct,
+                answerState = AnswerState.CORRECT,
                 onClick = {},
-                modifier = Modifier,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_ox_option_x),
-                    contentDescription = "X",
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(80.dp)
-                )
-            }
+                iconPaint = R.drawable.ic_ox_option_x,
+                modifier = Modifier
+            )
         }
     }
 }
@@ -107,31 +99,17 @@ private fun OxOptionButtonErrorPreview() {
     QuizCafeTheme {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OxOptionButton(
-                answerState = AnswerState.Selected,
+                answerState = AnswerState.INCORRECT,
                 onClick = {},
-                modifier = Modifier,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_ox_option_o),
-                    contentDescription = "O",
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(80.dp)
-                )
-            }
+                iconPaint = R.drawable.ic_ox_option_o,
+                modifier = Modifier
+            )
             OxOptionButton(
-                answerState = AnswerState.Incorrect,
+                answerState = AnswerState.SELECTED,
                 onClick = {},
-                modifier = Modifier,
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_ox_option_x),
-                    contentDescription = "X",
-                    modifier = Modifier
-                        .width(80.dp)
-                        .height(80.dp)
-                )
-            }
+                iconPaint = R.drawable.ic_ox_option_x,
+                modifier = Modifier
+            )
         }
     }
 }

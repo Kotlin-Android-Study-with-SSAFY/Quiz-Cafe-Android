@@ -12,42 +12,44 @@ import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-
-
+import com.android.quizcafe.core.designsystem.theme.blue_200
+import com.android.quizcafe.core.designsystem.theme.error_01
+import com.android.quizcafe.core.designsystem.theme.green_200
+import com.android.quizcafe.core.designsystem.theme.neutral07
+import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
+import com.android.quizcafe.core.designsystem.theme.scrimLight
 
 
 @Composable
 fun MultipleChoiceOptionButton(
     modifier: Modifier = Modifier,
-    answerState: AnswerState = AnswerState.Normal,
+    answerState: AnswerState = AnswerState.DEFAULT,
+    index : Number,
+    content : String,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
 ) {
     val (containerColor, contentColor) = when (answerState) {
-        AnswerState.Normal -> Pair(
-            colorResource(R.color.neutral_5),
-            colorResource(R.color.black)
+        AnswerState.DEFAULT -> Pair(
+            neutral07,
+            scrimLight
         )
 
-        AnswerState.Selected -> Pair(
-            colorResource(R.color.secondary_200),
-            colorResource(R.color.black)
+        AnswerState.SELECTED -> Pair(
+            blue_200,
+            scrimLight
         )
 
-        AnswerState.Correct -> Pair(
-            colorResource(R.color.green_2),
-            colorResource(R.color.black)
+        AnswerState.CORRECT -> Pair(
+            green_200,
+            scrimLight
         )
 
-        AnswerState.Incorrect -> Pair(
-            colorResource(R.color.error_0),
-            colorResource(R.color.black)
+        AnswerState.INCORRECT -> Pair(
+            error_01,
+            scrimLight
         )
     }
 
@@ -62,7 +64,17 @@ fun MultipleChoiceOptionButton(
             .padding(horizontal = 24.dp),
         shape = RoundedCornerShape(10.dp)
     ) {
-        content()
+        Row {
+            Text(
+                text = "${index}.",
+                style = quizCafeTypography().bodyLarge,
+                modifier = Modifier.padding(top = 3.dp)
+            )
+            Text(
+                text = content,
+                style = quizCafeTypography().bodyLarge
+            )
+        }
     }
 }
 
@@ -72,72 +84,36 @@ fun MultipleChoiceOptionPreview() {
     QuizCafeTheme {
         Column {
             MultipleChoiceOptionButton(
-                answerState = AnswerState.Normal,
+                answerState = AnswerState.DEFAULT,
                 onClick = { /* 선택 처리 */ },
-                modifier = Modifier
-            ) {
-                Row {
-                    Text(
-                        text = "2. ",
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. ",
-                        fontSize = 16.sp
-                    )
-                }
-            }
+                modifier = Modifier,
+                index = 1,
+                content = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. "
+            )
             Spacer(modifier = Modifier.height(8.dp))
             MultipleChoiceOptionButton(
-                answerState = AnswerState.Correct,
+                answerState = AnswerState.CORRECT,
                 onClick = { /* 선택 처리 */ },
-                modifier = Modifier
-            ) {
-                Row {
-                    Text(
-                        text = "2. ",
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. ",
-                        fontSize = 16.sp
-                    )
-                }
-            }
+                modifier = Modifier,
+                index = 1,
+                content = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. "
+            )
             Spacer(modifier = Modifier.height(8.dp))
             MultipleChoiceOptionButton(
-                answerState = AnswerState.Selected,
+                answerState = AnswerState.SELECTED,
                 onClick = { /* 선택 처리 */ },
-                modifier = Modifier
-            ) {
-                Row {
-                    Text(
-                        text = "2. ",
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. ",
-                        fontSize = 16.sp
-                    )
-                }
-            }
+                modifier = Modifier,
+                index = 1,
+                content = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. "
+            )
             Spacer(modifier = Modifier.height(8.dp))
             MultipleChoiceOptionButton(
-                answerState = AnswerState.Incorrect,
+                answerState = AnswerState.INCORRECT,
                 onClick = { /* 선택 처리 */ },
-                modifier = Modifier
-            ) {
-                Row {
-                    Text(
-                        text = "2. ",
-                        fontSize = 16.sp
-                    )
-                    Text(
-                        text = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. ",
-                        fontSize = 16.sp
-                    )
-                }
-            }
+                modifier = Modifier,
+                index = 1,
+                content = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. "
+            )
         }
     }
 }
