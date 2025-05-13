@@ -27,9 +27,7 @@ fun QuizScreen(
         item { Spacer(modifier = Modifier.height(16.dp)) }
         item { FeatureSection() }
     }
-
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -47,4 +45,3 @@ fun QuizScreenPreview() {
         )
     }
 }
-

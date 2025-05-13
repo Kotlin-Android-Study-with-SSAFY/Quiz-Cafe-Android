@@ -118,10 +118,11 @@ fun PreviewQuizHistorySection() {
 @Composable
 fun PreviewQuizHistoryCard() {
     QuizCafeTheme {
-        QuizHistoryCard(
-            history = QuizHistory(
-                time = "1시간 전", title = "오인성의 컴파일러 퀴즈", result = 15, totalProblems = 20
-            )
+        QuizHistory(
+            time = "1시간 전",
+            title = "오인성의 컴파일러 퀴즈",
+            result = 15,
+            totalProblems = 20
         )
     }
 }

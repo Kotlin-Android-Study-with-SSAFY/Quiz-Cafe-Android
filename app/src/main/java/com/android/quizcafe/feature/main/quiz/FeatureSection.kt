@@ -32,14 +32,13 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.QuizCardColorMultipleChoice
 import com.android.quizcafe.core.designsystem.theme.QuizCardColorShortAnswer
 
-
 @Composable
 fun FeatureSection() {
     val featureItems = listOf(
         FeatureItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
         FeatureItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
         FeatureItem(R.string.feature_title_short_answer_quiz, R.string.feature_desc_short_answer_quiz, QuizCardColorShortAnswer),
-        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor) // 테스트용 3번째
+        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor)
     )
 
     Column(modifier = Modifier.padding(horizontal = 12.dp)) {
