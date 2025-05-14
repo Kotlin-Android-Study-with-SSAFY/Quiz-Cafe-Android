@@ -49,51 +49,53 @@ fun QuizSolveScreen(
             )
         }
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(24.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            item {
-                Spacer(Modifier.height(36.dp))
-            }
-            item {
-                QuizTitleSection(questionText = uiState.questionText)
-            }
-            item {
-                Spacer(Modifier.height(24.dp))
-            }
-            item {
-                when (uiState.questionType) {
-                    QuestionType.OX -> {
-                        SelectOXSection(uiState = uiState) {
-                            onIntent
+        Column(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(padding)
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Spacer(Modifier.height(36.dp))
+                }
+                item {
+                    QuizTitleSection(questionText = uiState.questionText)
+                }
+                item {
+                    Spacer(Modifier.height(24.dp))
+                }
+                item {
+                    when (uiState.questionType) {
+                        QuestionType.OX -> {
+                            SelectOXSection(uiState = uiState) {
+                                onIntent
+                            }
                         }
-                    }
-                    QuestionType.MULTIPLE_CHOICE -> {
-                        SelectMultipleChoiceSection(uiState = uiState) {
-                            onIntent
+
+                        QuestionType.MULTIPLE_CHOICE -> {
+                            SelectMultipleChoiceSection(uiState = uiState) {
+                                onIntent
+                            }
                         }
-                    }
-                    QuestionType.SUBJECTIVE -> {
-                        SubjectiveAnswerSection(uiState = uiState) {
-                            onIntent
+
+                        QuestionType.SUBJECTIVE -> {
+                            SubjectiveAnswerSection(uiState = uiState) {
+                                onIntent
+                            }
                         }
                     }
                 }
             }
-            item{
-                QuizCafeButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    enabled = uiState.isButtonEnabled,
-                    onClick = {},
-                    text = { Text("적용") },
-                    shape = ButtonDefaults.shape,
-                )
-            }
+            Spacer(modifier = Modifier.weight(1F))
+            QuizCafeButton(
+                modifier = Modifier.fillMaxWidth(),
+                enabled = uiState.isButtonEnabled,
+                onClick = {},
+                text = { Text("적용") }
+            )
         }
     }
 }
