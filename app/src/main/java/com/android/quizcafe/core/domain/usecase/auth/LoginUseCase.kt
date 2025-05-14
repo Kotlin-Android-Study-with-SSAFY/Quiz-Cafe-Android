@@ -9,6 +9,6 @@ import javax.inject.Inject
 class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    suspend operator fun invoke(request: LoginRequest): Flow<Resource<Unit>> =
+    operator fun invoke(request: LoginRequest): Flow<Resource<Unit>> =
         authRepository.login(request)
 }

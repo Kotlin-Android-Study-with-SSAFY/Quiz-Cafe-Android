@@ -4,21 +4,49 @@ import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
-import com.android.quizcafe.core.network.model.onError
-import com.android.quizcafe.core.network.model.onException
 import com.android.quizcafe.core.network.model.onSuccess
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withTimeoutOrNull
-import java.net.ConnectException
-import java.net.SocketTimeoutException
 
-suspend fun <T : Any> apiResponseToResource(call: suspend () -> NetworkResult<ApiResponse<T>>): Resource<T> {
+suspend fun apiNoResponseToResource(
+    call: suspend () -> NetworkResult<ApiResponse<Unit>>
+): Resource<Unit> = apiCallToResource(call) {
+    Resource.Success(Unit)
+}
+
+suspend fun <I : Any, O : Any> apiSingleResponseToResource(
+    mapper: (I) -> O,
+    call: suspend () -> NetworkResult<ApiResponse<I>>
+): Resource<O> = apiCallToResource(call) { data ->
+    if (data == null) {
+        Resource.Failure(
+            errorMessage = DEFAULT_ERROR_MESSAGE,
+            code = HttpStatus.NO_CONTENT
+        )
+    } else {
+        Resource.Success(mapper(data))
+    }
+}
+
+suspend fun <I : Any, O : Any> apiResponseToResource(
+    mapper: (I) -> O,
+    call: suspend () -> NetworkResult<ApiResponse<List<I>>>
+): Resource<List<O>> = apiCallToResource(call) { data ->
+    if (data == null) {
+        Resource.Failure(
+            errorMessage = DEFAULT_ERROR_MESSAGE,
+            code = HttpStatus.NO_CONTENT
+        )
+    } else {
+        Resource.Success(data.map(mapper))
+    }
+}
+private suspend fun <T : Any, R> apiCallToResource(
+    call: suspend () -> NetworkResult<ApiResponse<T>>,
+    onSuccess: (T?) -> Resource<R>
+): Resource<R> {
     return withTimeoutOrNull(3_000L) {
         when (val result = call()) {
-            is NetworkResult.Success -> Resource.Success(result.data.data)
+            is NetworkResult.Success -> onSuccess(result.data.data)
             is NetworkResult.Error -> Resource.Failure(
                 errorMessage = result.message ?: DEFAULT_ERROR_MESSAGE,
                 code = result.code
@@ -29,45 +57,4 @@ suspend fun <T : Any> apiResponseToResource(call: suspend () -> NetworkResult<Ap
         errorMessage = "요청 시간이 초과되었습니다.",
         code = HttpStatus.REQUEST_TIMEOUT
     )
-}
-
-fun <T : Any> apiResponseToResourceFlow(call: suspend () -> NetworkResult<ApiResponse<T>>): Flow<Resource<T>> = flow {
-    emit(Resource.Loading)
-    withTimeoutOrNull(3_000L) {
-        call()
-            .onSuccess {
-                emit(Resource.Success(it.data))
-            }
-            .onError { code, message ->
-                emit(
-                    Resource.Failure(
-                        errorMessage = message ?: DEFAULT_ERROR_MESSAGE,
-                        code = code
-                    )
-                )
-            }
-            .onException { e -> emit(handleNetworkException(e)) }
-    } ?: emit(
-        Resource.Failure(
-            errorMessage = "요청 시간이 초과되었습니다.",
-            code = HttpStatus.REQUEST_TIMEOUT
-        )
-    )
-}.flowOn(Dispatchers.IO)
-
-fun handleNetworkException(e: Throwable): Resource.Failure {
-    return when (e) {
-        is ConnectException -> Resource.Failure(
-            errorMessage = "네트워크 연결을 확인해주세요.",
-            code = HttpStatus.NETWORK_DISCONNECTED
-        )
-        is SocketTimeoutException -> Resource.Failure(
-            errorMessage = "서버 응답이 지연되었습니다.",
-            code = HttpStatus.REQUEST_TIMEOUT
-        )
-        else -> Resource.Failure(
-            errorMessage = e.message ?: DEFAULT_ERROR_MESSAGE,
-            code = HttpStatus.UNKNOWN
-        )
-    }
 }
