@@ -1,12 +1,14 @@
-package com.android.quizcafe.feature.quizbookpicker
+package com.android.quizcafe.core.domain.model.quizbook.response
 
-// 임시 데이터 클래스
 data class QuizBook(
     val id: Long,
+    val version: Long,
+    val category: String,
+    val description: String,
+    val level: String,
+    val title: String,
     val ownerId: Long,
     val ownerName: String,
-    val category: String,
-    val title: String,
     val difficulty: String,
     val totalQuizzes: Int,
     val totalComments: Int,

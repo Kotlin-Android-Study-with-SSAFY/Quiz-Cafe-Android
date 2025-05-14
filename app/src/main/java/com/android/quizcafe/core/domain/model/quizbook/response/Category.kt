@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.domain.model.quizbook.reponse
+package com.android.quizcafe.core.domain.model.quizbook.response
 
 data class Category(
     val id: String,

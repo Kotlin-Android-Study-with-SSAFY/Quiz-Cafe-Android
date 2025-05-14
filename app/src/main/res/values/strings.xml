@@ -39,6 +39,6 @@
     <string name="level_medium">보통</string>
     <string name="level_hard">어려움</string>
     <string name="level_very_hard">매우 어려움</string>
-    <string name="pick_category">카테고리 선택</string>
+    <string name="list_category">카테고리 선택</string>
     <string name="go">Go</string>
 </resources>

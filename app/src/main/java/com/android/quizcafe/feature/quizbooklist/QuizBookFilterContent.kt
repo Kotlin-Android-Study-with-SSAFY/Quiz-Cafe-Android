@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.quizbookpicker
+package com.android.quizcafe.feature.quizbooklist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,9 +29,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.outlineVariantLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
@@ -54,20 +56,17 @@ fun QuizBookFilterContent(
         stringResource(R.string.all),
         stringResource(R.string.level_easy),
         stringResource(R.string.level_medium),
-        stringResource(R.string.level_hard),
-        stringResource(R.string.level_very_hard)
+        stringResource(R.string.level_hard)
     )
 
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         SortOptionContent(sortOptions)
-        Spacer(Modifier.height(8.dp))
         LevelOptionContent(levelOptions)
-        Spacer(Modifier.height(8.dp))
         SetQuizCountContent()
 
         QuizCafeButton(onClick = onApplyClick, modifier = Modifier.fillMaxWidth()) {
@@ -82,8 +81,8 @@ private fun SetQuizCountContent() {
     val maxCount by remember { mutableIntStateOf(50) }
     var sliderPosition by remember { mutableStateOf(minCount.toFloat()..maxCount.toFloat()) }
 
-    Text(stringResource(R.string.quiz_count), style = MaterialTheme.typography.titleMedium)
     Column {
+        Text(stringResource(R.string.quiz_count), style = MaterialTheme.typography.titleMedium)
         RangeSlider(
             value = sliderPosition,
             onValueChange = { range -> sliderPosition = range },
@@ -105,12 +104,15 @@ private fun LevelOptionContent(
     val defaultSortOption = stringResource(R.string.all)
     var selected by remember { mutableStateOf(defaultSortOption) }
 
-    Text(stringResource(R.string.level), style = MaterialTheme.typography.titleMedium)
-    OptionSelector(
-        options = levelOptions,
-        selectedOption = selected,
-        onOptionSelected = { selected = it }
-    )
+    Column {
+        Text(stringResource(R.string.level), style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(12.dp))
+        OptionSelector(
+            options = levelOptions,
+            selectedOption = selected,
+            onOptionSelected = { selected = it }
+        )
+    }
 }
 
 @Composable
@@ -120,12 +122,15 @@ private fun SortOptionContent(
     val defaultSortOption = stringResource(R.string.sort_latest)
     var selected by remember { mutableStateOf(defaultSortOption) }
 
-    Text(stringResource(R.string.sort), style = MaterialTheme.typography.titleMedium)
-    OptionSelector(
-        options = sortOptions,
-        selectedOption = selected,
-        onOptionSelected = { selected = it }
-    )
+    Column {
+        Text(stringResource(R.string.sort), style = MaterialTheme.typography.titleMedium)
+        Spacer(modifier = Modifier.height(12.dp))
+        OptionSelector(
+            options = sortOptions,
+            selectedOption = selected,
+            onOptionSelected = { selected = it }
+        )
+    }
 }
 
 @Composable
@@ -172,5 +177,50 @@ fun OptionSelector(
                 }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewQuizBookFilterContent() {
+    QuizCafeTheme {
+        QuizBookFilterContent(onApplyClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSortOptionContent() {
+    QuizCafeTheme {
+        SortOptionContent(
+            sortOptions = listOf(
+                stringResource(R.string.sort_latest),
+                stringResource(R.string.sort_saved),
+                stringResource(R.string.sort_random)
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewLevelOptionContent() {
+    QuizCafeTheme {
+        LevelOptionContent(
+            levelOptions = listOf(
+                stringResource(R.string.all),
+                stringResource(R.string.level_easy),
+                stringResource(R.string.level_medium),
+                stringResource(R.string.level_hard)
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewSetQuizCountContent() {
+    QuizCafeTheme {
+        SetQuizCountContent()
     }
 }

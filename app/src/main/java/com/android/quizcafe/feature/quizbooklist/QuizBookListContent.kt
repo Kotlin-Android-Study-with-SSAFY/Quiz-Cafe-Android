@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.quizbookpicker
+package com.android.quizcafe.feature.quizbooklist
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -31,6 +31,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
+import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 
 @Composable
 fun QuizBookCardList(quizBooks: List<QuizBook>) {
@@ -185,7 +186,10 @@ fun QuizBookCardListPreview() {
             totalQuizzes = 231,
             totalComments = 4,
             totalSaves = 32,
-            createdAt = "2025-05-11T15:30:00Z"
+            createdAt = "2025-05-11T15:30:00Z",
+            version = TODO(),
+            description = TODO(),
+            level = TODO()
         ),
         QuizBook(
             id = 2L,
@@ -197,7 +201,10 @@ fun QuizBookCardListPreview() {
             totalQuizzes = 30,
             totalComments = 4,
             totalSaves = 32,
-            createdAt = "2025-05-11T15:30:00Z"
+            createdAt = "2025-05-11T15:30:00Z",
+            version = TODO(),
+            description = TODO(),
+            level = TODO()
         )
     )
 

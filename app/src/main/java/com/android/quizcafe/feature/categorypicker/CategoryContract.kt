@@ -1,6 +1,6 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
-import com.android.quizcafe.core.domain.model.quizbook.reponse.Category
+import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.ui.base.BaseContract
 
 data class CategoryViewState(

@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,7 +17,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
-fun CategoryPickerScreen(
+fun CategoryListScreen(
     state: CategoryViewState = CategoryViewState(),
     sendIntent: (CategoryIntent) -> Unit
 ) {
@@ -30,7 +30,7 @@ fun CategoryPickerScreen(
             .navigationBarsPadding()
             .systemBarsPadding()
     ) {
-        TitleWithUnderLine(stringResource(R.string.pick_category))
+        TitleWithUnderLine(stringResource(R.string.list_category))
         Spacer(Modifier.height(12.dp))
         CategoryCardList(
             categories = categories,
@@ -43,8 +43,8 @@ fun CategoryPickerScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun CategoryPickerScreenPreview() {
+fun CategoryListScreenPreview() {
     QuizCafeTheme {
-        CategoryPickerScreen(state = CategoryViewState()) {}
+        CategoryListScreen(state = CategoryViewState()) {}
     }
 }

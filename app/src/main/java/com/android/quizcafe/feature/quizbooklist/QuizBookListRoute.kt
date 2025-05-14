@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorylist
+package com.android.quizcafe.feature.quizbooklist
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -10,30 +10,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
 
 @Composable
-fun CategoryRoute(
-    navigateToQuizBookList: () -> Unit,
-    navigateToHome: () -> Unit,
-    viewModel: CategoryViewModel = hiltViewModel()
+fun QuizBookListRoute(
+    navigateToQuizBookDetail: () -> Unit,
+    navigateToCategory: () -> Unit,
+    viewModel: QuizBookListViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(CategoryIntent.LoadCategories) // API 요청
+        viewModel.sendIntent(QuizBookListIntent.LoadQuizBooks) // API 요청
     }
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                CategoryEffect.NavigateToHome -> {
-                    navigateToHome()
+                QuizBookListEffect.NavigateToCategory -> {
+                    navigateToCategory()
                 }
 
-                CategoryEffect.NavigateToQuizBooks -> {
-                    navigateToQuizBookList()
+                QuizBookListEffect.NavigateToQuizBookDetail -> {
+                    navigateToQuizBookDetail()
                 }
 
-                is CategoryEffect.ShowError -> {
+                is QuizBookListEffect.ShowError -> {
                     Toast.makeText(
                         context,
                         context.getString(R.string.error_message),
@@ -44,7 +44,7 @@ fun CategoryRoute(
         }
     }
 
-    CategoryListScreen(
+    QuizBookListScreen(
         state = state,
         sendIntent = viewModel::sendIntent
     )

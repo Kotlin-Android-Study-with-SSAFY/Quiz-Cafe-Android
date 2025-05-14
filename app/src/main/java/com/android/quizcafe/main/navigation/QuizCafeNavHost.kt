@@ -7,10 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.android.quizcafe.feature.categorylist.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
+import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
+import com.android.quizcafe.main.navigation.routes.QuizBookRoute
 
 @Composable
 fun QuizCafeNavHost(
@@ -23,6 +26,7 @@ fun QuizCafeNavHost(
     ) {
         authGraph(navController)
         mainGraph(navController)
+        quizBookGraph(navController)
     }
 }
 
@@ -58,6 +62,14 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     ) {
         composable(MainRoute.Quiz.route) {
             //QuizScreen()
+            CategoryRoute(
+                navigateToHome = {
+                    navController.navigate(MainRoute.Graph.route)
+                },
+                navigateToQuizBookList = {
+                    navController.navigateSingleTopTo(QuizBookRoute.QuizBookList.route)
+                },
+            )
         }
         composable(MainRoute.MyPage.route) {
             //MyPageScreen()
@@ -67,3 +79,33 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         }
     }
 }
+
+fun NavGraphBuilder.quizBookGraph(navController: NavHostController) {
+    navigation(
+        startDestination = QuizBookRoute.startDestination,
+        route = QuizBookRoute.Graph.route
+    ) {
+        composable(QuizBookRoute.CategoryList.route) {
+            CategoryRoute(
+                navigateToHome = {
+                    navController.navigate(MainRoute.Graph.route)
+                },
+                navigateToQuizBookList = {
+                    navController.navigateSingleTopTo(QuizBookRoute.QuizBookList.route)
+                },
+            )
+        }
+
+        composable(QuizBookRoute.QuizBookList.route) {
+            QuizBookListRoute(
+                navigateToQuizBookDetail = {  },
+                navigateToCategory = {  }
+            )
+        }
+        composable(QuizBookRoute.QuizBookDetail.route) {
+//
+        }
+
+    }
+}
+

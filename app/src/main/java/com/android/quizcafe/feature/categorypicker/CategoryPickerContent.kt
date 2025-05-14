@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,7 +28,7 @@ import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
-import com.android.quizcafe.core.domain.model.quizbook.reponse.Category
+import com.android.quizcafe.core.domain.model.quizbook.response.Category
 
 @Composable
 fun CategoryCardList(categories: List<Category>, onItemClicked: () -> Unit = {}) {

@@ -1,10 +1,12 @@
-package com.android.quizcafe.feature.quizbookpicker
+package com.android.quizcafe.feature.quizbooklist
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
@@ -24,48 +26,28 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QuizBookPickerScreen() {
-    // 임시 데이터
-    val sampleQuizBooks = listOf(
-        QuizBook(
-            id = 1L,
-            ownerId = 123456L,
-            ownerName = "시스템 관리자",
-            category = "운영체제",
-            title = "모두의 운영체제",
-            difficulty = "???",
-            totalQuizzes = 231,
-            totalComments = 4,
-            totalSaves = 32,
-            createdAt = "2025-05-11T15:30:00Z"
-        ),
-        QuizBook(
-            id = 2L,
-            ownerId = 654321L,
-            ownerName = "싸피_박성준",
-            category = "운영체제",
-            title = "성준이의 운영체제",
-            difficulty = "상",
-            totalQuizzes = 30,
-            totalComments = 4,
-            totalSaves = 32,
-            createdAt = "2025-05-11T15:30:00Z"
-        )
-    )
-    val category = "운영체제"
-
+fun QuizBookListScreen(
+    state: QuizBookListViewState = QuizBookListViewState(),
+    sendIntent: (QuizBookListIntent) -> Unit
+) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
 
     var isSheetOpen by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
-        TitleWithUnderLine(category)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .navigationBarsPadding()
+            .systemBarsPadding()
+    ) {
+        TitleWithUnderLine(state.category)
         Spacer(Modifier.height(4.dp))
-        QuizBookListHeader(sampleQuizBooks.size) {
+        QuizBookListHeader(state.quizBooks.size) {
             isSheetOpen = true
         }
-        QuizBookCardList(sampleQuizBooks)
+        QuizBookCardList(state.quizBooks)
         if (isSheetOpen) {
             ModalBottomSheet(
                 onDismissRequest = {
@@ -93,8 +75,8 @@ fun QuizBookPickerScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun QuizBookPickerScreenPreview() {
+fun QuizBookListScreenPreview() {
     QuizCafeTheme {
-        QuizBookPickerScreen()
+        QuizBookListScreen(){}
     }
 }
