@@ -2,7 +2,7 @@ package com.android.quizcafe.feature.main.quiz
 
 import androidx.compose.ui.graphics.Color
 
-data class FeatureItem(
+data class ModeItem(
     val titleResId: Int,
     val descResId: Int,
     val backgroundColor: Color

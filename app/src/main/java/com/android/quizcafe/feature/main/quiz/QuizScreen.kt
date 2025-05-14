@@ -25,7 +25,7 @@ fun QuizScreen(
     ) {
         item { QuizHistorySection(historyList = state.historyList) }
         item { Spacer(modifier = Modifier.height(16.dp)) }
-        item { FeatureSection() }
+        item { QuizModeSection() }
     }
 }
 
