@@ -1,6 +1,7 @@
 package com.android.quizcafe.main.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 
@@ -27,5 +28,17 @@ fun NavHostController.navigateAndClearBackStack(
             this.inclusive = inclusive
         }
         launchSingleTop = true
+    }
+}
+
+fun NavController.navigatePopUpToStartDestination(
+    targetRoute: String
+) {
+    this.navigate(targetRoute) {
+        popUpTo(this@navigatePopUpToStartDestination.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
