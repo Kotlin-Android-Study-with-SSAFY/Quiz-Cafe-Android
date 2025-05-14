@@ -15,6 +15,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.ui.QuizCafeTopAppBar
 import com.android.quizcafe.core.ui.TopAppBarTitle
 import com.android.quizcafe.main.navigation.MainBottomNavHost
+import com.android.quizcafe.main.navigation.navigatePopUpToStartDestination
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
 data class MainTab(
@@ -51,13 +52,7 @@ fun MainScreen() {
                 onItemSelected = { index ->
                     val targetRoute = mainTabs[index].route
                     if (currentRoute != targetRoute) {
-                        navController.navigate(targetRoute) {
-                            popUpTo(navController.graph.startDestinationId) {
-                                saveState = true
-                            }
-                            launchSingleTop = true
-                            restoreState = true
-                        }
+                        navController.navigatePopUpToStartDestination(targetRoute)
                     }
                 }
             )

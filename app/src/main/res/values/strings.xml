@@ -46,5 +46,9 @@
     <string name="tab_title_workbook">저장한 문제집</string>
     <string name="tab_title_mypage"> </string>
 
+    <!--Quizpage Text -->
+    <string name="quiz_history">풀이기록</string>
+    <string name="navigate_forward">앞으로 이동</string>
+
 
 </resources>

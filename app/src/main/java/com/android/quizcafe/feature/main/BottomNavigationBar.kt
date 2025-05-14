@@ -1,18 +1,20 @@
 package com.android.quizcafe.feature.main
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.theme.primaryLight
 
 private data class BottomNavItem(
-    val iconResId: Int,
-    val labelResId: Int
+    @DrawableRes val iconResId: Int,
+    @StringRes val labelResId: Int
 )
 
 @Composable
@@ -35,7 +37,7 @@ fun BottomNavigationBar(
         )
     )
 
-    NavigationBar(containerColor = Color(0xFFAFCAFF)) {
+    NavigationBar(containerColor = primaryLight) {
         items.forEachIndexed { index, item ->
             NavigationBarItem(
                 selected = selectedIndex == index,

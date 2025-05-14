@@ -22,9 +22,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onSurfaceLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
@@ -45,12 +47,13 @@ fun QuizHistorySection(historyList: List<QuizHistory>) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                "풀이기록",
+                text = stringResource(id = R.string.quiz_history),
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold)
             )
+
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = "앞으로 이동"
+                contentDescription = stringResource(id = R.string.navigate_forward)
             )
         }
         // LazyColumn만 높이 제한
