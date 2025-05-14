@@ -17,19 +17,19 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.*
 
 @Composable
-fun FeatureSection() {
-    val featureItems = listOf(
-        FeatureItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
-        FeatureItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
-        FeatureItem(R.string.feature_title_short_answer_quiz, R.string.feature_desc_short_answer_quiz, QuizCardColorShortAnswer),
-        FeatureItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor)
+fun QuizModeSection() {
+    val modeItems = listOf(
+        ModeItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
+        ModeItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
+        ModeItem(R.string.feature_title_short_answer_quiz, R.string.feature_desc_short_answer_quiz, QuizCardColorShortAnswer),
+        ModeItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor)
     )
 
     Column(
         modifier = Modifier.padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        featureItems.chunked(2).forEach { rowItems ->
+        modeItems.chunked(2).forEach { rowItems ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -37,7 +37,7 @@ fun FeatureSection() {
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 rowItems.forEach { item ->
-                    FeatureCard(
+                    QuizModeCard(
                         title = stringResource(item.titleResId),
                         description = stringResource(item.descResId),
                         backgroundColor = item.backgroundColor
@@ -53,7 +53,7 @@ fun FeatureSection() {
 }
 
 @Composable
-fun RowScope.FeatureCard(
+fun RowScope.QuizModeCard(
     title: String,
     description: String,
     backgroundColor: Color,
@@ -96,15 +96,15 @@ fun RowScope.FeatureCard(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewFeatureSection() {
+fun PreviewQuizModeSection() {
     QuizCafeTheme {
-        FeatureSection()
+        QuizModeSection()
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewFeatureCard() {
+fun PreviewQuizModeCard() {
     QuizCafeTheme {
         Row(
             modifier = Modifier
@@ -112,12 +112,12 @@ fun PreviewFeatureCard() {
                 .height(160.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            FeatureCard(
+            QuizModeCard(
                 title = "문제 풀기",
                 description = "원하는 카테고리를 선택해서 학습해요.",
                 backgroundColor = Color(185, 234, 217, 255)
             )
-            FeatureCard(
+            QuizModeCard(
                 title = "문제 만들기",
                 description = "직접 문제를 만들어보세요.",
                 backgroundColor = Color(255, 240, 200, 255)
