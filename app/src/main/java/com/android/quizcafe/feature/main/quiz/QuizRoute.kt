@@ -29,6 +29,6 @@ fun QuizRoute(
 
     QuizScreen(
         state = state,
-        onIntent = viewModel::onIntent
+        onIntent = viewModel::sendIntent
     )
 }
