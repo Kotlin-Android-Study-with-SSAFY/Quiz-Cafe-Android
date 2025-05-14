@@ -60,8 +60,7 @@ fun MultipleChoiceOptionButton(
             contentColor = contentColor
         ),
         modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 24.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
         Row {

@@ -14,7 +14,7 @@ import com.android.quizcafe.main.navigation.routes.MainRoute
 
 @Composable
 fun QuizCafeNavHost(
-    startDestination: String = AuthRoute.startDestination
+    startDestination: String = AuthRoute.Graph.route
 ) {
     val navController = rememberNavController()
     NavHost(

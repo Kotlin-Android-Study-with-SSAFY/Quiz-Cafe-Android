@@ -59,16 +59,9 @@ fun UnderlinedTextField(
                     inner()
 
                     // 우측 아이콘 (정답/오답일 때만)
-                    when (answerState) {
-                        AnswerState.CORRECT,
-                        AnswerState.INCORRECT -> {
-                            AnswerResultIcon(answerState,bottomLineColor)
-                        }
-                        else -> {
-                            /* Normal 일 땐 아이콘 없음 */
-                        }
+                    if(answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
+                        AnswerResultIcon(answerState,bottomLineColor)
                     }
-
                 }
             }
         )

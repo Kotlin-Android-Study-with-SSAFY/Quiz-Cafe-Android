@@ -1,0 +1,38 @@
+package com.android.quizcafe.feature.quiz.solve.viewmodel
+
+import androidx.compose.runtime.remember
+import com.android.quizcafe.feature.quiz.solve.component.AnswerState
+
+enum class QuestionType { OX, MULTIPLE_CHOICE, SUBJECTIVE }
+enum class PlayMode { TIME_ATTACK, NO_TIME_ATTACK }
+
+data class QuizSolveUiState(
+    val currentQuestion: Int = 1,
+    val totalQuestions: Int = 10,
+    val questionType: QuestionType = QuestionType.OX,
+    val playMode: PlayMode = PlayMode.TIME_ATTACK,
+    val questionText: String = "",
+    val selectedOption: String = "",
+    val subjectHint : String = "",
+    val maxCharCount :Int = 30,
+    val showCharCount : Boolean = true,
+    val answerState: AnswerState = AnswerState.DEFAULT,
+    val options: List<String> = emptyList(),
+    val isButtonEnabled : Boolean = true,
+    val remainingSeconds: Int = 600
+) {
+    fun optionState(option: String): AnswerState = when {
+        answerState == AnswerState.DEFAULT -> AnswerState.DEFAULT
+        selectedOption == option && answerState == AnswerState.SELECTED -> AnswerState.SELECTED
+        selectedOption == option && answerState == AnswerState.CORRECT -> AnswerState.CORRECT
+        selectedOption == option && answerState == AnswerState.INCORRECT -> AnswerState.INCORRECT
+        else -> AnswerState.DEFAULT
+    }
+
+    fun getTimeRemainText(remainingSeconds: Int):String{
+        val m = remainingSeconds / 60
+        val s = remainingSeconds % 60
+        return String.format("%02d:%02d", m, s)
+    }
+
+}

@@ -57,6 +57,16 @@ fun quizCafeTypography(): Typography {
             fontWeight = FontWeight.Normal,
             fontSize = 14.sp,
         ),
+        headlineLarge = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 20.sp,
+        ),
+        titleMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 32.sp,
+        )
     )
 }
 
