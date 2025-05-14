@@ -12,7 +12,7 @@ import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
 import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
 import com.android.quizcafe.core.network.mapper.DEFAULT_ERROR_MESSAGE
-import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.apiNoResponseToResourceFlow
 import com.android.quizcafe.core.network.mapper.handleNetworkException
 import com.android.quizcafe.core.network.model.onError
 import com.android.quizcafe.core.network.model.onException
@@ -29,16 +29,16 @@ class AuthRepositoryImpl @Inject constructor(
     private val authManager: AuthManager
 ) : AuthRepository {
 
-    override suspend fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
-        apiResponseToResourceFlow { remoteDataSource.sendCode(request.toDto()) }
+    override fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
+        apiNoResponseToResourceFlow { remoteDataSource.sendCode(request.toDto()) }
 
-    override suspend fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>> =
-        apiResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto()) }
+    override fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>> =
+        apiNoResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto()) }
 
-    override suspend fun signUp(request: SignUpRequest): Flow<Resource<Unit>> =
-        apiResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
+    override fun signUp(request: SignUpRequest): Flow<Resource<Unit>> =
+        apiNoResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
 
-    override suspend fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
+    override fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
         withTimeoutOrNull(3_000L) {
             remoteDataSource.login(request.toDto())
@@ -65,6 +65,6 @@ class AuthRepositoryImpl @Inject constructor(
         )
     }.flowOn(Dispatchers.IO)
 
-    override suspend fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
-        apiResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
+    override fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
+        apiNoResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
 }
