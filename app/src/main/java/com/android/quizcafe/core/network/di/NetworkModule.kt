@@ -87,7 +87,7 @@ object NetworkModule {
     @Singleton
     @Named("token")
     fun provideTokenRetrofit(
-        okHttpClient: OkHttpClient
+        @Named("token") okHttpClient: OkHttpClient
     ): Retrofit {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
