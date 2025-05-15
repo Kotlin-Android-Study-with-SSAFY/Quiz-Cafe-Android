@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
@@ -91,10 +91,13 @@ fun QuizSolveScreen(
             }
             Spacer(modifier = Modifier.weight(1F))
             QuizCafeButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 enabled = uiState.isButtonEnabled,
                 onClick = {},
-                text = { Text("적용") }
+                text = { Text(
+                    text = stringResource(R.string.solve_btn_next_text),
+                    style = quizCafeTypography().titleSmall
+                ) }
             )
         }
     }
@@ -103,6 +106,7 @@ fun QuizSolveScreen(
 @Composable
 fun SubjectiveAnswerSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, onIntent: (QuizSolveIntent) -> Unit){
     UnderlinedTextField(
+        modifier = modifier,
         value = uiState.selectedOption,
         onValueChange = {onIntent(QuizSolveIntent.UpdatedSubjectiveAnswer(it))},
         maxCharCount = uiState.maxCharCount,
@@ -126,6 +130,7 @@ fun SelectMultipleChoiceSection(modifier : Modifier = Modifier, uiState: QuizSol
     ) {
         uiState.options.forEachIndexed { idx, option ->
             MultipleChoiceOptionButton(
+                modifier = modifier,
                 answerState = uiState.answerState,
                 index = idx+1,
                 content = option,
@@ -143,7 +148,7 @@ fun SelectOXSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, o
     ) {
         listOf("O", "X").forEach { option ->
             OxOptionButton(
-                modifier = Modifier.weight(1F),
+                modifier = modifier.weight(1F),
                 answerState = uiState.optionState(option),
                 iconPaint = if (option == "O") R.drawable.ic_ox_option_o else R.drawable.ic_ox_option_x,
                 onClick = { onIntent(QuizSolveIntent.SelectOXOption(option)) }
@@ -157,7 +162,7 @@ fun QuizTitleSection(modifier: Modifier = Modifier,questionText : String) {
     Text(
         text = questionText,
         style = quizCafeTypography().titleMedium,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     )
 }
 

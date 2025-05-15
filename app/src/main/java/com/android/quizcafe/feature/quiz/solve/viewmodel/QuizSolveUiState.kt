@@ -1,7 +1,7 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
-import androidx.compose.runtime.remember
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
+import java.util.Locale
 
 enum class QuestionType { OX, MULTIPLE_CHOICE, SUBJECTIVE }
 enum class PlayMode { TIME_ATTACK, NO_TIME_ATTACK }
@@ -32,7 +32,7 @@ data class QuizSolveUiState(
     fun getTimeRemainText(remainingSeconds: Int):String{
         val m = remainingSeconds / 60
         val s = remainingSeconds % 60
-        return String.format("%02d:%02d", m, s)
+        return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
 
 }
