@@ -45,7 +45,6 @@ fun QuizSolveScreen(
                 timeText = uiState.getTimeRemainText(uiState.remainingSeconds),
                 onBackClick = { onIntent(QuizSolveIntent.OnBackClick) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
-
             )
         }
     ) { padding ->
@@ -91,24 +90,32 @@ fun QuizSolveScreen(
             }
             Spacer(modifier = Modifier.weight(1F))
             QuizCafeButton(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
                 enabled = uiState.isButtonEnabled,
                 onClick = {},
-                text = { Text(
-                    text = stringResource(R.string.solve_btn_next_text),
-                    style = quizCafeTypography().titleSmall
-                ) }
+                text = {
+                    Text(
+                        text = stringResource(R.string.solve_btn_next_text),
+                        style = quizCafeTypography().titleSmall
+                    )
+                }
             )
         }
     }
 }
 
 @Composable
-fun SubjectiveAnswerSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, onIntent: (QuizSolveIntent) -> Unit){
+fun SubjectiveAnswerSection(
+    modifier: Modifier = Modifier,
+    uiState: QuizSolveUiState,
+    onIntent: (QuizSolveIntent) -> Unit
+) {
     UnderlinedTextField(
         modifier = modifier,
         value = uiState.selectedOption,
-        onValueChange = {onIntent(QuizSolveIntent.UpdatedSubjectiveAnswer(it))},
+        onValueChange = { onIntent(QuizSolveIntent.UpdatedSubjectiveAnswer(it)) },
         maxCharCount = uiState.maxCharCount,
         showCharCount = uiState.showCharCount,
         answerState = uiState.answerState
@@ -123,7 +130,11 @@ fun SubjectiveAnswerSection(modifier : Modifier = Modifier, uiState: QuizSolveUi
 }
 
 @Composable
-fun SelectMultipleChoiceSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, onIntent: (QuizSolveIntent) -> Unit){
+fun SelectMultipleChoiceSection(
+    modifier: Modifier = Modifier,
+    uiState: QuizSolveUiState,
+    onIntent: (QuizSolveIntent) -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
@@ -132,15 +143,20 @@ fun SelectMultipleChoiceSection(modifier : Modifier = Modifier, uiState: QuizSol
             MultipleChoiceOptionButton(
                 modifier = modifier,
                 answerState = uiState.answerState,
-                index = idx+1,
+                index = idx + 1,
                 content = option,
-                onClick = {onIntent(QuizSolveIntent.SelectOXOption(option))}
+                onClick = { onIntent(QuizSolveIntent.SelectOXOption(option)) }
             )
         }
     }
 }
+
 @Composable
-fun SelectOXSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, onIntent: (QuizSolveIntent) -> Unit){
+fun SelectOXSection(
+    modifier: Modifier = Modifier,
+    uiState: QuizSolveUiState,
+    onIntent: (QuizSolveIntent) -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth(),
@@ -158,7 +174,7 @@ fun SelectOXSection(modifier : Modifier = Modifier, uiState: QuizSolveUiState, o
 }
 
 @Composable
-fun QuizTitleSection(modifier: Modifier = Modifier,questionText : String) {
+fun QuizTitleSection(modifier: Modifier = Modifier, questionText: String) {
     Text(
         text = questionText,
         style = quizCafeTypography().titleMedium,
@@ -170,9 +186,11 @@ fun QuizTitleSection(modifier: Modifier = Modifier,questionText : String) {
 @Composable
 fun QuizSolveScreenOXPreview() {
     QuizCafeTheme {
-        QuizSolveScreen(QuizSolveUiState(
-            questionText = "Q1. 박승준의 나이는?",
-            questionType = QuestionType.OX)
+        QuizSolveScreen(
+            QuizSolveUiState(
+                questionText = "Q1. 박승준의 나이는?",
+                questionType = QuestionType.OX
+            )
         ) {}
     }
 }
@@ -195,6 +213,7 @@ fun QuizSolveScreenMultiplePreview() {
         ) {}
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun QuizSolveScreenSubjectivePreview() {
