@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
 
-    suspend fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>>
+    fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>>
 
-    suspend fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>>
+    fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>>
 
-    suspend fun signUp(request: SignUpRequest): Flow<Resource<Unit>>
+    fun signUp(request: SignUpRequest): Flow<Resource<Unit>>
 
-    suspend fun login(request: LoginRequest): Flow<Resource<Unit>>
+    fun login(request: LoginRequest): Flow<Resource<Unit>>
 
-    suspend fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>>
+    fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>>
 }

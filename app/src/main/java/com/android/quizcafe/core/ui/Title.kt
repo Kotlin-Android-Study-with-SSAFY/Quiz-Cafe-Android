@@ -53,7 +53,7 @@ fun AnimatedTitleWithBody(
 // TopAppBar를 사용하지 않는 underline Title
 @Composable
 fun TitleWithUnderLine(title: String) {
-    Spacer(Modifier.height(60.dp))
+    Spacer(Modifier.height(40.dp))
     Text(
         text = title,
         style = quizCafeTypography().titleLarge
