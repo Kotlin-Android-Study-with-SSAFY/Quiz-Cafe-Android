@@ -62,13 +62,12 @@ fun UnderlinedTextField(
                     when (answerState) {
                         AnswerState.CORRECT,
                         AnswerState.INCORRECT -> {
-                            AnswerResultIcon(answerState,bottomLineColor)
+                            AnswerResultIcon(answerState, bottomLineColor)
                         }
                         else -> {
                             /* Normal 일 땐 아이콘 없음 */
                         }
                     }
-
                 }
             }
         )
