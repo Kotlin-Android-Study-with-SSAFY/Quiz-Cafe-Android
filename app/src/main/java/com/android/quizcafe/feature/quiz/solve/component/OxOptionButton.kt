@@ -60,7 +60,7 @@ fun OxOptionButton(
         modifier = modifier
             .size(width = 184.dp, height = 184.dp),
         shape = RoundedCornerShape(10.dp),
-        border = if(answerState == AnswerState.INCORRECT) BorderStroke(8.dp, color = error_02) else null
+        border = if (answerState == AnswerState.INCORRECT) BorderStroke(8.dp, color = error_02) else null
     ) {
         Icon(
             painter = painterResource(iconPaint),
