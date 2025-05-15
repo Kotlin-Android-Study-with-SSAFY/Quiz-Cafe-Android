@@ -34,8 +34,8 @@ fun CategoryPickerScreen(
         Spacer(Modifier.height(12.dp))
         CategoryCardList(
             categories = categories,
-            onItemClicked = {
-                sendIntent(CategoryIntent.ClickCategory)
+            onItemClicked = { categoryName ->
+                sendIntent(CategoryIntent.ClickCategory(categoryName))
             }
         )
     }

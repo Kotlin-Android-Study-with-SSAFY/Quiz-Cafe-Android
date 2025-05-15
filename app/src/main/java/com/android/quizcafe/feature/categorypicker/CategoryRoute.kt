@@ -11,7 +11,7 @@ import com.android.quizcafe.R
 
 @Composable
 fun CategoryRoute(
-    navigateToQuizBookPicker: () -> Unit,
+    navigateToQuizBookPicker: (String) -> Unit,
     navigateToHome: () -> Unit,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
@@ -29,8 +29,8 @@ fun CategoryRoute(
                     navigateToHome()
                 }
 
-                CategoryEffect.NavigateToQuizBooks -> {
-                    navigateToQuizBookPicker()
+                is CategoryEffect.NavigateToQuizBooks -> {
+                    navigateToQuizBookPicker(effect.categoryId)
                 }
 
                 is CategoryEffect.ShowError -> {

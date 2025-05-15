@@ -18,8 +18,8 @@ class CategoryViewModel @Inject constructor(
     override suspend fun handleIntent(intent: CategoryIntent) {
         when (intent) {
             CategoryIntent.LoadCategories -> getCategoryList()
-            CategoryIntent.ClickCategory -> emitEffect(CategoryEffect.NavigateToQuizBooks)
-            is CategoryIntent.SuccessGetCategories -> emitEffect(CategoryEffect.NavigateToQuizBooks)
+            is CategoryIntent.ClickCategory -> emitEffect(CategoryEffect.NavigateToQuizBooks(intent.categoryId))
+            is CategoryIntent.SuccessGetCategories -> {}
             is CategoryIntent.FailGetCategories -> emitEffect(CategoryEffect.ShowError(intent.errorMessage ?: ""))
         }
     }
@@ -27,11 +27,8 @@ class CategoryViewModel @Inject constructor(
     override fun reduce(currentState: CategoryViewState, intent: CategoryIntent): CategoryViewState {
         return when (intent) {
             CategoryIntent.LoadCategories -> currentState.copy(isLoading = true, errorMessage = null)
-            CategoryIntent.ClickCategory -> currentState.copy(isLoading = true, errorMessage = null)
-            is CategoryIntent.SuccessGetCategories -> currentState.copy(
-                categories = intent.data,
-                isLoading = false
-            )
+            is CategoryIntent.ClickCategory -> currentState.copy(isLoading = true, errorMessage = null)
+            is CategoryIntent.SuccessGetCategories -> currentState.copy(categories = intent.data, isLoading = false)
             is CategoryIntent.FailGetCategories -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
         }
     }
