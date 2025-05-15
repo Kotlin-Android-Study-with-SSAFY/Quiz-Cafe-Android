@@ -36,12 +36,11 @@ fun UnderlinedTextField(
     answerState: AnswerState = AnswerState.DEFAULT
 ) {
     val bottomLineColor = when (answerState) {
+        AnswerState.SELECTED,
         AnswerState.DEFAULT -> scrimLight
         AnswerState.CORRECT -> blue_200
         AnswerState.INCORRECT -> error_02
-        AnswerState.SELECTED -> {}
-    } as Color
-
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         BasicTextField(
             value = value,
