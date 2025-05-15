@@ -18,5 +18,4 @@ class QuizBookRemoteDataSource @Inject constructor(
 
     suspend fun getQuizBooksByCategory(request: QuizBookRequestDto): NetworkResult<ApiResponse<List<QuizBookResponseDto>>> =
         quizBookService.getQuizBooks(request.category)
-
 }

@@ -77,6 +77,6 @@ fun QuizBookListScreen(
 @Composable
 fun QuizBookListScreenPreview() {
     QuizCafeTheme {
-        QuizBookListScreen(){}
+        QuizBookListScreen {}
     }
 }

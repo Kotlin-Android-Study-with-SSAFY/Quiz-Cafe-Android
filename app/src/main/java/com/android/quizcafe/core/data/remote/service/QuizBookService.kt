@@ -2,10 +2,8 @@ package com.android.quizcafe.core.data.remote.service
 
 import com.android.quizcafe.core.data.model.quizbook.response.CategoryResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
-import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
-import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Query
 
