@@ -22,13 +22,12 @@ import com.android.quizcafe.core.designsystem.theme.neutral07
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 
-
 @Composable
 fun MultipleChoiceOptionButton(
     modifier: Modifier = Modifier,
     answerState: AnswerState = AnswerState.DEFAULT,
-    index : Number,
-    content : String,
+    index: Number,
+    content: String,
     onClick: () -> Unit,
 ) {
     val (containerColor, contentColor) = when (answerState) {
@@ -65,7 +64,7 @@ fun MultipleChoiceOptionButton(
     ) {
         Row {
             Text(
-                text = "${index}.",
+                text = "$index.",
                 style = quizCafeTypography().bodyLarge,
                 modifier = Modifier.padding(top = 3.dp)
             )

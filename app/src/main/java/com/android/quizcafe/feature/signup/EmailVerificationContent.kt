@@ -37,7 +37,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun EmailInputContent(
     state: SignUpViewState,
-    onIntent: (SignUpIntent) -> Unit,
+    sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -53,11 +53,11 @@ fun EmailInputContent(
             val animatedSpacerPadding by animateDpAsState(if (state.isCodeSent) 0.dp else 40.dp)
             Spacer(modifier = Modifier.height(animatedSpacerPadding))
 
-            EmailInputContent(state, focusRequester, onIntent)
+            EmailInputContent(state, focusRequester, sendIntent)
 
             if (state.isCodeSent) {
                 Spacer(modifier = Modifier.height(32.dp))
-                VerificationContent(state, onIntent)
+                VerificationContent(state, sendIntent)
             }
         }
     )
@@ -67,12 +67,12 @@ fun EmailInputContent(
 fun EmailInputContent(
     state: SignUpViewState,
     focusRequester: FocusRequester?,
-    onIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit
 ) {
     LabeledInputField(
         label = stringResource(R.string.email),
         value = state.email,
-        onValueChange = { onIntent(SignUpIntent.UpdatedEmail(it)) },
+        onValueChange = { sendIntent(SignUpIntent.UpdatedEmail(it)) },
         errorMessage = state.emailErrorMessage,
         focusRequester = focusRequester,
         enabled = !state.isCodeSent
@@ -82,7 +82,7 @@ fun EmailInputContent(
 @Composable
 fun VerificationContent(
     state: SignUpViewState,
-    onIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit
 ) {
     Column {
         Row(
@@ -93,7 +93,7 @@ fun VerificationContent(
             Text(
                 stringResource(R.string.resend),
                 modifier = Modifier.clickable {
-                    onIntent(SignUpIntent.ClickSendCode)
+                    sendIntent(SignUpIntent.ClickSendCode)
                 },
                 fontSize = 16.sp,
                 color = onSurfaceVariantLight
@@ -102,7 +102,7 @@ fun VerificationContent(
 
         Spacer(modifier = Modifier.height(8.dp))
         VerificationInputField(state) {
-            onIntent(SignUpIntent.UpdatedVerificationCode(it))
+            sendIntent(SignUpIntent.UpdatedVerificationCode(it))
         }
 
         VerificationTimer(state)

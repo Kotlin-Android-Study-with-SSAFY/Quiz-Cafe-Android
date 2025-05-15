@@ -56,7 +56,6 @@ fun UnderlinedTextField(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     inner()
-
                     // 우측 아이콘 (정답/오답일 때만)
                     if(answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
                         AnswerResultIcon(answerState,bottomLineColor)

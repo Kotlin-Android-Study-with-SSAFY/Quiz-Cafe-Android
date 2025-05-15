@@ -21,7 +21,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun PasswordInputContent(
     state: SignUpViewState,
-    onIntent: (SignUpIntent) -> Unit,
+    sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -34,9 +34,9 @@ fun PasswordInputContent(
         title = stringResource(R.string.input_password),
         innerPadding = innerPadding,
         content = {
-            PasswordInputContent(state, focusRequester, onIntent)
+            PasswordInputContent(state, focusRequester, sendIntent)
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordConfirmInputContent(state, onIntent)
+            PasswordConfirmInputContent(state, sendIntent)
         }
     )
 }
@@ -45,12 +45,12 @@ fun PasswordInputContent(
 fun PasswordInputContent(
     state: SignUpViewState,
     focusRequester: FocusRequester?,
-    onIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit
 ) {
     LabeledInputField(
         label = stringResource(R.string.password),
         value = state.password,
-        onValueChange = { onIntent(SignUpIntent.UpdatedPassword(it)) },
+        onValueChange = { sendIntent(SignUpIntent.UpdatedPassword(it)) },
         isPassword = true,
         focusRequester = focusRequester,
         errorMessage = state.passwordErrorMessage
@@ -58,11 +58,11 @@ fun PasswordInputContent(
 }
 
 @Composable
-fun PasswordConfirmInputContent(state: SignUpViewState, onIntent: (SignUpIntent) -> Unit) {
+fun PasswordConfirmInputContent(state: SignUpViewState, sendIntent: (SignUpIntent) -> Unit) {
     LabeledInputField(
         label = stringResource(R.string.password_confirm),
         value = state.passwordConfirm,
-        onValueChange = { onIntent(SignUpIntent.UpdatedPasswordConfirm(it)) },
+        onValueChange = { sendIntent(SignUpIntent.UpdatedPasswordConfirm(it)) },
         isPassword = true,
         errorMessage = state.passwordConfirmErrorMessage
     )
