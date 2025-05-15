@@ -40,13 +40,9 @@ val surfaceContainerHighestLight = Color(0xFFE3E2E6)
 val neutral05 = Color(0xFFA8A7A7)
 val neutral06 = Color(0xFFC8C8C8)
 val neutral07 = Color(0xFFE9E9E9)
-
-
 val blue_200 = Color(0xFFAFEEFF)
 val blue_300 = Color(0xFF4581F9)
-
 val green_200 = Color(0xFFBAEAB8)
-
 val error_01 = Color(0xFFFFC9C9)
 val error_02 = Color(0xFFEA3323)
 

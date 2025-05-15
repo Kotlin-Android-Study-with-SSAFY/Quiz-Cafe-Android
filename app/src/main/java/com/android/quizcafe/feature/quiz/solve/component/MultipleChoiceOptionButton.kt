@@ -65,7 +65,7 @@ fun MultipleChoiceOptionButton(
     ) {
         Row {
             Text(
-                text = "${index}.",
+                text = "$index.",
                 style = quizCafeTypography().bodyLarge,
                 modifier = Modifier.padding(top = 3.dp)
             )
