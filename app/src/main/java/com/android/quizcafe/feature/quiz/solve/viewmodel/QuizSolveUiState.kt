@@ -13,12 +13,12 @@ data class QuizSolveUiState(
     val playMode: PlayMode = PlayMode.TIME_ATTACK,
     val questionText: String = "",
     val selectedOption: String = "",
-    val subjectHint : String = "",
-    val maxCharCount :Int = 30,
-    val showCharCount : Boolean = true,
+    val subjectHint: String = "",
+    val maxCharCount: Int = 30,
+    val showCharCount: Boolean = true,
     val answerState: AnswerState = AnswerState.DEFAULT,
     val options: List<String> = emptyList(),
-    val isButtonEnabled : Boolean = true,
+    val isButtonEnabled: Boolean = true,
     val remainingSeconds: Int = 600
 ) {
     fun optionState(option: String): AnswerState = when {
@@ -29,10 +29,9 @@ data class QuizSolveUiState(
         else -> AnswerState.DEFAULT
     }
 
-    fun getTimeRemainText(remainingSeconds: Int):String{
+    fun getTimeRemainText(remainingSeconds: Int): String {
         val m = remainingSeconds / 60
         val s = remainingSeconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
-
 }

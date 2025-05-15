@@ -30,7 +30,7 @@ fun QuizTopBar(
     modifier: Modifier = Modifier,
     currentQuestion: Int,
     totalQuestions: Int,
-    timeText : String?,
+    timeText: String?,
     onBackClick: () -> Unit,
     onSideBarClick: () -> Unit
 ) {
@@ -51,13 +51,13 @@ fun QuizTopBar(
             )
         },
         actions = {
-            TopbarActionSection(timeText,onSideBarClick)
+            TopbarActionSection(timeText, onSideBarClick)
         }
     )
 }
 
 @Composable
-fun TopbarActionSection(timeText : String?,onSideBarClick: () -> Unit){
+fun TopbarActionSection(timeText: String?, onSideBarClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(end = 8.dp)
@@ -113,7 +113,5 @@ fun QuizTopBarPreview() {
                 onSideBarClick = { }
             )
         }
-
     }
 }
-

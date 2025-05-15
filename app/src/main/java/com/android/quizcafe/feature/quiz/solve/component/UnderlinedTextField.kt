@@ -36,33 +36,27 @@ fun UnderlinedTextField(
     answerState: AnswerState = AnswerState.DEFAULT
 ) {
     val bottomLineColor = when (answerState) {
-        AnswerState.SELECTED,
-        AnswerState.DEFAULT -> scrimLight
+        AnswerState.SELECTED, AnswerState.DEFAULT -> scrimLight
+
         AnswerState.CORRECT -> blue_200
         AnswerState.INCORRECT -> error_02
     }
     Column(modifier = modifier.fillMaxWidth()) {
-        BasicTextField(
-            value = value,
-            onValueChange = {
-                if (it.length <= maxCharCount) onValueChange(it)
-            },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
-            decorationBox = { inner ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    inner()
-                    // 우측 아이콘 (정답/오답일 때만)
-                    if(answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
-                        AnswerResultIcon(answerState,bottomLineColor)
-                    }
+        BasicTextField(value = value, onValueChange = {
+            if (it.length <= maxCharCount) onValueChange(it)
+        }, singleLine = true, modifier = Modifier.fillMaxWidth(), decorationBox = { inner ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                inner()
+                // 우측 아이콘 (정답/오답일 때만)
+                if (answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
+                    AnswerResultIcon(answerState, bottomLineColor)
                 }
             }
-        )
+        })
         HorizontalDivider(
             color = bottomLineColor,
             thickness = 1.dp,
