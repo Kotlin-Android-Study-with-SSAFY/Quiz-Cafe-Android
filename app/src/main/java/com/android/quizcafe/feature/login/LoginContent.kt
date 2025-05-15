@@ -12,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -23,6 +22,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.outlineLight
 
 @Composable
 fun QuizCafeLogo() {
@@ -36,11 +36,11 @@ fun QuizCafeLogo() {
 }
 
 @Composable
-fun EmailInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
+fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "ID",
         value = state.email,
-        onValueChange = { onIntent(LoginIntent.UpdatedEmail(it)) },
+        onValueChange = { sendIntent(LoginIntent.UpdatedEmail(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp)
@@ -48,11 +48,11 @@ fun EmailInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
 }
 
 @Composable
-fun PasswordInputContent(state: LoginViewState, onIntent: (LoginIntent) -> Unit) {
+fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "PW",
         value = state.password,
-        onValueChange = { onIntent(LoginIntent.UpdatedPassword(it)) },
+        onValueChange = { sendIntent(LoginIntent.UpdatedPassword(it)) },
         modifier = Modifier
             .fillMaxWidth()
             .height(56.dp),
@@ -75,7 +75,7 @@ fun LoginButton(state: LoginViewState, onClick: () -> Unit) {
 }
 
 @Composable
-fun BottomTextOptions(onIntent: (LoginIntent) -> Unit) {
+fun BottomTextOptions(sendIntent: (LoginIntent) -> Unit) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.End
@@ -83,13 +83,13 @@ fun BottomTextOptions(onIntent: (LoginIntent) -> Unit) {
         Text(
             text = stringResource(R.string.forgot_password),
             fontSize = 14.sp,
-            color = Color.Gray
+            color = outlineLight
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = stringResource(R.string.signup),
             fontSize = 14.sp,
-            modifier = Modifier.clickable { onIntent(LoginIntent.ClickSignUp) }
+            modifier = Modifier.clickable { sendIntent(LoginIntent.ClickSignUp) }
         )
     }
 }

@@ -29,7 +29,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 @Composable
 fun LoginScreen(
     state: LoginViewState,
-    onIntent: (LoginIntent) -> Unit
+    sendIntent: (LoginIntent) -> Unit
 ) {
     // 키보드 크기 계산
     val imeBottomPx = WindowInsets.ime.getBottom(LocalDensity.current)
@@ -57,24 +57,24 @@ fun LoginScreen(
             QuizCafeLogo()
         }
         item {
-            EmailInputContent(state, onIntent)
+            EmailInputContent(state, sendIntent)
             Spacer(modifier = Modifier.height(20.dp))
         }
         item {
-            PasswordInputContent(state, onIntent)
+            PasswordInputContent(state, sendIntent)
             Spacer(modifier = Modifier.height(24.dp))
         }
         item {
             LoginButton(
                 onClick = {
-                    onIntent(LoginIntent.ClickLogin)
+                    sendIntent(LoginIntent.ClickLogin)
                 },
                 state = state
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            BottomTextOptions(onIntent)
+            BottomTextOptions(sendIntent)
             Spacer(modifier = Modifier.height(40.dp))
         }
     }

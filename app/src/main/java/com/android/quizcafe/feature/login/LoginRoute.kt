@@ -47,6 +47,6 @@ fun LoginRoute(
 
     LoginScreen(
         state = state,
-        onIntent = viewModel::onIntent
+        sendIntent = viewModel::sendIntent
     )
 }

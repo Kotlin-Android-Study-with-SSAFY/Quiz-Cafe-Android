@@ -31,7 +31,7 @@ import com.android.quizcafe.core.ui.TopAppBarTitle
 fun SignUpScreen(
     step: Int,
     state: SignUpViewState,
-    onIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -55,9 +55,9 @@ fun SignUpScreen(
                 state = state,
                 onClick = {
                     when {
-                        state.isSuccessVerification -> onIntent(SignUpIntent.ClickSignUp)
-                        state.isCodeSent -> onIntent(SignUpIntent.ClickVerifyCode)
-                        else -> onIntent(SignUpIntent.ClickSendCode)
+                        state.isSuccessVerification -> sendIntent(SignUpIntent.ClickSignUp)
+                        state.isCodeSent -> sendIntent(SignUpIntent.ClickVerifyCode)
+                        else -> sendIntent(SignUpIntent.ClickSendCode)
                     }
                 }
             )
@@ -65,8 +65,8 @@ fun SignUpScreen(
     ) { innerPadding ->
         AnimatedContent(step) {
             when (it) {
-                0 -> EmailInputContent(state, onIntent, innerPadding)
-                1 -> PasswordInputContent(state, onIntent, innerPadding)
+                0 -> EmailInputContent(state, sendIntent, innerPadding)
+                1 -> PasswordInputContent(state, sendIntent, innerPadding)
             }
         }
     }

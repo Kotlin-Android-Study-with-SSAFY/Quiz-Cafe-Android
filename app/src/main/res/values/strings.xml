@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">QuizCafe</string>
-
     <string name="password_visibility_toggle">비밀번호 보기 토글</string>
     <string name="clear_text">입력 지우기</string>
     <string name="error_icon">에러 아이콘</string>
@@ -24,4 +23,6 @@
     <string name="quiz_topbar_title">문제 %1$d of %2$d</string>
     <string name="quiz_time_format">%1$02d:%2$02d</string>
     <string name="solve_btn_next_text">다음 문제</string>
+    <string name="pick_category">카테고리 선택</string>
+    <string name="go">Go</string>
 </resources>

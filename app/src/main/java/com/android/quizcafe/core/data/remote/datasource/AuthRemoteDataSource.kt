@@ -1,8 +1,8 @@
 package com.android.quizcafe.core.data.remote.datasource
 
+import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SendCodeRequestDto
-import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SignUpRequestDto
 import com.android.quizcafe.core.data.model.auth.request.VerifyCodeRequestDto
 import com.android.quizcafe.core.data.model.auth.response.LoginResponseDto
@@ -14,9 +14,8 @@ import javax.inject.Inject
 class AuthRemoteDataSource @Inject constructor(
     private val authService: AuthService
 ) {
-
     suspend fun sendCode(request: SendCodeRequestDto): NetworkResult<ApiResponse<Unit>> =
-        authService.sendCode(email = request.email)
+        authService.sendCode(request)
 
     suspend fun verifyCode(request: VerifyCodeRequestDto): NetworkResult<ApiResponse<Unit>> =
         authService.verifyCode(request)

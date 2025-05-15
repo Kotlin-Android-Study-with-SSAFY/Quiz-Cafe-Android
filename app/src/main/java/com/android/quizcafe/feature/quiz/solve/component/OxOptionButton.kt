@@ -26,7 +26,7 @@ import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 fun OxOptionButton(
     modifier: Modifier = Modifier,
     answerState: AnswerState = AnswerState.DEFAULT,
-    iconPaint : Int,
+    iconPaint: Int,
     onClick: () -> Unit,
 ) {
     val (containerColor, contentColor) = when (answerState) {

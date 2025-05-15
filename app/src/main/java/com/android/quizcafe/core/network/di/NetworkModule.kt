@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.network.di
 
+import com.android.quizcafe.BuildConfig
 import com.android.quizcafe.core.datastore.AuthInterceptor
 import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.network.util.calladapter.NetworkResultCallAdapterFactory
@@ -9,21 +10,23 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import retrofit2.Retrofit
-import javax.inject.Named
-import javax.inject.Singleton
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    // TODO : local.properties에서 BASE_URL 가져오기
+    private val baseUrl = BuildConfig.BASE_URL.toHttpUrl()
+
     @Singleton
     @Provides
     @Named("default")
@@ -33,7 +36,7 @@ object NetworkModule {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit.Builder()
-            .baseUrl("BASE_URL")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(NullOnEmptyConverterFactory)
             .addConverterFactory(json.asConverterFactory(contentType))
@@ -53,8 +56,21 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    @Named("default")
+    fun provideDefaultOkHttpClient(): OkHttpClient {
+        val logging = HttpLoggingInterceptor().apply {
+            this.setLevel(HttpLoggingInterceptor.Level.BODY)
+        }
+        return OkHttpClient.Builder()
+            .connectTimeout(5000, TimeUnit.MILLISECONDS)
+            .addInterceptor(logging)
+            .build()
+    }
+
+    @Provides
+    @Singleton
     @Named("token")
-    fun provideOkHttpClient(
+    fun provideTokenOkHttpClient(
         authInterceptor: Interceptor
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
@@ -62,8 +78,8 @@ object NetworkModule {
         }
         return OkHttpClient.Builder()
             .connectTimeout(5000, TimeUnit.MILLISECONDS)
-            .addInterceptor(logging)
             .addInterceptor(authInterceptor)
+            .addInterceptor(logging)
             .build()
     }
 
@@ -76,7 +92,7 @@ object NetworkModule {
         val contentType = "application/json".toMediaType()
         val json = Json { ignoreUnknownKeys = true }
         return Retrofit.Builder()
-            .baseUrl("BASE_URL")
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(NullOnEmptyConverterFactory)
             .addConverterFactory(json.asConverterFactory(contentType))
