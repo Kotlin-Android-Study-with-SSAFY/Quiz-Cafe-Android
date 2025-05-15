@@ -4,19 +4,18 @@ import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
-import com.android.quizcafe.core.network.model.onSuccess
 import kotlinx.coroutines.withTimeoutOrNull
 
-suspend fun apiNoResponseToResource(
+suspend fun emptyApiResponseToResource(
     call: suspend () -> NetworkResult<ApiResponse<Unit>>
-): Resource<Unit> = apiCallToResource(call) {
+): Resource<Unit> = resourceFromNetworkResult(call) {
     Resource.Success(Unit)
 }
 
-suspend fun <I : Any, O : Any> apiSingleResponseToResource(
-    mapper: (I) -> O,
-    call: suspend () -> NetworkResult<ApiResponse<I>>
-): Resource<O> = apiCallToResource(call) { data ->
+suspend fun <T : Any, R : Any> apiResponseToResource(
+    mapper: (T) -> R,
+    call: suspend () -> NetworkResult<ApiResponse<T>>
+): Resource<R> = resourceFromNetworkResult(call) { data ->
     if (data == null) {
         Resource.Failure(
             errorMessage = DEFAULT_ERROR_MESSAGE,
@@ -27,10 +26,10 @@ suspend fun <I : Any, O : Any> apiSingleResponseToResource(
     }
 }
 
-suspend fun <I : Any, O : Any> apiResponseToResource(
-    mapper: (I) -> O,
-    call: suspend () -> NetworkResult<ApiResponse<List<I>>>
-): Resource<List<O>> = apiCallToResource(call) { data ->
+suspend fun <T : Any, R : Any> apiResponseListToResource(
+    mapper: (T) -> R,
+    call: suspend () -> NetworkResult<ApiResponse<List<T>>>
+): Resource<List<R>> = resourceFromNetworkResult(call) { data ->
     if (data == null) {
         Resource.Failure(
             errorMessage = DEFAULT_ERROR_MESSAGE,
@@ -40,7 +39,7 @@ suspend fun <I : Any, O : Any> apiResponseToResource(
         Resource.Success(data.map(mapper))
     }
 }
-private suspend fun <T : Any, R> apiCallToResource(
+private suspend fun <T : Any, R : Any> resourceFromNetworkResult(
     call: suspend () -> NetworkResult<ApiResponse<T>>,
     onSuccess: (T?) -> Resource<R>
 ): Resource<R> {

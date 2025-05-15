@@ -12,7 +12,7 @@ import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
 import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
 import com.android.quizcafe.core.network.mapper.DEFAULT_ERROR_MESSAGE
-import com.android.quizcafe.core.network.mapper.apiNoResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
 import com.android.quizcafe.core.network.mapper.handleNetworkException
 import com.android.quizcafe.core.network.model.onError
 import com.android.quizcafe.core.network.model.onException
@@ -30,13 +30,13 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
 
     override fun sendCode(request: SendCodeRequest): Flow<Resource<Unit>> =
-        apiNoResponseToResourceFlow { remoteDataSource.sendCode(request.toDto()) }
+        emptyApiResponseToResourceFlow { remoteDataSource.sendCode(request.toDto()) }
 
     override fun verifyCode(request: VerifyCodeRequest): Flow<Resource<Unit>> =
-        apiNoResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto()) }
+        emptyApiResponseToResourceFlow { remoteDataSource.verifyCode(request.toDto()) }
 
     override fun signUp(request: SignUpRequest): Flow<Resource<Unit>> =
-        apiNoResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
+        emptyApiResponseToResourceFlow { remoteDataSource.signUp(request.toDto()) }
 
     override fun login(request: LoginRequest): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)
@@ -66,5 +66,5 @@ class AuthRepositoryImpl @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     override fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
-        apiNoResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
+        emptyApiResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
 }
