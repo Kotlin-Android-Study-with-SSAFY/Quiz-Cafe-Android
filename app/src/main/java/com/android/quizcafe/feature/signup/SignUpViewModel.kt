@@ -1,81 +1,106 @@
 package com.android.quizcafe.feature.signup
 
-import androidx.lifecycle.ViewModel
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.SendCodeRequest
+import com.android.quizcafe.core.domain.model.auth.request.SignUpRequest
+import com.android.quizcafe.core.domain.model.auth.request.VerifyCodeRequest
+import com.android.quizcafe.core.domain.usecase.auth.SendCodeUseCase
+import com.android.quizcafe.core.domain.usecase.auth.SignUpUseCase
+import com.android.quizcafe.core.domain.usecase.auth.VerifyCodeUseCase
+import com.android.quizcafe.core.ui.base.BaseViewModel
 import com.android.quizcafe.feature.util.CountdownTimer
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
-
-    private val _state = MutableStateFlow(SignUpViewState())
-    val state: StateFlow<SignUpViewState> = _state.asStateFlow()
-
-    private val _effect = MutableSharedFlow<SignUpEffect>()
-    val effect: SharedFlow<SignUpEffect> = _effect.asSharedFlow()
+class SignUpViewModel @Inject constructor(
+    private val signUpUseCase: SignUpUseCase,
+    private val sendCodeUseCase: SendCodeUseCase,
+    private val verifyCodeUseCase: VerifyCodeUseCase
+) : BaseViewModel<SignUpViewState, SignUpIntent, SignUpEffect>(
+    initialState = SignUpViewState()
+) {
 
     private val countdownTimer = CountdownTimer(
         coroutineScope = viewModelScope,
         seconds = 180,
         onTick = { remaining ->
-            _state.update { it.copy(remainingSeconds = remaining) }
+            sendIntent(SignUpIntent.UpdatedTimer(remaining))
         }
     )
 
-    fun onIntent(intent: SignUpIntent) {
-        _state.value = reduce(_state.value, intent)
-
+    override suspend fun handleIntent(intent: SignUpIntent) {
         when (intent) {
             SignUpIntent.ClickSignUp -> {
-                viewModelScope.launch {
-                    // TODO: 회원 가입
-                    onIntent(SignUpIntent.SuccessSignUp)
-//                    onIntent(SignUpIntent.FailSignUp())
+                signUpUseCase(
+                    SignUpRequest(
+                        email = state.value.email,
+                        password = state.value.password,
+                        nickName = "jw"
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "SignUp Success")
+                            sendIntent(SignUpIntent.SuccessSignUp)
+                        }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "SignUp Fail")
+                    }
                 }
             }
 
             SignUpIntent.ClickVerifyCode -> {
-                viewModelScope.launch {
-                    // TODO: 이메일 인증
-                    onIntent(SignUpIntent.SuccessCodeVerification)
-//                    onIntent(SignUpIntent.FailCodeVerification())
+                verifyCodeUseCase(
+                    VerifyCodeRequest(
+                        email = state.value.email,
+                        code = state.value.verificationCode
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "VerifyCode Success")
+                            sendIntent(SignUpIntent.SuccessCodeVerification)
+                        }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "VerifyCode Fail")
+                    }
                 }
             }
 
             SignUpIntent.ClickSendCode -> {
-                viewModelScope.launch {
-                    // TODO: 이메일 인증 코드 요청
-                    onIntent(SignUpIntent.SuccessSendCode)
-//                    onIntent(SignUpIntent.FailSendCode())
+                sendCodeUseCase(
+                    SendCodeRequest(
+                        email = state.value.email,
+                        type = "SIGN_UP"
+                    )
+                ).collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            Log.d("signup", "SendCode Success")
+                            sendIntent(SignUpIntent.SuccessSendCode)
+                        }
+                        is Resource.Loading -> Log.d("signup", "Loading")
+                        is Resource.Failure -> Log.d("signup", "SendCode Fail")
+                    }
                 }
             }
 
             SignUpIntent.SuccessCodeVerification -> {
-                viewModelScope.launch {
-                    _effect.emit(SignUpEffect.NavigateToPasswordInput)
-                }
+                emitEffect(SignUpEffect.NavigateToPasswordInput)
             }
 
             SignUpIntent.SuccessSignUp -> {
-                viewModelScope.launch {
-                    _effect.emit(SignUpEffect.NavigateToLoginScreen)
-                }
+                emitEffect(SignUpEffect.NavigateToLoginScreen)
             }
 
             else -> Unit
         }
     }
 
-    private fun reduce(state: SignUpViewState, intent: SignUpIntent): SignUpViewState {
+    override fun reduce(state: SignUpViewState, intent: SignUpIntent): SignUpViewState {
         return when (intent) {
             is SignUpIntent.UpdatedEmail -> state.copy(email = intent.email).recalculate()
             is SignUpIntent.UpdatedVerificationCode -> state.copy(
@@ -87,6 +112,7 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
             is SignUpIntent.UpdatedPassword -> state.copy(password = intent.password).recalculate()
             is SignUpIntent.UpdatedPasswordConfirm -> state.copy(passwordConfirm = intent.password)
                 .recalculate()
+            is SignUpIntent.UpdatedTimer -> state.copy(remainingSeconds = intent.remainingSeconds)
 
             SignUpIntent.ClickVerifyCode -> state.copy(
                 isLoading = true,

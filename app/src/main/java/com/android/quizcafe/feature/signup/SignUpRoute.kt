@@ -57,6 +57,6 @@ fun SignUpRoute(
     SignUpScreen(
         step = step,
         state = state,
-        onIntent = viewModel::onIntent
+        sendIntent = viewModel::sendIntent
     )
 }

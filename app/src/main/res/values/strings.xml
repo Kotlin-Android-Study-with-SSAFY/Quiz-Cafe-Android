@@ -21,5 +21,7 @@
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="quizcafe_logo">QuizCafe Logo</string>
     <string name="resend">재전송</string>
+    <string name="pick_category">카테고리 선택</string>
+    <string name="go">Go</string>
 
 </resources>
