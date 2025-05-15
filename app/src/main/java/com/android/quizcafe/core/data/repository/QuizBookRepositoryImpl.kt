@@ -5,9 +5,9 @@ import com.android.quizcafe.core.data.model.quizbook.response.toDomain
 import com.android.quizcafe.core.data.model.quizbook.request.toDto
 import com.android.quizcafe.core.data.remote.datasource.QuizBookRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.quizbook.reponse.Category
-import com.android.quizcafe.core.domain.model.quizbook.reponse.QuizBook
-import com.android.quizcafe.core.domain.model.quizbook.reponse.QuizBookDetail
+import com.android.quizcafe.core.domain.model.quizbook.response.Category
+import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
