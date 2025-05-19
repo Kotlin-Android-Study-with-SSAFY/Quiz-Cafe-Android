@@ -36,7 +36,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun EmailInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
@@ -65,7 +65,7 @@ fun EmailInputContent(
 
 @Composable
 fun EmailInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     focusRequester: FocusRequester?,
     sendIntent: (SignUpIntent) -> Unit
 ) {
@@ -81,7 +81,7 @@ fun EmailInputContent(
 
 @Composable
 fun VerificationContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     sendIntent: (SignUpIntent) -> Unit
 ) {
     Column {
@@ -111,7 +111,7 @@ fun VerificationContent(
 
 @Composable
 fun VerificationInputField(
-    state: SignUpViewState,
+    state: SignUpUiState,
     onValueChanged: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -133,7 +133,7 @@ fun VerificationInputField(
 
 @SuppressLint("DefaultLocale")
 @Composable
-fun VerificationTimer(state: SignUpViewState) {
+fun VerificationTimer(state: SignUpUiState) {
     val time = state.remainingSeconds
     val formatted = String.format("%02d:%02d", time / 60, time % 60)
 
@@ -152,11 +152,11 @@ fun VerificationTimer(state: SignUpViewState) {
 fun EmailInputContentPreview() {
     QuizCafeTheme {
         Column {
-            EmailInputContent(SignUpViewState(), null) {}
+            EmailInputContent(SignUpUiState(), null) {}
             Spacer(Modifier.height(20.dp))
-            EmailInputContent(SignUpViewState(email = "email", emailErrorMessage = "이메일 형식이 올바르지 않습니다."), null) {}
+            EmailInputContent(SignUpUiState(email = "email", emailErrorMessage = "이메일 형식이 올바르지 않습니다."), null) {}
             Spacer(Modifier.height(20.dp))
-            EmailInputContent(SignUpViewState(email = "email@email.com"), null) {}
+            EmailInputContent(SignUpUiState(email = "email@email.com"), null) {}
         }
     }
 }
@@ -166,9 +166,9 @@ fun EmailInputContentPreview() {
 fun VerificationInputFieldPreview() {
     QuizCafeTheme {
         Column {
-            VerificationContent(SignUpViewState()) {}
+            VerificationContent(SignUpUiState()) {}
             Spacer(Modifier.height(20.dp))
-            VerificationContent(SignUpViewState(verificationCode = "123456")) {}
+            VerificationContent(SignUpUiState(verificationCode = "123456")) {}
         }
     }
 }

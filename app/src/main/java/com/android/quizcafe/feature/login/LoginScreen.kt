@@ -22,7 +22,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
 fun LoginScreen(
-    state: LoginViewState,
+    state: LoginUiState,
     sendIntent: (LoginIntent) -> Unit
 ) {
     // 키보드 크기 계산
@@ -78,6 +78,6 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     QuizCafeTheme {
-        LoginScreen(LoginViewState()) {}
+        LoginScreen(LoginUiState()) {}
     }
 }

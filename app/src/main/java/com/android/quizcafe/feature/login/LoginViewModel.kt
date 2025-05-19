@@ -11,8 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
-) : BaseViewModel<LoginViewState, LoginIntent, LoginEffect>(
-    initialState = LoginViewState()
+) : BaseViewModel<LoginUiState, LoginIntent, LoginEffect>(
+    initialState = LoginUiState()
 ) {
 
     override suspend fun handleIntent(intent: LoginIntent) {
@@ -47,7 +47,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(state: LoginViewState, intent: LoginIntent): LoginViewState {
+    override fun reduce(state: LoginUiState, intent: LoginIntent): LoginUiState {
         return when (intent) {
             is LoginIntent.UpdatedEmail -> state.copy(email = intent.email, errorMessage = null)
                 .recalculate()
@@ -66,7 +66,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun LoginViewState.recalculate(): LoginViewState {
+    private fun LoginUiState.recalculate(): LoginUiState {
         val isLoginEnabled = password.isNotBlank() && email.isNotBlank()
         return this.copy(isLoginEnabled = isLoginEnabled)
     }
