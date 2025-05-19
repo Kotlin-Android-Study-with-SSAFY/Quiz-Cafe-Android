@@ -56,6 +56,8 @@
 
     <string name="quiz_record_empty">텅</string>
 
+    <string name="quiz_history_empty">텅</string>
+
     <!-- Bottom Navigation Text -->
     <string name="bottom_nav_quiz">퀴즈</string>
     <string name="bottom_nav_workbook">복습</string>
