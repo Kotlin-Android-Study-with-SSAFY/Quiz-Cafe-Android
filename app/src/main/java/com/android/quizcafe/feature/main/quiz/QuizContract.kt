@@ -18,13 +18,29 @@ data class QuizHistory(
 
 // TODO: viewState, Intent, Effect 전부다 재설정 필요.
 data class QuizViewState(
-    val historyList: List<QuizHistory> = emptyList()
+    val historyList: List<QuizHistory> = emptyList(),
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null
 ) : BaseContract.ViewState
 
 sealed class QuizIntent : BaseContract.ViewIntent {
-    data class LoadHistory(val histories: List<QuizHistory>) : QuizIntent()
+    data object FetchHistory : QuizIntent()
+    data object LoadingFetchHistory : QuizIntent()
+    data class SuccessFetchHistory(val histories: List<QuizHistory>) : QuizIntent()
+    data class FailFetchHistory(val errorMessage: String? = null) : QuizIntent()
+
+    data object ClickOxQuiz : QuizIntent()
+    data object ClickMultipleChoiceQuiz : QuizIntent()
+    data object ClickShortAnswerQuiz : QuizIntent()
+    data object ClickCreateQuiz : QuizIntent()
 }
+
 
 sealed class QuizEffect : BaseContract.ViewEffect {
     data class ShowErrorDialog(val message: String) : QuizEffect()
+
+    data object NavigateToOxQuiz : QuizEffect()
+    data object NavigateToMultipleChoiceQuiz : QuizEffect()
+    data object NavigateToShortAnswerQuiz : QuizEffect()
+    data object NavigateToCreateQuiz : QuizEffect()
 }

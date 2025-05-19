@@ -18,10 +18,27 @@ fun QuizRoute(
 
     // side effect 처리
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizIntent.FetchHistory)
+
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is QuizEffect.ShowErrorDialog -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+                QuizEffect.NavigateToOxQuiz -> {
+                    // navigateToOxQuiz()
+                }
+
+                QuizEffect.NavigateToMultipleChoiceQuiz -> {
+                    // navigateToMultipleChoiceQuiz()
+                }
+
+                QuizEffect.NavigateToShortAnswerQuiz -> {
+                    // navigateToShortAnswerQuiz()
+                }
+
+                QuizEffect.NavigateToCreateQuiz -> {
+                    // navigateToCreateQuiz()
                 }
             }
         }
