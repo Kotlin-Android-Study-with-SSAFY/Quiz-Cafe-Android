@@ -38,7 +38,7 @@ fun <T : Any, R : Any> apiResponseListToResourceFlow(
     }
 }
 
-private fun <T : Any, R: Any> resourceFlowFromNetworkResult(
+private fun <T : Any, R : Any> resourceFlowFromNetworkResult(
     call: suspend () -> NetworkResult<ApiResponse<T>>,
     onSuccess: suspend (T?) -> Resource<R>
 ): Flow<Resource<R>> = flow {
