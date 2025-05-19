@@ -24,8 +24,9 @@ fun QuizScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item { QuizHistorySection(historyList = state.historyList) }
-        item { Spacer(modifier = Modifier.height(16.dp)) }
+        item { Spacer(modifier = Modifier.height(4.dp)) }
         item { QuizModeSection() }
+        item { Spacer(modifier = Modifier.height(6.dp)) }
     }
 }
 
