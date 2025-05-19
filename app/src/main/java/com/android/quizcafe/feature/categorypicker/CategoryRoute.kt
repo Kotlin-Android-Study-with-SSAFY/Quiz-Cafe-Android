@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorylist
+package com.android.quizcafe.feature.categorypicker
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -8,10 +8,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
+import com.android.quizcafe.feature.categorylist.CategoryEffect
+import com.android.quizcafe.feature.categorylist.CategoryIntent
+import com.android.quizcafe.feature.categorylist.CategoryListScreen
+import com.android.quizcafe.feature.categorylist.CategoryViewModel
 
 @Composable
 fun CategoryRoute(
-    navigateToQuizBookList: () -> Unit,
+    navigateToQuizBookList: (String) -> Unit,
     navigateToHome: () -> Unit,
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
@@ -29,8 +33,8 @@ fun CategoryRoute(
                     navigateToHome()
                 }
 
-                CategoryEffect.NavigateToQuizBooks -> {
-                    navigateToQuizBookList()
+                is CategoryEffect.NavigateToQuizBooks -> {
+                    navigateToQuizBookList(effect.categoryId)
                 }
 
                 is CategoryEffect.ShowError -> {

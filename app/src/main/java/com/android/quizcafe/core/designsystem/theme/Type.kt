@@ -24,41 +24,78 @@ fun quizCafeTypography(): Typography {
     val fontFamily = quizCafeDefaultFont()
 
     return Typography(
-        bodyLarge = TextStyle(
+        headlineLarge = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
+            fontSize = 40.sp,
+            letterSpacing = 0.5.sp
+        ),
+        headlineMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 36.sp,
+            letterSpacing = 0.5.sp
+        ),
+        headlineSmall = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 32.sp,
             letterSpacing = 0.5.sp
         ),
         titleLarge = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
             fontSize = 28.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp
+            letterSpacing = 0.5.sp
         ),
         titleMedium = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 20.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp
+            fontSize = 24.sp,
+            letterSpacing = 0.5.sp
         ),
-        labelSmall = TextStyle(
+        titleSmall = TextStyle(
             fontFamily = fontFamily,
-            fontWeight = FontWeight.Medium,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontSize = 20.sp,
+            letterSpacing = 0.5.sp
+        ),
+        bodyLarge = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 18.sp,
+            letterSpacing = 0.5.sp
+        ),
+        bodyMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            letterSpacing = 0.5.sp
+        ),
+        bodySmall = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
             letterSpacing = 0.5.sp
         ),
         labelLarge = TextStyle(
             fontFamily = fontFamily,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
+            fontSize = 14.sp,
             letterSpacing = 0.5.sp
         ),
+        labelMedium = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp,
+            letterSpacing = 0.5.sp
+        ),
+        labelSmall = TextStyle(
+            fontFamily = fontFamily,
+            fontWeight = FontWeight.Normal,
+            fontSize = 10.sp,
+            letterSpacing = 0.5.sp
+        )
     )
 }
 

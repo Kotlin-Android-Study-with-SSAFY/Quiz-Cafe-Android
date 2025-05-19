@@ -31,13 +31,13 @@ import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.domain.model.quizbook.response.Category
 
 @Composable
-fun CategoryCardList(categories: List<Category>, onItemClicked: () -> Unit = {}) {
+fun CategoryCardList(categories: List<Category>, onItemClicked: (String) -> Unit = {}) {
     LazyColumn {
         items(categories) { category ->
             CategoryCard(
                 category = category,
                 onCategoryItemClick = {
-                    onItemClicked()
+                    onItemClicked(category.name)
                 }
             )
         }

@@ -12,7 +12,7 @@ data class CategoryViewState(
 
 sealed class CategoryIntent : BaseContract.ViewIntent {
     data object LoadCategories : CategoryIntent()
-    data object ClickCategory : CategoryIntent()
+    data class ClickCategory(val categoryId: String) : CategoryIntent()
 
     data class SuccessGetCategories(val data: List<Category>) : CategoryIntent()
     data class FailGetCategories(val errorMessage: String? = null) : CategoryIntent()
@@ -21,5 +21,5 @@ sealed class CategoryIntent : BaseContract.ViewIntent {
 sealed class CategoryEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : CategoryEffect()
     data object NavigateToHome : CategoryEffect()
-    data object NavigateToQuizBooks : CategoryEffect()
+    data class NavigateToQuizBooks(val categoryId: String) : CategoryEffect()
 }

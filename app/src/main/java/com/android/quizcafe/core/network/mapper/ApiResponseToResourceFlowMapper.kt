@@ -4,23 +4,22 @@ import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
-import com.android.quizcafe.core.network.model.onSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withTimeoutOrNull
 
-fun <T : Any> apiNoResponseToResourceFlow(
+fun <T : Any> emptyApiResponseToResourceFlow(
     call: suspend () -> NetworkResult<ApiResponse<T>>
-): Flow<Resource<Unit>> = apiCallToResourceFlow(call) {
+): Flow<Resource<Unit>> = resourceFlowFromNetworkResult(call) {
     Resource.Success(Unit)
 }
 
-fun <I : Any, O : Any> apiSingleResponseToResourceFlow(
-    mapper: (I) -> O,
-    call: suspend () -> NetworkResult<ApiResponse<I>>
-): Flow<Resource<O>> = apiCallToResourceFlow(call) { data ->
+fun <T : Any, R : Any> apiResponseToResourceFlow(
+    mapper: (T) -> R,
+    call: suspend () -> NetworkResult<ApiResponse<T>>
+): Flow<Resource<R>> = resourceFlowFromNetworkResult(call) { data ->
     if (data == null) {
         Resource.Failure(DEFAULT_ERROR_MESSAGE, HttpStatus.NO_CONTENT)
     } else {
@@ -28,10 +27,10 @@ fun <I : Any, O : Any> apiSingleResponseToResourceFlow(
     }
 }
 
-fun <I : Any, O : Any> apiResponseToResourceFlow(
-    mapper: (I) -> O,
-    call: suspend () -> NetworkResult<ApiResponse<List<I>>>
-): Flow<Resource<List<O>>> = apiCallToResourceFlow(call) { data ->
+fun <T : Any, R : Any> apiResponseListToResourceFlow(
+    mapper: (T) -> R,
+    call: suspend () -> NetworkResult<ApiResponse<List<T>>>
+): Flow<Resource<List<R>>> = resourceFlowFromNetworkResult(call) { data ->
     if (data == null) {
         Resource.Failure(DEFAULT_ERROR_MESSAGE, HttpStatus.NO_CONTENT)
     } else {
@@ -39,7 +38,7 @@ fun <I : Any, O : Any> apiResponseToResourceFlow(
     }
 }
 
-private fun <T : Any, R> apiCallToResourceFlow(
+private fun <T : Any, R : Any> resourceFlowFromNetworkResult(
     call: suspend () -> NetworkResult<ApiResponse<T>>,
     onSuccess: suspend (T?) -> Resource<R>
 ): Flow<Resource<R>> = flow {

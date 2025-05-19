@@ -12,7 +12,7 @@ import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
 import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
-import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class QuizBookRepositoryImpl @Inject constructor(
 ) : QuizBookRepository {
 
     override fun getAllCategories(categoryRequest: CategoryRequest): Flow<Resource<List<Category>>> =
-        apiResponseToResourceFlow(mapper = CategoryResponseDto::toDomain) {
+        apiResponseListToResourceFlow(mapper = CategoryResponseDto::toDomain) {
             quizBookRemoteDataSource.getCategoriesByType(categoryRequest.toDto())
         }
 
