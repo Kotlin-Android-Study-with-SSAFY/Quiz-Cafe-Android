@@ -6,29 +6,28 @@ import com.android.quizcafe.core.ui.base.BaseContract
 data class ModeItem(
     val titleResId: Int,
     val descResId: Int,
-    val backgroundColor: Color,
-    val iconResId: Int
+    val backgroundColor: Color
 )
 
-// TODO: 백엔드 API 따라 변경
-data class QuizRecord(
+data class QuizHistory(
     val time: String,
     val title: String,
     val result: Int,
     val totalProblems: Int
 )
 
+// TODO: viewState, Intent, Effect 전부다 재설정 필요.
 data class QuizViewState(
-    val quizRecords: List<QuizRecord> = emptyList(),
+    val historyList: List<QuizHistory> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 ) : BaseContract.ViewState
 
 sealed class QuizIntent : BaseContract.ViewIntent {
-    data object FetchRecord : QuizIntent()
-    data object LoadingFetchRecord : QuizIntent()
-    data class SuccessFetchRecord(val quizRecords: List<QuizRecord>) : QuizIntent()
-    data class FailFetchRecord(val errorMessage: String? = null) : QuizIntent()
+    data object FetchHistory : QuizIntent()
+    data object LoadingFetchHistory : QuizIntent()
+    data class SuccessFetchHistory(val histories: List<QuizHistory>) : QuizIntent()
+    data class FailFetchHistory(val errorMessage: String? = null) : QuizIntent()
 
     data object ClickOxQuiz : QuizIntent()
     data object ClickMultipleChoiceQuiz : QuizIntent()

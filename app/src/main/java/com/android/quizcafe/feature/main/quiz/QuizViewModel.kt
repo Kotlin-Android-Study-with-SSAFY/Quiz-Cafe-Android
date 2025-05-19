@@ -15,40 +15,36 @@ class QuizViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: QuizIntent) {
         when (intent) {
-            QuizIntent.FetchRecord -> {
+            QuizIntent.FetchHistory -> {
                 // 로딩 시작
-                sendIntent(QuizIntent.LoadingFetchRecord)
+                sendIntent(QuizIntent.LoadingFetchHistory)
                 getQuizHistoryUseCase().collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            sendIntent(QuizIntent.SuccessFetchRecord(resource.data ?: emptyList()))
+                            sendIntent(QuizIntent.SuccessFetchHistory(resource.data ?: emptyList()))
                         }
 
                         is Resource.Failure -> {
-                            sendIntent(QuizIntent.FailFetchRecord(resource.errorMessage))
+                            sendIntent(QuizIntent.FailFetchHistory(resource.errorMessage))
                         }
 
-                        /* 필요 시 처리 */
-                        is Resource.Loading -> {
-
+                        is Resource.Loading -> { /* 필요 시 처리 */
                         }
                     }
                 }
             }
 
-            // 로딩 상태 진입
-            // 상태만 변경, 별도 처리 필요 X
-            is QuizIntent.LoadingFetchRecord -> {
-
+            is QuizIntent.LoadingFetchHistory -> {
+                // 로딩 상태 진입
+                // 상태만 변경, 별도 처리 필요 X
             }
 
-            // 성공적으로 히스토리 불러옴
-            // 필요하면 효과도 emitEffect로 보낼 수 있음
-            is QuizIntent.SuccessFetchRecord -> {
-
+            is QuizIntent.SuccessFetchHistory -> {
+                // 성공적으로 히스토리 불러옴
+                // 필요하면 효과도 emitEffect로 보낼 수 있음
             }
 
-            is QuizIntent.FailFetchRecord -> {
+            is QuizIntent.FailFetchHistory -> {
                 emitEffect(QuizEffect.ShowErrorDialog(intent.errorMessage ?: "히스토리 불러오기에 실패했습니다."))
             }
 
@@ -61,15 +57,15 @@ class QuizViewModel @Inject constructor(
 
     override fun reduce(currentState: QuizViewState, intent: QuizIntent): QuizViewState {
         return when (intent) {
-            QuizIntent.FetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
-            is QuizIntent.LoadingFetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
-            is QuizIntent.SuccessFetchRecord -> currentState.copy(
+            QuizIntent.FetchHistory -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizIntent.LoadingFetchHistory -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizIntent.SuccessFetchHistory -> currentState.copy(
                 isLoading = false,
-                quizRecords = intent.quizRecords,
+                historyList = intent.histories,
                 errorMessage = null
             )
 
-            is QuizIntent.FailFetchRecord -> currentState.copy(
+            is QuizIntent.FailFetchHistory -> currentState.copy(
                 isLoading = false,
                 errorMessage = intent.errorMessage
             )
