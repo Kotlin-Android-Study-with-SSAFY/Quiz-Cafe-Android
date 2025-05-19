@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -142,7 +143,8 @@ fun VerificationTimer(state: SignUpUiState) {
             text = formatted,
             modifier = Modifier
                 .align(Alignment.End)
-                .padding(4.dp)
+                .padding(4.dp),
+            style = MaterialTheme.typography.bodyMedium
         )
     }
 }

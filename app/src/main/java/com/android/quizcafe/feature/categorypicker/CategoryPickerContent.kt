@@ -28,18 +28,24 @@ import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
+import com.android.quizcafe.core.domain.model.quizbook.response.Category
 
 @Composable
-fun CategoryCardList(categories: List<Category>) {
+fun CategoryCardList(categories: List<Category>, onItemClicked: (String) -> Unit = {}) {
     LazyColumn {
         items(categories) { category ->
-            CategoryCard(category = category)
+            CategoryCard(
+                category = category,
+                onCategoryItemClick = {
+                    onItemClicked(category.name)
+                }
+            )
         }
     }
 }
 
 @Composable
-fun CategoryCard(category: Category) {
+fun CategoryCard(category: Category, onCategoryItemClick: () -> Unit) {
     Spacer(Modifier.height(8.dp))
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -47,46 +53,56 @@ fun CategoryCard(category: Category) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = onPrimaryLight),
         onClick = {
-            // TODO: 문제집 화면으로 이동
+            onCategoryItemClick()
         }
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = category.group,
-                color = outlineLight,
-                style = quizCafeTypography().bodyLarge
-            )
+            CategoryGroupText(category.group)
             Spacer(Modifier.height(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = category.name,
-                    style = quizCafeTypography().titleMedium
-                )
-
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = stringResource(R.string.go),
-                    tint = scrimLight,
-                    modifier = Modifier.height(24.dp)
-                )
-            }
+            CategoryCardTitle(category.name)
         }
     }
     Spacer(Modifier.height(8.dp))
+}
+
+@Composable
+private fun CategoryCardTitle(categoryName: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = categoryName,
+            style = quizCafeTypography().titleMedium
+        )
+
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = stringResource(R.string.go),
+            tint = scrimLight,
+            modifier = Modifier.height(24.dp)
+        )
+    }
+}
+
+@Composable
+private fun CategoryGroupText(group: String) {
+    Text(
+        text = group,
+        color = outlineLight,
+        style = quizCafeTypography().bodyLarge
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun CategoryCardPreview() {
     QuizCafeTheme {
-        CategoryCardList(listOf(Category("그룹", "카테고리 이름"), Category("그룹", "카테고리 이름")))
+        CategoryCardList(listOf(Category("0", "그룹", "카테고리 이름"), Category("1", "그룹", "카테고리 이름")))
     }
 }
