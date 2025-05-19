@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuizRoute(
-    navigateToCategory: (String) -> Unit,
     viewModel: QuizViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -19,14 +18,27 @@ fun QuizRoute(
 
     // side effect 처리
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizIntent.FetchHistory)
+
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is QuizEffect.ShowErrorDialog -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
+                QuizEffect.NavigateToOxQuiz -> {
+                    // navigateToOxQuiz()
+                }
 
-                is QuizEffect.NavigateToCategory -> {
-                    navigateToCategory(effect.quizType)
+                QuizEffect.NavigateToMultipleChoiceQuiz -> {
+                    // navigateToMultipleChoiceQuiz()
+                }
+
+                QuizEffect.NavigateToShortAnswerQuiz -> {
+                    // navigateToShortAnswerQuiz()
+                }
+
+                QuizEffect.NavigateToCreateQuiz -> {
+                    // navigateToCreateQuiz()
                 }
             }
         }
@@ -34,6 +46,6 @@ fun QuizRoute(
 
     QuizScreen(
         state = state,
-        sendIntent = viewModel::sendIntent
+        onIntent = viewModel::sendIntent
     )
 }
