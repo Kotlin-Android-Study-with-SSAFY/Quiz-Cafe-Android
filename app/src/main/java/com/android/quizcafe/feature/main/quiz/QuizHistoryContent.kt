@@ -33,7 +33,7 @@ import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
 
 @Composable
-fun QuizHistorySection(
+fun QuizHistoryContent(
     historyList: List<QuizHistory>,
     onHistoryClick: (QuizHistory) -> Unit = {}
 ) {
@@ -131,9 +131,9 @@ fun QuizHistoryCard(
 
 @Preview(showBackground = true, name = "기록이 있는 경우")
 @Composable
-fun PreviewQuizHistorySection() {
+fun PreviewQuizHistoryContent() {
     QuizCafeTheme {
-        QuizHistorySection(
+        QuizHistoryContent(
             historyList = listOf(
                 QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
                 QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
@@ -145,9 +145,9 @@ fun PreviewQuizHistorySection() {
 
 @Preview(showBackground = true, name = "\"텅\" 상태")
 @Composable
-fun PreviewQuizHistorySection_Empty() {
+fun PreviewQuizHistoryContentEmpty() {
     QuizCafeTheme {
-        QuizHistorySection(
+        QuizHistoryContent(
             historyList = emptyList()
         )
     }
