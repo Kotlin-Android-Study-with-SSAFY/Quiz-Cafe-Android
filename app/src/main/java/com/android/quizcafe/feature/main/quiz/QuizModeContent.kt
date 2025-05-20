@@ -1,9 +1,21 @@
 package com.android.quizcafe.feature.main.quiz
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,10 +26,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
-import com.android.quizcafe.core.designsystem.theme.*
+import com.android.quizcafe.core.designsystem.theme.CreateQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.OxQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorMultipleChoice
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorShortAnswer
 
 @Composable
-fun QuizModeSection() {
+fun QuizModeContent() {
     val modeItems = listOf(
         ModeItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
         ModeItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
@@ -96,9 +112,9 @@ fun RowScope.QuizModeCard(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewQuizModeSection() {
+fun PreviewQuizModeContent() {
     QuizCafeTheme {
-        QuizModeSection()
+        QuizModeContent()
     }
 }
 
