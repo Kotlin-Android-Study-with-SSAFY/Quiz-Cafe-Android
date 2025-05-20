@@ -28,20 +28,24 @@ class QuizViewModel @Inject constructor(
                             sendIntent(QuizIntent.FailFetchHistory(resource.errorMessage))
                         }
 
-                        is Resource.Loading -> { /* 필요 시 처리 */
+                        /* 필요 시 처리 */
+                        is Resource.Loading -> {
+
                         }
                     }
                 }
             }
 
+            // 로딩 상태 진입
+            // 상태만 변경, 별도 처리 필요 X
             is QuizIntent.LoadingFetchHistory -> {
-                // 로딩 상태 진입
-                // 상태만 변경, 별도 처리 필요 X
+
             }
 
+            // 성공적으로 히스토리 불러옴
+            // 필요하면 효과도 emitEffect로 보낼 수 있음
             is QuizIntent.SuccessFetchHistory -> {
-                // 성공적으로 히스토리 불러옴
-                // 필요하면 효과도 emitEffect로 보낼 수 있음
+
             }
 
             is QuizIntent.FailFetchHistory -> {
