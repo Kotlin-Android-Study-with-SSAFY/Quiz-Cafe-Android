@@ -1,9 +1,11 @@
 package com.android.quizcafe.core.data.remote.service
 
 import com.android.quizcafe.core.data.model.quizbook.response.CategoryResponseDto
+import com.android.quizcafe.core.data.model.quizbook.response.QuizBookDetailResponseDto
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface QuizBookService {
 
@@ -12,4 +14,10 @@ interface QuizBookService {
     suspend fun getCategories(
 //        @Body request: QuizBookRequest
     ): NetworkResult<ApiResponse<List<CategoryResponseDto>>>
+
+
+    @GET("quiz-book/{quizBookId}")
+    suspend fun getQuizBookDetail(
+        @Query("quizBookId") quizBookId: Int
+    ): NetworkResult<ApiResponse<QuizBookDetailResponseDto>>
 }
