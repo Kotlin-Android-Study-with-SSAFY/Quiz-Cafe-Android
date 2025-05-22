@@ -23,6 +23,7 @@ class QuizBookDetailViewModel @Inject constructor(
             is QuizBookDetailIntent.FailGetQuizBookDetail -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
             QuizBookDetailIntent.LoadQuizBookDetail -> getQuizBookDetailList()
             is QuizBookDetailIntent.SuccessGetQuizBookDetail -> {}
+            is QuizBookDetailIntent.UpdateQuizBookId -> {}
         }
     }
 
@@ -37,7 +38,7 @@ class QuizBookDetailViewModel @Inject constructor(
                 isLoading = false
             )
             is QuizBookDetailIntent.FailGetQuizBookDetail -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
-
+            is QuizBookDetailIntent.UpdateQuizBookId -> currentState.copy(quizBookId = intent.quizBookId)
         }
     }
 

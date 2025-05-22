@@ -9,8 +9,9 @@ data class QuizBookDetail(
     val title: String = "",
     val description: String = "",
     val difficulty: String = "",
-    val averageScore: Double = 0.0,
+    val averageScore: String = "",
     val totalSaves: Int = 0,
+    val views: Int = 0,
     val quizSummaries: List<QuizSummary> = emptyList(),
     val comments: List<Comment> = emptyList(),
     val createdAt: String = ""
@@ -19,7 +20,7 @@ data class QuizBookDetail(
 data class QuizSummary(
     val quizId: Long,
     val quizContent: String,
-    val quizType: String // 예시로 String, 필요 시 enum으로 대체
+    val quizType: String
 )
 
 data class Comment(

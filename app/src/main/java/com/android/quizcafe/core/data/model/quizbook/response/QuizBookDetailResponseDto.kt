@@ -31,15 +31,16 @@ fun QuizBookDetailResponseDto.toDomain() = QuizBookDetail(
     title = title,
     description = description,
     difficulty = level,
-    averageScore = 0.0,
+    averageScore = "",
     totalSaves = 0,
-    quizSummaries = quizzes.map{ it.toDomain() },
+    views = 0,
+    quizSummaries = quizzes.map { it.toDomain() },
     comments = emptyList(),
     createdAt = ""
 )
 
 fun QuizSummaryDto.toDomain() = QuizSummary(
-    quizId =quizId,
+    quizId = quizId,
     quizContent = quizContent,
     quizType = quizType
 )

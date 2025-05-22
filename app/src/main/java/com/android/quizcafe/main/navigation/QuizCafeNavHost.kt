@@ -12,7 +12,6 @@ import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
-import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
@@ -38,16 +37,11 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
         route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {
-//            LoginRoute(
-//                navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
-//                navigateToHome = {
-//                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
-//                }
-//            )
-            QuizBookDetailRoute(
-                navigateToQuizBookPicker = {},
-                navigateToQuizSolve = {},
-                navigateToUserPage = {}
+            LoginRoute(
+                navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
+                navigateToHome = {
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
+                }
             )
         }
         composable(AuthRoute.Signup.route) {

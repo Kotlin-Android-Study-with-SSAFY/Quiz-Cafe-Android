@@ -11,6 +11,7 @@ import com.android.quizcafe.R
 
 @Composable
 fun QuizBookDetailRoute(
+    quizBookId: Int,
     navigateToQuizBookPicker: () -> Unit,
     navigateToQuizSolve: () -> Unit,
     navigateToUserPage: () -> Unit,
@@ -20,6 +21,7 @@ fun QuizBookDetailRoute(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizBookDetailIntent.UpdateQuizBookId(quizBookId))
         viewModel.sendIntent(QuizBookDetailIntent.LoadQuizBookDetail) // API 요청
     }
 

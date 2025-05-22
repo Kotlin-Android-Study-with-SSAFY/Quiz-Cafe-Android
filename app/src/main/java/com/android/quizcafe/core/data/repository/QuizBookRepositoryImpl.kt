@@ -34,5 +34,4 @@ class QuizBookRepositoryImpl @Inject constructor(
         apiResponseToResourceFlow(mapper = QuizBookDetailResponseDto::toDomain) {
             quizBookRemoteDataSource.getQuizBookDetail(quizBookDetailRequest.toDto())
         }
-    
 }
