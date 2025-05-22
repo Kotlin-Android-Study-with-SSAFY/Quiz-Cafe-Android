@@ -7,11 +7,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
+import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
@@ -77,9 +79,7 @@ fun MainBottomNavHost(
     ) {
         composable(MainRoute.Quiz.route) {
             QuizRoute(
-//                navigateToDetail = { id ->
-//                    navController.navigateSingleTopTo("")
-//                }
+                navigateToCategory = { _ -> navController.navigateSingleTopTo(MainRoute.CategoryList.route) }
             )
         }
         composable(MainRoute.Workbook.route) {
@@ -90,6 +90,26 @@ fun MainBottomNavHost(
             )
         }
         composable(MainRoute.MyPage.route) {
+            MyPageRoute(
+//                navigateToSetting = {
+//                    navController.navigateSingleTopTo()
+//                }
+            )
+        }
+        composable(MainRoute.CategoryList.route) {
+            CategoryRoute(
+                navigateToQuizBookList = { navController.navigateSingleTopTo(MainRoute.QuizBookList.route) },
+                navigateToHome = {},
+            )
+        }
+        composable(MainRoute.QuizBookList.route) {
+            QuizBookListRoute(
+                category = "NETWORK",
+                navigateToQuizBookDetail = {},
+                navigateToCategory = {},
+            )
+        }
+        composable(MainRoute.QuizBookDetail.route) {
             MyPageRoute(
 //                navigateToSetting = {
 //                    navController.navigateSingleTopTo()

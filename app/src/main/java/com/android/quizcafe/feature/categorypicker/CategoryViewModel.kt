@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
 import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
@@ -39,7 +39,7 @@ class CategoryViewModel @Inject constructor(
         ).collect {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("category", "Get Category List Success")
+                    Log.d("category", "Get CategoryList List Success")
                     sendIntent(CategoryIntent.SuccessGetCategories(it.data))
                 }
 
@@ -48,7 +48,7 @@ class CategoryViewModel @Inject constructor(
                 }
 
                 is Resource.Failure -> {
-                    Log.d("category", "Get Category List Fail")
+                    Log.d("category", "Get CategoryList List Fail")
                     sendIntent(CategoryIntent.FailGetCategories(it.errorMessage))
                 }
             }

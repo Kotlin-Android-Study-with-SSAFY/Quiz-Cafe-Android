@@ -37,7 +37,6 @@ fun QuizHistorySection(historyList: List<QuizHistory>) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp)
     ) {
         Row(
             modifier = Modifier
