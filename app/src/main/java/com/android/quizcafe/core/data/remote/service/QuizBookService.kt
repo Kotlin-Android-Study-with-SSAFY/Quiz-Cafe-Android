@@ -5,6 +5,7 @@ import com.android.quizcafe.core.data.model.quizbook.response.QuizBookDetailResp
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface QuizBookService {
@@ -18,6 +19,6 @@ interface QuizBookService {
 
     @GET("quiz-book/{quizBookId}")
     suspend fun getQuizBookDetail(
-        @Query("quizBookId") quizBookId: Int
+        @Path("quizBookId") quizBookId: Int
     ): NetworkResult<ApiResponse<QuizBookDetailResponseDto>>
 }
