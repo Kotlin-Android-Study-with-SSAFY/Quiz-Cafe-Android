@@ -36,7 +36,6 @@ fun QuizScreen(
             item { QuizModeSection { sendIntent(QuizIntent.ClickQuizCard("")) } }
         }
     }
-
 }
 
 @Preview(showBackground = true)

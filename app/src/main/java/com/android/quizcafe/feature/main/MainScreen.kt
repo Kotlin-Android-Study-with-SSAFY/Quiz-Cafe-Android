@@ -8,12 +8,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.quizcafe.R
-import com.android.quizcafe.core.ui.QuizCafeTopAppBar
-import com.android.quizcafe.core.ui.TopAppBarTitle
 import com.android.quizcafe.main.navigation.MainBottomNavHost
 import com.android.quizcafe.main.navigation.navigatePopUpToStartDestination
 import com.android.quizcafe.main.navigation.routes.MainRoute

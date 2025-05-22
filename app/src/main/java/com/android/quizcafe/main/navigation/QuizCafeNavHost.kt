@@ -98,7 +98,7 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.CategoryList.route) {
             CategoryRoute(
-                navigateToQuizBookList = { navController.navigateSingleTopTo(MainRoute.QuizBookList.route)},
+                navigateToQuizBookList = { navController.navigateSingleTopTo(MainRoute.QuizBookList.route) },
                 navigateToHome = {},
             )
         }

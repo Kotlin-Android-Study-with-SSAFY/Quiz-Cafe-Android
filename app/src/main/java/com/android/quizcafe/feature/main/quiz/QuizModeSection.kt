@@ -98,7 +98,7 @@ fun RowScope.QuizModeCard(
 @Composable
 fun PreviewQuizModeSection() {
     QuizCafeTheme {
-        QuizModeSection{}
+        QuizModeSection {}
     }
 }
 

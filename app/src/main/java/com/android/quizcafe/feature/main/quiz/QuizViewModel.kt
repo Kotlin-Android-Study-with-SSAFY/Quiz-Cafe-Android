@@ -10,7 +10,7 @@ class QuizViewModel @Inject constructor() : BaseViewModel<QuizViewState, QuizInt
 ) {
 
     override suspend fun handleIntent(intent: QuizIntent) {
-        when(intent) {
+        when (intent) {
             is QuizIntent.ClickQuizCard -> emitEffect(QuizEffect.NavigateToCategory(intent.quizType))
             is QuizIntent.LoadHistory -> {}
         }
