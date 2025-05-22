@@ -37,15 +37,8 @@ fun MainScreen() {
     val currentRoute = navBackStackEntry?.destination?.route ?: MainRoute.Quiz.route
 
     val selectedIndex = mainTabs.indexOfFirst { it.route == currentRoute }.coerceAtLeast(0)
-    val currentLabel = stringResource(id = mainTabs[selectedIndex].labelResId)
 
     Scaffold(
-        topBar = {
-            QuizCafeTopAppBar(
-                title = TopAppBarTitle.Text(currentLabel),
-                alignTitleToStart = true
-            )
-        },
         bottomBar = {
             BottomNavigationBar(
                 selectedIndex = selectedIndex,

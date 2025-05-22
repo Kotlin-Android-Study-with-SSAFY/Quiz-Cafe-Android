@@ -17,7 +17,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.*
 
 @Composable
-fun QuizModeSection() {
+fun QuizModeSection(onClick: () -> Unit) {
     val modeItems = listOf(
         ModeItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
         ModeItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
@@ -26,7 +26,6 @@ fun QuizModeSection() {
     )
 
     Column(
-        modifier = Modifier.padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         modeItems.chunked(2).forEach { rowItems ->
@@ -40,7 +39,8 @@ fun QuizModeSection() {
                     QuizModeCard(
                         title = stringResource(item.titleResId),
                         description = stringResource(item.descResId),
-                        backgroundColor = item.backgroundColor
+                        backgroundColor = item.backgroundColor,
+                        onClick = onClick
                     )
                 }
 
@@ -98,7 +98,7 @@ fun RowScope.QuizModeCard(
 @Composable
 fun PreviewQuizModeSection() {
     QuizCafeTheme {
-        QuizModeSection()
+        QuizModeSection{}
     }
 }
 

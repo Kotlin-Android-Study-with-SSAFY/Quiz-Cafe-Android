@@ -27,8 +27,6 @@ fun CategoryListScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .navigationBarsPadding()
-            .systemBarsPadding()
     ) {
         TitleWithUnderLine(stringResource(R.string.list_category))
         Spacer(Modifier.height(12.dp))

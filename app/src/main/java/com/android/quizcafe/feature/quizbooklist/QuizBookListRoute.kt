@@ -11,6 +11,7 @@ import com.android.quizcafe.R
 
 @Composable
 fun QuizBookListRoute(
+    category: String,
     navigateToQuizBookDetail: () -> Unit,
     navigateToCategory: () -> Unit,
     viewModel: QuizBookListViewModel = hiltViewModel()
@@ -19,6 +20,7 @@ fun QuizBookListRoute(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizBookListIntent.UpdateCategory(category))
         viewModel.sendIntent(QuizBookListIntent.LoadQuizBooks) // API 요청
     }
 

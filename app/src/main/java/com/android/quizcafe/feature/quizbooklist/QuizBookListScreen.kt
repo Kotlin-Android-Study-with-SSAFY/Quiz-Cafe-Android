@@ -39,8 +39,6 @@ fun QuizBookListScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .navigationBarsPadding()
-            .systemBarsPadding()
     ) {
         TitleWithUnderLine(state.category)
         Spacer(Modifier.height(4.dp))

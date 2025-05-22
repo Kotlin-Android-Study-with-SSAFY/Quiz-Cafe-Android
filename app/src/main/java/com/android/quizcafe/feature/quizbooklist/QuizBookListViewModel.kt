@@ -21,6 +21,7 @@ class QuizBookListViewModel @Inject constructor(
             QuizBookListIntent.ClickQuizBookList -> emitEffect(QuizBookListEffect.NavigateToQuizBookDetail)
             is QuizBookListIntent.SuccessGetQuizBooks -> {}
             is QuizBookListIntent.FailGetQuizBooks -> emitEffect(QuizBookListEffect.ShowError(intent.errorMessage ?: ""))
+            is QuizBookListIntent.UpdateCategory -> {}
         }
     }
 
@@ -28,6 +29,7 @@ class QuizBookListViewModel @Inject constructor(
         return when (intent) {
             QuizBookListIntent.LoadQuizBooks -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookListIntent.ClickQuizBookList -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizBookListIntent.UpdateCategory -> currentState.copy(category = intent.category)
             is QuizBookListIntent.SuccessGetQuizBooks -> currentState.copy(
                 quizBooks = intent.data,
                 isLoading = false

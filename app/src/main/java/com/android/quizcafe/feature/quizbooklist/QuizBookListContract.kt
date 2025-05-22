@@ -14,6 +14,8 @@ sealed class QuizBookListIntent : BaseContract.ViewIntent {
     data object LoadQuizBooks : QuizBookListIntent()
     data object ClickQuizBookList : QuizBookListIntent()
 
+    data class UpdateCategory(val category: String) : QuizBookListIntent()
+
     data class SuccessGetQuizBooks(val data: List<QuizBook>) : QuizBookListIntent()
     data class FailGetQuizBooks(val errorMessage: String? = null) : QuizBookListIntent()
 }

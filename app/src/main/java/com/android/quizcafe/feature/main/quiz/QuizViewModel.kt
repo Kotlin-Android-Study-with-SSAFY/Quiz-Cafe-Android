@@ -10,12 +10,16 @@ class QuizViewModel @Inject constructor() : BaseViewModel<QuizViewState, QuizInt
 ) {
 
     override suspend fun handleIntent(intent: QuizIntent) {
-        TODO("Not yet implemented")
+        when(intent) {
+            is QuizIntent.ClickQuizCard -> emitEffect(QuizEffect.NavigateToCategory(intent.quizType))
+            is QuizIntent.LoadHistory -> {}
+        }
     }
 
     override fun reduce(state: QuizViewState, intent: QuizIntent): QuizViewState {
         return when (intent) {
             is QuizIntent.LoadHistory -> state.copy(historyList = intent.histories)
+            is QuizIntent.ClickQuizCard -> state
         }
     }
 }
