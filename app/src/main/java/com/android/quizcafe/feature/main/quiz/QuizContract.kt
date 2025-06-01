@@ -6,7 +6,8 @@ import com.android.quizcafe.core.ui.base.BaseContract
 data class ModeItem(
     val titleResId: Int,
     val descResId: Int,
-    val backgroundColor: Color
+    val backgroundColor: Color,
+    val iconResId: Int
 )
 
 data class QuizHistory(
