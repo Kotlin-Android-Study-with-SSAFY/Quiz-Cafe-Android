@@ -11,7 +11,6 @@ import com.android.quizcafe.R
 import com.android.quizcafe.feature.categorylist.CategoryEffect
 import com.android.quizcafe.feature.categorylist.CategoryIntent
 import com.android.quizcafe.feature.categorylist.CategoryListScreen
-import com.android.quizcafe.feature.categorylist.CategoryViewModel
 
 @Composable
 fun CategoryRoute(
@@ -34,7 +33,7 @@ fun CategoryRoute(
                 }
 
                 is CategoryEffect.NavigateToQuizBooks -> {
-                    navigateToQuizBookList(effect.categoryId)
+                    navigateToQuizBookList(effect.categoryName)
                 }
 
                 is CategoryEffect.ShowError -> {

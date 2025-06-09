@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.ui.TitleWithUnderLine
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,9 +30,6 @@ fun QuizBookListScreen(
     state: QuizBookListViewState = QuizBookListViewState(),
     sendIntent: (QuizBookListIntent) -> Unit
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-
     var isSheetOpen by remember { mutableStateOf(false) }
 
     Column(
@@ -44,28 +43,38 @@ fun QuizBookListScreen(
             isSheetOpen = true
         }
         QuizBookCardList(state.quizBooks)
+
         if (isSheetOpen) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    scope.launch {
-                        sheetState.hide()
-                        isSheetOpen = false
-                    }
-                },
-                sheetState = sheetState,
-                shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-            ) {
-                QuizBookFilterContent(
-                    onApplyClick = {
-                        scope.launch {
-                            sheetState.hide()
-                            isSheetOpen = false
-                        }
-                        // TODO: 필터 적용하여 리스트 정렬
-                    }
-                )
+            val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+            val scope = rememberCoroutineScope()
+
+            QuizBookFilterBottomSheet(scope, sheetState) {
+                sendIntent(QuizBookListIntent.LoadQuizBooks)
             }
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+private fun QuizBookFilterBottomSheet(
+    scope: CoroutineScope,
+    sheetState: SheetState,
+    applyFilter: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = {
+            scope.launch { sheetState.hide() }
+        },
+        sheetState = sheetState,
+        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
+    ) {
+        QuizBookFilterContent(
+            onApplyClick = {
+                scope.launch { sheetState.hide() }
+                applyFilter()
+            }
+        )
     }
 }
 

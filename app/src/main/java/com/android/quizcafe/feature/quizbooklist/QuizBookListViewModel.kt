@@ -34,7 +34,7 @@ class QuizBookListViewModel @Inject constructor(
                 quizBooks = intent.data,
                 isLoading = false
             )
-            is QuizBookListIntent.FailGetQuizBooks -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
+            is QuizBookListIntent.FailGetQuizBooks -> currentState.copy(isLoading = false, errorMessage = "데이터 로드에 실패했습니다.")
         }
     }
 

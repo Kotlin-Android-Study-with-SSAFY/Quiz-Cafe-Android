@@ -1,10 +1,13 @@
-package com.android.quizcafe.feature.categorylist
+package com.android.quizcafe.feature.categorypicker
 
 import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
 import com.android.quizcafe.core.domain.usecase.quizbook.GetCategoryListUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
+import com.android.quizcafe.feature.categorylist.CategoryEffect
+import com.android.quizcafe.feature.categorylist.CategoryIntent
+import com.android.quizcafe.feature.categorylist.CategoryViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,7 +21,7 @@ class CategoryViewModel @Inject constructor(
     override suspend fun handleIntent(intent: CategoryIntent) {
         when (intent) {
             CategoryIntent.LoadCategories -> getCategoryList()
-            is CategoryIntent.ClickCategory -> emitEffect(CategoryEffect.NavigateToQuizBooks(intent.categoryId))
+            is CategoryIntent.ClickCategory -> emitEffect(CategoryEffect.NavigateToQuizBooks(intent.categoryName))
             is CategoryIntent.SuccessGetCategories -> {}
             is CategoryIntent.FailGetCategories -> emitEffect(CategoryEffect.ShowError(intent.errorMessage ?: ""))
         }
