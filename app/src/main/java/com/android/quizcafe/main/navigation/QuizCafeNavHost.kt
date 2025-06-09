@@ -1,6 +1,9 @@
 package com.android.quizcafe.main.navigation
 
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,7 +26,8 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route
+        startDestination = AuthRoute.Graph.route,
+        modifier = Modifier.navigationBarsPadding().systemBarsPadding()
     ) {
         authGraph(navController)
         mainGraph(navController)
