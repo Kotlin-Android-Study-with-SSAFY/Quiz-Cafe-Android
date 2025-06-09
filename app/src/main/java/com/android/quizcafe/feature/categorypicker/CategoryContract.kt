@@ -3,12 +3,12 @@ package com.android.quizcafe.feature.categorypicker
 import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class CategoryViewState(
+data class CategoryUiState(
     val quizType: String = "",
     val categories: List<Category> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class CategoryIntent : BaseContract.ViewIntent {
     data object LoadCategories : CategoryIntent()

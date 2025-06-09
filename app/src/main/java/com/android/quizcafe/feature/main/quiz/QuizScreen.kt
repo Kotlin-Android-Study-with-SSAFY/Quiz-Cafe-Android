@@ -14,7 +14,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
 fun QuizScreen(
-    state: QuizViewState,
+    state: QuizUiState,
     onIntent: (QuizIntent) -> Unit
 ) {
     LazyColumn(
@@ -34,7 +34,7 @@ fun QuizScreen(
 fun QuizScreenPreview() {
     QuizCafeTheme {
         QuizScreen(
-            state = QuizViewState(
+            state = QuizUiState(
                 historyList = listOf(
                     QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
                     QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
