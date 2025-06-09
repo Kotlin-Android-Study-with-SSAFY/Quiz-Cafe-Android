@@ -100,13 +100,19 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.CategoryList.route) {
             CategoryRoute(
-                navigateToQuizBookList = { category -> navController.navigateSingleTopTo("${MainRoute.QuizBookList.route}/${category}")},
+                navigateToQuizBookList = { category -> navController.navigateSingleTopTo("${MainRoute.QuizBookList.route}/$category") },
                 navigateToHome = { navController.navigateUp() },
             )
         }
         composable(
             route = "${MainRoute.QuizBookList.route}/{category}",
-            arguments = listOf(navArgument("category") { type = NavType.StringType; nullable = true; defaultValue = "" })
+            arguments = listOf(
+                navArgument("category") {
+                    type = NavType.StringType
+                    nullable = true
+                    defaultValue = ""
+                }
+            )
         ) { backStackEntry ->
             val category = backStackEntry.arguments?.getString("category") ?: ""
 
