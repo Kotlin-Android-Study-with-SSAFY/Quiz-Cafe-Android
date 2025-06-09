@@ -18,7 +18,7 @@ fun QuizRoute(
 
     // side effect 처리
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(QuizIntent.FetchHistory)
+        viewModel.sendIntent(QuizIntent.FetchRecord)
 
         viewModel.effect.collectLatest { effect ->
             when (effect) {
