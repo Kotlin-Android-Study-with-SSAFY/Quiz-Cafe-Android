@@ -3,9 +3,11 @@ package com.android.quizcafe.main.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
@@ -98,23 +100,24 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.CategoryList.route) {
             CategoryRoute(
-                navigateToQuizBookList = { navController.navigateSingleTopTo(MainRoute.QuizBookList.route) },
-                navigateToHome = {},
+                navigateToQuizBookList = { category -> navController.navigateSingleTopTo("${MainRoute.QuizBookList.route}/${category}")},
+                navigateToHome = { navController.navigateUp() },
             )
         }
-        composable(MainRoute.QuizBookList.route) {
+        composable(
+            route = "${MainRoute.QuizBookList.route}/{category}",
+            arguments = listOf(navArgument("category") { type = NavType.StringType; nullable = true; defaultValue = "" })
+        ) { backStackEntry ->
+            val category = backStackEntry.arguments?.getString("category") ?: ""
+
             QuizBookListRoute(
-                category = "NETWORK",
-                navigateToQuizBookDetail = {},
+                category = category,
+                navigateToQuizBookDetail = { navController.navigateSingleTopTo(MainRoute.QuizBookDetail.route) },
                 navigateToCategory = {},
             )
         }
         composable(MainRoute.QuizBookDetail.route) {
-            MyPageRoute(
-//                navigateToSetting = {
-//                    navController.navigateSingleTopTo()
-//                }
-            )
+            // TODO: QuizBookDetail 화면 연결
         }
     }
 }
