@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
@@ -100,7 +101,7 @@ fun QuizHeader(
                 contentPadding = PaddingValues(8.dp)
             ) {
                 IconText(
-                    text = if (isSaved) "저장됨 " else "저장",
+                    text = if (isSaved) stringResource(R.string.saved) else stringResource(R.string.save),
                     iconResId = if (isSaved) R.drawable.ic_check else R.drawable.ic_add,
                     MaterialTheme.typography.labelMedium
                 )
@@ -112,7 +113,11 @@ fun QuizHeader(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text("평균 점수 : $averageScore", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
+            Text(
+                "${stringResource(R.string.average_score)} : $averageScore",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.outline
+            )
             Row {
                 IconText(totalSaves.toString(), R.drawable.ic_bookmark)
                 Spacer(modifier = Modifier.width(12.dp))
@@ -124,7 +129,7 @@ fun QuizHeader(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Text("문제 수 : ${questionCount}문제", style = MaterialTheme.typography.bodySmall)
+            Text("${stringResource(R.string.quiz_count)} : ${stringResource(R.string.quiz_count_description, questionCount)}", style = MaterialTheme.typography.bodySmall)
             IconText(creatorName, R.drawable.ic_account)
         }
     }
@@ -133,7 +138,7 @@ fun QuizHeader(
 @Composable
 fun QuizDescription(description: String) {
     Column {
-        Text("문제집 설명", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.quiz_book_description), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(modifier = Modifier.height(8.dp))
         Text(description, style = MaterialTheme.typography.bodySmall)
     }
@@ -142,7 +147,7 @@ fun QuizDescription(description: String) {
 @Composable
 fun QuizQuestionList(quizSummaries: List<QuizSummary>) {
     Column {
-        Text("문제 목록", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.quiz_list), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(modifier = Modifier.height(8.dp))
         quizSummaries.forEach {
             Text(it.quizContent, style = MaterialTheme.typography.bodySmall)
@@ -155,7 +160,7 @@ fun QuizQuestionList(quizSummaries: List<QuizSummary>) {
 @Composable
 fun CommentList(comments: List<Comment>) {
     Column {
-        IconText("댓글 ${comments.size}", R.drawable.ic_comment)
+        IconText("${stringResource(R.string.comment)} ${comments.size}", R.drawable.ic_comment)
         Spacer(modifier = Modifier.height(4.dp))
         comments.forEach {
             Text(it.commentContent, style = MaterialTheme.typography.bodySmall)
@@ -174,7 +179,7 @@ fun QuizSolveButton(onClick: () -> Unit) {
                 .fillMaxWidth()
                 .height(52.dp)
         ) {
-            Text("바로 문제 풀기", style = MaterialTheme.typography.bodyLarge)
+            Text(stringResource(R.string.solve_now), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }

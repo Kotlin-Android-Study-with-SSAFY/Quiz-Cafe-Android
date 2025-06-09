@@ -81,7 +81,7 @@ fun QuizBookListHeader(size: Int, onFilterClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            stringResource(R.string.quiz_count_description, size),
+            stringResource(R.string.quiz_book_count_description, size),
             style = quizCafeTypography().labelLarge
         )
         QuizBookFilterButton(stringResource(R.string.filter)) { onFilterClick() }
