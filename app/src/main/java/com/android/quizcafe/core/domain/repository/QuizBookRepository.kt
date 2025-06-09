@@ -16,4 +16,8 @@ interface QuizBookRepository {
     fun getQuizBooksByCategory(quizBookRequest: QuizBookRequest): Flow<Resource<List<QuizBook>>>
 
     fun getQuizBookById(quizBookDetailRequest: QuizBookDetailRequest): Flow<Resource<QuizBookDetail>>
+
+    fun saveQuizBook(quizBookId: Int): Flow<Resource<Unit>>
+
+    fun unsaveQuizBook(quizBookId: Int): Flow<Resource<Unit>>
 }

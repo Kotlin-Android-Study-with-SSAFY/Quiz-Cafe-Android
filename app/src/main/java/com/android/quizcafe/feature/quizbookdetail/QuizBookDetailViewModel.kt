@@ -4,13 +4,17 @@ import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookDetailRequest
 import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookDetailUseCase
+import com.android.quizcafe.core.domain.usecase.quizbook.SaveQuizBookUseCase
+import com.android.quizcafe.core.domain.usecase.quizbook.UnsaveQuizBookUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class QuizBookDetailViewModel @Inject constructor(
-    private val getQuizBookDetailUseCase: GetQuizBookDetailUseCase
+    private val getQuizBookDetailUseCase: GetQuizBookDetailUseCase,
+    private val saveQuizBookUseCase: SaveQuizBookUseCase,
+    private val unsaveQuizBookUseCase: UnsaveQuizBookUseCase
 ) : BaseViewModel<QuizBookDetailViewState, QuizBookDetailIntent, QuizBookDetailEffect>(
     initialState = QuizBookDetailViewState()
 ) {
@@ -18,12 +22,16 @@ class QuizBookDetailViewModel @Inject constructor(
     override suspend fun handleIntent(intent: QuizBookDetailIntent) {
         when (intent) {
             QuizBookDetailIntent.ClickQuizSolve -> emitEffect(QuizBookDetailEffect.NavigateToQuizSolve)
-            QuizBookDetailIntent.ClickSaveQuizBook -> {}
+            QuizBookDetailIntent.ClickSaveQuizBook -> saveQuizBook()
+            QuizBookDetailIntent.ClickUnsaveQuizBook -> unsaveQuizBook()
             QuizBookDetailIntent.ClickUser -> emitEffect(QuizBookDetailEffect.NavigateToUserPage)
-            is QuizBookDetailIntent.FailGetQuizBookDetail -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
             QuizBookDetailIntent.LoadQuizBookDetail -> getQuizBookDetailList()
             is QuizBookDetailIntent.SuccessGetQuizBookDetail -> {}
+            QuizBookDetailIntent.SuccessSaveQuizBook -> {}
+            QuizBookDetailIntent.SuccessUnsaveQuizBook -> {}
             is QuizBookDetailIntent.UpdateQuizBookId -> {}
+            is QuizBookDetailIntent.FailGetQuizBookDetail -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
+            is QuizBookDetailIntent.FailUpdateSaveState -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
         }
     }
 
@@ -32,17 +40,30 @@ class QuizBookDetailViewModel @Inject constructor(
             QuizBookDetailIntent.LoadQuizBookDetail -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickQuizSolve -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickSaveQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
+            QuizBookDetailIntent.ClickUnsaveQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickUser -> currentState.copy(isLoading = true, errorMessage = null)
+
+            is QuizBookDetailIntent.UpdateQuizBookId -> currentState.copy(quizBookId = intent.quizBookId)
+
             is QuizBookDetailIntent.SuccessGetQuizBookDetail -> currentState.copy(
                 quizBookDetail = intent.data,
                 isLoading = false
             )
+
+            QuizBookDetailIntent.SuccessSaveQuizBook -> {
+                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isSaved = true))
+            }
+
+            QuizBookDetailIntent.SuccessUnsaveQuizBook -> {
+                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isSaved = false))
+            }
+
             is QuizBookDetailIntent.FailGetQuizBookDetail -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
-            is QuizBookDetailIntent.UpdateQuizBookId -> currentState.copy(quizBookId = intent.quizBookId)
+            is QuizBookDetailIntent.FailUpdateSaveState -> currentState.copy(isLoading = false, errorMessage = null)
         }
     }
 
-    private suspend fun QuizBookDetailViewModel.getQuizBookDetailList() {
+    private suspend fun getQuizBookDetailList() {
         getQuizBookDetailUseCase(
             QuizBookDetailRequest(state.value.quizBookId)
         ).collect {
@@ -59,6 +80,46 @@ class QuizBookDetailViewModel @Inject constructor(
                 is Resource.Failure -> {
                     Log.d("quizBookDetail", "Get QuizBookDetail List Fail")
                     sendIntent(QuizBookDetailIntent.FailGetQuizBookDetail(it.errorMessage))
+                }
+            }
+        }
+    }
+
+    private suspend fun saveQuizBook() {
+        saveQuizBookUseCase(state.value.quizBookId).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("quizBookDetail", "Save QuizBook Success")
+                    sendIntent(QuizBookDetailIntent.SuccessSaveQuizBook)
+                }
+
+                is Resource.Loading -> {
+                    Log.d("quizBookDetail", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("quizBookDetail", "Save QuizBook Fail")
+                    sendIntent(QuizBookDetailIntent.FailUpdateSaveState(it.errorMessage))
+                }
+            }
+        }
+    }
+
+    private suspend fun unsaveQuizBook() {
+        unsaveQuizBookUseCase(state.value.quizBookId).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("quizBookDetail", "Unsave QuizBook Success")
+                    sendIntent(QuizBookDetailIntent.SuccessUnsaveQuizBook)
+                }
+
+                is Resource.Loading -> {
+                    Log.d("quizBookDetail", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("quizBookDetail", "Unsave QuizBook Fail")
+                    sendIntent(QuizBookDetailIntent.FailUpdateSaveState(it.errorMessage))
                 }
             }
         }

@@ -7,6 +7,8 @@ import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
+import retrofit2.http.DELETE
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface QuizBookService {
@@ -26,4 +28,14 @@ interface QuizBookService {
     suspend fun getQuizBooks(
         @Query("category") request: String
     ): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>
+
+    @POST("quiz-book-bookmark")
+    suspend fun saveQuizBook(
+        @Query("quizBookId") quizBookId: Int
+    ): NetworkResult<ApiResponse<Unit>>
+
+    @DELETE("quiz-book-bookmark")
+    suspend fun unsaveQuizBook(
+        @Query("quizBookId") quizBookId: Int
+    ): NetworkResult<ApiResponse<Unit>>
 }

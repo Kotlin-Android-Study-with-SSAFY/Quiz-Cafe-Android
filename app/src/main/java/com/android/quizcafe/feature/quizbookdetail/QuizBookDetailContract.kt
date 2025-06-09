@@ -14,12 +14,16 @@ sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
     data object LoadQuizBookDetail : QuizBookDetailIntent()
     data object ClickQuizSolve : QuizBookDetailIntent()
     data object ClickSaveQuizBook : QuizBookDetailIntent()
+    data object ClickUnsaveQuizBook : QuizBookDetailIntent()
     data object ClickUser : QuizBookDetailIntent()
 
     data class UpdateQuizBookId(val quizBookId: Int) : QuizBookDetailIntent()
 
     data class SuccessGetQuizBookDetail(val data: QuizBookDetail) : QuizBookDetailIntent()
+    data object SuccessSaveQuizBook : QuizBookDetailIntent()
+    data object SuccessUnsaveQuizBook : QuizBookDetailIntent()
     data class FailGetQuizBookDetail(val errorMessage: String? = null) : QuizBookDetailIntent()
+    data class FailUpdateSaveState(val errorMessage: String? = null) : QuizBookDetailIntent()
 }
 
 sealed class QuizBookDetailEffect : BaseContract.ViewEffect {

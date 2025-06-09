@@ -30,7 +30,6 @@ import com.android.quizcafe.core.domain.model.quizbook.response.Comment
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
 
-// --- Composable Entry ---
 @Composable
 fun QuizBookDetailScreen(
     state: QuizBookDetailViewState = QuizBookDetailViewState(),
@@ -59,8 +58,15 @@ fun QuizBookDetailScreen(
                 totalSaves = quizBookDetail.totalSaves,
                 views = quizBookDetail.views,
                 questionCount = quizBookDetail.quizSummaries.size,
-                creatorName = quizBookDetail.ownerName
-            )
+                creatorName = quizBookDetail.ownerName,
+                isSaved = quizBookDetail.isSaved
+            ) {
+                if (quizBookDetail.isSaved) {
+                    sendIntent(QuizBookDetailIntent.ClickUnsaveQuizBook)
+                } else {
+                    sendIntent(QuizBookDetailIntent.ClickSaveQuizBook)
+                }
+            }
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             QuizDescription(quizBookDetail.description)
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -78,7 +84,9 @@ fun QuizHeader(
     totalSaves: Int,
     views: Int,
     questionCount: Int,
-    creatorName: String
+    creatorName: String,
+    isSaved: Boolean,
+    onSaveClick: () -> Unit
 ) {
     Column {
         Row(
@@ -88,12 +96,14 @@ fun QuizHeader(
         ) {
             Text(title, style = MaterialTheme.typography.titleLarge)
             QuizCafeOutlinedButton(
-                onClick = {
-                    // TODO: 문제집 저장
-                },
+                onClick = onSaveClick,
                 contentPadding = PaddingValues(8.dp)
             ) {
-                IconText("저장 ", R.drawable.ic_add, MaterialTheme.typography.labelMedium)
+                IconText(
+                    text = if (isSaved) "저장됨 " else "저장",
+                    iconResId = if (isSaved) R.drawable.ic_check else R.drawable.ic_add,
+                    MaterialTheme.typography.labelMedium
+                )
             }
         }
 

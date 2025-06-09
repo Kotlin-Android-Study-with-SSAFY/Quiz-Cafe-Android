@@ -18,6 +18,7 @@ import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
+import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
@@ -31,7 +32,9 @@ fun QuizCafeNavHost(
     NavHost(
         navController = navController,
         startDestination = AuthRoute.Graph.route,
-        modifier = Modifier.navigationBarsPadding().systemBarsPadding()
+        modifier = Modifier
+            .navigationBarsPadding()
+            .systemBarsPadding()
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -113,7 +116,7 @@ fun MainBottomNavHost(
             arguments = listOf(
                 navArgument("category") {
                     type = NavType.StringType
-                    nullable = true
+                    nullable = false
                     defaultValue = ""
                 }
             )
@@ -126,8 +129,24 @@ fun MainBottomNavHost(
                 navigateToCategory = {},
             )
         }
-        composable(MainRoute.QuizBookDetail.route) {
-            // TODO: QuizBookDetail 화면 연결
+        composable(
+            route = "${MainRoute.QuizBookDetail.route}/{quizBookId}",
+            arguments = listOf(
+                navArgument("quizBookId") {
+                    type = NavType.IntType
+                    nullable = false
+                    defaultValue = ""
+                }
+            )
+        ) { backStackEntry ->
+            val quizBookId = backStackEntry.arguments?.getInt("quizBookId") ?: 0
+
+            QuizBookDetailRoute(
+                quizBookId = quizBookId,
+                navigateToQuizBookPicker = {},
+                navigateToQuizSolve = {},
+                navigateToUserPage = {}
+            )
         }
     }
 }
