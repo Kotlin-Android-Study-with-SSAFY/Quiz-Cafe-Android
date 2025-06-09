@@ -23,7 +23,7 @@ fun QuizScreen(
             .padding(horizontal = 8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        item { QuizHistoryContent(historyList = state.historyList) }
+        item { QuizRecordContent(quizRecords = state.quizRecords) }
         item { QuizModeContent() }
         item { Spacer(modifier = Modifier.height(6.dp)) }
     }
@@ -35,10 +35,10 @@ fun QuizScreenPreview() {
     QuizCafeTheme {
         QuizScreen(
             state = QuizViewState(
-                historyList = listOf(
-                    QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
-                    QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
-                    QuizHistory("04/01", "재용이의 안드로이드", 19, 20)
+                quizRecords = listOf(
+                    QuizRecord("30분 전", "성준이의 운영체제", 16, 20),
+                    QuizRecord("16시간 전", "성민이의 네트워크", 18, 20),
+                    QuizRecord("04/01", "재용이의 안드로이드", 19, 20)
                 )
             ),
             onIntent = {}
