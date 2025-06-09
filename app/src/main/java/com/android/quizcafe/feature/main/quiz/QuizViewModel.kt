@@ -15,17 +15,17 @@ class QuizViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: QuizIntent) {
         when (intent) {
-            QuizIntent.FetchHistory -> {
+            QuizIntent.FetchRecord -> {
                 // 로딩 시작
-                sendIntent(QuizIntent.LoadingFetchHistory)
+                sendIntent(QuizIntent.LoadingFetchRecord)
                 getQuizHistoryUseCase().collect { resource ->
                     when (resource) {
                         is Resource.Success -> {
-                            sendIntent(QuizIntent.SuccessFetchHistory(resource.data ?: emptyList()))
+                            sendIntent(QuizIntent.SuccessFetchRecord(resource.data ?: emptyList()))
                         }
 
                         is Resource.Failure -> {
-                            sendIntent(QuizIntent.FailFetchHistory(resource.errorMessage))
+                            sendIntent(QuizIntent.FailFetchRecord(resource.errorMessage))
                         }
 
                         /* 필요 시 처리 */
@@ -38,17 +38,17 @@ class QuizViewModel @Inject constructor(
 
             // 로딩 상태 진입
             // 상태만 변경, 별도 처리 필요 X
-            is QuizIntent.LoadingFetchHistory -> {
+            is QuizIntent.LoadingFetchRecord -> {
 
             }
 
             // 성공적으로 히스토리 불러옴
             // 필요하면 효과도 emitEffect로 보낼 수 있음
-            is QuizIntent.SuccessFetchHistory -> {
+            is QuizIntent.SuccessFetchRecord -> {
 
             }
 
-            is QuizIntent.FailFetchHistory -> {
+            is QuizIntent.FailFetchRecord -> {
                 emitEffect(QuizEffect.ShowErrorDialog(intent.errorMessage ?: "히스토리 불러오기에 실패했습니다."))
             }
 
@@ -61,15 +61,15 @@ class QuizViewModel @Inject constructor(
 
     override fun reduce(currentState: QuizViewState, intent: QuizIntent): QuizViewState {
         return when (intent) {
-            QuizIntent.FetchHistory -> currentState.copy(isLoading = true, errorMessage = null)
-            is QuizIntent.LoadingFetchHistory -> currentState.copy(isLoading = true, errorMessage = null)
-            is QuizIntent.SuccessFetchHistory -> currentState.copy(
+            QuizIntent.FetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizIntent.LoadingFetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizIntent.SuccessFetchRecord -> currentState.copy(
                 isLoading = false,
-                historyList = intent.histories,
+                quizRecords = intent.quizRecords,
                 errorMessage = null
             )
 
-            is QuizIntent.FailFetchHistory -> currentState.copy(
+            is QuizIntent.FailFetchRecord -> currentState.copy(
                 isLoading = false,
                 errorMessage = intent.errorMessage
             )
