@@ -33,9 +33,9 @@ import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
 
 @Composable
-fun QuizHistoryContent(
-    historyList: List<QuizHistory>,
-    onHistoryClick: (QuizHistory) -> Unit = {}
+fun QuizRecordContent(
+    quizRecords: List<QuizRecord>,
+    onQuizRecordClick: (QuizRecord) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun QuizHistoryContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.quiz_history),
+                text = stringResource(id = R.string.quiz_record),
                 style = MaterialTheme.typography.titleMedium
             )
             Icon(
@@ -57,7 +57,7 @@ fun QuizHistoryContent(
                 contentDescription = stringResource(id = R.string.navigate_forward)
             )
         }
-        if (historyList.isEmpty()) {
+        if (quizRecords.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -65,7 +65,7 @@ fun QuizHistoryContent(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.quiz_history_empty),
+                    text = stringResource(R.string.quiz_record_empty),
                     style = MaterialTheme.typography.displayLarge,
                     color = MaterialTheme.colorScheme.outline
                 )
@@ -78,10 +78,10 @@ fun QuizHistoryContent(
                 contentPadding = PaddingValues(vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(historyList) { history ->
-                    QuizHistoryCard(
-                        history = history,
-                        onClick = { onHistoryClick(history) }
+                items(quizRecords) { record ->
+                    QuizRecordCard(
+                        quizRecord = record,
+                        onClick = { onQuizRecordClick(record) }
                     )
                 }
             }
@@ -90,8 +90,8 @@ fun QuizHistoryContent(
 }
 
 @Composable
-fun QuizHistoryCard(
-    history: QuizHistory,
+fun QuizRecordCard(
+    quizRecord: QuizRecord,
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -107,20 +107,20 @@ fun QuizHistoryCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = history.time,
+                text = quizRecord.time,
                 style = MaterialTheme.typography.labelSmall,
                 color = outlineLight
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = history.title,
+                text = quizRecord.title,
                 style = MaterialTheme.typography.titleSmall,
                 color = onSurfaceLight
             )
             Row(modifier = Modifier.fillMaxWidth()) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "결과 : ${history.result}/${history.totalProblems}",
+                    text = "결과 : ${quizRecord.result}/${quizRecord.totalProblems}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -130,13 +130,13 @@ fun QuizHistoryCard(
 
 @Preview(showBackground = true, name = "기록이 있는 경우")
 @Composable
-fun PreviewQuizHistoryContent() {
+fun PreviewQuizRecordContent() {
     QuizCafeTheme {
-        QuizHistoryContent(
-            historyList = listOf(
-                QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
-                QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
-                QuizHistory("04/01", "재용이의 안드로이드", 19, 20)
+        QuizRecordContent(
+            quizRecords = listOf(
+                QuizRecord("30분 전", "성준이의 운영체제", 16, 20),
+                QuizRecord("16시간 전", "성민이의 네트워크", 18, 20),
+                QuizRecord("04/01", "재용이의 안드로이드", 19, 20)
             )
         )
     }
@@ -144,20 +144,20 @@ fun PreviewQuizHistoryContent() {
 
 @Preview(showBackground = true, name = "\"텅\" 상태")
 @Composable
-fun PreviewQuizHistoryContentEmpty() {
+fun PreviewQuizRecordContentEmpty() {
     QuizCafeTheme {
-        QuizHistoryContent(
-            historyList = emptyList()
+        QuizRecordContent(
+            quizRecords = emptyList()
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewQuizHistoryCard() {
+fun PreviewQuizRecordCard() {
     QuizCafeTheme {
-        QuizHistoryCard(
-            history = QuizHistory(
+        QuizRecordCard(
+            quizRecord = QuizRecord(
                 time = "1시간 전",
                 title = "오인성의 컴파일러 퀴즈",
                 result = 15,
