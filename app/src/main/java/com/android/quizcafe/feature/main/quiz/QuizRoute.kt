@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun QuizRoute(
+    navigateToCategory: (String) -> Unit,
     viewModel: QuizViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -23,12 +24,16 @@ fun QuizRoute(
                 is QuizEffect.ShowErrorDialog -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
+
+                is QuizEffect.NavigateToCategory -> {
+                    navigateToCategory(effect.quizType)
+                }
             }
         }
     }
 
     QuizScreen(
         state = state,
-        onIntent = viewModel::sendIntent
+        sendIntent = viewModel::sendIntent
     )
 }

@@ -21,7 +21,25 @@
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="quizcafe_logo">QuizCafe Logo</string>
     <string name="resend">재전송</string>
-    <string name="pick_category">카테고리 선택</string>
+    <string name="filter">필터</string>
+    <string name="quiz_count_description">%1$s개의 문제집이 있어요</string>
+    <string name="all">전체</string>
+    <string name="question">문제</string>
+    <string name="difficulty">난이도</string>
+    <string name="is_saved">isSaved</string>
+    <string name="comment">comment</string>
+    <string name="apply">적용</string>
+    <string name="quiz_count">문제 수</string>
+    <string name="level">난이도</string>
+    <string name="sort">정렬</string>
+    <string name="sort_latest">최신순</string>
+    <string name="sort_saved">저장순</string>
+    <string name="sort_random">랜덤</string>
+    <string name="level_easy">쉬움</string>
+    <string name="level_medium">보통</string>
+    <string name="level_hard">어려움</string>
+    <string name="level_very_hard">매우 어려움</string>
+    <string name="list_category">카테고리 선택</string>
     <string name="go">Go</string>
 
     <!-- Feature Card Titles -->
@@ -49,6 +67,5 @@
     <!--Quizpage Text -->
     <string name="quiz_history">풀이기록</string>
     <string name="navigate_forward">앞으로 이동</string>
-
 
 </resources>
