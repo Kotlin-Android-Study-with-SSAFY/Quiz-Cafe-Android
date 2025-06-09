@@ -11,7 +11,7 @@ import com.android.quizcafe.R
 
 @Composable
 fun QuizBookDetailRoute(
-    quizBookId: Int,
+    quizBookId: Long,
     navigateToQuizBookPicker: () -> Unit,
     navigateToQuizSolve: () -> Unit,
     navigateToUserPage: () -> Unit,

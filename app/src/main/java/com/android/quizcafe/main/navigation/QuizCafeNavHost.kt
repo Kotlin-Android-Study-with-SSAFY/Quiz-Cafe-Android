@@ -1,7 +1,8 @@
 package com.android.quizcafe.main.navigation
 
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
@@ -32,9 +33,7 @@ fun QuizCafeNavHost(
     NavHost(
         navController = navController,
         startDestination = AuthRoute.Graph.route,
-        modifier = Modifier
-            .navigationBarsPadding()
-            .systemBarsPadding()
+        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -125,7 +124,7 @@ fun MainBottomNavHost(
 
             QuizBookListRoute(
                 category = category,
-                navigateToQuizBookDetail = { navController.navigateSingleTopTo(MainRoute.QuizBookDetail.route) },
+                navigateToQuizBookDetail = { quizBookId -> navController.navigateSingleTopTo("${MainRoute.QuizBookDetail.route}/$quizBookId") },
                 navigateToCategory = {},
             )
         }
@@ -133,13 +132,13 @@ fun MainBottomNavHost(
             route = "${MainRoute.QuizBookDetail.route}/{quizBookId}",
             arguments = listOf(
                 navArgument("quizBookId") {
-                    type = NavType.IntType
+                    type = NavType.LongType
                     nullable = false
-                    defaultValue = ""
+                    defaultValue = 0L
                 }
             )
         ) { backStackEntry ->
-            val quizBookId = backStackEntry.arguments?.getInt("quizBookId") ?: 0
+            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
 
             QuizBookDetailRoute(
                 quizBookId = quizBookId,

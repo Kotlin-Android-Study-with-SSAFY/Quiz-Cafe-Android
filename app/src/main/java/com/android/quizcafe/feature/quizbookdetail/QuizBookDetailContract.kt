@@ -4,7 +4,7 @@ import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.ui.base.BaseContract
 
 data class QuizBookDetailViewState(
-    val quizBookId: Int = 2,
+    val quizBookId: Long = 2,
     val quizBookDetail: QuizBookDetail = QuizBookDetail(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
@@ -17,7 +17,7 @@ sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
     data object ClickUnsaveQuizBook : QuizBookDetailIntent()
     data object ClickUser : QuizBookDetailIntent()
 
-    data class UpdateQuizBookId(val quizBookId: Int) : QuizBookDetailIntent()
+    data class UpdateQuizBookId(val quizBookId: Long) : QuizBookDetailIntent()
 
     data class SuccessGetQuizBookDetail(val data: QuizBookDetail) : QuizBookDetailIntent()
     data object SuccessSaveQuizBook : QuizBookDetailIntent()

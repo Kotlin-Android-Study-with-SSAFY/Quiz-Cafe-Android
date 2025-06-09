@@ -25,7 +25,7 @@ class QuizBookDetailViewModel @Inject constructor(
             QuizBookDetailIntent.ClickSaveQuizBook -> saveQuizBook()
             QuizBookDetailIntent.ClickUnsaveQuizBook -> unsaveQuizBook()
             QuizBookDetailIntent.ClickUser -> emitEffect(QuizBookDetailEffect.NavigateToUserPage)
-            QuizBookDetailIntent.LoadQuizBookDetail -> getQuizBookDetailList()
+            QuizBookDetailIntent.LoadQuizBookDetail -> getQuizBookDetail()
             is QuizBookDetailIntent.SuccessGetQuizBookDetail -> {}
             QuizBookDetailIntent.SuccessSaveQuizBook -> {}
             QuizBookDetailIntent.SuccessUnsaveQuizBook -> {}
@@ -63,13 +63,13 @@ class QuizBookDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getQuizBookDetailList() {
+    private suspend fun getQuizBookDetail() {
         getQuizBookDetailUseCase(
             QuizBookDetailRequest(state.value.quizBookId)
         ).collect {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("quizBookDetail", "Get QuizBookDetail List Success")
+                    Log.d("quizBookDetail", "Get QuizBookDetail Success")
                     sendIntent(QuizBookDetailIntent.SuccessGetQuizBookDetail(it.data))
                 }
 
@@ -78,7 +78,7 @@ class QuizBookDetailViewModel @Inject constructor(
                 }
 
                 is Resource.Failure -> {
-                    Log.d("quizBookDetail", "Get QuizBookDetail List Fail")
+                    Log.d("quizBookDetail", "${it.errorMessage}")
                     sendIntent(QuizBookDetailIntent.FailGetQuizBookDetail(it.errorMessage))
                 }
             }

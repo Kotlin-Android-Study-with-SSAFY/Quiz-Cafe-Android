@@ -8,6 +8,6 @@ import javax.inject.Inject
 class UnsaveQuizBookUseCase @Inject constructor(
     private val quizBookRepository: QuizBookRepository
 ) {
-    operator fun invoke(quizBookId: Int): Flow<Resource<Unit>> =
+    operator fun invoke(quizBookId: Long): Flow<Resource<Unit>> =
         quizBookRepository.unsaveQuizBook(quizBookId)
 }

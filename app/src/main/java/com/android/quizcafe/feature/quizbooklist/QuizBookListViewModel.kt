@@ -18,7 +18,7 @@ class QuizBookListViewModel @Inject constructor(
     override suspend fun handleIntent(intent: QuizBookListIntent) {
         when (intent) {
             QuizBookListIntent.LoadQuizBooks -> getQuizBookList()
-            QuizBookListIntent.ClickQuizBookList -> emitEffect(QuizBookListEffect.NavigateToQuizBookDetail)
+            is QuizBookListIntent.ClickQuizBook -> emitEffect(QuizBookListEffect.NavigateToQuizBookDetail(intent.quizBookId))
             is QuizBookListIntent.SuccessGetQuizBooks -> {}
             is QuizBookListIntent.FailGetQuizBooks -> emitEffect(QuizBookListEffect.ShowError(intent.errorMessage ?: ""))
             is QuizBookListIntent.UpdateCategory -> {}
@@ -28,7 +28,7 @@ class QuizBookListViewModel @Inject constructor(
     override fun reduce(currentState: QuizBookListViewState, intent: QuizBookListIntent): QuizBookListViewState {
         return when (intent) {
             QuizBookListIntent.LoadQuizBooks -> currentState.copy(isLoading = true, errorMessage = null)
-            QuizBookListIntent.ClickQuizBookList -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizBookListIntent.ClickQuizBook -> currentState.copy(isLoading = false, errorMessage = null)
             is QuizBookListIntent.UpdateCategory -> currentState.copy(category = intent.category)
             is QuizBookListIntent.SuccessGetQuizBooks -> currentState.copy(
                 quizBooks = intent.data,

@@ -13,7 +13,13 @@ data class QuizBookDetailResponseDto(
     val level: String,
     val quizzes: List<QuizSummaryDto>,
     val title: String,
-    val version: Long
+    val version: Long,
+    val averageCorrectCount: Double,
+    val createdAt: String,
+    val totalSaves: Int,
+    val views: Int,
+    val isSaved: Boolean,
+    val ownerId: Long
 )
 
 @Serializable
@@ -25,18 +31,19 @@ data class QuizSummaryDto(
 
 fun QuizBookDetailResponseDto.toDomain() = QuizBookDetail(
     id = id,
-    ownerId = 0,
-    ownerName = "",
+    ownerId = ownerId,
+    ownerName = createdBy,
     category = category,
     title = title,
     description = description,
     difficulty = level,
-    averageScore = "",
-    totalSaves = 0,
-    views = 0,
+    averageScore = "$averageCorrectCount / ${quizzes.size}",
+    totalSaves = totalSaves,
+    views = views,
     quizSummaries = quizzes.map { it.toDomain() },
     comments = emptyList(),
-    createdAt = ""
+    createdAt = createdAt,
+    isSaved = isSaved
 )
 
 fun QuizSummaryDto.toDomain() = QuizSummary(

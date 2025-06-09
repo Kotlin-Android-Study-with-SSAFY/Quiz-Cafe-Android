@@ -12,7 +12,7 @@ data class QuizBookListViewState(
 
 sealed class QuizBookListIntent : BaseContract.ViewIntent {
     data object LoadQuizBooks : QuizBookListIntent()
-    data object ClickQuizBookList : QuizBookListIntent()
+    data class ClickQuizBook(val quizBookId: Long) : QuizBookListIntent()
 
     data class UpdateCategory(val category: String) : QuizBookListIntent()
 
@@ -23,5 +23,5 @@ sealed class QuizBookListIntent : BaseContract.ViewIntent {
 sealed class QuizBookListEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : QuizBookListEffect()
     data object NavigateToCategory : QuizBookListEffect()
-    data object NavigateToQuizBookDetail : QuizBookListEffect()
+    data class NavigateToQuizBookDetail(val quizBookId: Long) : QuizBookListEffect()
 }

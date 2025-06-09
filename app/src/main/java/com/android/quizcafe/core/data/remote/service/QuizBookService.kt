@@ -21,7 +21,7 @@ interface QuizBookService {
 
     @GET("quiz-book/{quizBookId}")
     suspend fun getQuizBookDetail(
-        @Path("quizBookId") quizBookId: Int
+        @Path("quizBookId") quizBookId: Long
     ): NetworkResult<ApiResponse<QuizBookDetailResponseDto>>
 
     @GET("quiz-book")
@@ -31,11 +31,11 @@ interface QuizBookService {
 
     @POST("quiz-book-bookmark")
     suspend fun saveQuizBook(
-        @Query("quizBookId") quizBookId: Int
+        @Query("quizBookId") quizBookId: Long
     ): NetworkResult<ApiResponse<Unit>>
 
     @DELETE("quiz-book-bookmark")
     suspend fun unsaveQuizBook(
-        @Query("quizBookId") quizBookId: Int
+        @Query("quizBookId") quizBookId: Long
     ): NetworkResult<ApiResponse<Unit>>
 }

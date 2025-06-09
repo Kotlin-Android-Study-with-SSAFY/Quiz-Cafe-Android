@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class QuizBookDetailRequestDto(
-    val quizBookId: Int
+    val quizBookId: Long
 )
 
 fun QuizBookDetailRequest.toDto() =
