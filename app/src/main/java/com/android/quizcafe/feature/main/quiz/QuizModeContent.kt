@@ -95,7 +95,7 @@ fun RowScope.QuizModeCard(
     title: String,
     description: String,
     backgroundColor: Color,
-    iconResId: Int, // 추가
+    iconResId: Int,
     onClick: () -> Unit = {}
 ) {
     Card(

@@ -31,11 +31,13 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onSurfaceLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
+import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizSolvingRecord
+import com.android.quizcafe.feature.util.safeToRelativeTime
 
 @Composable
 fun QuizRecordContent(
-    quizRecords: List<QuizRecord>,
-    onQuizRecordClick: (QuizRecord) -> Unit = {}
+    quizSolvingRecords: List<QuizSolvingRecord>,
+    onQuizRecordClick: (QuizSolvingRecord) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -58,7 +60,7 @@ fun QuizRecordContent(
                 contentDescription = stringResource(id = R.string.navigate_forward)
             )
         }
-        if (quizRecords.isEmpty()) {
+        if (quizSolvingRecords.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -79,9 +81,9 @@ fun QuizRecordContent(
                 contentPadding = PaddingValues(vertical = 12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(quizRecords) { record ->
+                items(quizSolvingRecords) { record ->
                     QuizRecordCard(
-                        quizRecord = record,
+                        quizSolvingRecord = record,
                         onClick = { onQuizRecordClick(record) }
                     )
                 }
@@ -92,7 +94,7 @@ fun QuizRecordContent(
 
 @Composable
 fun QuizRecordCard(
-    quizRecord: QuizRecord,
+    quizSolvingRecord: QuizSolvingRecord,
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -108,20 +110,20 @@ fun QuizRecordCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = quizRecord.time,
+                text = quizSolvingRecord.completedAt.safeToRelativeTime(),
                 style = MaterialTheme.typography.labelSmall,
                 color = outlineLight
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = quizRecord.title,
+                text = quizSolvingRecord.title,
                 style = MaterialTheme.typography.titleSmall,
                 color = onSurfaceLight
             )
             Row(modifier = Modifier.fillMaxWidth()) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "결과 : ${quizRecord.result}/${quizRecord.totalProblems}",
+                    text = "결과 : ${quizSolvingRecord.correctCount}/${quizSolvingRecord.totalQuizzes}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -134,10 +136,49 @@ fun QuizRecordCard(
 fun PreviewQuizRecordContent() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizRecords = listOf(
-                QuizRecord("30분 전", "성준이의 운영체제", 16, 20),
-                QuizRecord("16시간 전", "성민이의 네트워크", 18, 20),
-                QuizRecord("04/01", "재용이의 안드로이드", 19, 20)
+            quizSolvingRecords = listOf(
+                QuizSolvingRecord(
+                    id = 1,
+                    userId = 1,
+                    quizBookId = 1,
+                    version = 1,
+                    level = "EASY",
+                    category = "운영체제",
+                    title = "성준이의 운영체제",
+                    description = "",
+                    totalQuizzes = 20,
+                    correctCount = 16,
+                    completedAt = "2025-06-09T05:14:05.986Z",
+                    quizzes = emptyList()
+                ),
+                QuizSolvingRecord(
+                    id = 2,
+                    userId = 2,
+                    quizBookId = 2,
+                    version = 1,
+                    level = "MEDIUM",
+                    category = "네트워크",
+                    title = "성민이의 네트워크",
+                    description = "",
+                    totalQuizzes = 20,
+                    correctCount = 18,
+                    completedAt = "2025-06-09T05:14:05.986Z",
+                    quizzes = emptyList()
+                ),
+                QuizSolvingRecord(
+                    id = 3,
+                    userId = 3,
+                    quizBookId = 3,
+                    version = 1,
+                    level = "HARD",
+                    category = "안드로이드",
+                    title = "재용이의 안드로이드",
+                    description = "",
+                    totalQuizzes = 20,
+                    correctCount = 19,
+                    completedAt = "2025-06-09T05:14:05.986Z",
+                    quizzes = emptyList()
+                )
             )
         )
     }
@@ -148,22 +189,7 @@ fun PreviewQuizRecordContent() {
 fun PreviewQuizRecordContentEmpty() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizRecords = emptyList()
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewQuizRecordCard() {
-    QuizCafeTheme {
-        QuizRecordCard(
-            quizRecord = QuizRecord(
-                time = "1시간 전",
-                title = "오인성의 컴파일러 퀴즈",
-                result = 15,
-                totalProblems = 20
-            )
+            quizSolvingRecords = emptyList()
         )
     }
 }
