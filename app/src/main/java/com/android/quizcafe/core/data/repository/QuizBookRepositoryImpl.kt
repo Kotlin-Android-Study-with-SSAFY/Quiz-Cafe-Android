@@ -4,6 +4,7 @@ import com.android.quizcafe.core.data.model.quizbook.request.toDto
 import com.android.quizcafe.core.data.model.quizbook.response.CategoryResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookDetailResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.toDomain
+import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.remote.datasource.QuizBookRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
@@ -11,6 +12,7 @@ import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookDetailReq
 import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
+import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
@@ -26,9 +28,10 @@ class QuizBookRepositoryImpl @Inject constructor(
             quizBookRemoteDataSource.getCategoriesByType(categoryRequest.toDto())
         }
 
-    override fun getQuizBooksByCategory(categoryId: String): Flow<Resource<List<QuizBook>>> {
-        TODO("Not yet implemented")
-    }
+    override fun getQuizBooksByCategory(quizBookRequest: QuizBookRequest): Flow<Resource<List<QuizBook>>> =
+        apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
+            quizBookRemoteDataSource.getQuizBooksByCategory(quizBookRequest.toDto())
+        }
 
     override fun getQuizBookById(quizBookDetailRequest: QuizBookDetailRequest): Flow<Resource<QuizBookDetail>> =
         apiResponseToResourceFlow(mapper = QuizBookDetailResponseDto::toDomain) {

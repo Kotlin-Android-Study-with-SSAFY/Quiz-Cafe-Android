@@ -19,6 +19,18 @@ sealed interface MainRoute : NavRoute {
         override val route = "${Graph.route}/workbook"
     }
 
+    data object CategoryList : MainRoute {
+        override val route = "${Graph.route}/category"
+    }
+
+    data object QuizBookList : MainRoute {
+        override val route = "${Graph.route}/quiz-book-list"
+    }
+
+    data object QuizBookDetail : MainRoute {
+        override val route = "${Graph.route}/quiz-book-detail"
+    }
+
     companion object {
         val startDestination = Quiz.route
     }
