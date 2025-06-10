@@ -29,7 +29,7 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route
+        startDestination = QuizSolveRoute.Graph.route
     ) {
         authGraph(navController)
         mainGraph(navController)

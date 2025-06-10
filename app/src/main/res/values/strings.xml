@@ -70,5 +70,8 @@
     <!--Quizpage Text -->
     <string name="quiz_history">풀이기록</string>
     <string name="navigate_forward">앞으로 이동</string>
-  
+    <string name="solve_btn_submit">제출하기</string>
+    <string name="solve_btn_explanation">해설보기</string>
+    <string name="explanation">해설</string>
+
 </resources>
