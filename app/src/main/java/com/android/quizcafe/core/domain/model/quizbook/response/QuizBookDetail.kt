@@ -11,6 +11,7 @@ data class QuizBookDetail(
     val difficulty: String = "",
     val averageScore: String = "",
     val totalSaves: Int = 0,
+    val level: String = "",
     val views: Int = 0,
     val quizSummaries: List<QuizSummary> = emptyList(),
     val comments: List<Comment> = emptyList(),

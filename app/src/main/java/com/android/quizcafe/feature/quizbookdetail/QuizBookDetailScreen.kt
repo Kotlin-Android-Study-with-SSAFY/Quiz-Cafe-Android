@@ -1,8 +1,8 @@
 package com.android.quizcafe.feature.quizbookdetail
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,20 +13,23 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
-import com.android.quizcafe.core.designsystem.IconText
-import com.android.quizcafe.core.designsystem.QuizCafeButton
-import com.android.quizcafe.core.designsystem.QuizCafeOutlinedButton
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.selectedColor
 import com.android.quizcafe.core.domain.model.quizbook.response.Comment
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
@@ -38,11 +41,33 @@ fun QuizBookDetailScreen(
 ) {
     val quizBookDetail = state.quizBookDetail
 
+    var isChecked by remember { mutableStateOf(false) }
+
     Scaffold(
         bottomBar = {
-            QuizSolveButton(
-                onClick = { sendIntent(QuizBookDetailIntent.ClickQuizSolve) }
-            )
+            Column(
+                Modifier.padding(horizontal = 16.dp).padding(bottom = 8.dp),
+                horizontalAlignment = Alignment.End
+            ) {
+                Row(
+                    modifier = Modifier.clickable {
+                        isChecked = !isChecked
+                    },
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        painter = painterResource(if (isChecked) R.drawable.ic_check_circle_fill else R.drawable.ic_check_circle_unfill),
+                        contentDescription = null,
+                        tint = if (isChecked) selectedColor else MaterialTheme.colorScheme.onSurface,
+                    )
+                    Spacer(Modifier.width(4.dp))
+                    Text("즉시 채점 모드")
+                }
+                Spacer(Modifier.height(8.dp))
+                QuizSolveButton(
+                    onClick = { sendIntent(QuizBookDetailIntent.ClickQuizSolve) }
+                )
+            }
         }
     ) { innerPadding ->
         Column(
@@ -59,7 +84,9 @@ fun QuizBookDetailScreen(
                 totalSaves = quizBookDetail.totalSaves,
                 views = quizBookDetail.views,
                 questionCount = quizBookDetail.quizSummaries.size,
+                level = quizBookDetail.level,
                 creatorName = quizBookDetail.ownerName,
+                createdAt = quizBookDetail.createdAt,
                 isSaved = quizBookDetail.isSaved
             ) {
                 if (quizBookDetail.isSaved) {
@@ -71,115 +98,9 @@ fun QuizBookDetailScreen(
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
             QuizDescription(quizBookDetail.description)
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
-            QuizQuestionList(quizBookDetail.quizSummaries)
-            CommentList(quizBookDetail.comments)
-        }
-    }
-}
-
-// --- Sub-Components ---
-@Composable
-fun QuizHeader(
-    title: String,
-    averageScore: String,
-    totalSaves: Int,
-    views: Int,
-    questionCount: Int,
-    creatorName: String,
-    isSaved: Boolean,
-    onSaveClick: () -> Unit
-) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(title, style = MaterialTheme.typography.titleLarge)
-            QuizCafeOutlinedButton(
-                onClick = onSaveClick,
-                contentPadding = PaddingValues(8.dp)
-            ) {
-                IconText(
-                    text = if (isSaved) stringResource(R.string.saved) else stringResource(R.string.save),
-                    iconResId = if (isSaved) R.drawable.ic_check else R.drawable.ic_add,
-                    MaterialTheme.typography.labelMedium
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text(
-                "${stringResource(R.string.average_score)} : $averageScore",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.outline
-            )
-            Row {
-                IconText(totalSaves.toString(), R.drawable.ic_bookmark)
-                Spacer(modifier = Modifier.width(12.dp))
-                IconText(views.toString(), R.drawable.ic_view)
-            }
-        }
-        Spacer(modifier = Modifier.height(4.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Text("${stringResource(R.string.quiz_count)} : ${stringResource(R.string.quiz_count_description, questionCount)}", style = MaterialTheme.typography.bodySmall)
-            IconText(creatorName, R.drawable.ic_account)
-        }
-    }
-}
-
-@Composable
-fun QuizDescription(description: String) {
-    Column {
-        Text(stringResource(R.string.quiz_book_description), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(description, style = MaterialTheme.typography.bodySmall)
-    }
-}
-
-@Composable
-fun QuizQuestionList(quizSummaries: List<QuizSummary>) {
-    Column {
-        Text(stringResource(R.string.quiz_list), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Spacer(modifier = Modifier.height(8.dp))
-        quizSummaries.forEach {
-            Text(it.quizContent, style = MaterialTheme.typography.bodySmall)
-            Text(it.quizType, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.outline)
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
-}
-
-@Composable
-fun CommentList(comments: List<Comment>) {
-    Column {
-        IconText("${stringResource(R.string.comment)} ${comments.size}", R.drawable.ic_comment)
-        Spacer(modifier = Modifier.height(4.dp))
-        comments.forEach {
-            Text(it.commentContent, style = MaterialTheme.typography.bodySmall)
-        }
-    }
-}
-
-@Composable
-fun QuizSolveButton(onClick: () -> Unit) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        QuizCafeButton(
-            onClick = onClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp)
-        ) {
-            Text(stringResource(R.string.solve_now), style = MaterialTheme.typography.bodyLarge)
+            QuizSummaryList(quizBookDetail.quizSummaries)
+            HorizontalDivider(modifier = Modifier.fillMaxWidth())
+            CommentContent(quizBookDetail.comments)
         }
     }
 }

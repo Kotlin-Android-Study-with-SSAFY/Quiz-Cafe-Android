@@ -91,6 +91,7 @@ class QuizBookDetailViewModel @Inject constructor(
                 is Resource.Success -> {
                     Log.d("quizBookDetail", "Save QuizBook Success")
                     sendIntent(QuizBookDetailIntent.SuccessSaveQuizBook)
+                    sendIntent(QuizBookDetailIntent.LoadQuizBookDetail)
                 }
 
                 is Resource.Loading -> {
@@ -111,6 +112,7 @@ class QuizBookDetailViewModel @Inject constructor(
                 is Resource.Success -> {
                     Log.d("quizBookDetail", "Unsave QuizBook Success")
                     sendIntent(QuizBookDetailIntent.SuccessUnsaveQuizBook)
+                    sendIntent(QuizBookDetailIntent.LoadQuizBookDetail)
                 }
 
                 is Resource.Loading -> {
