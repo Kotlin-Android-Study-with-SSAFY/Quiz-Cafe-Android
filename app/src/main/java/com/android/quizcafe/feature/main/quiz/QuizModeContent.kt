@@ -40,25 +40,25 @@ fun QuizModeContent(onClick: () -> Unit) {
             R.string.feature_title_ox_quiz,
             R.string.feature_desc_ox_quiz,
             OxQuizCardColor,
-            R.drawable.quiz_ox
+            R.drawable.ic_quiz_ox
         ),
         ModeItem(
             R.string.feature_title_multiple_choice_quiz,
             R.string.feature_desc_multiple_choice_quiz,
             QuizCardColorMultipleChoice,
-            R.drawable.quiz_objective
+            R.drawable.ic_quiz_multiple_choice
         ),
         ModeItem(
             R.string.feature_title_short_answer_quiz,
             R.string.feature_desc_short_answer_quiz,
             QuizCardColorShortAnswer,
-            R.drawable.quiz_subjective
+            R.drawable.ic_quiz_short_answer
         ),
         ModeItem(
             R.string.feature_title_create_quiz,
-            R.string.feature_desc_create_quiz,
+            R.string.feature_desc_making_quiz,
             CreateQuizCardColor,
-            R.drawable.quiz_making
+            R.drawable.ic_quiz_making
         )
     )
 
