@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
