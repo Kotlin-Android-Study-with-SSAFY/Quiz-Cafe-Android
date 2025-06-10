@@ -5,6 +5,7 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
+import com.android.quizcafe.core.domain.model.value.QuizId
 
 @Entity(
     tableName = "mcq_option",
@@ -19,7 +20,8 @@ import com.android.quizcafe.core.database.model.quiz.QuizEntity
     indices = [Index(value = ["quizId"])]
 )
 data class McqOptionEntity(
-    @PrimaryKey val id: Long,
+    @PrimaryKey
+    val id: Long,
     val quizId: Long,
     val optionNumber: Int,
     val optionContent: String,

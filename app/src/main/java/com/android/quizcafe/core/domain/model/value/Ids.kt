@@ -11,5 +11,5 @@ value class QuizBookId(val value : Long)
 value class QuizBookGradeLocalId(val value : Long)
 
 @JvmInline
-value class QuizBookGradeServerId(val value : Long)
+value class QuizBookGradeServerId(val value : Long?)
 

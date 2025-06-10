@@ -7,7 +7,7 @@ data class QuizBookGradeWithQuizGradesRelation(
     @Embedded val quizBookGradeEntity: QuizBookGradeEntity,
     @Relation(
         parentColumn = "localId",
-        entityColumn = "quizBookGradingLocalId"
+        entityColumn = "quizBookGradeLocalId"
     )
     val quizGradeEntities : List<QuizGradeEntity>
 )

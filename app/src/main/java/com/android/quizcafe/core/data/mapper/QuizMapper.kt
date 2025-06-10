@@ -8,8 +8,8 @@ import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.model.value.QuizId
 
 fun QuizDto.toEntity() = QuizEntity(
-    id = QuizId(id),
-    quizBookId = QuizBookId(quizBookId),
+    id = id,
+    quizBookId = quizBookId,
     questionType = questionType,
     content = content,
     answer = answer,
@@ -18,8 +18,8 @@ fun QuizDto.toEntity() = QuizEntity(
 )
 
 fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
-    id = quizEntity.id,
-    quizBookId = quizEntity.quizBookId,
+    id = QuizId(quizEntity.id),
+    quizBookId = QuizBookId(quizEntity.quizBookId),
     questionType = quizEntity.questionType,
     content = quizEntity.content,
     answer = quizEntity.answer,
