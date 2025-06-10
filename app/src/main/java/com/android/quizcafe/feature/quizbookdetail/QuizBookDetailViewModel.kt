@@ -118,7 +118,7 @@ class QuizBookDetailViewModel @Inject constructor(
                 }
 
                 is Resource.Failure -> {
-                    Log.d("quizBookDetail", "Unsave QuizBook Fail")
+                    Log.d("quizBookDetail", it.errorMessage)
                     sendIntent(QuizBookDetailIntent.FailUpdateSaveState(it.errorMessage))
                 }
             }

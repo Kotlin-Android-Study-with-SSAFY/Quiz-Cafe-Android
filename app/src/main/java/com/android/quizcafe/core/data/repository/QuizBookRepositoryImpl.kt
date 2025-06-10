@@ -16,7 +16,7 @@ import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
-import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.noContentResponseToResourceFlow
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -40,8 +40,8 @@ class QuizBookRepositoryImpl @Inject constructor(
         }
 
     override fun saveQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { quizBookRemoteDataSource.saveQuizBook(quizBookId) }
+        noContentResponseToResourceFlow { quizBookRemoteDataSource.saveQuizBook(quizBookId) }
 
     override fun unsaveQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { quizBookRemoteDataSource.unsaveQuizBook(quizBookId) }
+        noContentResponseToResourceFlow { quizBookRemoteDataSource.unsaveQuizBook(quizBookId) }
 }

@@ -24,9 +24,9 @@ class QuizBookRemoteDataSource @Inject constructor(
     suspend fun getQuizBooksByCategory(request: QuizBookRequestDto): NetworkResult<ApiResponse<List<QuizBookResponseDto>>> =
         quizBookService.getQuizBooks(request.category)
 
-    suspend fun saveQuizBook(quizBookId: Long): NetworkResult<ApiResponse<Unit>> =
+    suspend fun saveQuizBook(quizBookId: Long): NetworkResult<Unit> =
         quizBookService.saveQuizBook(quizBookId)
 
-    suspend fun unsaveQuizBook(quizBookId: Long): NetworkResult<ApiResponse<Unit>> =
+    suspend fun unsaveQuizBook(quizBookId: Long): NetworkResult<Unit> =
         quizBookService.unsaveQuizBook(quizBookId)
 }

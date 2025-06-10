@@ -32,10 +32,10 @@ interface QuizBookService {
     @POST("quiz-book-bookmark")
     suspend fun saveQuizBook(
         @Query("quizBookId") quizBookId: Long
-    ): NetworkResult<ApiResponse<Unit>>
+    ): NetworkResult<Unit>
 
     @DELETE("quiz-book-bookmark")
     suspend fun unsaveQuizBook(
         @Query("quizBookId") quizBookId: Long
-    ): NetworkResult<ApiResponse<Unit>>
+    ): NetworkResult<Unit>
 }
