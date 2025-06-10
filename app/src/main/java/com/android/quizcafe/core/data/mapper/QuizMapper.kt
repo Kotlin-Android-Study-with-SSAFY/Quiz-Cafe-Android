@@ -1,7 +1,8 @@
 package com.android.quizcafe.core.data.mapper
 
 import com.android.quizcafe.core.data.model.quiz.QuizDto
-import com.android.quizcafe.core.database.model.QuizEntity
+import com.android.quizcafe.core.database.model.quiz.QuizEntity
+import com.android.quizcafe.core.database.model.quiz.QuizWithMcqOptionsRelation
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.model.value.QuizId
@@ -13,16 +14,18 @@ fun QuizDto.toEntity() = QuizEntity(
     content = content,
     answer = answer,
     explanation = explanation,
-    version = version
+    version = version,
 )
 
-
-fun QuizEntity.toDomain() = Quiz(
-    id = id,
-    quizBookId = quizBookId,
-    questionType = questionType,
-    content = content,
-    answer = answer,
-    explanation = explanation,
-    version = version
+fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
+    id = quizEntity.id,
+    quizBookId = quizEntity.quizBookId,
+    questionType = quizEntity.questionType,
+    content = quizEntity.content,
+    answer = quizEntity.answer,
+    explanation = quizEntity.explanation,
+    version = quizEntity.version,
+    mcqOption = if (mcqOptions.isNotEmpty()) {
+        mcqOptions.toDomain()
+    } else null
 )

@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.data.model.quiz
+package com.android.quizcafe.core.data.model.solving.request
 
 import kotlinx.serialization.Serializable
 
@@ -8,10 +8,9 @@ data class QuizSolvingRequestDto(
     val questionType: String,
     val content: String,
     val answer: String,
-    val explanation: String,
-    val memo: String,
-    val userAnswer: String,
+    val explanation: String?,
+    val memo: String?,
+    val userAnswer: String?,
     val isCorrect: Boolean,
-    val completedAt: String, // ISO8601
-    val mcqOptions: List<McpOptionSolvingRequestDto>
+    val mcqOptions: List<McqOptionSolvingRequestDto>
 )

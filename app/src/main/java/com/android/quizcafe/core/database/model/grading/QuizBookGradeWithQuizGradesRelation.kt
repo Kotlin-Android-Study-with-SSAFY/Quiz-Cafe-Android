@@ -9,5 +9,5 @@ data class QuizBookGradeWithQuizGradesRelation(
         parentColumn = "localId",
         entityColumn = "quizBookGradingLocalId"
     )
-    val quizGradings : List<QuizGradeEntity>
+    val quizGradeEntities : List<QuizGradeEntity>
 )

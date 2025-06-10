@@ -7,12 +7,13 @@ import com.android.quizcafe.core.database.model.QuizBookEntity
 @Dao
 interface QuizBookDao {
 
+    @Query("SELECT * FROM quiz_book WHERE id = :quizBookId")
+    suspend fun getQuizBookById(quizBookId: Long): QuizBookEntity
 
     @Query("SELECT * FROM quiz_book WHERE category = :category")
     suspend fun getQuizBooksByCategory(category: String): List<QuizBookEntity>
 
     @Query("SELECT id FROM quiz_book WHERE category = :category")
     suspend fun getQuizBookIdsByCategory(category: String): List<Long>
-
 
 }

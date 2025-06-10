@@ -28,7 +28,7 @@ class QuizRepositoryImpl @Inject constructor(
     override fun getQuizListByBookId(quizBookId : QuizBookId) : Flow<Resource<List<Quiz>>> = flow {
         emit(Resource.Loading)
 
-        val localQuizList = quizDao.getQuizListByBookId(quizBookId.value)
+        val localQuizList = quizDao.getQuizListWithOptionsByBookId(quizBookId.value)
         if (localQuizList.isNotEmpty()) {
             emit(Resource.Success(localQuizList.map { it.toDomain() }))
             return@flow
@@ -40,7 +40,7 @@ class QuizRepositoryImpl @Inject constructor(
                     quizDao.insertQuizList(
                         quizList = quizList.map { it.toEntity() }
                     )
-                    val updatedLocal = quizDao.getQuizListByBookId(quizBookId.value)
+                    val updatedLocal = quizDao.getQuizListWithOptionsByBookId(quizBookId.value)
                     emit(Resource.Success(updatedLocal.map { it.toDomain() }))
                 }?: emit(Resource.Failure.NullData)
             }

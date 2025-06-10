@@ -6,8 +6,9 @@ import com.android.quizcafe.core.domain.model.value.QuizId
 data class QuizGrade(
     val localId : Long = -1,
     val quizId : QuizId,
-    val quizBookGradingLocalId : QuizBookGradeLocalId,
+    val quizBookGradeLocalId : QuizBookGradeLocalId,
     val userAnswer : String,
-    val isCorrect : Boolean? = null,
+    val memo : String? = null,
+    val isCorrect : Boolean = false,
     val completedAt : String
 )

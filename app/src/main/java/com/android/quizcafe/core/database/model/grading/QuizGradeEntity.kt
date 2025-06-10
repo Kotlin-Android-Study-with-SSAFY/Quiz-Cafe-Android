@@ -22,6 +22,7 @@ data class QuizGradeEntity(
     val quizId : Long,
     val quizBookGradingLocalId : Long,
     val userAnswer : String,
-    val isCorrect : Boolean?,
+    val memo : String?,
+    val isCorrect : Boolean,
     val completedAt : String
 )

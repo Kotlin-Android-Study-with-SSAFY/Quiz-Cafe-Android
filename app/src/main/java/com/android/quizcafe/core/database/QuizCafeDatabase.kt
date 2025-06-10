@@ -8,7 +8,7 @@ import com.android.quizcafe.core.database.dao.quiz.QuizDao
 import com.android.quizcafe.core.database.dao.quiz.QuizGradeDao
 import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
 import com.android.quizcafe.core.database.model.QuizBookEntity
-import com.android.quizcafe.core.database.model.QuizEntity
+import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.database.converter.DurationConverter
 import com.android.quizcafe.core.database.converter.QuizBookGradeIdConverter
 import com.android.quizcafe.core.database.converter.QuizBookIdConverter

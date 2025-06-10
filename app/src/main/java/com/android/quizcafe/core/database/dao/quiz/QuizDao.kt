@@ -4,17 +4,21 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.android.quizcafe.core.database.model.QuizEntity
+import androidx.room.Transaction
+import com.android.quizcafe.core.database.model.quiz.QuizEntity
+import com.android.quizcafe.core.database.model.quiz.QuizWithMcqOptionsRelation
 
 @Dao
 interface QuizDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuizList(quizList: List<QuizEntity>)
-
+    @Transaction
     @Query("SELECT * FROM quiz WHERE id = :quizId")
-    suspend fun getQuizById(quizId: Long): QuizEntity
+    suspend fun getQuizWithOptionsById(quizId: Long): QuizWithMcqOptionsRelation?
 
+    @Transaction
     @Query("SELECT * FROM quiz WHERE quizBookId = :quizBookId")
-    suspend fun getQuizListByBookId(quizBookId: Long): List<QuizEntity>
+    suspend fun getQuizListWithOptionsByBookId(quizBookId: Long): List<QuizWithMcqOptionsRelation>
+
 }

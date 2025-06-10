@@ -1,8 +1,6 @@
-package com.android.quizcafe.core.database.model
+package com.android.quizcafe.core.database.model.quiz
 
 import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.model.value.QuizId
 
