@@ -6,6 +6,7 @@ import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookDetailRequest
 import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import kotlinx.coroutines.flow.Flow
 
@@ -15,5 +16,9 @@ interface QuizBookRepository {
 
     fun getQuizBooksByCategory(quizBookRequest: QuizBookRequest): Flow<Resource<List<QuizBook>>>
 
-    fun getQuizBookById(id: QuizBookId): Flow<Resource<QuizBookDetail>>
+    fun getQuizBookById(quizBookDetailRequest: QuizBookDetailRequest): Flow<Resource<QuizBookDetail>>
+
+    fun saveQuizBook(quizBookId: Long): Flow<Resource<Unit>>
+
+    fun unsaveQuizBook(quizBookId: Long): Flow<Resource<Unit>>
 }

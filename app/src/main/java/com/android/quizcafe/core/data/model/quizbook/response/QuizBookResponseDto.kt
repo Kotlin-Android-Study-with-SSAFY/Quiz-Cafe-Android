@@ -12,6 +12,9 @@ data class QuizBookResponseDto(
     val title: String,
     val description: String,
     val level: String,
+    val createdBy: String,
+    val createdAt: String,
+    val totalQuizzes: Int
 )
 
 fun QuizBookResponseDto.toDomain() = QuizBook(
@@ -21,11 +24,9 @@ fun QuizBookResponseDto.toDomain() = QuizBook(
     description = description,
     level = level,
     title = title,
-    ownerId = 0,
-    ownerName = "",
-    difficulty = "",
-    totalQuizzes = 0,
+    ownerName = createdBy,
+    totalQuizzes = totalQuizzes,
     totalComments = 0,
     totalSaves = 0,
-    createdAt = ""
+    createdAt = createdAt
 )

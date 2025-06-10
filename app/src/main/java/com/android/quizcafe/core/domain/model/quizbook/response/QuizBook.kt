@@ -9,7 +9,6 @@ data class QuizBook(
     val level: String,
     val ownerId: Long,
     val ownerName: String,
-    val difficulty: String,
     val totalQuizzes: Int,
     val totalComments: Int,
     val totalSaves: Int,
