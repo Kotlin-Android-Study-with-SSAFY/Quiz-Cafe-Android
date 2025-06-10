@@ -1,5 +1,7 @@
 package com.android.quizcafe.core.domain.model.quizbook.response
 
+import com.android.quizcafe.core.domain.model.QuizType
+
 // --- Data Classes ---
 data class QuizBookDetail(
     val id: Long = 0,
@@ -22,7 +24,7 @@ data class QuizBookDetail(
 data class QuizSummary(
     val quizId: Long,
     val quizContent: String,
-    val quizType: String
+    val quizType: QuizType
 )
 
 data class Comment(

@@ -23,6 +23,7 @@ import com.android.quizcafe.core.designsystem.IconText
 import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeOutlinedButton
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quizbook.response.Comment
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
 
@@ -138,7 +139,7 @@ private fun QuizSummary(
         Column {
             Text(quizSummary.quizContent, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(quizSummary.quizType, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
+            Text(quizSummary.quizType.quizTypeName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.outline)
         }
     }
 }
@@ -241,17 +242,17 @@ fun QuizQuestionListPreview() {
             QuizSummary(
                 quizId = 1L,
                 quizContent = "코틀린에서 'val'과 'var'의 차이점은 무엇인가요?",
-                quizType = "객관식"
+                quizType = QuizType.MCQ
             ),
             QuizSummary(
                 quizId = 2L,
                 quizContent = "고차 함수(Higher-Order Function)에 대해 설명하세요.",
-                quizType = "주관식"
+                quizType = QuizType.MCQ
             ),
             QuizSummary(
                 quizId = 3L,
                 quizContent = "코틀린의 데이터 클래스(Data Class)의 특징으로 옳지 않은 것은?",
-                quizType = "객관식"
+                quizType = QuizType.MCQ
             )
         )
         Column(modifier = Modifier.padding(16.dp)) {

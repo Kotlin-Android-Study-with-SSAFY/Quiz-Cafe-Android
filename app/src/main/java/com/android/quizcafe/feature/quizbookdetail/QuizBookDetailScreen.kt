@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.checkedColor
+import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quizbook.response.Comment
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
@@ -125,7 +126,7 @@ fun QuizBookDetailScreenPreview() {
                         QuizSummary(
                             quizId = 0,
                             quizContent = "!23123",
-                            quizType = "객관식"
+                            quizType = QuizType.MCQ
                         )
                     ),
                     comments = listOf(

@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.model.quizbook.response
 
+import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
 import kotlinx.serialization.SerialName
@@ -53,9 +54,9 @@ fun QuizSummaryDto.toDomain() = QuizSummary(
     quizId = quizId,
     quizContent = quizContent,
     quizType = when (quizType) {
-        "MCQ" -> "객관식"
-        "OX" -> "O, X"
-        "SUBJECTIVE" -> "주관식 단답형"
-        else -> "-"
+        "MCQ" -> QuizType.MCQ
+        "OX" -> QuizType.OX
+        "SHORT_ANSWER" -> QuizType.SHORT_ANSWER
+        else -> QuizType.UNKNOWN
     }
 )
