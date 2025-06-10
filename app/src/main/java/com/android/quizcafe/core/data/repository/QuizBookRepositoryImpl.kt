@@ -39,9 +39,9 @@ class QuizBookRepositoryImpl @Inject constructor(
             quizBookRemoteDataSource.getQuizBookDetail(quizBookDetailRequest.toDto())
         }
 
-    override fun saveQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { quizBookRemoteDataSource.saveQuizBook(quizBookId) }
+    override fun markQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
+        noContentResponseToResourceFlow { quizBookRemoteDataSource.markQuizBook(quizBookId) }
 
-    override fun unsaveQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { quizBookRemoteDataSource.unsaveQuizBook(quizBookId) }
+    override fun unmarkQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
+        noContentResponseToResourceFlow { quizBookRemoteDataSource.unmarkQuizBook(quizBookId) }
 }

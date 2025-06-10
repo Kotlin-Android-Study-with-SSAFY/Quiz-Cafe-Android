@@ -90,9 +90,9 @@ fun QuizBookDetailScreen(
                 isSaved = quizBookDetail.isSaved
             ) {
                 if (quizBookDetail.isSaved) {
-                    sendIntent(QuizBookDetailIntent.ClickUnsaveQuizBook)
+                    sendIntent(QuizBookDetailIntent.ClickUnmarkQuizBook)
                 } else {
-                    sendIntent(QuizBookDetailIntent.ClickSaveQuizBook)
+                    sendIntent(QuizBookDetailIntent.ClickMarkQuizBook)
                 }
             }
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
