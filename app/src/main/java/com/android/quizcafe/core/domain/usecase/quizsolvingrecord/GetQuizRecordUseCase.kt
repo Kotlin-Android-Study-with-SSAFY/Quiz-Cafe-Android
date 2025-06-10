@@ -4,7 +4,6 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizSolvingRecord
 import com.android.quizcafe.core.domain.repository.QuizSolvingRecordRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class GetQuizRecordUseCase @Inject constructor(
