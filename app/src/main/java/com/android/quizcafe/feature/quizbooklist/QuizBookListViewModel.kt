@@ -22,6 +22,7 @@ class QuizBookListViewModel @Inject constructor(
             is QuizBookListIntent.SuccessGetQuizBooks -> {}
             is QuizBookListIntent.FailGetQuizBooks -> emitEffect(QuizBookListEffect.ShowError(intent.errorMessage ?: ""))
             is QuizBookListIntent.UpdateCategory -> {}
+            is QuizBookListIntent.UpdateFilterOptions -> {}
         }
     }
 
@@ -32,9 +33,11 @@ class QuizBookListViewModel @Inject constructor(
             is QuizBookListIntent.UpdateCategory -> currentState.copy(category = intent.category)
             is QuizBookListIntent.SuccessGetQuizBooks -> currentState.copy(
                 quizBooks = intent.data,
+                filteredQuizBooks = intent.data,
                 isLoading = false
             )
             is QuizBookListIntent.FailGetQuizBooks -> currentState.copy(isLoading = false, errorMessage = "데이터 로드에 실패했습니다.")
+            is QuizBookListIntent.UpdateFilterOptions -> currentState.copy(isLoading = false, filteredQuizBooks = filteredList(intent.filterState), currentFilters = intent.filterState)
         }
     }
 
@@ -57,6 +60,19 @@ class QuizBookListViewModel @Inject constructor(
                     sendIntent(QuizBookListIntent.FailGetQuizBooks(it.errorMessage))
                 }
             }
+        }
+    }
+
+    private fun filteredList(filters: FilterState) = state.value.quizBooks.filter { quizBook ->
+        val levelMatch = if (filters.level == QuizLevel.ALL) true else quizBook.level == filters.level.name
+        val countMatch = quizBook.totalQuizzes in filters.quizCountRange
+
+        levelMatch && countMatch
+    }.let { list ->
+        when (filters.sortOption) {
+            SortOption.LATEST -> list.sortedByDescending { it.createdAt }
+            SortOption.SAVED -> list.sortedByDescending { it.totalSaves }
+            SortOption.RANDOM -> list.shuffled()
         }
     }
 }

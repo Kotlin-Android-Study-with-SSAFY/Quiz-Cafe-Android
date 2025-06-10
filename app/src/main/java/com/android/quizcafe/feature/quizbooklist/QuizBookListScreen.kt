@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuizBookListScreen(
     state: QuizBookListViewState = QuizBookListViewState(),
@@ -35,19 +34,20 @@ fun QuizBookListScreen(
     ) {
         TitleWithUnderLine(state.category)
         Spacer(Modifier.height(4.dp))
-        QuizBookListHeader(state.quizBooks.size) {
+        QuizBookListHeader(state.filteredQuizBooks.size) {
             isSheetOpen = true
         }
-        QuizBookCardList(state.quizBooks) { quizBookId ->
+        QuizBookCardList(state.filteredQuizBooks) { quizBookId ->
             sendIntent(QuizBookListIntent.ClickQuizBook(quizBookId))
         }
 
         if (isSheetOpen) {
             QuizBookFilterBottomSheet(
-                applyFilter = {
-                    // TODO: 필터 적용 로직 구현
+                filterState = state.currentFilters,
+                applyFilter = { filterState ->
+                    sendIntent(QuizBookListIntent.UpdateFilterOptions(filterState))
                 },
-                onDismiss = { isSheetOpen = false }
+                onDismiss = { isSheetOpen = false },
             )
         }
     }
@@ -56,8 +56,9 @@ fun QuizBookListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun QuizBookFilterBottomSheet(
+    filterState: FilterState,
     onDismiss: () -> Unit,
-    applyFilter: () -> Unit
+    applyFilter: (FilterState) -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -67,10 +68,11 @@ private fun QuizBookFilterBottomSheet(
         shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
     ) {
         QuizBookFilterContent(
-            onApplyClick = {
-                applyFilter()
+            onApplyClick = { filterState ->
+                applyFilter(filterState)
                 onDismiss()
-            }
+            },
+            filterState = filterState,
         )
     }
 }
