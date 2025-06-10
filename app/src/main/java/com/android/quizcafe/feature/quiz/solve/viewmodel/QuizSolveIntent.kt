@@ -1,8 +1,11 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
-sealed class QuizSolveIntent {
-    data class SelectOXOption(val option: String) : QuizSolveIntent()
+import com.android.quizcafe.core.ui.base.BaseContract
+
+sealed class QuizSolveIntent : BaseContract.ViewIntent {
+    data class SelectOption(val option: String) : QuizSolveIntent()
     data class UpdatedSubjectiveAnswer(val answer: String) : QuizSolveIntent()
-    object SubmitAnswer : QuizSolveIntent()
-    object OnBackClick : QuizSolveIntent()
+    data object SubmitAnswer : QuizSolveIntent()
+    data object OnBackClick : QuizSolveIntent()
+    data object TickTime : QuizSolveIntent()
 }

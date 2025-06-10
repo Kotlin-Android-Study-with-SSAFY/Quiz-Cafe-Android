@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -42,13 +43,17 @@ fun QuizSolveScreen(
             QuizTopBar(
                 currentQuestion = uiState.currentQuestion,
                 totalQuestions = uiState.totalQuestions,
-                timeText = uiState.getTimeRemainText(uiState.remainingSeconds),
+                timeText = uiState.getTimeText(),
                 onBackClick = { onIntent(QuizSolveIntent.OnBackClick) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .navigationBarsPadding()
+        ) {
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,21 +74,15 @@ fun QuizSolveScreen(
                 item {
                     when (uiState.questionType) {
                         QuestionType.OX -> {
-                            SelectOXSection(uiState = uiState) {
-                                onIntent
-                            }
+                            SelectOXSection(uiState = uiState, onIntent = onIntent)
                         }
 
                         QuestionType.MULTIPLE_CHOICE -> {
-                            SelectMultipleChoiceSection(uiState = uiState) {
-                                onIntent
-                            }
+                            SelectMultipleChoiceSection(uiState = uiState, onIntent = onIntent)
                         }
 
                         QuestionType.SUBJECTIVE -> {
-                            SubjectiveAnswerSection(uiState = uiState) {
-                                onIntent
-                            }
+                            SubjectiveAnswerSection(uiState = uiState, onIntent = onIntent)
                         }
                     }
                 }
@@ -145,7 +144,7 @@ fun SelectMultipleChoiceSection(
                 answerState = uiState.answerState,
                 index = idx + 1,
                 content = option,
-                onClick = { onIntent(QuizSolveIntent.SelectOXOption(option)) }
+                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
             )
         }
     }
@@ -167,7 +166,7 @@ fun SelectOXSection(
                 modifier = modifier.weight(1F),
                 answerState = uiState.optionState(option),
                 iconPaint = if (option == "O") R.drawable.ic_ox_option_o else R.drawable.ic_ox_option_x,
-                onClick = { onIntent(QuizSolveIntent.SelectOXOption(option)) }
+                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
             )
         }
     }

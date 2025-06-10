@@ -12,9 +12,11 @@ import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
+import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
+import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 
 @Composable
 fun QuizCafeNavHost(
@@ -27,6 +29,7 @@ fun QuizCafeNavHost(
     ) {
         authGraph(navController)
         mainGraph(navController)
+        quizSolveGraph(navController)
     }
 }
 
@@ -94,6 +97,22 @@ fun MainBottomNavHost(
 //                navigateToSetting = {
 //                    navController.navigateSingleTopTo()
 //                }
+            )
+        }
+    }
+}
+
+// 퀴즈 풀이
+fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
+    navigation(
+        startDestination = QuizSolveRoute.QuizSolve.route,
+        route = QuizSolveRoute.Graph.route
+    ) {
+        composable(QuizSolveRoute.QuizSolve.route) {
+            QuizSolveRoute(
+                navigateToBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }

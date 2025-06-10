@@ -47,17 +47,17 @@ fun QuizTopBar(
         title = {
             Text(
                 text = stringResource(R.string.quiz_topbar_title, currentQuestion, totalQuestions),
-                style = quizCafeTypography().headlineLarge
+                style = quizCafeTypography().titleMedium
             )
         },
         actions = {
-            TopbarActionSection(timeText, onSideBarClick)
+            TopBarActionSection(timeText, onSideBarClick)
         }
     )
 }
 
 @Composable
-fun TopbarActionSection(timeText: String?, onSideBarClick: () -> Unit) {
+fun TopBarActionSection(timeText: String?, onSideBarClick: () -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(end = 8.dp)
@@ -85,7 +85,7 @@ fun TimeRemainSection(timeText: String) {
     Spacer(modifier = Modifier.width(8.dp))
     Text(
         text = timeText,
-        style = quizCafeTypography().headlineLarge
+        style = quizCafeTypography().titleSmall
     )
 }
 

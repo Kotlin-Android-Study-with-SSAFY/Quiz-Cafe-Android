@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import java.util.Locale
 
@@ -10,7 +11,7 @@ data class QuizSolveUiState(
     val currentQuestion: Int = 1,
     val totalQuestions: Int = 10,
     val questionType: QuestionType = QuestionType.OX,
-    val playMode: PlayMode = PlayMode.TIME_ATTACK,
+    val playMode: PlayMode = PlayMode.NO_TIME_ATTACK,
     val questionText: String = "",
     val selectedOption: String = "",
     val subjectHint: String = "",
@@ -19,8 +20,11 @@ data class QuizSolveUiState(
     val answerState: AnswerState = AnswerState.DEFAULT,
     val options: List<String> = emptyList(),
     val isButtonEnabled: Boolean = true,
-    val remainingSeconds: Int = 600
-) {
+    /** 남은 시간(TIME_ATTACK 모드) */
+    val remainingSeconds: Int = 600,
+    /** 경과 시간(NO_TIME_ATTACK 모드) */
+    val elapsedSeconds: Int = 0
+) : BaseContract.ViewState {
     fun optionState(option: String): AnswerState = when {
         answerState == AnswerState.DEFAULT -> AnswerState.DEFAULT
         selectedOption == option && answerState == AnswerState.SELECTED -> AnswerState.SELECTED
@@ -29,9 +33,10 @@ data class QuizSolveUiState(
         else -> AnswerState.DEFAULT
     }
 
-    fun getTimeRemainText(remainingSeconds: Int): String {
-        val m = remainingSeconds / 60
-        val s = remainingSeconds % 60
+    fun getTimeText(): String {
+        val seconds = if (playMode == PlayMode.TIME_ATTACK) remainingSeconds else elapsedSeconds
+        val m = seconds / 60
+        val s = seconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
 }
