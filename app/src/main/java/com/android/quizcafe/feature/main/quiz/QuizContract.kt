@@ -17,9 +17,9 @@ data class QuizHistory(
 )
 
 // TODO: viewState, Intent, Effect 전부다 재설정 필요.
-data class QuizViewState(
+data class QuizUiState(
     val historyList: List<QuizHistory> = emptyList()
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class QuizIntent : BaseContract.ViewIntent {
     data class LoadHistory(val histories: List<QuizHistory>) : QuizIntent()

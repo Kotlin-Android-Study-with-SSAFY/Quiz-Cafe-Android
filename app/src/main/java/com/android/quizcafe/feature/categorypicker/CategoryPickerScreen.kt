@@ -18,7 +18,7 @@ import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
 fun CategoryPickerScreen(
-    state: CategoryViewState = CategoryViewState(),
+    state: CategoryUiState = CategoryUiState(),
     sendIntent: (CategoryIntent) -> Unit
 ) {
     val categories = state.categories
@@ -45,6 +45,6 @@ fun CategoryPickerScreen(
 @Composable
 fun CategoryPickerScreenPreview() {
     QuizCafeTheme {
-        CategoryPickerScreen(state = CategoryViewState()) {}
+        CategoryPickerScreen(state = CategoryUiState()) {}
     }
 }
