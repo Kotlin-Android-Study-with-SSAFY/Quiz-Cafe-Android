@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -37,57 +39,77 @@ import com.android.quizcafe.feature.util.safeToRelativeTime
 @Composable
 fun QuizRecordContent(
     quizSolvingRecords: List<QuizSolvingRecord>,
-    onQuizRecordClick: (QuizSolvingRecord) -> Unit = {}
+    onQuizRecordClick: (QuizSolvingRecord) -> Unit = {},
+    onHeaderClick: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = stringResource(id = R.string.quiz_record),
-                style = MaterialTheme.typography.titleMedium
-            )
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = stringResource(id = R.string.navigate_forward)
-            )
-        }
+        QuizRecordHeader(onClick = onHeaderClick)
         if (quizSolvingRecords.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(288.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.quiz_record_empty),
-                    style = MaterialTheme.typography.displayLarge,
-                    color = MaterialTheme.colorScheme.outline
-                )
-            }
+            QuizRecordEmpty()
         } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(288.dp),
-                contentPadding = PaddingValues(vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(quizSolvingRecords) { record ->
-                    QuizRecordCard(
-                        quizSolvingRecord = record,
-                        onClick = { onQuizRecordClick(record) }
-                    )
-                }
-            }
+            QuizRecordList(quizSolvingRecords, onQuizRecordClick)
+        }
+    }
+}
+
+@Composable
+fun QuizRecordHeader(onClick: () -> Unit = {}) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+            .clickable(onClick = onClick),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(id = R.string.quiz_record),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.ArrowForward,
+            contentDescription = stringResource(id = R.string.navigate_forward)
+        )
+    }
+}
+
+@Composable
+fun QuizRecordEmpty() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(288.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.quiz_record_empty),
+            style = MaterialTheme.typography.displayLarge,
+            color = MaterialTheme.colorScheme.outline
+        )
+    }
+}
+
+@Composable
+fun QuizRecordList(
+    quizSolvingRecords: List<QuizSolvingRecord>,
+    onQuizRecordClick: (QuizSolvingRecord) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(max = 288.dp),
+        contentPadding = PaddingValues(vertical = 12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(quizSolvingRecords) { record ->
+            QuizRecordCard(
+                quizSolvingRecord = record,
+                onClick = { onQuizRecordClick(record) }
+            )
         }
     }
 }
@@ -110,7 +132,10 @@ fun QuizRecordCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Text(
-                text = quizSolvingRecord.completedAt.safeToRelativeTime(),
+                text = stringResource(
+                    id = R.string.quiz_solved_date,
+                    quizSolvingRecord.completedAt.safeToRelativeTime()
+                ),
                 style = MaterialTheme.typography.labelSmall,
                 color = outlineLight
             )
@@ -120,10 +145,15 @@ fun QuizRecordCard(
                 style = MaterialTheme.typography.titleSmall,
                 color = onSurfaceLight
             )
+            Spacer(modifier = Modifier.height(8.dp))
             Row(modifier = Modifier.fillMaxWidth()) {
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "결과 : ${quizSolvingRecord.correctCount}/${quizSolvingRecord.totalQuizzes}",
+                    text = stringResource(
+                        R.string.quiz_result,
+                        quizSolvingRecord.totalQuizzes,
+                        quizSolvingRecord.correctCount
+                    ),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -131,65 +161,77 @@ fun QuizRecordCard(
     }
 }
 
-@Preview(showBackground = true, name = "기록이 있는 경우")
+@Preview(showBackground = true, name = "QuizRecordContent - 기록 있음")
 @Composable
-fun PreviewQuizRecordContent() {
+fun Preview_QuizRecordContent() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizSolvingRecords = listOf(
-                QuizSolvingRecord(
-                    id = 1,
-                    userId = 1,
-                    quizBookId = 1,
-                    version = 1,
-                    level = "EASY",
-                    category = "운영체제",
-                    title = "성준이의 운영체제",
-                    description = "",
-                    totalQuizzes = 20,
-                    correctCount = 16,
-                    completedAt = "2025-06-09T05:14:05.986Z",
-                    quizzes = emptyList()
-                ),
-                QuizSolvingRecord(
-                    id = 2,
-                    userId = 2,
-                    quizBookId = 2,
-                    version = 1,
-                    level = "MEDIUM",
-                    category = "네트워크",
-                    title = "성민이의 네트워크",
-                    description = "",
-                    totalQuizzes = 20,
-                    correctCount = 18,
-                    completedAt = "2025-06-09T05:14:05.986Z",
-                    quizzes = emptyList()
-                ),
-                QuizSolvingRecord(
-                    id = 3,
-                    userId = 3,
-                    quizBookId = 3,
-                    version = 1,
-                    level = "HARD",
-                    category = "안드로이드",
-                    title = "재용이의 안드로이드",
-                    description = "",
-                    totalQuizzes = 20,
-                    correctCount = 19,
-                    completedAt = "2025-06-09T05:14:05.986Z",
-                    quizzes = emptyList()
-                )
+            quizSolvingRecords = sampleQuizSolvingRecords()
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "QuizRecordContent - 텅 비어 있음")
+@Composable
+fun Preview_QuizRecordContent_Empty() {
+    QuizCafeTheme {
+        QuizRecordContent(quizSolvingRecords = emptyList())
+    }
+}
+
+@Preview(showBackground = true, name = "QuizRecordHeader")
+@Composable
+fun Preview_QuizRecordHeader() {
+    QuizCafeTheme {
+        QuizRecordHeader()
+    }
+}
+
+@Preview(showBackground = true, name = "QuizRecordEmpty")
+@Composable
+fun Preview_QuizRecordEmpty() {
+    QuizCafeTheme {
+        QuizRecordEmpty()
+    }
+}
+
+@Preview(showBackground = true, name = "QuizRecordCard")
+@Composable
+fun Preview_QuizRecordCard() {
+    QuizCafeTheme {
+        QuizRecordCard(
+            quizSolvingRecord = QuizSolvingRecord(
+                id = 1,
+                userId = 1,
+                quizBookId = 1,
+                version = 1,
+                level = "EASY",
+                category = "운영체제",
+                title = "성준이의 운영체제",
+                description = "",
+                totalQuizzes = 20,
+                correctCount = 16,
+                completedAt = "2025-06-09T05:14:05.986Z",
+                quizzes = emptyList()
             )
         )
     }
 }
 
-@Preview(showBackground = true, name = "\"텅\" 상태")
-@Composable
-fun PreviewQuizRecordContentEmpty() {
-    QuizCafeTheme {
-        QuizRecordContent(
-            quizSolvingRecords = emptyList()
-        )
-    }
-}
+// 샘플 데이터 함수
+fun sampleQuizSolvingRecords() = listOf(
+    QuizSolvingRecord(
+        id = 1,
+        userId = 1,
+        quizBookId = 1,
+        version = 1,
+        level = "EASY",
+        category = "운영체제",
+        title = "성준이의 운영체제",
+        description = "",
+        totalQuizzes = 20,
+        correctCount = 16,
+        completedAt = "2025-06-09T05:14:05.986Z",
+        quizzes = emptyList()
+    )
+)

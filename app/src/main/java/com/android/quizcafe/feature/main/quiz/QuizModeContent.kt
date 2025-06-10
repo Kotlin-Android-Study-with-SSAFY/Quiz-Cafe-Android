@@ -126,7 +126,7 @@ fun RowScope.QuizModeCard(
             )
             Image(
                 painter = painterResource(iconResId),
-                contentDescription = "$title 이동",
+                contentDescription = stringResource(R.string.desc_navigate_to, title),
                 modifier = Modifier
                     .align(Alignment.End)
                     .size(48.dp)
