@@ -3,7 +3,6 @@ package com.android.quizcafe.core.data.repository
 import com.android.quizcafe.core.data.mapper.toDomain
 import com.android.quizcafe.core.data.mapper.toEntity
 import com.android.quizcafe.core.data.remote.datasource.QuizRemoteDataSource
-import com.android.quizcafe.core.database.dao.quizBook.QuizBookDao
 import com.android.quizcafe.core.database.dao.quiz.QuizDao
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.Quiz
@@ -37,7 +36,7 @@ class QuizRepositoryImpl @Inject constructor(
         quizRemoteDataSource.getQuizListByBookId(quizBookId.value)
             .onSuccess {response ->
                 response.data?.let { quizList ->
-                    quizDao.insertQuizList(
+                    quizDao.upsertQuizList(
                         quizList = quizList.map { it.toEntity() }
                     )
                     val updatedLocal = quizDao.getQuizListWithOptionsByBookId(quizBookId.value)

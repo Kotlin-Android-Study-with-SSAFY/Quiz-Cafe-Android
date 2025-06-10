@@ -10,26 +10,26 @@ import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
 import com.android.quizcafe.core.database.model.QuizBookEntity
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.database.converter.DurationConverter
-import com.android.quizcafe.core.database.converter.QuizBookGradeIdConverter
-import com.android.quizcafe.core.database.converter.QuizBookIdConverter
-import com.android.quizcafe.core.database.converter.QuizIdConverter
+import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
+import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
+import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 
 @Database(
     entities = [
         QuizEntity::class,
-        QuizBookEntity::class
+        QuizBookEntity::class,
+        QuizGradeEntity::class,
+        QuizBookGradeEntity::class,
+        McqOptionEntity::class
     ],
     version = 1
 )
 @TypeConverters(
-    DurationConverter::class,
-    QuizIdConverter::class,
-    QuizBookIdConverter::class,
-    QuizBookGradeIdConverter::class,
+    DurationConverter::class
 )
-internal abstract class QuizCafeDatabase : RoomDatabase(){
+abstract class QuizCafeDatabase : RoomDatabase(){
     abstract fun quizDao(): QuizDao
     abstract fun quizBookDao(): QuizBookDao
-    abstract fun quizGradingRecordDao(): QuizGradeDao
-    abstract fun quizBookGradingRecordDao(): QuizBookGradeDao
+    abstract fun quizGradeDao(): QuizGradeDao
+    abstract fun quizBookGradeDao(): QuizBookGradeDao
 }

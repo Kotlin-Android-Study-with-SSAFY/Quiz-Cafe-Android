@@ -27,11 +27,11 @@ internal object DaoModule {
     @Provides
     fun provideQuizGradingRecordDao(
         database: QuizCafeDatabase
-    ): QuizGradeDao = database.quizGradingRecordDao()
+    ): QuizGradeDao = database.quizGradeDao()
 
     @Provides
     fun provideQuizBookGradingRecordDao(
         database: QuizCafeDatabase
-    ): QuizBookGradeDao = database.quizBookGradingRecordDao()
+    ): QuizBookGradeDao = database.quizBookGradeDao()
 
 }

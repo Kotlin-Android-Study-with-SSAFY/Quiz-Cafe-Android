@@ -2,10 +2,15 @@ package com.android.quizcafe.core.database.dao.quizBook
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Upsert
 import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 @Dao
 interface QuizBookDao {
+
+    @Upsert
+    suspend fun upsertQuizBook(quizBook: QuizBookEntity): Long
 
     @Query("SELECT * FROM quiz_book WHERE id = :quizBookId")
     suspend fun getQuizBookById(quizBookId: Long): QuizBookEntity
