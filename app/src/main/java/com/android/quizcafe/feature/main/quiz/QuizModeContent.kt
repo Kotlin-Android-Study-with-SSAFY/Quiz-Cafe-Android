@@ -34,7 +34,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCardColorMultipleChoice
 import com.android.quizcafe.core.designsystem.theme.QuizCardColorShortAnswer
 
 @Composable
-fun QuizModeContent() {
+fun QuizModeContent(onClick: () -> Unit) {
     val modeItems = listOf(
         ModeItem(
             R.string.feature_title_ox_quiz,
@@ -78,6 +78,7 @@ fun QuizModeContent() {
                         title = stringResource(item.titleResId),
                         description = stringResource(item.descResId),
                         backgroundColor = item.backgroundColor,
+                        onClick = onClick,
                         iconResId = item.iconResId
                     )
                 }
@@ -138,6 +139,6 @@ fun RowScope.QuizModeCard(
 @Composable
 fun PreviewQuizModeContent() {
     QuizCafeTheme {
-        QuizModeContent()
+        QuizModeContent {}
     }
 }

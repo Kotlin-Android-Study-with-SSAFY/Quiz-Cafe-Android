@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 interface QuizSolvingRecordService {
 
-    @GET("/quiz-book-solving")
+    @GET("quiz-book-solving")
     suspend fun getQuizSolvingRecords(): NetworkResult<ApiResponse<List<QuizSolvingRecordResponseDto>>>
 }

@@ -29,10 +29,7 @@ class QuizViewModel @Inject constructor(
             is QuizIntent.FailFetchRecord -> {
                 emitEffect(QuizEffect.ShowErrorDialog(intent.errorMessage ?: "기록 불러오기 실패"))
             }
-            QuizIntent.ClickOxQuiz -> emitEffect(QuizEffect.NavigateToOxQuiz)
-            QuizIntent.ClickMultipleChoiceQuiz -> emitEffect(QuizEffect.NavigateToMultipleChoiceQuiz)
-            QuizIntent.ClickShortAnswerQuiz -> emitEffect(QuizEffect.NavigateToShortAnswerQuiz)
-            QuizIntent.ClickCreateQuiz -> emitEffect(QuizEffect.NavigateToCreateQuiz)
+            is QuizIntent.ClickQuizCard -> emitEffect(QuizEffect.NavigateToCategory(intent.quizType))
         }
     }
 
@@ -49,7 +46,7 @@ class QuizViewModel @Inject constructor(
                 isLoading = false,
                 errorMessage = intent.errorMessage
             )
-            else -> currentState
+            is QuizIntent.ClickQuizCard -> currentState
         }
     }
 }

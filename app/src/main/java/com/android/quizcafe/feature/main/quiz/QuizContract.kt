@@ -23,17 +23,11 @@ sealed class QuizIntent : BaseContract.ViewIntent {
     data class SuccessFetchRecord(val quizSolvingRecords: List<QuizSolvingRecord>) : QuizIntent()
     data class FailFetchRecord(val errorMessage: String? = null) : QuizIntent()
 
-    data object ClickOxQuiz : QuizIntent()
-    data object ClickMultipleChoiceQuiz : QuizIntent()
-    data object ClickShortAnswerQuiz : QuizIntent()
-    data object ClickCreateQuiz : QuizIntent()
+    data class ClickQuizCard(val quizType: String) : QuizIntent()
 }
 
 sealed class QuizEffect : BaseContract.ViewEffect {
     data class ShowErrorDialog(val message: String) : QuizEffect()
 
-    data object NavigateToOxQuiz : QuizEffect()
-    data object NavigateToMultipleChoiceQuiz : QuizEffect()
-    data object NavigateToShortAnswerQuiz : QuizEffect()
-    data object NavigateToCreateQuiz : QuizEffect()
+    data class NavigateToCategory(val quizType: String) : QuizEffect()
 }
