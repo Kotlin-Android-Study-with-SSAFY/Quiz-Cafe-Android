@@ -16,7 +16,7 @@ data class QuizBookDetail(
     val quizSummaries: List<QuizSummary> = emptyList(),
     val comments: List<Comment> = emptyList(),
     val createdAt: String = "",
-    val isSaved: Boolean = false
+    val isMarked: Boolean = false
 )
 
 data class QuizSummary(

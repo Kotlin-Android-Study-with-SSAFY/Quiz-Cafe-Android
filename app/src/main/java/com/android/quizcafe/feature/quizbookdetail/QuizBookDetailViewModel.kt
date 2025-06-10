@@ -51,11 +51,11 @@ class QuizBookDetailViewModel @Inject constructor(
             )
 
             QuizBookDetailIntent.SuccessMarkQuizBook -> {
-                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isSaved = true))
+                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isMarked = true))
             }
 
             QuizBookDetailIntent.SuccessUnmarkQuizBook -> {
-                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isSaved = false))
+                currentState.copy(isLoading = false, errorMessage = null, quizBookDetail = state.value.quizBookDetail.copy(isMarked = false))
             }
 
             is QuizBookDetailIntent.FailGetQuizBookDetail -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
@@ -110,7 +110,7 @@ class QuizBookDetailViewModel @Inject constructor(
         unmarkQuizBookUseCase(state.value.quizBookId).collect {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("quizBookDetail", "Unsave QuizBook Success")
+                    Log.d("quizBookDetail", "Unmark QuizBook Success")
                     sendIntent(QuizBookDetailIntent.SuccessUnmarkQuizBook)
                     sendIntent(QuizBookDetailIntent.LoadQuizBookDetail)
                 }

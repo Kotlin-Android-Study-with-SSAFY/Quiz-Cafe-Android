@@ -37,10 +37,14 @@ fun QuizHeader(
     level: String,
     creatorName: String,
     createdAt: String,
-    isSaved: Boolean,
-    onSaveClick: () -> Unit
+    isMarked: Boolean,
+    modifier: Modifier = Modifier,
+    onMarkClick: () -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -48,12 +52,12 @@ fun QuizHeader(
         ) {
             Text(title, style = MaterialTheme.typography.titleLarge)
             QuizCafeOutlinedButton(
-                onClick = onSaveClick,
+                onClick = onMarkClick,
                 contentPadding = PaddingValues(8.dp)
             ) {
                 IconText(
-                    text = if (isSaved) stringResource(R.string.saved) else stringResource(R.string.save),
-                    iconResId = if (isSaved) R.drawable.ic_check else R.drawable.ic_add,
+                    text = if (isMarked) stringResource(R.string.saved) else stringResource(R.string.save),
+                    iconResId = if (isMarked) R.drawable.ic_check else R.drawable.ic_add,
                     MaterialTheme.typography.labelMedium
                 )
             }
@@ -96,16 +100,22 @@ fun QuizHeader(
 }
 
 @Composable
-fun QuizDescription(description: String) {
-    Column {
+fun QuizDescription(
+    description: String,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.height(8.dp))
         Text(description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
 @Composable
-fun QuizSummaryList(quizSummaries: List<QuizSummary>) {
-    Column {
+fun QuizSummaryList(
+    quizSummaries: List<QuizSummary>,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         Text(stringResource(R.string.quiz_list), style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(modifier = Modifier.height(12.dp))
         quizSummaries.forEach { quizSummary ->
@@ -117,9 +127,13 @@ fun QuizSummaryList(quizSummaries: List<QuizSummary>) {
 
 @Composable
 private fun QuizSummary(
-    quizSummary: QuizSummary
+    quizSummary: QuizSummary,
+    modifier: Modifier = Modifier
 ) {
-    Row(verticalAlignment = Alignment.Top) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.Top
+    ) {
         Text("- ", style = MaterialTheme.typography.bodyMedium)
         Column {
             Text(quizSummary.quizContent, style = MaterialTheme.typography.bodyMedium)
@@ -130,10 +144,13 @@ private fun QuizSummary(
 }
 
 @Composable
-fun CommentContent(comments: List<Comment>, modifier: Modifier = Modifier) {
-    Column {
+fun CommentContent(
+    comments: List<Comment>,
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
         IconText("${stringResource(R.string.comment)} ${comments.size}", R.drawable.ic_comment)
-        Spacer(modifier = modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
         comments.forEach {
             Text(it.commentContent, style = MaterialTheme.typography.bodyMedium)
         }
@@ -141,8 +158,11 @@ fun CommentContent(comments: List<Comment>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun QuizSolveButton(onClick: () -> Unit) {
-    Column {
+fun QuizSolveButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Column(modifier = modifier) {
         QuizCafeButton(
             onClick = onClick,
             modifier = Modifier
@@ -173,8 +193,9 @@ fun QuizHeaderSavedPreview() {
             level = "어려움",
             creatorName = "개발자A",
             createdAt = "2일 전",
-            isSaved = true,
-            onSaveClick = {}
+            isMarked = true,
+            onMarkClick = {},
+            modifier = Modifier.padding(16.dp)
         )
     }
 }
@@ -192,8 +213,9 @@ fun QuizHeaderNotSavedPreview() {
             level = "어려움",
             creatorName = "프론트엔드 마스터",
             createdAt = "2일 전",
-            isSaved = false,
-            onSaveClick = {}
+            isMarked = false,
+            onMarkClick = {},
+            modifier = Modifier.padding(16.dp)
         )
     }
 }

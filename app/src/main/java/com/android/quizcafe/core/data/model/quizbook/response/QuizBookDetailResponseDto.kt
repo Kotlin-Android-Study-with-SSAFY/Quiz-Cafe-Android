@@ -2,6 +2,7 @@ package com.android.quizcafe.core.data.model.quizbook.response
 
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import toRelativeDate
 
@@ -19,7 +20,7 @@ data class QuizBookDetailResponseDto(
     val createdAt: String,
     val totalSaves: Int,
     val views: Int,
-    val isSaved: Boolean,
+    @SerialName("isSaved") val isMarked: Boolean,
     val ownerId: Long
 )
 
@@ -45,7 +46,7 @@ fun QuizBookDetailResponseDto.toDomain() = QuizBookDetail(
     quizSummaries = quizzes.map { it.toDomain() },
     comments = emptyList(),
     createdAt = createdAt.toRelativeDate(),
-    isSaved = isSaved
+    isMarked = isMarked
 )
 
 fun QuizSummaryDto.toDomain() = QuizSummary(

@@ -87,9 +87,9 @@ fun QuizBookDetailScreen(
                 level = quizBookDetail.level,
                 creatorName = quizBookDetail.ownerName,
                 createdAt = quizBookDetail.createdAt,
-                isSaved = quizBookDetail.isSaved
+                isMarked = quizBookDetail.isMarked
             ) {
-                if (quizBookDetail.isSaved) {
+                if (quizBookDetail.isMarked) {
                     sendIntent(QuizBookDetailIntent.ClickUnmarkQuizBook)
                 } else {
                     sendIntent(QuizBookDetailIntent.ClickMarkQuizBook)
