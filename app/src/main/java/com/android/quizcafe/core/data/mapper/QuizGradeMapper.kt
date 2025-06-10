@@ -8,7 +8,7 @@ import com.android.quizcafe.core.domain.model.value.QuizId
 fun QuizGradeEntity.toDomain() = QuizGrade(
     localId = localId,
     quizId = QuizId(quizId),
-    quizBookGradeLocalId = QuizBookGradeLocalId(quizBookGradingLocalId),
+    quizBookGradeLocalId = QuizBookGradeLocalId(quizBookGradeLocalId),
     userAnswer = userAnswer,
     isCorrect = isCorrect,
     completedAt = completedAt,
@@ -18,7 +18,7 @@ fun QuizGradeEntity.toDomain() = QuizGrade(
 fun QuizGrade.toEntity() = QuizGradeEntity(
     localId = localId,
     quizId = quizId.value,
-    quizBookGradingLocalId = quizBookGradeLocalId.value,
+    quizBookGradeLocalId = quizBookGradeLocalId.value,
     userAnswer = userAnswer,
     memo = memo,
     isCorrect = isCorrect,

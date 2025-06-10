@@ -2,25 +2,28 @@ package com.android.quizcafe.core.database.model.grading
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
+import com.android.quizcafe.core.domain.model.value.QuizId
 
 @Entity(
     foreignKeys = [
         ForeignKey(
             entity = QuizBookGradeEntity::class,
             parentColumns = ["localId"],
-            childColumns = ["quizBookGradingLocalId"],
+            childColumns = ["quizBookGradeLocalId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
-    // TODO : Index 설정
+    ],
+    indices = [Index(value = ["quizBookGradeLocalId"])]
 )
 data class QuizGradeEntity(
     @PrimaryKey(autoGenerate = true)
-    val localId : Long,
+    val localId : Long = 0,
     val serverId : Long? = null,
     val quizId : Long,
-    val quizBookGradingLocalId : Long,
+    val quizBookGradeLocalId : Long,
     val userAnswer : String,
     val memo : String?,
     val isCorrect : Boolean,
