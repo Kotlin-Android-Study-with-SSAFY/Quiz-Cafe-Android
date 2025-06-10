@@ -7,7 +7,7 @@ sealed interface QuizSolveRoute : NavRoute {
         override val route = "quizSolve"
     }
 
-    data object QuizSolve : MainRoute{
+    data object QuizSolve : MainRoute {
         override val route = "${Graph.route}/quizSolve"
     }
 

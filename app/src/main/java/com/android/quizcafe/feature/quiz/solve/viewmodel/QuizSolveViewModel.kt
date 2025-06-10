@@ -4,16 +4,12 @@ import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Delay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import javax.annotation.meta.When
 import javax.inject.Inject
 
 @HiltViewModel
-class QuizSolveViewModel @Inject constructor(
-
-) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
+class QuizSolveViewModel @Inject constructor() : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
     init {

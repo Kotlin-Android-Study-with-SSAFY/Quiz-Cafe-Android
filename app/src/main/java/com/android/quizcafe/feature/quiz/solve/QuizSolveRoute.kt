@@ -34,7 +34,6 @@ fun QuizSolveRoute(
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-
             }
         }
     }
