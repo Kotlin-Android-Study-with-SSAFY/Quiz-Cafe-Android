@@ -20,16 +20,15 @@ class QuizViewModel @Inject constructor(
                     when (resource) {
                         is Resource.Success -> sendIntent(QuizIntent.SuccessFetchRecord(resource.data))
                         is Resource.Failure -> sendIntent(QuizIntent.FailFetchRecord(resource.errorMessage))
-                        is Resource.Loading -> {}
+                        else -> Unit
                     }
                 }
             }
-            is QuizIntent.LoadingFetchRecord -> {}
-            is QuizIntent.SuccessFetchRecord -> {}
             is QuizIntent.FailFetchRecord -> {
                 emitEffect(QuizEffect.ShowErrorDialog(intent.errorMessage ?: "기록 불러오기 실패"))
             }
             is QuizIntent.ClickQuizCard -> emitEffect(QuizEffect.NavigateToCategory(intent.quizType))
+            else -> Unit
         }
     }
 
