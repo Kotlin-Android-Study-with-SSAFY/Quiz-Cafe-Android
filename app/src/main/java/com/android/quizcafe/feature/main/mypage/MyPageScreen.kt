@@ -26,13 +26,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 @Composable
 fun MyPageScreen(
-    // TODO : 추후 변경
     userName: String = "빵빠야",
     solvedCount: Int = 1205,
     myQuizSetCount: Int = 5,
+    quizSolvingRecord: Map<String, Int> = emptyMap(),
+    startDateStr: String = "",
 
     onClickStats: () -> Unit = {},
     onClickAlarm: () -> Unit = {},
@@ -44,6 +49,7 @@ fun MyPageScreen(
             .fillMaxSize()
             .padding(top = 32.dp, start = 18.dp, end = 18.dp)
     ) {
+        // 유저 이름(가운데 정렬)
         Text(
             text = userName,
             modifier = Modifier
@@ -54,6 +60,7 @@ fun MyPageScreen(
             fontWeight = FontWeight.Bold
         )
 
+        // 푼 문제/문제집 통계
         Row(
             Modifier
                 .fillMaxWidth()
@@ -68,6 +75,7 @@ fun MyPageScreen(
                     Text("$solvedCount", fontSize = 20.sp, color = Color.Black, fontWeight = FontWeight.Bold)
                 }
             }
+            // 세로 구분선
             Box(
                 Modifier
                     .width(1.dp)
@@ -87,16 +95,24 @@ fun MyPageScreen(
 
         Spacer(Modifier.height(16.dp))
         HorizontalDivider(
-            color = Color(0xFFE0E0E0),
-            modifier = Modifier.height(1.dp)
+            modifier = Modifier.height(1.dp),
+            color = Color(0xFFE0E0E0)
         )
 
+        // 메뉴 리스트
         Column(Modifier.fillMaxWidth()) {
             MyPageMenuItem("학습 통계", onClickStats)
             MyPageMenuItem("알림 설정", onClickAlarm)
             MyPageMenuItem("비밀번호 변경", onClickChangePw)
             MyPageMenuItem("내가 만든 문제집 보기", onClickMyQuizSet, isLast = true)
         }
+
+        Spacer(Modifier.height(28.dp))
+        QuizGrassGridByCalendar(
+            quizSolvingRecord = quizSolvingRecord,
+            joinDateStr = startDateStr
+        )
+
     }
 }
 
@@ -134,8 +150,8 @@ fun MyPageMenuItem(
         }
         if (!isLast) {
             HorizontalDivider(
-                color = Color(0xFFE0E0E0),
-                modifier = Modifier.height(1.dp)
+                modifier = Modifier.height(1.dp),
+                color = Color(0xFFE0E0E0)
             )
         }
     }
@@ -144,5 +160,22 @@ fun MyPageMenuItem(
 @Preview(showBackground = true, backgroundColor = 0xFFFDFDFD)
 @Composable
 fun PreviewMyPageScreen() {
-    MyPageScreen()
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    val today = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+    val start = addDaysToCalendar(today, -364) // 364일 전이 1년(365개)
+
+    val quizHistory = mutableMapOf<String, Int>()
+    for (i in 0..364) {
+        val cal = addDaysToCalendar(start, i)
+        quizHistory[sdf.format(cal.time)] = (0..4).random()
+    }
+
+    MyPageScreen(
+        userName = "빵빠야",
+        solvedCount = 1205,
+        myQuizSetCount = 5,
+        quizSolvingRecord = quizHistory,
+        startDateStr = sdf.format(start.time),
+    )
 }

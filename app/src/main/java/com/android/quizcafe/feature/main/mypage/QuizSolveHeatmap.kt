@@ -3,87 +3,137 @@ package com.android.quizcafe.feature.main.mypage
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 // TODO : Merge 되면 quizSolvingRecord Data Class 연결하기
 @Composable
 fun QuizGrassGridByCalendar(
     quizSolvingRecord: Map<String, Int>,
-    startDateStr: String,
+    joinDateStr: String,
     modifier: Modifier = Modifier
 ) {
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-    sdf.timeZone = TimeZone.getTimeZone("UTC")
-
-    val startDate = Calendar.getInstance().apply { time = sdf.parse(startDateStr)!! }
-    val endDate = Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+    // 날짜 계산
+    val sdf = remember { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply { timeZone = TimeZone.getTimeZone("UTC") } }
+    val joinDate = remember { Calendar.getInstance().apply { time = sdf.parse(joinDateStr)!! } }
+    val today = remember { Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
         set(Calendar.HOUR_OF_DAY, 0)
         set(Calendar.MINUTE, 0)
         set(Calendar.SECOND, 0)
         set(Calendar.MILLISECOND, 0)
-    }
-    val totalDays = getDaysBetween(startDate, endDate) + 1
+    }}
 
-    val days = mutableListOf<Calendar>()
-    for (i in 0 until totalDays) {
-        days.add(addDaysToCalendar(startDate, i))
-    }
-
-    val firstDayOfWeek = (days.first().get(Calendar.DAY_OF_WEEK) + 5) % 7
-    val weekCount = ((firstDayOfWeek + days.size + 6) / 7)
-    val grid = MutableList(weekCount) { MutableList<Calendar?>(7) { null } }
-    var week = 0
-    var dayOfWeek = firstDayOfWeek
-    for (i in days.indices) {
-        grid[week][dayOfWeek] = days[i]
-        dayOfWeek++
-        if (dayOfWeek == 7) {
-            dayOfWeek = 0
-            week++
+    // (1) 1년 미만이면 회원가입일부터 1년 뒤(365일)까지, 1년 이상이면 오늘 기준 1년 전부터 오늘까지
+    val (startDate, endDate) = remember(joinDate, today) {
+        val oneYear = 364
+        val dayDiff = getDaysBetween(joinDate, today)
+        if (dayDiff < oneYear) {
+            val end = (joinDate.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, oneYear) }
+            Pair(joinDate, end)
+        } else {
+            val start = (today.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -oneYear) }
+            Pair(start, today)
         }
     }
 
-    val monthLabels = MutableList(weekCount) { "" }
-    var prevMonth: Int? = null
-    for (w in grid.indices) {
-        val firstNotNull = grid[w].firstOrNull { it != null }
-        val month = firstNotNull?.get(Calendar.MONTH)
-        if (month != null && month != prevMonth) {
-            monthLabels[w] = getMonthShort(month)
-            prevMonth = month
+    // (2) 잔디(그래스) 데이터 구성 (365칸)
+    val totalDays = getDaysBetween(startDate, endDate) + 1
+    val days = remember(startDate, endDate) {
+        List(totalDays) { addDaysToCalendar(startDate, it) }
+    }
+
+    // (3) 요일, 주차 계산
+    val firstDayOfWeek = (days.first().get(Calendar.DAY_OF_WEEK) + 5) % 7 // 월~일: 0~6
+    val weekCount = ((firstDayOfWeek + days.size + 6) / 7)
+    val grid = remember(days) {
+        MutableList(weekCount) { MutableList<Calendar?>(7) { null } }.apply {
+            var week = 0
+            var dayOfWeek = firstDayOfWeek
+            for (i in days.indices) {
+                this[week][dayOfWeek] = days[i]
+                dayOfWeek++
+                if (dayOfWeek == 7) {
+                    dayOfWeek = 0
+                    week++
+                }
+            }
+        }
+    }
+
+    // (4) 월 라벨
+    val monthLabels = remember(grid) {
+        MutableList(weekCount) { "" }.apply {
+            var prevMonth: Int? = null
+            for (w in grid.indices) {
+                val firstNotNull = grid[w].firstOrNull { it != null }
+                val month = firstNotNull?.get(Calendar.MONTH)
+                if (month != null && month != prevMonth) {
+                    this[w] = getMonthShort(month)
+                    prevMonth = month
+                }
+            }
         }
     }
 
     val weekLabels = listOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
     val scrollState = rememberScrollState()
 
+    // (5) 연도 라벨(상단은 고정)
+    val yearLabel = remember(startDate, endDate) {
+        val startYear = startDate.get(Calendar.YEAR)
+        val endYear = endDate.get(Calendar.YEAR)
+        if (startYear == endYear) "$startYear" else "$startYear ~ $endYear"
+    }
+
     val (maxStreak, currentStreak) = remember(quizSolvingRecord, startDate, endDate) {
         calcStreakInfo(quizSolvingRecord, startDate, endDate)
     }
 
     Column(modifier) {
+        // --- 상단은 항상 고정 ---
+        Text(
+            text = "나의 기록",
+            fontSize = 20.sp,
+            color = Color(0xFF263238),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 2.dp).align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = yearLabel,
+            fontSize = 14.sp,
+            color = Color.Gray,
+            modifier = Modifier.padding(bottom = 10.dp).align(Alignment.CenterHorizontally)
+        )
+
+        // --- 잔디/그래스 구간은 좌우 스크롤 ---
         Row(
-            modifier = Modifier
-                .padding(start = 36.dp, bottom = 4.dp)
-                .horizontalScroll(scrollState)
+            modifier = Modifier.padding(start = 36.dp, bottom = 4.dp).horizontalScroll(scrollState)
         ) {
             monthLabels.forEach { label ->
                 Box(
-                    modifier = Modifier
-                        .width(22.dp)
-                        .height(14.dp),
+                    modifier = Modifier.width(22.dp).height(14.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -102,9 +152,7 @@ fun QuizGrassGridByCalendar(
             ) {
                 weekLabels.forEach { label ->
                     Box(
-                        Modifier
-                            .height(20.dp)
-                            .width(32.dp),
+                        Modifier.height(20.dp).width(32.dp),
                         contentAlignment = Alignment.CenterEnd
                     ) {
                         Text(
@@ -117,6 +165,7 @@ fun QuizGrassGridByCalendar(
                 }
             }
 
+            // 잔디 영역
             Row(
                 modifier = Modifier
                     .horizontalScroll(scrollState)
@@ -135,10 +184,11 @@ fun QuizGrassGridByCalendar(
                             val count = quizSolvingRecord[dateKey] ?: 0
                             val color = when {
                                 cal == null -> Color.Transparent
-                                count == 0 -> Color(0xFFEEEEEE)
-                                count == 1 -> Color(0xFFB5E48C)
-                                count in 2..3 -> Color(0xFF52B788)
-                                count >= 4 -> Color(0xFF1B4332)
+                                // ------ QuizCafe 전용 컬러 팔레트 ------
+                                count == 0 -> Color(0xFFF1F6FB)
+                                count == 1 -> Color(0xFFAFCAFF)   // primaryLight
+                                count in 2..3 -> Color(0xFF6E9DD8) // 메인 대비 진한톤
+                                count >= 4 -> Color(0xFF3853A4)    // 가장 진함
                                 else -> Color.LightGray
                             }
                             Box(
@@ -151,26 +201,25 @@ fun QuizGrassGridByCalendar(
                 }
             }
         }
-
-        Row(
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .align(Alignment.CenterHorizontally),
-            horizontalArrangement = Arrangement.spacedBy(24.dp)
+        // --- streak info ---
+        Column (
+            modifier = Modifier.padding(top = 12.dp)
+                .align(Alignment.CenterHorizontally)
         ) {
             Text(
                 text = "한 번도 쉬지 않고 푼 최장 기록: ${maxStreak}일",
-                color = Color(0xFF1B4332),
+                color = Color(0xFF3853A4),
                 fontSize = 13.sp,
             )
             Text(
                 text = "연속 풀이 챌린지 달성: ${currentStreak}일",
-                color = Color(0xFF388e3c),
+                color = Color(0xFF4278C9),
                 fontSize = 13.sp,
             )
         }
     }
 }
+
 
 fun calcStreakInfo(
     record: Map<String, Int>,
@@ -264,7 +313,7 @@ fun QuizGrassGridByCalendarPreview() {
     Box(modifier = Modifier.padding(16.dp)) {
         QuizGrassGridByCalendar(
             quizSolvingRecord = quizHistory,
-            startDateStr = sdf.format(start.time),
+            joinDateStr = sdf.format(start.time),
         )
     }
 }
