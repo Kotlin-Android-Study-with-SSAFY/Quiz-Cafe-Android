@@ -21,7 +21,7 @@ data class MainTab(
 )
 
 val mainTabs = listOf(
-    MainTab(MainRoute.Quiz.route, R.string.tab_title_quiz),
+    MainTab(MainRoute.Home.route, R.string.tab_title_quiz),
     MainTab(MainRoute.Workbook.route, R.string.tab_title_workbook),
     MainTab(MainRoute.MyPage.route, R.string.tab_title_mypage)
 )
@@ -31,7 +31,7 @@ val mainTabs = listOf(
 fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route ?: MainRoute.Quiz.route
+    val currentRoute = navBackStackEntry?.destination?.route ?: MainRoute.Home.route
 
     val selectedIndex = mainTabs.indexOfFirst { it.route == currentRoute }.coerceAtLeast(0)
 

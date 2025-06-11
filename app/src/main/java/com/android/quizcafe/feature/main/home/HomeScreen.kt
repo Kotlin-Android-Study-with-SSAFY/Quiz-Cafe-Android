@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.main.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -18,9 +18,9 @@ import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizSol
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
-fun QuizScreen(
-    state: QuizViewState,
-    sendIntent: (QuizIntent) -> Unit
+fun HomeScreen(
+    state: HomeViewState,
+    sendIntent: (HomeIntent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -34,17 +34,17 @@ fun QuizScreen(
         ) {
             item { QuizRecordContent(quizSolvingRecords = state.quizSolvingRecords) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            item { QuizModeContent { sendIntent(QuizIntent.ClickQuizCard("")) } }
+            item { QuizModeContent { sendIntent(HomeIntent.ClickHomeCard("")) } }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun QuizScreenPreview() {
+fun HomeScreenPreview() {
     QuizCafeTheme {
-        QuizScreen(
-            state = QuizViewState(
+        HomeScreen(
+            state = HomeViewState(
                 quizSolvingRecords = listOf(
                     QuizSolvingRecord(
                         id = 1,
