@@ -167,6 +167,7 @@ private fun GrassGridContent(
 ) {
     Row(
         modifier = Modifier
+            .fillMaxWidth()
             .horizontalScroll(scrollState)
             .border(1.dp, gridBorder, RoundedCornerShape(4.dp))
             .padding(8.dp),
@@ -193,6 +194,8 @@ private fun GrassGridContent(
                 }
             }
         }
+
+        Spacer(modifier = Modifier.weight(1f, fill = true)) // 오른쪽 남는 공간 채움
     }
 }
 
