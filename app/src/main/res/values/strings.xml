@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">QuizCafe</string>
-
     <string name="password_visibility_toggle">비밀번호 보기 토글</string>
     <string name="clear_text">입력 지우기</string>
     <string name="error_icon">에러 아이콘</string>
@@ -21,6 +20,10 @@
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="quizcafe_logo">QuizCafe Logo</string>
     <string name="resend">재전송</string>
+    <string name="quiz_topbar_title">문제 %1$d of %2$d</string>
+    <string name="quiz_time_format">%1$02d:%2$02d</string>
+    <string name="solve_btn_next_text">다음 문제</string>
+    <string name="pick_category">카테고리 선택</string>
     <string name="filter">필터</string>
     <string name="quiz_book_count_description">%1$s개의 문제집이 있어요</string>
     <string name="all">전체</string>
@@ -41,7 +44,7 @@
     <string name="level_very_hard">매우 어려움</string>
     <string name="list_category">카테고리 선택</string>
     <string name="go">Go</string>
-
+  
     <!-- Feature Card Titles -->
     <string name="feature_title_ox_quiz">O/X 퀴즈</string>
     <string name="feature_title_multiple_choice_quiz">객관식 퀴즈</string>
@@ -72,6 +75,9 @@
     <string name="quiz_result">%1$d문제 중 %2$d개 정답</string>
     <string name="quiz_solved_date">%1$s 풀이</string>
 
+    <string name="solve_btn_submit">제출하기</string>
+    <string name="solve_btn_explanation">해설보기</string>
+    <string name="explanation">해설</string>
     <string name="save">"저장 "</string>
     <string name="saved">"저장됨 "</string>
     <string name="average_score">평균 점수</string>

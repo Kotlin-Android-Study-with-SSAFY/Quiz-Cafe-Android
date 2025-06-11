@@ -19,15 +19,17 @@ import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.home.HomeRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
+import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
+import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 
 @Composable
 fun QuizCafeNavHost(
-    startDestination: String = AuthRoute.startDestination
+    startDestination: String = AuthRoute.Graph.route
 ) {
     val navController = rememberNavController()
     NavHost(
@@ -37,6 +39,7 @@ fun QuizCafeNavHost(
     ) {
         authGraph(navController)
         mainGraph(navController)
+        quizSolveGraph(navController)
     }
 }
 
@@ -145,6 +148,22 @@ fun MainBottomNavHost(
                 navigateToQuizBookPicker = {},
                 navigateToQuizSolve = {},
                 navigateToUserPage = {}
+            )
+        }
+    }
+}
+
+// 퀴즈 풀이
+fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
+    navigation(
+        startDestination = QuizSolveRoute.QuizSolve.route,
+        route = QuizSolveRoute.Graph.route
+    ) {
+        composable(QuizSolveRoute.QuizSolve.route) {
+            QuizSolveRoute(
+                navigateToBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }
