@@ -34,32 +34,36 @@ import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 
 @Composable
-fun QuizBookCardList(quizBooks: List<QuizBook>) {
+fun QuizBookCardList(
+    quizBooks: List<QuizBook>,
+    onQuizBookClick: (Long) -> Unit
+) {
     LazyColumn {
         items(quizBooks) { quizBook ->
-            QuizBookCard(quizBook = quizBook)
+            QuizBookCard(quizBook = quizBook, onQuizBookClick)
         }
     }
 }
 
 @Composable
-fun QuizBookCard(quizBook: QuizBook) {
+fun QuizBookCard(
+    quizBook: QuizBook,
+    onQuizBookClick: (Long) -> Unit
+) {
     Spacer(Modifier.height(8.dp))
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = onPrimaryLight),
-        onClick = {
-            // TODO: 문제집 상세 화면으로 이동
-        }
+        onClick = { onQuizBookClick(quizBook.id) }
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            QuizBookHeader(difficulty = quizBook.difficulty, totalQuizzes = quizBook.totalQuizzes)
+            QuizBookHeader(difficulty = quizBook.level, totalQuizzes = quizBook.totalQuizzes)
             Spacer(modifier = Modifier.height(8.dp))
             QuizBookTitle(title = quizBook.title)
             Spacer(modifier = Modifier.height(16.dp))
@@ -81,7 +85,7 @@ fun QuizBookListHeader(size: Int, onFilterClick: () -> Unit) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            stringResource(R.string.quiz_count_description, size),
+            stringResource(R.string.quiz_book_count_description, size),
             style = quizCafeTypography().labelLarge
         )
         QuizBookFilterButton(stringResource(R.string.filter)) { onFilterClick() }
@@ -178,11 +182,9 @@ fun QuizBookCardListPreview() {
     val sampleQuizBooks = listOf(
         QuizBook(
             id = 1L,
-            ownerId = 123456L,
             ownerName = "시스템 관리자",
             category = "운영체제",
             title = "모두의 운영체제",
-            difficulty = "???",
             totalQuizzes = 231,
             totalComments = 4,
             totalSaves = 32,
@@ -193,11 +195,9 @@ fun QuizBookCardListPreview() {
         ),
         QuizBook(
             id = 2L,
-            ownerId = 654321L,
             ownerName = "싸피_박성준",
             category = "운영체제",
             title = "성준이의 운영체제",
-            difficulty = "상",
             totalQuizzes = 30,
             totalComments = 4,
             totalSaves = 32,
@@ -209,9 +209,7 @@ fun QuizBookCardListPreview() {
     )
 
     QuizCafeTheme {
-        QuizBookCardList(
-            quizBooks = sampleQuizBooks
-        )
+        QuizBookCardList(quizBooks = sampleQuizBooks) {}
     }
 }
 
