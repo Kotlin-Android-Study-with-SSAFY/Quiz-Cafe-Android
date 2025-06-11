@@ -48,9 +48,10 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     stringResource(id = R.string.mypage_solved_problem),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     "$solvedCount",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
@@ -70,9 +71,10 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     stringResource(id = R.string.mypage_my_quiz_set),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = MaterialTheme.typography.bodySmall,
                     color = Color.Black
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     "$myQuizSetCount",
                     style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
