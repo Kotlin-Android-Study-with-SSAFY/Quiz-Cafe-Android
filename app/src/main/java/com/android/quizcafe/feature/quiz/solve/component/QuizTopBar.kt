@@ -65,14 +65,6 @@ fun TopBarActionSection(timeText: String?, onSideBarClick: () -> Unit) {
         if (timeText != null) {
             TimeRemainSection(timeText)
         }
-        Spacer(modifier = Modifier.width(12.dp))
-        Icon(
-            painter = painterResource(R.drawable.ic_sidebar),
-            contentDescription = "사이드 바",
-            modifier = Modifier.clickable {
-                onSideBarClick()
-            }
-        )
     }
 }
 
