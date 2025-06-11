@@ -38,12 +38,14 @@ fun QuizGrassGridByCalendar(
     // 날짜 계산
     val sdf = remember { SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply { timeZone = TimeZone.getTimeZone("UTC") } }
     val joinDate = remember { Calendar.getInstance().apply { time = sdf.parse(joinDateStr)!! } }
-    val today = remember { Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }}
+    val today = remember {
+        Calendar.getInstance(TimeZone.getTimeZone("UTC")).apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+    }
 
     // (1) 1년 미만이면 회원가입일부터 1년 뒤(365일)까지, 1년 이상이면 오늘 기준 1년 전부터 오늘까지
     val (startDate, endDate) = remember(joinDate, today) {
@@ -186,9 +188,9 @@ fun QuizGrassGridByCalendar(
                                 cal == null -> Color.Transparent
                                 // ------ QuizCafe 전용 컬러 팔레트 ------
                                 count == 0 -> Color(0xFFF1F6FB)
-                                count == 1 -> Color(0xFFAFCAFF)   // primaryLight
+                                count == 1 -> Color(0xFFAFCAFF) // primaryLight
                                 count in 2..3 -> Color(0xFF6E9DD8) // 메인 대비 진한톤
-                                count >= 4 -> Color(0xFF3853A4)    // 가장 진함
+                                count >= 4 -> Color(0xFF3853A4) // 가장 진함
                                 else -> Color.LightGray
                             }
                             Box(
@@ -202,7 +204,7 @@ fun QuizGrassGridByCalendar(
             }
         }
         // --- streak info ---
-        Column (
+        Column(
             modifier = Modifier.padding(top = 12.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
@@ -219,7 +221,6 @@ fun QuizGrassGridByCalendar(
         }
     }
 }
-
 
 fun calcStreakInfo(
     record: Map<String, Int>,
