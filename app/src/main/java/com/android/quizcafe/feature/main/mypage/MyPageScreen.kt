@@ -23,10 +23,7 @@ fun MyPageScreen(
     myQuizSetCount: Int = 5,
     quizSolvingRecord: Map<String, Int> = emptyMap(),
     startDateStr: String = "",
-    onClickStats: () -> Unit = {},
-    onClickAlarm: () -> Unit = {},
-    onClickChangePw: () -> Unit = {},
-    onClickMyQuizSet: () -> Unit = {}
+    onClick: (Int) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -40,15 +37,9 @@ fun MyPageScreen(
             modifier = Modifier.height(1.dp),
             color = Color(0xFFE0E0E0)
         )
-        MyPageMenu(
-            onClickStats,
-            onClickAlarm,
-            onClickChangePw,
-            onClickMyQuizSet
-        )
+        MyPageMenu(onClick)
         Spacer(Modifier.height(28.dp))
 
-        // TODO : ViewModel, UseCase 연결하면 제거하기
         val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         sdf.timeZone = TimeZone.getTimeZone("UTC")
         val today = Calendar.getInstance(TimeZone.getTimeZone("UTC"))

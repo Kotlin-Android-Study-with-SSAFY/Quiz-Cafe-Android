@@ -1,11 +1,13 @@
 package com.android.quizcafe.feature.main.mypage
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material3.*
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.android.quizcafe.R
 
 @Composable
@@ -27,9 +28,8 @@ fun MyPageUserName(userName: String) {
     ) {
         Text(
             text = userName,
-            fontSize = 28.sp,
-            color = Color.Black,
-            fontWeight = FontWeight.Bold
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+            color = Color.Black
         )
     }
 }
@@ -48,14 +48,13 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     stringResource(id = R.string.mypage_solved_problem),
-                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.Black
                 )
                 Text(
                     "$solvedCount",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = Color.Black
                 )
             }
         }
@@ -63,7 +62,6 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
             Modifier
                 .width(1.dp)
                 .fillMaxHeight()
-                .background(Color(0xFFE0E0E0))
         )
         Box(
             Modifier.weight(1f),
@@ -72,14 +70,13 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
                     stringResource(id = R.string.mypage_my_quiz_set),
-                    fontSize = 16.sp,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.Black
                 )
                 Text(
                     "$myQuizSetCount",
-                    fontSize = 20.sp,
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    color = Color.Black
                 )
             }
         }
@@ -88,16 +85,23 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
 
 @Composable
 fun MyPageMenu(
-    onClickStats: () -> Unit = {},
-    onClickAlarm: () -> Unit = {},
-    onClickChangePw: () -> Unit = {},
-    onClickMyQuizSet: () -> Unit = {}
+    onMenuClick: (Int) -> Unit = {}
 ) {
+    val menuItems = listOf(
+        R.string.mypage_menu_stats,
+        R.string.mypage_menu_alarm,
+        R.string.mypage_menu_change_pw,
+        R.string.mypage_menu_my_quiz_set
+    )
+
     Column(Modifier.fillMaxWidth()) {
-        MyPageMenuItem(stringResource(R.string.mypage_menu_stats), onClickStats)
-        MyPageMenuItem(stringResource(R.string.mypage_menu_alarm), onClickAlarm)
-        MyPageMenuItem(stringResource(R.string.mypage_menu_change_pw), onClickChangePw)
-        MyPageMenuItem(stringResource(R.string.mypage_menu_my_quiz_set), onClickMyQuizSet, isLast = true)
+        menuItems.forEachIndexed { idx, labelRes ->
+            MyPageMenuItem(
+                title = stringResource(labelRes),
+                onClick = { onMenuClick(idx) },
+                isLast = idx == menuItems.lastIndex
+            )
+        }
     }
 }
 
@@ -107,23 +111,19 @@ fun MyPageMenuItem(
     onClick: () -> Unit,
     isLast: Boolean = false
 ) {
-    Column(
-        Modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-            .padding(vertical = 8.dp)
-    ) {
+    Column(Modifier.fillMaxWidth()) {
         Row(
             Modifier
                 .fillMaxWidth()
+                .clickable { onClick() }
+                .padding(vertical = 8.dp)
                 .height(32.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = title,
-                fontSize = 17.sp,
-                color = Color.Black,
-                fontWeight = FontWeight.Normal
+                style = MaterialTheme.typography.bodyLarge,
+                color = Color.Black
             )
             Spacer(Modifier.weight(1f))
             Icon(
@@ -135,8 +135,7 @@ fun MyPageMenuItem(
         }
         if (!isLast) {
             HorizontalDivider(
-                modifier = Modifier.height(1.dp),
-                color = Color(0xFFE0E0E0)
+                modifier = Modifier.height(1.dp)
             )
         }
     }
@@ -158,10 +157,10 @@ fun PreviewMyPageUserName() {
 @Composable
 fun PreviewMyPageMenu() {
     Column {
-        MyPageMenuItem("학습 통계", onClick = {})
-        MyPageMenuItem("알림 설정", onClick = {})
-        MyPageMenuItem("비밀번호 변경", onClick = {})
-        MyPageMenuItem("내가 만든 문제집 보기", onClick = {}, isLast = true)
+        MyPageMenuItem(title = "학습 통계", onClick = {})
+        MyPageMenuItem(title = "알림 설정", onClick = {})
+        MyPageMenuItem(title = "비밀번호 변경", onClick = {})
+        MyPageMenuItem(title = "내가 만든 문제집 보기", onClick = {}, isLast = true)
     }
 }
 

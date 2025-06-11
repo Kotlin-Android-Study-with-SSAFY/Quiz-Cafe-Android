@@ -1,6 +1,10 @@
 package com.android.quizcafe.main.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -21,6 +25,7 @@ import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
 
+
 @Composable
 fun QuizCafeNavHost(
     startDestination: String = AuthRoute.startDestination
@@ -28,7 +33,8 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route
+        startDestination = MainRoute.Graph.route,
+        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -110,7 +116,7 @@ fun MainBottomNavHost(
             arguments = listOf(
                 navArgument("category") {
                     type = NavType.StringType
-                    nullable = true
+                    nullable = false
                     defaultValue = ""
                 }
             )
