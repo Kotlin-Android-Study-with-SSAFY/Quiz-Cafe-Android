@@ -47,9 +47,21 @@ fun MyPageScreen(
             onClickMyQuizSet
         )
         Spacer(Modifier.height(28.dp))
+
+        // TODO : ViewModel, UseCase 연결하면 제거하기
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+        val today = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        val start = addDaysToCalendar(today, -364)
+        val quizHistory = mutableMapOf<String, Int>()
+        for (i in 0..364) {
+            val cal = addDaysToCalendar(start, i)
+            quizHistory[sdf.format(cal.time)] = (0..4).random()
+        }
+
         QuizGrassGridByCalendar(
-            quizSolvingRecord = quizSolvingRecord,
-            joinDateStr = startDateStr
+            quizSolvingRecord = quizHistory,
+            joinDateStr = sdf.format(start.time)
         )
     }
 }
