@@ -43,22 +43,36 @@ fun UnderlinedTextField(
         AnswerState.CORRECT -> blue_200
         AnswerState.INCORRECT -> error_02
     }
+
+    val modifiable = when (answerState) {
+        AnswerState.DEFAULT,
+        AnswerState.SELECTED -> true
+
+        else -> false
+    }
     Column(modifier = modifier.fillMaxWidth()) {
-        BasicTextField(value = value, onValueChange = {
-            if (it.length <= maxCharCount) onValueChange(it)
-        }, singleLine = true, modifier = Modifier.fillMaxWidth(), decorationBox = { inner ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                inner()
-                // 우측 아이콘 (정답/오답일 때만)
-                if (answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
-                    AnswerResultIcon(answerState, bottomLineColor)
+        BasicTextField(
+            value = value,
+            onValueChange = {
+                if (it.length <= maxCharCount) onValueChange(it)
+            },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+            enabled = modifiable,
+            decorationBox = { inner ->
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    inner()
+                    // 우측 아이콘 (정답/오답일 때만)
+                    if (answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
+                        AnswerResultIcon(answerState, bottomLineColor)
+                    }
                 }
             }
-        })
+        )
         HorizontalDivider(
             color = bottomLineColor,
             thickness = 1.dp,

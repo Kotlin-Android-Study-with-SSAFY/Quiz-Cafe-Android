@@ -1,11 +1,13 @@
 package com.android.quizcafe.feature.quiz.solve.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilledTonalButton
@@ -62,15 +64,19 @@ fun MultipleChoiceOptionButton(
             .fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
-        Row {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start
+        ) {
             Text(
                 text = "$index.",
-                style = quizCafeTypography().bodyLarge,
+                style = quizCafeTypography().bodyMedium,
                 modifier = Modifier.padding(top = 3.dp)
             )
+            Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = content,
-                style = quizCafeTypography().bodyLarge
+                style = quizCafeTypography().bodyMedium
             )
         }
     }
@@ -94,7 +100,7 @@ fun MultipleChoiceOptionPreview() {
                 onClick = { /* 선택 처리 */ },
                 modifier = Modifier,
                 index = 1,
-                content = "코루틴은 자바에서만 사용할 수 있다. 코루틴은 자바에서만 사용할 수 있다. "
+                content = "코루틴은 자바에서만 사용할 수 있다. "
             )
             Spacer(modifier = Modifier.height(8.dp))
             MultipleChoiceOptionButton(

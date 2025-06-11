@@ -2,7 +2,6 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.ui.base.BaseViewModel
-import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -58,19 +57,19 @@ class QuizSolveViewModel @Inject constructor(
 
             is QuizSolveIntent.SelectOption -> {
                 currentState.copy(
-                    selectedOption = intent.option,
-                    answerState = AnswerState.SELECTED,
+                    selectedOptionId = intent.option,
                     isButtonEnabled = true
                 )
             }
 
             is QuizSolveIntent.UpdatedSubjectiveAnswer ->
                 currentState.copy(
-                    selectedOption = intent.answer,
-                    answerState = AnswerState.SELECTED,
+                    subjectiveAnswer = intent.answer,
                     isButtonEnabled = intent.answer.isNotBlank()
                 )
-
+            QuizSolveIntent.ShowExplanation -> {
+                currentState.copy(showExplanation = true)
+            }
             else -> currentState
         }
     }
