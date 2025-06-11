@@ -122,11 +122,10 @@ private fun MonthRow(monthLabels: List<String>, scrollState: ScrollState) {
                     maxLines = 1
                 )
             }
-            // 마지막 칸은 Spacer 생략
             if (idx != monthLabels.lastIndex) {
                 Spacer(modifier = Modifier.width(6.dp))
             } else {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
             }
         }
     }
