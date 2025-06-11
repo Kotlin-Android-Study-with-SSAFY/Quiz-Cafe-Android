@@ -40,36 +40,52 @@ class QuizSolveViewModel @Inject constructor(
     override fun reduce(currentState: QuizSolveUiState, intent: QuizSolveIntent): QuizSolveUiState {
         return when (intent) {
             QuizSolveIntent.TickTime -> {
-                when (currentState.playMode) {
-                    PlayMode.TIME_ATTACK -> {
-                        if (currentState.remainingSeconds > 0) {
-                            currentState.copy(remainingSeconds = currentState.remainingSeconds - 1)
-                        } else {
-                            currentState
-                        }
-                    }
+                val timer = currentState.timer
+                when (timer.playMode) {
+                    PlayMode.TIME_ATTACK ->
+                        currentState.copy(
+                            timer = timer.copy(
+                                remainingSeconds = (timer.remainingSeconds - 1).coerceAtLeast(0)
+                            )
+                        )
 
-                    PlayMode.NO_TIME_ATTACK -> {
-                        currentState.copy(elapsedSeconds = currentState.elapsedSeconds + 1)
-                    }
+                    PlayMode.NO_TIME_ATTACK ->
+                        currentState.copy(
+                            timer = timer.copy(
+                                elapsedSeconds = timer.elapsedSeconds + 1
+                            )
+                        )
                 }
             }
 
-            is QuizSolveIntent.SelectOption -> {
+            is QuizSolveIntent.SelectOption ->
                 currentState.copy(
-                    selectedOptionId = intent.option,
-                    isButtonEnabled = true
+                    mcq = currentState.mcq.copy(
+                        selectedId = intent.option
+                    ),
+                    common = currentState.common.copy(
+                        isButtonEnabled = true
+                    )
                 )
-            }
 
             is QuizSolveIntent.UpdatedSubjectiveAnswer ->
                 currentState.copy(
-                    subjectiveAnswer = intent.answer,
-                    isButtonEnabled = intent.answer.isNotBlank()
+                    subjective = currentState.subjective.copy(
+                        answer = intent.answer
+                    ),
+                    common = currentState.common.copy(
+                        isButtonEnabled = intent.answer.isNotBlank()
+                    )
                 )
-            QuizSolveIntent.ShowExplanation -> {
-                currentState.copy(showExplanation = true)
-            }
+
+            // ─── 4) 해설보기 토글 ─────────────────────────────────────────
+            QuizSolveIntent.ShowExplanation ->
+                currentState.copy(
+                    review = currentState.review.copy(
+                        showExplanation = true
+                    )
+                )
+
             else -> currentState
         }
     }

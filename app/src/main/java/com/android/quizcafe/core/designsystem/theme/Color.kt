@@ -46,7 +46,7 @@ val blue_300 = Color(0xFF4581F9)
 val green_200 = Color(0xFFBAEAB8)
 val error_01 = Color(0xFFFFC9C9)
 val error_02 = Color(0xFFEA3323)
-val isWrongButton = Color(0xFFF9DB78)
+val wrongButtonColor = Color(0xFFF9DB78)
 
 val primaryDark = Color(0xFFAFCAFF)
 val onPrimaryDark = Color(0xFF10305C)
