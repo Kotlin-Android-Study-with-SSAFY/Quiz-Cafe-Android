@@ -34,7 +34,12 @@ fun rememberTodayCalendar(timeZone: TimeZone): Calendar =
         set(Calendar.MILLISECOND, 0)
     }
 
-fun rememberJoinDate(joinDateStr: String, sdf: SimpleDateFormat, today: Calendar, kst: TimeZone): Calendar {
+fun rememberJoinDate(
+    joinDateStr: String,
+    sdf: SimpleDateFormat,
+    today: Calendar,
+    kst: TimeZone
+): Calendar {
     val cal = Calendar.getInstance(kst)
     val parsed = sdf.runCatching { parse(joinDateStr) }.getOrNull()
     return if (parsed != null) {

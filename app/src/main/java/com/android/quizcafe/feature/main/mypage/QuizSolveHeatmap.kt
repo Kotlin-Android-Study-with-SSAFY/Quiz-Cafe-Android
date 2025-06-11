@@ -125,7 +125,7 @@ private fun MonthRow(monthLabels: List<String>, scrollState: ScrollState) {
             // 마지막 칸은 Spacer 생략
             if (idx != monthLabels.lastIndex) {
                 Spacer(modifier = Modifier.width(6.dp))
-            } else{
+            } else {
                 Spacer(modifier = Modifier.width(8.dp))
             }
         }
@@ -183,7 +183,7 @@ private fun GrassGridContent(
                     if (cal == null || cal.before(joinDate) || cal.after(today)) {
                         Box(
                             modifier = Modifier
-                                .size(18.dp) // 잔디 cell 기준!
+                                .size(18.dp)
                                 .background(Color.Transparent)
                         )
                         continue
@@ -198,8 +198,6 @@ private fun GrassGridContent(
         Spacer(modifier = Modifier.weight(1f, fill = true)) // 오른쪽 남는 공간 채움
     }
 }
-
-
 
 @Composable
 private fun GrassCell(count: Int) {
