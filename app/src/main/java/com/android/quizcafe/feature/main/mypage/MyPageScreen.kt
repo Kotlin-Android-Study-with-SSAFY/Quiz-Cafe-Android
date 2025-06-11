@@ -38,7 +38,6 @@ fun MyPageScreen(
     myQuizSetCount: Int = 5,
     quizSolvingRecord: Map<String, Int> = emptyMap(),
     startDateStr: String = "",
-
     onClickStats: () -> Unit = {},
     onClickAlarm: () -> Unit = {},
     onClickChangePw: () -> Unit = {},
@@ -112,7 +111,6 @@ fun MyPageScreen(
             quizSolvingRecord = quizSolvingRecord,
             joinDateStr = startDateStr
         )
-
     }
 }
 
