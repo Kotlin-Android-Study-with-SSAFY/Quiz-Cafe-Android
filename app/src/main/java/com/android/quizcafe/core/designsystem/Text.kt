@@ -11,7 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
 fun IconText(
@@ -22,6 +25,14 @@ fun IconText(
     Row(verticalAlignment = Alignment.CenterVertically) {
         Image(painter = painterResource(id = iconResId), contentDescription = null)
         Spacer(modifier = Modifier.width(4.dp))
-        Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(text, style = style, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun IconTextPreview() {
+    QuizCafeTheme {
+        IconText("아이콘 텍스트", R.drawable.ic_filter)
     }
 }

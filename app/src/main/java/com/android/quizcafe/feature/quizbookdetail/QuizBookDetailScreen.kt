@@ -29,7 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.designsystem.theme.selectedColor
+import com.android.quizcafe.core.designsystem.theme.checkedColor
+import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quizbook.response.Comment
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
@@ -58,7 +59,7 @@ fun QuizBookDetailScreen(
                     Icon(
                         painter = painterResource(if (isChecked) R.drawable.ic_check_circle_fill else R.drawable.ic_check_circle_unfill),
                         contentDescription = null,
-                        tint = if (isChecked) selectedColor else MaterialTheme.colorScheme.onSurface,
+                        tint = if (isChecked) checkedColor else MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(Modifier.width(4.dp))
                     Text("즉시 채점 모드")
@@ -87,12 +88,12 @@ fun QuizBookDetailScreen(
                 level = quizBookDetail.level,
                 creatorName = quizBookDetail.ownerName,
                 createdAt = quizBookDetail.createdAt,
-                isSaved = quizBookDetail.isSaved
+                isMarked = quizBookDetail.isMarked
             ) {
-                if (quizBookDetail.isSaved) {
-                    sendIntent(QuizBookDetailIntent.ClickUnsaveQuizBook)
+                if (quizBookDetail.isMarked) {
+                    sendIntent(QuizBookDetailIntent.ClickUnmarkQuizBook)
                 } else {
-                    sendIntent(QuizBookDetailIntent.ClickSaveQuizBook)
+                    sendIntent(QuizBookDetailIntent.ClickMarkQuizBook)
                 }
             }
             HorizontalDivider(modifier = Modifier.fillMaxWidth())
@@ -125,7 +126,7 @@ fun QuizBookDetailScreenPreview() {
                         QuizSummary(
                             quizId = 0,
                             quizContent = "!23123",
-                            quizType = "객관식"
+                            quizType = QuizType.MCQ
                         )
                     ),
                     comments = listOf(

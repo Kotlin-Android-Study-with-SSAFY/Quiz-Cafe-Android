@@ -5,9 +5,9 @@ import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UnsaveQuizBookUseCase @Inject constructor(
+class UnmarkQuizBookUseCase @Inject constructor(
     private val quizBookRepository: QuizBookRepository
 ) {
     operator fun invoke(quizBookId: Long): Flow<Resource<Unit>> =
-        quizBookRepository.unsaveQuizBook(quizBookId)
+        quizBookRepository.unmarkQuizBook(quizBookId)
 }

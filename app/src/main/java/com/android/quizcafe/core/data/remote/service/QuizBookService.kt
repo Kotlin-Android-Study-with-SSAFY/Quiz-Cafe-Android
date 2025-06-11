@@ -38,12 +38,12 @@ interface QuizBookService {
     ): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>
 
     @POST("quiz-book-bookmark")
-    suspend fun saveQuizBook(
+    suspend fun markQuizBook(
         @Query("quizBookId") quizBookId: Long
     ): NetworkResult<Unit>
 
     @DELETE("quiz-book-bookmark")
-    suspend fun unsaveQuizBook(
+    suspend fun unmarkQuizBook(
         @Query("quizBookId") quizBookId: Long
     ): NetworkResult<Unit>
 }
