@@ -90,3 +90,10 @@ val QuizCardColorShortAnswer = Color(0xFFFFC9C9)
 val QuizCardColorMultipleChoice = Color(0xFFFDFFB6)
 
 val checkedColor = Color(0xFF42CA07)
+
+val grass1 = Color(0xFFAFCAFF)
+val grass2 = Color(0xFF6E9DD8)
+val grass3 = Color(0xFF3853A4)
+val gridBorder = Color(0xFFE0E0E0)
+val weekLabelColor = Color(0xFF90A4AE)
+val bgColor = Color(0xFFF6F6F6)

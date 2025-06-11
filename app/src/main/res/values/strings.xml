@@ -94,4 +94,15 @@
     <string name="mypage_menu_change_pw">비밀번호 변경</string>
     <string name="mypage_menu_my_quiz_set">내가 만든 문제집 보기</string>
 
+    <string name="mypage_record_title">나의 기록</string>
+    <string name="mypage_record_max_streak">한 번도 쉬지 않고 푼 최장 기록: %1$d일</string>
+    <string name="mypage_record_current_streak">연속 풀이 챌린지 달성: %1$d일</string>
+    <string name="week_mon">mon</string>
+    <string name="week_tue">tue</string>
+    <string name="week_wed">wed</string>
+    <string name="week_thu">the</string>
+    <string name="week_fri">fri</string>
+    <string name="week_sat">sat</string>
+    <string name="week_sun">sun</string>
+
 </resources>
