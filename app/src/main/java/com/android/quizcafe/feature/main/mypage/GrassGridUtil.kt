@@ -9,12 +9,6 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
-fun addDaysToCalendar(calendar: Calendar, days: Int): Calendar {
-    val cal = calendar.clone() as Calendar
-    cal.add(Calendar.DAY_OF_YEAR, days)
-    return cal
-}
-
 fun getGrassColor(count: Int): Color = when {
     count == 0 -> Color.White
     count == 1 -> grass1

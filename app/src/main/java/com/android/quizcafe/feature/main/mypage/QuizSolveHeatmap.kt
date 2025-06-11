@@ -103,11 +103,10 @@ private fun MonthRow(monthLabels: List<String>, scrollState: ScrollState) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 6.dp)
+            .padding(start = 44.dp, bottom = 6.dp)
             .horizontalScroll(scrollState),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Box(modifier = Modifier.width(44.dp))
         monthLabels.forEachIndexed { idx, label ->
             Box(
                 modifier = Modifier
@@ -218,6 +217,7 @@ private fun StreakSummary(maxStreak: Int, currentStreak: Int) {
             style = MaterialTheme.typography.bodySmall,
             color = grass3,
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = stringResource(R.string.mypage_record_current_streak, currentStreak),
             style = MaterialTheme.typography.bodySmall,
