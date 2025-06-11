@@ -37,7 +37,7 @@ import com.android.quizcafe.core.domain.model.quizbook.response.QuizSummary
 
 @Composable
 fun QuizBookDetailScreen(
-    state: QuizBookDetailViewState = QuizBookDetailViewState(),
+    state: QuizBookDetailUiState = QuizBookDetailUiState(),
     sendIntent: (QuizBookDetailIntent) -> Unit
 ) {
     val quizBookDetail = state.quizBookDetail
@@ -111,7 +111,7 @@ fun QuizBookDetailScreen(
 fun QuizBookDetailScreenPreview() {
     QuizCafeTheme {
         QuizBookDetailScreen(
-            QuizBookDetailViewState(
+            QuizBookDetailUiState(
                 quizBookDetail = QuizBookDetail(
                     id = 1,
                     ownerId = 1,

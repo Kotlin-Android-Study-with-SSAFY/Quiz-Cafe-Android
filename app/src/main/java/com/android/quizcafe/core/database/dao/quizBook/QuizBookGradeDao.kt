@@ -16,6 +16,6 @@ interface QuizBookGradeDao{
     // QuizBookGradeEntity LocalId로 QuizGradingResult 리스트 반환
     @Transaction
     @Query("SELECT * FROM QuizBookGradeEntity WHERE localId = :localId")
-    suspend fun getQuizBookGrade(localId : Long) : QuizBookGradeWithQuizGradesRelation
+    suspend fun getQuizBookGrade(localId : Long) : QuizBookGradeWithQuizGradesRelation?
 
 }

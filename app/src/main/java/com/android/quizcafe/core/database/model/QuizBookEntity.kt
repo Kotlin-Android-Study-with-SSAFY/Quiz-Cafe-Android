@@ -12,5 +12,9 @@ data class QuizBookEntity (
     val version: Long,
     val category: String,
     val title: String,
-    val description: String
+    val description: String,
+    val level: String,
+    val createdBy: String,
+    val createdAt: String,
+    val totalQuizzes: Int
 )

@@ -7,7 +7,7 @@ import com.android.quizcafe.core.domain.usecase.quizbook.GetCategoryListUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import com.android.quizcafe.feature.categorylist.CategoryEffect
 import com.android.quizcafe.feature.categorylist.CategoryIntent
-import com.android.quizcafe.feature.categorylist.CategoryViewState
+import com.android.quizcafe.feature.categorylist.CategoryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
