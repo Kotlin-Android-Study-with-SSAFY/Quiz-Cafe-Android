@@ -86,4 +86,12 @@
     <string name="quiz_list">문제 목록</string>
     <string name="solve_now">바로 문제 풀기</string>
 
+    <!-- MyPage -->
+    <string name="mypage_solved_problem">푼 문제</string>
+    <string name="mypage_my_quiz_set">문제집</string>
+    <string name="mypage_menu_stats">학습 통계</string>
+    <string name="mypage_menu_alarm">알림 설정</string>
+    <string name="mypage_menu_change_pw">비밀번호 변경</string>
+    <string name="mypage_menu_my_quiz_set">내가 만든 문제집 보기</string>
+
 </resources>
