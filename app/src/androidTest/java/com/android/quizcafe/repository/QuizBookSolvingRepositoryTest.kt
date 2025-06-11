@@ -121,7 +121,10 @@ class QuizBookSolvingRepositoryTest {
 
         // Then - 로컬 데이터베이스에서 실제 저장된 데이터 조회 및 비교
         val savedQuizBookGrade = database.quizBookGradeDao().getQuizBookGrade(quizBookGradeLocalId.value)
-        val savedQuizGrades = savedQuizBookGrade.quizGradeEntities
+        if (savedQuizBookGrade == null) {
+            fail("Saved QuizBookGrade should not be null")
+        }
+        val savedQuizGrades = savedQuizBookGrade!!.quizGradeEntities
 
         // 저장된 퀴즈 답안이 1개인지 확인
         assertEquals(1, savedQuizGrades.size)
@@ -249,13 +252,17 @@ class QuizBookSolvingRepositoryTest {
     }
 
     private suspend fun setupTestData(quizBookId: QuizBookId) {
-        // QuizBook 데이터 삽입
+        // QuizBook 데이터 삽입 - 새로운 필드 포함
         val quizBookEntity = QuizBookEntity(
             id = quizBookId.value,
-            title = "테스트 퀴즈북",
-            category = "TEST",
             version = 1L,
-            description = "테스트 퀴즈북입니다."
+            category = "TEST",
+            title = "테스트 퀴즈북",
+            description = "테스트 퀴즈북입니다.",
+            level = "BEGINNER", // 새로운 필드
+            createdBy = "testuser", // 새로운 필드
+            createdAt = "2023-01-01T00:00:00Z", // 새로운 필드
+            totalQuizzes = 3 // 새로운 필드
         )
         database.quizBookDao().upsertQuizBook(quizBookEntity)
 
