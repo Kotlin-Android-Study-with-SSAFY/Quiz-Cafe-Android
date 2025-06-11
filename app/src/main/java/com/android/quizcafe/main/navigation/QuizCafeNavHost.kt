@@ -1,6 +1,10 @@
 package com.android.quizcafe.main.navigation
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -16,6 +20,7 @@ import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
+import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
@@ -29,7 +34,8 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = QuizSolveRoute.Graph.route
+        startDestination = AuthRoute.Graph.route,
+        modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
         mainGraph(navController)
@@ -112,7 +118,7 @@ fun MainBottomNavHost(
             arguments = listOf(
                 navArgument("category") {
                     type = NavType.StringType
-                    nullable = true
+                    nullable = false
                     defaultValue = ""
                 }
             )
@@ -121,12 +127,28 @@ fun MainBottomNavHost(
 
             QuizBookListRoute(
                 category = category,
-                navigateToQuizBookDetail = { navController.navigateSingleTopTo(MainRoute.QuizBookDetail.route) },
+                navigateToQuizBookDetail = { quizBookId -> navController.navigateSingleTopTo("${MainRoute.QuizBookDetail.route}/$quizBookId") },
                 navigateToCategory = {},
             )
         }
-        composable(MainRoute.QuizBookDetail.route) {
-            // TODO: QuizBookDetail 화면 연결
+        composable(
+            route = "${MainRoute.QuizBookDetail.route}/{quizBookId}",
+            arguments = listOf(
+                navArgument("quizBookId") {
+                    type = NavType.LongType
+                    nullable = false
+                    defaultValue = 0L
+                }
+            )
+        ) { backStackEntry ->
+            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
+
+            QuizBookDetailRoute(
+                quizBookId = quizBookId,
+                navigateToQuizBookPicker = {},
+                navigateToQuizSolve = {},
+                navigateToUserPage = {}
+            )
         }
     }
 }

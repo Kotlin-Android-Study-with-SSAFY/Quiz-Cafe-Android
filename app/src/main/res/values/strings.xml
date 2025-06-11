@@ -25,12 +25,12 @@
     <string name="solve_btn_next_text">다음 문제</string>
     <string name="pick_category">카테고리 선택</string>
     <string name="filter">필터</string>
-    <string name="quiz_count_description">%1$s개의 문제집이 있어요</string>
+    <string name="quiz_book_count_description">%1$s개의 문제집이 있어요</string>
     <string name="all">전체</string>
     <string name="question">문제</string>
     <string name="difficulty">난이도</string>
-    <string name="is_saved">isSaved</string>
-    <string name="comment">comment</string>
+    <string name="is_saved">isMarked</string>
+    <string name="comment">댓글</string>
     <string name="apply">적용</string>
     <string name="quiz_count">문제 수</string>
     <string name="level">난이도</string>
@@ -73,5 +73,12 @@
     <string name="solve_btn_submit">제출하기</string>
     <string name="solve_btn_explanation">해설보기</string>
     <string name="explanation">해설</string>
+    <string name="save">"저장 "</string>
+    <string name="saved">"저장됨 "</string>
+    <string name="average_score">평균 점수</string>
+    <string name="quiz_count_description">%1$s 문제</string>
+    <string name="quiz_book_description">문제집 설명</string>
+    <string name="quiz_list">문제 목록</string>
+    <string name="solve_now">바로 문제 풀기</string>
 
 </resources>

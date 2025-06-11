@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,20 +43,11 @@ import kotlin.math.roundToInt
 
 @Composable
 fun QuizBookFilterContent(
-    onApplyClick: () -> Unit,
+    filterState: FilterState,
+    onApplyClick: (FilterState) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val sortOptions = listOf(
-        stringResource(R.string.sort_latest),
-        stringResource(R.string.sort_saved),
-        stringResource(R.string.sort_random)
-    )
-    val levelOptions = listOf(
-        stringResource(R.string.all),
-        stringResource(R.string.level_easy),
-        stringResource(R.string.level_medium),
-        stringResource(R.string.level_hard)
-    )
+    var currentFilterState by remember { mutableStateOf(filterState) }
 
     Column(
         modifier = modifier
@@ -65,33 +55,61 @@ fun QuizBookFilterContent(
             .padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
-        SortOptionContent(sortOptions)
-        LevelOptionContent(levelOptions)
-        SetQuizCountContent()
+        SortOptionContent(
+            selected = currentFilterState.sortOption,
+            onOptionSelected = { currentFilterState = currentFilterState.copy(sortOption = it) }
+        )
+        LevelOptionContent(
+            selected = currentFilterState.level,
+            onOptionSelected = { currentFilterState = currentFilterState.copy(level = it) }
+        )
+        SetQuizCountContent(
+            selected = currentFilterState.quizCountRange,
+            onValueChanged = { currentFilterState = currentFilterState.copy(quizCountRange = it) }
+        )
 
-        QuizCafeButton(onClick = onApplyClick, modifier = Modifier.fillMaxWidth()) {
+        QuizCafeButton(
+            onClick = { onApplyClick(currentFilterState) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(stringResource(R.string.apply))
         }
     }
 }
 
 @Composable
-private fun SetQuizCountContent() {
-    val minCount by remember { mutableIntStateOf(5) }
-    val maxCount by remember { mutableIntStateOf(50) }
-    var sliderPosition by remember { mutableStateOf(minCount.toFloat()..maxCount.toFloat()) }
+private fun SetQuizCountContent(
+    selected: IntRange = 1..50,
+    onValueChanged: (IntRange) -> Unit = {}
+) {
+    var sliderPosition by remember { mutableStateOf(selected.first.toFloat()..selected.last.toFloat()) }
+
+    val max = 50
+    val min = 1
 
     Column {
         Text(stringResource(R.string.quiz_count), style = MaterialTheme.typography.titleMedium)
         RangeSlider(
             value = sliderPosition,
-            onValueChange = { range -> sliderPosition = range },
-            valueRange = minCount.toFloat()..maxCount.toFloat(),
-            steps = maxCount - minCount - 1,
-            colors = SliderDefaults.colors(thumbColor = tertiaryLight, activeTrackColor = tertiaryLight, activeTickColor = Color.Transparent, inactiveTickColor = Color.Transparent)
+            onValueChange = { range ->
+                sliderPosition = range
+                onValueChanged(range.start.toInt()..range.endInclusive.toInt())
+            },
+            valueRange = min.toFloat()..max.toFloat(),
+            steps = max - min - 1,
+            colors = SliderDefaults.colors(
+                thumbColor = tertiaryLight,
+                activeTrackColor = tertiaryLight,
+                activeTickColor = Color.Transparent,
+                inactiveTickColor = Color.Transparent
+            )
         )
         Text(
-            text = "${sliderPosition.start.roundToInt()}~${sliderPosition.endInclusive.roundToInt()} ${stringResource(R.string.question)}",
+            text = "${sliderPosition.start.roundToInt()}~${sliderPosition.endInclusive.roundToInt()} ${
+                stringResource(
+                    R.string.question
+                )
+            }",
             modifier = Modifier.align(Alignment.End)
         )
     }
@@ -99,45 +117,46 @@ private fun SetQuizCountContent() {
 
 @Composable
 private fun LevelOptionContent(
-    levelOptions: List<String>
+    levelOptions: List<QuizLevel> = QuizLevel.entries,
+    selected: QuizLevel = QuizLevel.ALL,
+    onOptionSelected: (QuizLevel) -> Unit = {}
 ) {
-    val defaultSortOption = stringResource(R.string.all)
-    var selected by remember { mutableStateOf(defaultSortOption) }
-
     Column {
         Text(stringResource(R.string.level), style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(12.dp))
         OptionSelector(
             options = levelOptions,
             selectedOption = selected,
-            onOptionSelected = { selected = it }
+            onOptionSelected = { onOptionSelected(it) },
+            optionToText = { it.stringResId }
         )
     }
 }
 
 @Composable
 private fun SortOptionContent(
-    sortOptions: List<String>
+    sortOptions: List<SortOption> = SortOption.entries,
+    selected: SortOption = SortOption.LATEST,
+    onOptionSelected: (SortOption) -> Unit = {}
 ) {
-    val defaultSortOption = stringResource(R.string.sort_latest)
-    var selected by remember { mutableStateOf(defaultSortOption) }
-
     Column {
         Text(stringResource(R.string.sort), style = MaterialTheme.typography.titleMedium)
         Spacer(modifier = Modifier.height(12.dp))
         OptionSelector(
             options = sortOptions,
             selectedOption = selected,
-            onOptionSelected = { selected = it }
+            onOptionSelected = { onOptionSelected(it) },
+            optionToText = { it.stringResId }
         )
     }
 }
 
 @Composable
-fun OptionSelector(
-    options: List<String>,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit
+fun <T> OptionSelector(
+    options: List<T>,
+    selectedOption: T,
+    onOptionSelected: (T) -> Unit,
+    optionToText: (T) -> Int
 ) {
     Surface(
         shape = RoundedCornerShape(16.dp),
@@ -153,14 +172,14 @@ fun OptionSelector(
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(12.dp))
-                        .background(if (isSelected) tertiaryLight else Color.Transparent)
+                        .background(if (isSelected) tertiaryLight else Color.Transparent) // 예시 색상
                         .clickable {
                             onOptionSelected(option)
                         }
                         .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
                     Text(
-                        text = option,
+                        text = stringResource(optionToText(option)),
                         color = if (isSelected) onPrimaryLight else scrimLight,
                         style = quizCafeTypography().labelSmall
                     )
@@ -184,7 +203,10 @@ fun OptionSelector(
 @Composable
 fun PreviewQuizBookFilterContent() {
     QuizCafeTheme {
-        QuizBookFilterContent(onApplyClick = {})
+        QuizBookFilterContent(
+            onApplyClick = {},
+            filterState = FilterState()
+        )
     }
 }
 
@@ -192,13 +214,7 @@ fun PreviewQuizBookFilterContent() {
 @Composable
 fun PreviewSortOptionContent() {
     QuizCafeTheme {
-        SortOptionContent(
-            sortOptions = listOf(
-                stringResource(R.string.sort_latest),
-                stringResource(R.string.sort_saved),
-                stringResource(R.string.sort_random)
-            )
-        )
+        SortOptionContent()
     }
 }
 
@@ -206,14 +222,7 @@ fun PreviewSortOptionContent() {
 @Composable
 fun PreviewLevelOptionContent() {
     QuizCafeTheme {
-        LevelOptionContent(
-            levelOptions = listOf(
-                stringResource(R.string.all),
-                stringResource(R.string.level_easy),
-                stringResource(R.string.level_medium),
-                stringResource(R.string.level_hard)
-            )
-        )
+        LevelOptionContent()
     }
 }
 

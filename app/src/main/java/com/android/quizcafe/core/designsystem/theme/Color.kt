@@ -88,3 +88,5 @@ val OxQuizCardColor = Color(0xFFB9EAD9)
 val CreateQuizCardColor = Color(0xFFD8C7FF)
 val QuizCardColorShortAnswer = Color(0xFFFFC9C9)
 val QuizCardColorMultipleChoice = Color(0xFFFDFFB6)
+
+val checkedColor = Color(0xFF42CA07)
