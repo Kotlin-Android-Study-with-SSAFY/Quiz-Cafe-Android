@@ -39,14 +39,13 @@ fun QuizCafeNavHost(
     ) {
         authGraph(navController)
         mainGraph(navController)
-        quizSolveGraph(navController)
     }
 }
 
 // 1. 로그인 및 회원가입
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
-        startDestination = AuthRoute.Login.route,
+        startDestination = AuthRoute.startDestination,
         route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {
@@ -73,16 +72,15 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         startDestination = MainRoute.Quiz.route,
         route = MainRoute.Graph.route
     ) {
-        composable(MainRoute.Quiz.route) {
-            MainScreen()
-        }
+        composable(MainRoute.Quiz.route) { MainScreen() }
+        quizSolveGraph(navController)
     }
 }
 
 @Composable
 fun MainBottomNavHost(
     navController: NavHostController,
-    startDestination: String = MainRoute.Quiz.route
+    startDestination: String = MainRoute.startDestination
 ) {
     NavHost(
         navController = navController,
@@ -156,7 +154,7 @@ fun MainBottomNavHost(
 // 퀴즈 풀이
 fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
     navigation(
-        startDestination = QuizSolveRoute.QuizSolve.route,
+        startDestination = QuizSolveRoute.startDestination,
         route = QuizSolveRoute.Graph.route
     ) {
         composable(QuizSolveRoute.QuizSolve.route) {

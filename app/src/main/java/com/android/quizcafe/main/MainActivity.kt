@@ -32,11 +32,11 @@ class MainActivity : ComponentActivity() {
 
                 LaunchedEffect(Unit) {
                     val accessToken = authManager.getToken()
-                    startDestination = if (accessToken != null) MainRoute.startDestination else AuthRoute.startDestination
+                    startDestination = if (accessToken != null) MainRoute.Graph.route else AuthRoute.Graph.route
                 }
 
                 when (startDestination) {
-                    MainRoute.startDestination, AuthRoute.startDestination -> {
+                    MainRoute.Graph.route, AuthRoute.Graph.route -> {
                         QuizCafeNavHost(startDestination = startDestination)
                     }
                     else -> Unit

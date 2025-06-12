@@ -14,7 +14,6 @@ sealed interface AuthRoute : NavRoute {
         override val route = "${Graph.route}/signup"
     }
     companion object {
-        // [수정] companion object의 시작점을 Login.route로 변경
-        val startDestination = Graph.route // "auth/login"
+        val startDestination = Login.route
     }
 }
