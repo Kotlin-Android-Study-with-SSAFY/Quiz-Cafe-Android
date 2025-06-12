@@ -65,23 +65,23 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(state: LoginViewState, intent: LoginIntent): LoginViewState {
+    override fun reduce(currentState: LoginViewState, intent: LoginIntent): LoginViewState {
         return when (intent) {
-            is LoginIntent.UpdatedEmail -> state.copy(email = intent.email, errorMessage = null)
+            is LoginIntent.UpdatedEmail -> currentState.copy(email = intent.email, errorMessage = null)
                 .recalculate()
 
-            is LoginIntent.UpdatedPassword -> state.copy(
+            is LoginIntent.UpdatedPassword -> currentState.copy(
                 password = intent.password,
                 errorMessage = null
             ).recalculate()
 
-            LoginIntent.ClickLogin -> state.copy(isLoading = true, errorMessage = null)
-            LoginIntent.ClickSignUp -> state.copy(isLoading = false)
+            LoginIntent.ClickLogin -> currentState.copy(isLoading = true, errorMessage = null)
+            LoginIntent.ClickSignUp -> currentState.copy(isLoading = false)
 
-            LoginIntent.SuccessLogin -> state.copy(isLoading = false)
+            LoginIntent.SuccessLogin -> currentState.copy(isLoading = false)
 
-            is LoginIntent.FailLogin -> state.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
-            is LoginIntent.GoogleLogin -> state
+            is LoginIntent.GoogleLogin -> currentState
+            is LoginIntent.FailLogin -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
         }
     }
 

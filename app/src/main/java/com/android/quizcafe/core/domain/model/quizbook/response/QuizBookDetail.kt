@@ -1,6 +1,35 @@
 package com.android.quizcafe.core.domain.model.quizbook.response
 
-// TODO: API Response에 맞게 수정
+import com.android.quizcafe.core.domain.model.QuizType
+
+// --- Data Classes ---
 data class QuizBookDetail(
-    val id: Long
+    val id: Long = 0,
+    val ownerId: Long = 0,
+    val ownerName: String = "",
+    val category: String = "",
+    val title: String = "",
+    val description: String = "",
+    val difficulty: String = "",
+    val averageScore: String = "",
+    val totalSaves: Int = 0,
+    val level: String = "",
+    val views: Int = 0,
+    val quizSummaries: List<QuizSummary> = emptyList(),
+    val comments: List<Comment> = emptyList(),
+    val createdAt: String = "",
+    val isMarked: Boolean = false
+)
+
+data class QuizSummary(
+    val quizId: Long,
+    val quizContent: String,
+    val quizType: QuizType
+)
+
+data class Comment(
+    val commentId: Long,
+    val userId: Long,
+    val userName: String,
+    val commentContent: String
 )

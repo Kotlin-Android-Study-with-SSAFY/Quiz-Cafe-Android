@@ -12,7 +12,7 @@ import com.android.quizcafe.R
 @Composable
 fun QuizBookListRoute(
     category: String,
-    navigateToQuizBookDetail: () -> Unit,
+    navigateToQuizBookDetail: (Long) -> Unit,
     navigateToCategory: () -> Unit,
     viewModel: QuizBookListViewModel = hiltViewModel()
 ) {
@@ -31,8 +31,8 @@ fun QuizBookListRoute(
                     navigateToCategory()
                 }
 
-                QuizBookListEffect.NavigateToQuizBookDetail -> {
-                    navigateToQuizBookDetail()
+                is QuizBookListEffect.NavigateToQuizBookDetail -> {
+                    navigateToQuizBookDetail(effect.quizBookId)
                 }
 
                 is QuizBookListEffect.ShowError -> {
