@@ -32,7 +32,8 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onSurfaceLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
-import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizBookSolving
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.feature.util.safeToRelativeTime
 
 @Composable
@@ -165,7 +166,7 @@ fun QuizRecordCard(
 fun Preview_QuizRecordContent() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizBookSolvings = sampleQuizSolvingRecords()
+            quizBookSolvings = sampleQuizSolvings()
         )
     }
 }
@@ -202,7 +203,7 @@ fun Preview_QuizRecordCard() {
             quizBookSolving = QuizBookSolving(
                 id = 1,
                 userId = 1,
-                quizBookId = 1,
+                quizBookId = QuizBookId(1),
                 version = 1,
                 level = "EASY",
                 category = "운영체제",
@@ -218,11 +219,11 @@ fun Preview_QuizRecordCard() {
 }
 
 // 샘플 데이터 함수
-fun sampleQuizSolvingRecords() = listOf(
+fun sampleQuizSolvings() = listOf(
     QuizBookSolving(
         id = 1,
         userId = 1,
-        quizBookId = 1,
+        quizBookId = QuizBookId(1),
         version = 1,
         level = "EASY",
         category = "운영체제",

@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.domain.model.quizsolvingrecord.response
+package com.android.quizcafe.core.domain.model.solving
 
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 

@@ -1,7 +1,7 @@
 package com.android.quizcafe.feature.main.home
 
 import androidx.compose.ui.graphics.Color
-import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizBookSolving
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.ui.base.BaseContract
 
 data class ModeItem(

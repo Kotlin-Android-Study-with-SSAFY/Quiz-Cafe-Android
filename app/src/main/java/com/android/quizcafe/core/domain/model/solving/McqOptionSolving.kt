@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.domain.model.quizsolvingrecord.response
+package com.android.quizcafe.core.domain.model.solving
 
 data class McqOptionSolving(
     val id: Long,

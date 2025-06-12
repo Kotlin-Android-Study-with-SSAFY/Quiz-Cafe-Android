@@ -1,7 +1,7 @@
 package com.android.quizcafe.feature.main.home
 
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.usecase.quizsolvingrecord.GetAllQuizBookSolvingUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GetAllQuizBookSolvingUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
