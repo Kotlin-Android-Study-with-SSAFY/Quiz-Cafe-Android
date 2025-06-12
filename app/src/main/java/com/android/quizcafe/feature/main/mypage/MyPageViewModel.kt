@@ -4,8 +4,6 @@ import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.usecase.user.GetUserInfoUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
-import com.android.quizcafe.feature.categorylist.CategoryIntent
-import com.android.quizcafe.feature.categorypicker.CategoryViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
@@ -33,10 +31,6 @@ class MyPageViewModel @Inject constructor(
             is MyPageIntent.LoadUserInfo -> currentState.copy(isLoading = true, errorMessage = null)
             is MyPageIntent.SuccessLoadUserInfo -> currentState.copy(
                 nickname = intent.data.nickname,
-                solvedCount = intent.solvedCount,
-                myQuizSetCount = intent.myQuizSetCount,
-                quizSolvingRecord = intent.quizSolvingRecord,
-                joinDateStr = intent.joinDateStr,
                 isLoading = false,
                 errorMessage = null
             )

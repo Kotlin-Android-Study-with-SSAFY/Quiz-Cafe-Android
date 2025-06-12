@@ -34,7 +34,7 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = MainRoute.Graph.route,
+        startDestination = AuthRoute.Graph.route,
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
