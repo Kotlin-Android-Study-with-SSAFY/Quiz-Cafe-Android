@@ -35,7 +35,8 @@ interface AuthService {
     ): NetworkResult<ApiResponse<LoginResponseDto>>
 
     @POST("/auth/google-login")
-    suspend fun googleLogin(@Body request: GoogleLoginRequestDto
+    suspend fun googleLogin(
+        @Body request: GoogleLoginRequestDto
     ): NetworkResult<ApiResponse<LoginResponseDto>>
 
     @POST("auth/password/reset")

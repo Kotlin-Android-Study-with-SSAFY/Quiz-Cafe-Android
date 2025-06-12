@@ -19,7 +19,6 @@ fun LoginScreen(
     state: LoginViewState,
     sendIntent: (LoginIntent) -> Unit,
     onClickGoogleLogin: () -> Unit
-
 ) {
     LazyColumn(
         modifier = Modifier
@@ -67,8 +66,10 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     QuizCafeTheme {
-        LoginScreen(LoginViewState(),
+        LoginScreen(
+            LoginViewState(),
             sendIntent = {},
-            onClickGoogleLogin = {})
+            onClickGoogleLogin = {}
+        )
     }
 }

@@ -1,10 +1,7 @@
 package com.android.quizcafe.feature.login
 
-import android.credentials.GetCredentialException
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,9 +14,6 @@ import androidx.credentials.GetCredentialResponse
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.R
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
@@ -33,7 +27,6 @@ fun LoginRoute(
     val context = LocalContext.current
     val credentialManager = remember { CredentialManager.create(context) }
     val state by viewModel.state.collectAsState()
-
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->

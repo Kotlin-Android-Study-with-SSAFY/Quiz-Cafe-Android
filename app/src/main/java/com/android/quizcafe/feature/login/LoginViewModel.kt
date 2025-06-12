@@ -43,7 +43,7 @@ class LoginViewModel @Inject constructor(
 
             is LoginIntent.GoogleLogin -> {
                 googleLoginUseCase(intent.idToken).collect { result ->
-                    when(result) {
+                    when (result) {
                         is Resource.Success -> {
                             Log.d("googleLogin", "111")
                             sendIntent(LoginIntent.SuccessLogin)
