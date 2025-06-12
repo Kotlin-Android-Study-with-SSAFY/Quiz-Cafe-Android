@@ -21,7 +21,7 @@ import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
 import com.android.quizcafe.core.network.mapper.noContentResponseToResourceFlow
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
-import com.android.quizcafe.core.data.mapper.toDomain
+import com.android.quizcafe.core.data.mapper.solving.toDomain
 
 class QuizBookRepositoryImpl @Inject constructor(
     private val quizDao: QuizDao,

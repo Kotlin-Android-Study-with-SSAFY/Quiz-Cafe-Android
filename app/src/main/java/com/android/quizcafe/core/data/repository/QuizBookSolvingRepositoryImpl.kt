@@ -1,13 +1,13 @@
 package com.android.quizcafe.core.data.repository
 
-import android.R.id.message
-import android.util.Log.e
 import com.android.quizcafe.core.common.network.HttpStatus
-import com.android.quizcafe.core.data.mapper.toDomain
-import com.android.quizcafe.core.data.mapper.toEntity
+import com.android.quizcafe.core.data.mapper.solving.toDomain
+import com.android.quizcafe.core.data.mapper.quiz.toEntity
+import com.android.quizcafe.core.data.mapper.quizbook.toDomain
 import com.android.quizcafe.core.data.model.solving.request.McqOptionSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizBookSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizSolvingRequestDto
+import com.android.quizcafe.core.data.model.solving.response.QuizBookSolvingResponseDto
 import com.android.quizcafe.core.data.remote.datasource.QuizBookSolvingRemoteDataSource
 import com.android.quizcafe.core.data.util.LocalErrorCode
 import com.android.quizcafe.core.database.dao.quiz.QuizDao
@@ -19,14 +19,17 @@ import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
+import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizBookSolving
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
+import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
+import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
 import com.android.quizcafe.core.network.model.onErrorOrException
 import com.android.quizcafe.core.network.model.onSuccess
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -61,16 +64,34 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     // 퀴즈북 풀이 기록 가져오기
     override fun getQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<QuizBookGrade>> = flow {
         emit(Resource.Loading)
-        val gradeRelation = quizBookGradeDao.getQuizBookGrade(id.value)
+        val quizBookGradeRelation = quizBookGradeDao.getQuizBookGrade(id.value)
 
-        if (gradeRelation == null) {
+        if (quizBookGradeRelation == null) {
             emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록을 찾을 수 없습니다", code = LocalErrorCode.ROOM_ERROR))
         } else {
-            val grade = gradeRelation.toDomain()
-            emit(Resource.Success(grade))
+            val quizBookGrade = quizBookGradeRelation.toDomain()
+            emit(Resource.Success(quizBookGrade))
         }
     }.catch {e ->
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
+    }
+
+    override fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>> = flow {
+        val quizBookSolvingId = id.value
+        if (quizBookSolvingId == null){
+            emit(Resource.Failure("quizBookGradeServerId가 null입니다", HttpStatus.UNKNOWN))
+            return@flow
+        }else {
+            apiResponseToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
+                remoteDataSource.getQuizBookSolving(quizBookSolvingId)
+            }
+        }
+    }
+
+    override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> = flow {
+        apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain){
+            remoteDataSource.getAllQuizBookSolvingByUser()
+        }
     }
 
     // 퀴즈 1개 풀이 기록 저장 및 수정
@@ -89,7 +110,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     }
 
     // 로컬에서 퀴즈북 풀이 기록 가져와 requestDto로 변환 후 퀴즈북 풀이 완료 API 요청하기
-    override fun solveQuizBook(localId: QuizBookGradeLocalId): Flow<Resource<Unit>> = flow {
+    override fun solveQuizBook(localId: QuizBookGradeLocalId): Flow<Resource<QuizBookGradeServerId>> = flow {
         emit(Resource.Loading)
         val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeData(localId)
         val quizBookEntity = getQuizBookEntity(quizBookGradeEntity.quizBookId)
@@ -102,8 +123,10 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
 
         remoteDataSource.solveQuizBook(requestDto)
             .onSuccess { response ->
-                response.data?.let {
-                    emit(Resource.Success(Unit))
+                response.data?.let {serverId ->
+                    quizBookGradeDao.deleteQuizBookGrade(localId.value)
+                    // TODO : 삭제 실패 했을 때 처리
+                    emit(Resource.Success(QuizBookGradeServerId(serverId)))
                 } ?: emit(Resource.Failure("서버 응답 데이터가 null입니다", HttpStatus.UNKNOWN))
             }
             .onErrorOrException { code, message ->

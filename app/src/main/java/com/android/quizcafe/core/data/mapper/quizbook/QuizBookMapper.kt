@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.data.mapper
+package com.android.quizcafe.core.data.mapper.quizbook
 
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.database.model.QuizBookEntity

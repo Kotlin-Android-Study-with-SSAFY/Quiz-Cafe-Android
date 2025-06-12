@@ -17,7 +17,7 @@ import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
-import com.android.quizcafe.feature.main.quiz.QuizRoute
+import com.android.quizcafe.feature.main.home.HomeRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.quiz.solvingResult.QuizBookSolvingResultRoute
@@ -71,10 +71,10 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     navigation(
-        startDestination = MainRoute.Quiz.route,
+        startDestination = MainRoute.Home.route,
         route = MainRoute.Graph.route
     ) {
-        composable(MainRoute.Quiz.route) {
+        composable(MainRoute.Home.route) {
             MainScreen()
         }
     }
@@ -83,14 +83,14 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
 @Composable
 fun MainBottomNavHost(
     navController: NavHostController,
-    startDestination: String = MainRoute.Quiz.route
+    startDestination: String = MainRoute.Home.route
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        composable(MainRoute.Quiz.route) {
-            QuizRoute(
+        composable(MainRoute.Home.route) {
+            HomeRoute(
                 navigateToCategory = { _ -> navController.navigateSingleTopTo(MainRoute.CategoryList.route) }
             )
         }

@@ -1,5 +1,6 @@
-package com.android.quizcafe.core.data.mapper
+package com.android.quizcafe.core.data.mapper.quizbook
 
+import com.android.quizcafe.core.data.mapper.quiz.toDomain
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeWithQuizGradesRelation
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
@@ -13,3 +14,4 @@ fun QuizBookGradeWithQuizGradesRelation.toDomain() = QuizBookGrade(
     quizGrades = quizGradeEntities.map { it.toDomain() },
     elapsedTime = quizBookGradeEntity.elapsedTime
 )
+

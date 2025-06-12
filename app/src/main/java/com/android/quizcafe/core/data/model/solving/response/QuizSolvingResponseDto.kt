@@ -1,10 +1,10 @@
 package com.android.quizcafe.core.data.model.solving.response
 
-data class QuizSolvingResponse(
+data class QuizSolvingResponseDto(
     val id: Long,
     val quizBookSolvingId: Long,
     val quizId: Long,
-    val questionType: String, // MCQ, SHORT_ANSWER, OX
+    val questionType: String,
     val content: String,
     val answer: String,
     val explanation: String?,
@@ -12,5 +12,5 @@ data class QuizSolvingResponse(
     val userAnswer: String?,
     val isCorrect: Boolean,
     val completedAt: String,
-    val mcqOptions: List<McqOptionSolvingResponse>?
+    val mcqOptions: List<McqOptionSolvingResponseDto>?
 )

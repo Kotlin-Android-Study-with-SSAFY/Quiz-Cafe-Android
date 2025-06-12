@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.data.mapper
+package com.android.quizcafe.core.data.mapper.quiz
 
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade

@@ -1,9 +1,11 @@
-package com.android.quizcafe.core.data.model.solving.response
+package com.android.quizcafe.core.domain.model.quizsolvingrecord.response
 
-data class QuizBookSolvingResponse(
+import com.android.quizcafe.core.domain.model.value.QuizBookId
+
+data class QuizBookSolving(
     val id: Long,
     val userId: Long,
-    val quizBookId: Long,
+    val quizBookId: QuizBookId,
     val version: Long,
     val level: String,
     val category: String,
@@ -12,5 +14,5 @@ data class QuizBookSolvingResponse(
     val totalQuizzes: Int,
     val correctCount: Int,
     val completedAt: String,
-    val quizzes: List<QuizSolvingResponse>
+    val quizSolvings: List<QuizSolving>
 )
