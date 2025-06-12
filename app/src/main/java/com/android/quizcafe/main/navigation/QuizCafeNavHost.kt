@@ -20,6 +20,7 @@ import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.quiz.QuizRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
+import com.android.quizcafe.feature.quiz.solvingResult.QuizBookSolvingResultRoute
 import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
@@ -163,6 +164,25 @@ fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
             QuizSolveRoute(
                 navigateToBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+
+        composable(
+            route = "${QuizSolveRoute.QuizSolvingResult.route}/{quizBookGradeLocalId}",
+            arguments = listOf(
+                navArgument("quizBookGradeLocalId") {
+                    type = NavType.LongType
+                    nullable = false
+                    defaultValue = 0L
+                }
+            )
+        ) { backStackEntry ->
+            val quizBookGradeLocalId = backStackEntry.arguments?.getLong("quizBookGradeLocalId") ?: 0L
+            QuizBookSolvingResultRoute(
+                quizBookGradeLocalId = quizBookGradeLocalId,
+                navigateToMain = {
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route, QuizSolveRoute.QuizSolve.route)
                 }
             )
         }

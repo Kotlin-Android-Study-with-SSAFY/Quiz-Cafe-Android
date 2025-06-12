@@ -38,7 +38,7 @@ data class QuizSolveUiState(
     val remainingSeconds: Int = 600,
     /** 경과 시간(NO_TIME_ATTACK 모드) */
     val elapsedSeconds: Int = 0
-) : BaseContract.ViewState {
+) : BaseContract.UiState {
     fun optionState(opt: QuizOption): AnswerState = when (phase) {
         AnswerPhase.ANSWERING -> when {
             opt.id == selectedOptionId -> AnswerState.SELECTED
