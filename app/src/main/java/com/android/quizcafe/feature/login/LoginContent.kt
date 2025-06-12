@@ -104,7 +104,7 @@ fun GoogleLoginButton(
     ) {
         Image(
             painter = painterResource(id = R.drawable.google_logo),
-            contentDescription = "Google 로그인",
+            contentDescription = stringResource(R.string.google_login_description),
             modifier = Modifier.fillMaxSize()
         )
     }

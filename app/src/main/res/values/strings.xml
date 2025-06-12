@@ -47,6 +47,7 @@
     <string name="level_very_hard">매우 어려움</string>
     <string name="list_category">카테고리 선택</string>
     <string name="go">Go</string>
+    <string name="google_login_description">Google 로그인</string>
   
     <!-- Feature Card Titles -->
     <string name="feature_title_ox_quiz">O/X 퀴즈</string>
