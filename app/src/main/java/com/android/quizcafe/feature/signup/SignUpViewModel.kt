@@ -34,58 +34,15 @@ class SignUpViewModel @Inject constructor(
     override suspend fun handleIntent(intent: SignUpIntent) {
         when (intent) {
             SignUpIntent.ClickSignUp -> {
-                signUpUseCase(
-                    SignUpRequest(
-                        email = state.value.email,
-                        password = state.value.password,
-                        nickName = "jw"
-                    )
-                ).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            Log.d("signup", "SignUp Success")
-                            sendIntent(SignUpIntent.SuccessSignUp)
-                        }
-                        is Resource.Loading -> Log.d("signup", "Loading")
-                        is Resource.Failure -> Log.d("signup", "SignUp Fail")
-                    }
-                }
+                signUp()
             }
 
             SignUpIntent.ClickVerifyCode -> {
-                verifyCodeUseCase(
-                    VerifyCodeRequest(
-                        email = state.value.email,
-                        code = state.value.verificationCode
-                    )
-                ).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            Log.d("signup", "VerifyCode Success")
-                            sendIntent(SignUpIntent.SuccessCodeVerification)
-                        }
-                        is Resource.Loading -> Log.d("signup", "Loading")
-                        is Resource.Failure -> Log.d("signup", "VerifyCode Fail")
-                    }
-                }
+                verifyCode()
             }
 
             SignUpIntent.ClickSendCode -> {
-                sendCodeUseCase(
-                    SendCodeRequest(
-                        email = state.value.email,
-                        type = "SIGN_UP"
-                    )
-                ).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            Log.d("signup", "SendCode Success")
-                            sendIntent(SignUpIntent.SuccessSendCode)
-                        }
-                        is Resource.Loading -> Log.d("signup", "Loading")
-                        is Resource.Failure -> Log.d("signup", "SendCode Fail")
-                    }
-                }
+                sendCode()
             }
 
             SignUpIntent.SuccessCodeVerification -> {
@@ -97,6 +54,73 @@ class SignUpViewModel @Inject constructor(
             }
 
             else -> Unit
+        }
+    }
+
+    private suspend fun sendCode() {
+        sendCodeUseCase(
+            SendCodeRequest(
+                email = state.value.email,
+                type = "SIGN_UP"
+            )
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("signup", "SendCode Success")
+                    sendIntent(SignUpIntent.SuccessSendCode)
+                }
+
+                is Resource.Loading -> {
+                    Log.d("signup", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("signup", "SendCode Fail")
+                    sendIntent(SignUpIntent.FailSendCode(it.errorMessage))
+                }
+            }
+        }
+    }
+
+    private suspend fun verifyCode() {
+        verifyCodeUseCase(
+            VerifyCodeRequest(
+                email = state.value.email,
+                code = state.value.verificationCode
+            )
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("signup", "VerifyCode Success")
+                    sendIntent(SignUpIntent.SuccessCodeVerification)
+                }
+
+                is Resource.Loading -> Log.d("signup", "Loading")
+                is Resource.Failure -> {
+                    Log.d("signup", "VerifyCode Fail")
+                    sendIntent(SignUpIntent.FailCodeVerification(it.errorMessage))
+                }
+            }
+        }
+    }
+
+    private suspend fun signUp() {
+        signUpUseCase(
+            SignUpRequest(
+                email = state.value.email,
+                password = state.value.password,
+                nickName = "jw"
+            )
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("signup", "SignUp Success")
+                    sendIntent(SignUpIntent.SuccessSignUp)
+                }
+
+                is Resource.Loading -> Log.d("signup", "Loading")
+                is Resource.Failure -> Log.d("signup", "SignUp Fail")
+            }
         }
     }
 
@@ -130,12 +154,13 @@ class SignUpViewModel @Inject constructor(
 
             is SignUpIntent.FailCodeVerification -> state.copy(
                 isLoading = false,
-                verificationCodeErrorMessage = "코드가 올바르지 않습니다."
+                verificationCodeErrorMessage = intent.errorMessage
             )
 
             is SignUpIntent.FailSendCode -> state.copy(
                 isLoading = false,
-                errorMessage = "오류가 발생했습니다\n다시 시도해 주세요."
+                emailErrorMessage = intent.errorMessage,
+                isCodeSent = false
             )
 
             is SignUpIntent.FailSignUp -> state.copy(
