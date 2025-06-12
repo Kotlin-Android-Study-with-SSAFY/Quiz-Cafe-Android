@@ -29,6 +29,8 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.googleBackgroundColor
+import com.android.quizcafe.core.designsystem.theme.googleBorderColor
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 
 @Composable
@@ -92,12 +94,12 @@ fun GoogleLoginButton(
             .fillMaxWidth()
             .height(48.dp)
             .background(
-                color = Color(0xFFF2F2F2),
+                color = googleBackgroundColor,
                 shape = RoundedCornerShape(8.dp)
             )
             .border(
                 width = 1.dp,
-                color = Color.LightGray,
+                color = googleBorderColor,
                 shape = RoundedCornerShape(8.dp)
             )
     ) {

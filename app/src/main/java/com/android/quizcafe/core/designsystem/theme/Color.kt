@@ -90,3 +90,6 @@ val QuizCardColorShortAnswer = Color(0xFFFFC9C9)
 val QuizCardColorMultipleChoice = Color(0xFFFDFFB6)
 
 val checkedColor = Color(0xFF42CA07)
+
+val googleBackgroundColor = Color(0xFFF2F2F2)
+val googleBorderColor = Color(0xFFCCCCCC)

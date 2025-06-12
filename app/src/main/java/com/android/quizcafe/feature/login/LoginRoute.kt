@@ -28,6 +28,42 @@ fun LoginRoute(
     val credentialManager = remember { CredentialManager.create(context) }
     val state by viewModel.state.collectAsState()
 
+    suspend fun handleGoogleLogin() {
+        try {
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setServerClientId(context.getString(R.string.default_web_client_id))
+                .setFilterByAuthorizedAccounts(false)
+                .build()
+
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
+
+            val result: GetCredentialResponse = credentialManager.getCredential(
+                request = request,
+                context = context
+            )
+
+            val credential = result.credential
+            val googleCredential = try {
+                GoogleIdTokenCredential.createFrom(credential.data)
+            } catch (e: Exception) {
+                Log.e("googleLogin", "파싱 실패: ${e.message}")
+                null
+            }
+            Log.d("googleLogin", "credential class: $googleCredential")
+            if (googleCredential != null) {
+                Log.d("googleLogin", "LoginRoute: ${googleCredential.idToken}")
+                viewModel.sendIntent(LoginIntent.GoogleLogin(googleCredential.idToken))
+            } else {
+                Toast.makeText(context, "idToken 획득 실패", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
+            Log.d("googleLogin", "LoginRoute: ${e.message}")
+        }
+    }
+
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
@@ -60,39 +96,7 @@ fun LoginRoute(
         sendIntent = viewModel::sendIntent,
         onClickGoogleLogin = {
             viewModel.viewModelScope.launch {
-                try {
-                    val googleIdOption = GetGoogleIdOption.Builder()
-                        .setServerClientId(context.getString(R.string.default_web_client_id))
-                        .setFilterByAuthorizedAccounts(false)
-                        .build()
-
-                    val request = GetCredentialRequest.Builder()
-                        .addCredentialOption(googleIdOption)
-                        .build()
-
-                    val result: GetCredentialResponse = credentialManager.getCredential(
-                        request = request,
-                        context = context
-                    )
-
-                    val credential = result.credential
-                    val googleCredential = try {
-                        GoogleIdTokenCredential.createFrom(credential.data)
-                    } catch (e: Exception) {
-                        Log.e("googleLogin", "파싱 실패: ${e.message}")
-                        null
-                    }
-                    Log.d("googleLogin", "credential class: $googleCredential")
-                    if (googleCredential != null) {
-                        Log.d("googleLogin", "LoginRoute: ${googleCredential.idToken}")
-                        viewModel.sendIntent(LoginIntent.GoogleLogin(googleCredential.idToken))
-                    } else {
-                        Toast.makeText(context, "idToken 획득 실패", Toast.LENGTH_SHORT).show()
-                    }
-                } catch (e: Exception) {
-                    Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
-                    Log.d("googleLogin", "LoginRoute: ${e.message}")
-                }
+                handleGoogleLogin()
             }
         }
     )
