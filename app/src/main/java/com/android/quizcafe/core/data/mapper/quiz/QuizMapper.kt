@@ -27,5 +27,7 @@ fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     version = quizEntity.version,
     mcqOption = if (mcqOptions.isNotEmpty()) {
         mcqOptions.toDomain()
-    } else null
+    } else {
+        null
+    }
 )

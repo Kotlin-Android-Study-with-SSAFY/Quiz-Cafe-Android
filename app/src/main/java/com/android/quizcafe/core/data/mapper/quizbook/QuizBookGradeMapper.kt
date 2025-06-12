@@ -14,4 +14,3 @@ fun QuizBookGradeWithQuizGradesRelation.toDomain() = QuizBookGrade(
     quizGrades = quizGradeEntities.map { it.toDomain() },
     elapsedTime = quizBookGradeEntity.elapsedTime
 )
-

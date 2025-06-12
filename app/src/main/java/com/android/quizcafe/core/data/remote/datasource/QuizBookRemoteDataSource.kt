@@ -18,7 +18,7 @@ class QuizBookRemoteDataSource @Inject constructor(
     suspend fun getCategoriesByType(request: CategoryRequestDto): NetworkResult<ApiResponse<List<QuizBookCategoryResponseDto>>> =
         quizBookService.getCategories()
 
-    suspend fun getAllCategories() : NetworkResult<ApiResponse<QuizBookCategoryResponseDto>> =
+    suspend fun getAllCategories(): NetworkResult<ApiResponse<QuizBookCategoryResponseDto>> =
         quizBookService.getAllCategories()
     suspend fun getQuizBookDetail(request: QuizBookDetailRequestDto): NetworkResult<ApiResponse<QuizBookDetailResponseDto>> =
         quizBookService.getQuizBookDetail(request.quizBookId)

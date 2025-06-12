@@ -60,7 +60,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
-
     // 퀴즈북 풀이 기록 가져오기
     override fun getQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<QuizBookGrade>> = flow {
         emit(Resource.Loading)
@@ -72,16 +71,16 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             val quizBookGrade = quizBookGradeRelation.toDomain()
             emit(Resource.Success(quizBookGrade))
         }
-    }.catch {e ->
+    }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
     override fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>> = flow {
         val quizBookSolvingId = id.value
-        if (quizBookSolvingId == null){
+        if (quizBookSolvingId == null) {
             emit(Resource.Failure("quizBookGradeServerId가 null입니다", HttpStatus.UNKNOWN))
             return@flow
-        }else {
+        } else {
             apiResponseToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
                 remoteDataSource.getQuizBookSolving(quizBookSolvingId)
             }
@@ -89,7 +88,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     }
 
     override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> = flow {
-        apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain){
+        apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
             remoteDataSource.getAllQuizBookSolvingByUser()
         }
     }
@@ -123,7 +122,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
 
         remoteDataSource.solveQuizBook(requestDto)
             .onSuccess { response ->
-                response.data?.let {serverId ->
+                response.data?.let { serverId ->
                     quizBookGradeDao.deleteQuizBookGrade(localId.value)
                     // TODO : 삭제 실패 했을 때 처리
                     emit(Resource.Success(QuizBookGradeServerId(serverId)))
@@ -132,7 +131,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             .onErrorOrException { code, message ->
                 emit(Resource.Failure(message ?: "퀴즈북 풀이 제출 실패", code))
             }
-
     }.catch { e ->
         emit(Resource.Failure("퀴즈북 제출 중 오류 발생: ${e.message}", LocalErrorCode.ROOM_ERROR))
     }
@@ -206,4 +204,3 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         )
     }
 }
-

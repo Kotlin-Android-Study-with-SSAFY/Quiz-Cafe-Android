@@ -3,7 +3,7 @@ package com.android.quizcafe.core.data.mapper.solving
 import com.android.quizcafe.core.data.model.solving.response.QuizSolvingResponseDto
 import com.android.quizcafe.core.domain.model.solving.QuizSolving
 
-fun QuizSolvingResponseDto.toDomain() : QuizSolving = QuizSolving(
+fun QuizSolvingResponseDto.toDomain(): QuizSolving = QuizSolving(
     id = id,
     quizBookSolvingId = quizBookSolvingId,
     quizId = quizId,

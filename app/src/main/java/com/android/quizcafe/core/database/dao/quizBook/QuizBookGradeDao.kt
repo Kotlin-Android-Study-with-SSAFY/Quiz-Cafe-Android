@@ -9,16 +9,16 @@ import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeWithQuizGradesRelation
 
 @Dao
-interface QuizBookGradeDao{
+interface QuizBookGradeDao {
 
     @Upsert
-    suspend fun upsertQuizBookGrade(entity : QuizBookGradeEntity) : Long
+    suspend fun upsertQuizBookGrade(entity: QuizBookGradeEntity): Long
 
     // QuizBookGradeEntity LocalId로 QuizQuizBookSolvingResult 리스트 반환
     @Transaction
     @Query("SELECT * FROM QuizBookGradeEntity WHERE localId = :localId")
-    suspend fun getQuizBookGrade(localId : Long) : QuizBookGradeWithQuizGradesRelation?
+    suspend fun getQuizBookGrade(localId: Long): QuizBookGradeWithQuizGradesRelation?
 
     @Delete
-    suspend fun deleteQuizBookGrade(localId : Long)
+    suspend fun deleteQuizBookGrade(localId: Long)
 }

@@ -2,7 +2,6 @@ package com.android.quizcafe.feature.quiz.solvingResult.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,15 +62,18 @@ fun QuizResultItem(
             ) {
                 Icon(
                     painter = painterResource(
-                        if (isCorrect) R.drawable.ic_subjective_correct
-                        else R.drawable.ic_subjective_incorrect
+                        if (isCorrect) {
+                            R.drawable.ic_subjective_correct
+                        } else {
+                            R.drawable.ic_subjective_incorrect
+                        }
                     ),
                     contentDescription = null,
                     tint = if (isCorrect) checkedColor else MaterialTheme.colorScheme.error
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Text(
-                    text = "$questionNumber. " +quiz.content,
+                    text = "$questionNumber. " + quiz.content,
                     style = quizCafeTypography().titleSmall,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,
@@ -94,8 +96,11 @@ fun QuizResultItem(
             )
             Icon(
                 painter = painterResource(
-                    if (isExpanded) R.drawable.ic_keyboard_arrow_down
-                    else R.drawable.ic_keyboard_arrow_right
+                    if (isExpanded) {
+                        R.drawable.ic_keyboard_arrow_down
+                    } else {
+                        R.drawable.ic_keyboard_arrow_right
+                    }
                 ),
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -129,7 +134,7 @@ fun QuizExpandedContent(
             .padding(start = 36.dp)
     ) {
         // 전체 문제 내용 표시
-        if(hasTextOverflow){
+        if (hasTextOverflow) {
             Text(
                 text = quiz.content,
                 style = quizCafeTypography().bodyMedium,

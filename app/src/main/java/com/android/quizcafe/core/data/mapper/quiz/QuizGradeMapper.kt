@@ -14,7 +14,6 @@ fun QuizGradeEntity.toDomain() = QuizGrade(
     completedAt = completedAt,
 )
 
-
 fun QuizGrade.toEntity() = QuizGradeEntity(
     localId = localId,
     quizId = quizId.value,

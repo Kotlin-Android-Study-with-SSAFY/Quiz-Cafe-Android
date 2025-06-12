@@ -27,5 +27,4 @@ interface QuizDao {
 
     @Query("SELECT * FROM mcq_option WHERE quizId = :quizId")
     suspend fun getMcqOptionsByQuizId(quizId: Long): List<McqOptionEntity>
-
 }

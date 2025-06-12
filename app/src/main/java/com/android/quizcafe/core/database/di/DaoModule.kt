@@ -33,5 +33,4 @@ internal object DaoModule {
     fun provideQuizBookGradingRecordDao(
         database: QuizCafeDatabase
     ): QuizBookGradeDao = database.quizBookGradeDao()
-
 }

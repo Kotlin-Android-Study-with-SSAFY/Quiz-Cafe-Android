@@ -98,10 +98,12 @@ class QuizBookSolvingResultViewModel @Inject constructor(
             .collect { quizListResource ->
                 when (quizListResource) {
                     is Resource.Success -> {
-                        sendIntent(QuizBookSolvingResultIntent.SuccessLoadData(
-                            quizBookGrade = loadedQuizBookGrade,
-                            quizzes = quizListResource.data
-                        ))
+                        sendIntent(
+                            QuizBookSolvingResultIntent.SuccessLoadData(
+                                quizBookGrade = loadedQuizBookGrade,
+                                quizzes = quizListResource.data
+                            )
+                        )
                         Log.d(TAG, "Successfully loaded both QuizBookGrade and Quiz list")
                     }
                     is Resource.Failure -> {
@@ -111,5 +113,4 @@ class QuizBookSolvingResultViewModel @Inject constructor(
                 }
             }
     }
-
 }

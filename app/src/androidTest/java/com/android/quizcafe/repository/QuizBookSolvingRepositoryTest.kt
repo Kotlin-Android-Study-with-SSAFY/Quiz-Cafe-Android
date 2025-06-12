@@ -46,7 +46,6 @@ class QuizBookSolvingRepositoryTest {
 
     private val mockWebServer = MockWebServer()
 
-
     @Before
     fun setup() {
         mockWebServer.start(8080)
@@ -55,19 +54,20 @@ class QuizBookSolvingRepositoryTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(200)
-                .setBody("""
+                .setBody(
+                    """
                     {
                         "status": "success",
                         "code": 200,
                         "message": "퀴즈북 풀이 완료",
                         "data": 1
                     }
-                """.trimIndent())
+                    """.trimIndent()
+                )
                 .addHeader("Content-Type", "application/json")
         )
 
         hiltRule.inject()
-
     }
 
     @After
@@ -75,7 +75,6 @@ class QuizBookSolvingRepositoryTest {
         database.close()
         mockWebServer.shutdown()
     }
-
 
     @Test
     fun createEmptyQuizBookGrade_success() = runTest {
@@ -173,7 +172,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 1L,
                 quizId = QuizId(1L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "X", // 정답은 "O"인데 "X"로 답함
+                userAnswer = "X",
                 isCorrect = false,
                 completedAt = "2023-01-01T00:00:00Z"
             ),
@@ -182,7 +181,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 2L,
                 quizId = QuizId(2L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "A", // 정답
+                userAnswer = "A",
                 isCorrect = true,
                 completedAt = "2023-01-01T00:00:01Z"
             ),
@@ -191,7 +190,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 3L,
                 quizId = QuizId(3L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "val", // 정답
+                userAnswer = "val",
                 isCorrect = true,
                 completedAt = "2023-01-01T00:00:02Z"
             )
@@ -248,7 +247,6 @@ class QuizBookSolvingRepositoryTest {
         assertEquals(3L, quiz3?.get("quizId")?.jsonPrimitive?.long)
         assertEquals("val", quiz3?.get("userAnswer")?.jsonPrimitive?.content)
         assertEquals(true, quiz3?.get("isCorrect")?.jsonPrimitive?.boolean)
-
     }
 
     private suspend fun setupTestData(quizBookId: QuizBookId) {
@@ -259,10 +257,10 @@ class QuizBookSolvingRepositoryTest {
             category = "TEST",
             title = "테스트 퀴즈북",
             description = "테스트 퀴즈북입니다.",
-            level = "BEGINNER", // 새로운 필드
-            createdBy = "testuser", // 새로운 필드
-            createdAt = "2023-01-01T00:00:00Z", // 새로운 필드
-            totalQuizzes = 3 // 새로운 필드
+            level = "BEGINNER",
+            createdBy = "testuser",
+            createdAt = "2023-01-01T00:00:00Z",
+            totalQuizzes = 3
         )
         database.quizBookDao().upsertQuizBook(quizBookEntity)
 

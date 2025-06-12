@@ -26,7 +26,7 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class GradeQuizUseCaseIntegrationTest {
+class GradeQuizUseCaseTest {
 
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
@@ -125,7 +125,7 @@ class GradeQuizUseCaseIntegrationTest {
         gradeQuizUseCase.invoke(
             quiz = oxQuiz,
             quizBookGradeLocalId = gradeId,
-            userAnswer = "X" // 틀린 답
+            userAnswer = "X"
         ).collect(results::add)
 
         // Then
@@ -168,7 +168,7 @@ class GradeQuizUseCaseIntegrationTest {
         val results = mutableListOf<Resource<Unit>>()
         gradeQuizUseCase.invoke(
             quiz = mcqQuiz,
-            quizBookGradeLocalId = gradeId, // 미리 생성된 gradeId 사용
+            quizBookGradeLocalId = gradeId,
             userAnswer = "A"
         ).collect(results::add)
 
@@ -188,7 +188,6 @@ class GradeQuizUseCaseIntegrationTest {
         assertEquals(true, savedQuizGrade.isCorrect)
         assertEquals(gradeId.value, savedQuizGrade.quizBookGradeLocalId)
     }
-
 
     @Test
     fun gradeShortAnswerQuiz_correctAnswer() = runTest {
@@ -348,11 +347,11 @@ class GradeQuizUseCaseIntegrationTest {
         val quizBookEntity = QuizBookEntity(
             id = quizBookId.value,
             version = 1L,
-            category = "TEST_${baseId}",
-            title = "테스트 퀴즈북 ${baseId}",
-            description = "테스트 퀴즈북입니다. ID: ${baseId}",
+            category = "TEST_$baseId",
+            title = "테스트 퀴즈북 $baseId",
+            description = "테스트 퀴즈북입니다. ID: $baseId",
             level = "BEGINNER",
-            createdBy = "testuser_${baseId}",
+            createdBy = "testuser_$baseId",
             createdAt = "2023-01-01T00:00:00Z",
             totalQuizzes = 3
         )

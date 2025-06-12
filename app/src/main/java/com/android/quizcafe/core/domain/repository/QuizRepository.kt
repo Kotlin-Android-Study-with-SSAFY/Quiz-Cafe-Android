@@ -5,8 +5,7 @@ import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import kotlinx.coroutines.flow.Flow
 
-interface QuizRepository{
+interface QuizRepository {
 
-    fun getQuizListByBookId(quizBookId : QuizBookId): Flow<Resource<List<Quiz>>>
-
+    fun getQuizListByBookId(quizBookId: QuizBookId): Flow<Resource<List<Quiz>>>
 }

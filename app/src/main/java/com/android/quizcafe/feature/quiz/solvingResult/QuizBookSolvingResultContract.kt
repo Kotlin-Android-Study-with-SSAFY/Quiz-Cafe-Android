@@ -4,7 +4,6 @@ import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.ui.base.BaseContract
 
-
 data class QuizBookSolvingResultUiState(
     val isLoading: Boolean = true,
     val quizBookId: String? = null,
@@ -26,9 +25,8 @@ sealed class QuizBookSolvingResultIntent : BaseContract.ViewIntent {
 
     data object ClickFinish : QuizBookSolvingResultIntent()
 
-    data class Error(val errorMessage : String? = null) : QuizBookSolvingResultIntent()
+    data class Error(val errorMessage: String? = null) : QuizBookSolvingResultIntent()
 }
-
 
 sealed class QuizBookSolvingResultEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : QuizBookSolvingResultEffect()

@@ -11,5 +11,5 @@ data class QuizDto(
     val answer: String,
     val explanation: String?,
     val version: Long,
-    val mcqOption: List<McqOptionDto>? = null // MCQ 타입일 때만 사용
+    val mcqOption: List<McqOptionDto>? = null
 )

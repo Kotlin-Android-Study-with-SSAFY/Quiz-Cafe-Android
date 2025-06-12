@@ -15,4 +15,3 @@ data class QuizBookResponseDto(
     val createdAt: String,
     val totalQuizzes: Int
 )
-

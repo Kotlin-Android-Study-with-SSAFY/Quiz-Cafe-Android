@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class QuizRemoteDataSource @Inject constructor(
     private val quizService: QuizService
-){
-    suspend fun getQuizListByBookId(quizBookId : Long) : NetworkResult<ApiResponse<List<QuizDto>>> =
+) {
+    suspend fun getQuizListByBookId(quizBookId: Long): NetworkResult<ApiResponse<List<QuizDto>>> =
         quizService.getQuizListByBookId(quizBookId)
 }

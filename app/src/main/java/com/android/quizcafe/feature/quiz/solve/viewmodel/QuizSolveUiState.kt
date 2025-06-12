@@ -20,11 +20,9 @@ data class QuizSolveUiState(
     val phase: AnswerPhase = AnswerPhase.ANSWERING,
     val playMode: PlayMode = PlayMode.NO_TIME_ATTACK,
     val questionText: String = "",
-    // MC/OX 전용
     val options: List<QuizOption> = emptyList(),
     val selectedOptionId: Long? = null,
     val correctOptionId: Long? = null,
-    // SUBJECTIVE 전용
     val subjectiveAnswer: String = "",
     val correctAnswerText: String? = null,
     val subjectHint: String = "",
@@ -34,9 +32,7 @@ data class QuizSolveUiState(
     val showExplanation: Boolean = false,
     val explanation: String = "",
     val isButtonEnabled: Boolean = false,
-    /** 남은 시간(TIME_ATTACK 모드) */
     val remainingSeconds: Int = 600,
-    /** 경과 시간(NO_TIME_ATTACK 모드) */
     val elapsedSeconds: Int = 0
 ) : BaseContract.UiState {
     fun optionState(opt: QuizOption): AnswerState = when (phase) {

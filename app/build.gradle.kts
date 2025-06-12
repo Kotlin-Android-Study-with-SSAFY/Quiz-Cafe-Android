@@ -93,6 +93,7 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
+    testImplementation(libs.okhttp.mockwebserver)
     testImplementation("org.json:json:20220924")
 
     // 통합 테스트

@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import com.android.quizcafe.core.database.model.QuizBookEntity
-import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 @Dao
 interface QuizBookDao {
@@ -20,5 +19,4 @@ interface QuizBookDao {
 
     @Query("SELECT id FROM quiz_book WHERE category = :category")
     suspend fun getQuizBookIdsByCategory(category: String): List<Long>
-
 }

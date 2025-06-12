@@ -4,7 +4,6 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
-import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
 import com.android.quizcafe.core.domain.usecase.solving.gradingStrategy.GradingStrategyFactory
 import kotlinx.coroutines.flow.Flow
@@ -19,10 +18,10 @@ class GradeQuizUseCase @Inject constructor(
     private val quizBookSolvingRepository: QuizBookSolvingRepository
 ) {
     operator fun invoke(
-        quiz : Quiz,
-        quizBookGradeLocalId : QuizBookGradeLocalId,
-        userAnswer : String
-    ) : Flow<Resource<Unit>> = flow {
+        quiz: Quiz,
+        quizBookGradeLocalId: QuizBookGradeLocalId,
+        userAnswer: String
+    ): Flow<Resource<Unit>> = flow {
         val strategy = GradingStrategyFactory.getGradingStrategy(quiz.questionType)
         val isCorrect = strategy.grade(quiz, userAnswer)
 
@@ -38,5 +37,4 @@ class GradeQuizUseCase @Inject constructor(
             emit(result)
         }
     }
-
 }

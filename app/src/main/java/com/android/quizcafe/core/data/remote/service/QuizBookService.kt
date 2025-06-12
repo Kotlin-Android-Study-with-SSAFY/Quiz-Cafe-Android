@@ -15,16 +15,16 @@ interface QuizBookService {
 
     @GET("quiz-book")
     suspend fun getQuizBooksByCategory(
-        @Query("category")category : String
+        @Query("category")category: String
     ): NetworkResult<ApiResponse<QuizBookResponseDto>>
-
 
     @GET("quiz-book/category")
     suspend fun getCategories(
 //        @Body request: QuizBookRequest
     ): NetworkResult<ApiResponse<List<QuizBookCategoryResponseDto>>>
 
-    suspend fun getAllCategories() : NetworkResult<ApiResponse<QuizBookCategoryResponseDto>>
+    suspend fun getAllCategories(): NetworkResult<ApiResponse<QuizBookCategoryResponseDto>>
+
     @GET("quiz-book/{quizBookId}")
     suspend fun getQuizBookDetail(
         @Path("quizBookId") quizBookId: Long

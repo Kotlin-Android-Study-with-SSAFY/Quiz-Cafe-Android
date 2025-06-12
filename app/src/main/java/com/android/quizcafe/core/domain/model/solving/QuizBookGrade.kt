@@ -12,7 +12,7 @@ data class QuizBookGrade(
     val quizBookId: QuizBookId,
     val quizGrades: List<QuizGrade> = listOf(),
     val elapsedTime: Duration = Duration.Companion.ZERO
-){
+) {
     /**
      * 정답 개수를 반환
      */
@@ -25,7 +25,6 @@ data class QuizBookGrade(
      */
     fun getTotalQuestions(): Int {
         return quizGrades.size
-
     }
 
     /**
@@ -45,5 +44,4 @@ data class QuizBookGrade(
             String.format("%02d:%02d", minutes, seconds)
         }
     }
-
 }

@@ -27,7 +27,7 @@ import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 @TypeConverters(
     DurationConverter::class
 )
-abstract class QuizCafeDatabase : RoomDatabase(){
+abstract class QuizCafeDatabase : RoomDatabase() {
     abstract fun quizDao(): QuizDao
     abstract fun quizBookDao(): QuizBookDao
     abstract fun quizGradeDao(): QuizGradeDao

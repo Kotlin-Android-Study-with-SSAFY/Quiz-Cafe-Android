@@ -10,7 +10,6 @@ interface QuizService {
 
     @GET("quiz")
     suspend fun getQuizListByBookId(
-        @Query("quizBookId")quizBookId : Long
+        @Query("quizBookId")quizBookId: Long
     ): NetworkResult<ApiResponse<List<QuizDto>>>
-
 }

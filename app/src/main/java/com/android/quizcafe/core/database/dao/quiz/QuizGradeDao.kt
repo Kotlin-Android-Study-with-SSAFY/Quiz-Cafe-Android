@@ -8,6 +8,5 @@ import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 interface QuizGradeDao {
 
     @Upsert
-    suspend fun upsert(entity: QuizGradeEntity) : Long
-
+    suspend fun upsert(entity: QuizGradeEntity): Long
 }

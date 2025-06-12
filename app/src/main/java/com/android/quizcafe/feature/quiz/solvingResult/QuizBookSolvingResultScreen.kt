@@ -1,6 +1,5 @@
 package com.android.quizcafe.feature.quiz.solvingResult
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.core.designsystem.QuizCafeButton
@@ -44,7 +42,6 @@ fun QuizBookSolvingResultScreen(
     state: QuizBookSolvingResultUiState = QuizBookSolvingResultUiState(),
     sendIntent: (QuizBookSolvingResultIntent) -> Unit = {}
 ) {
-
     val quizBookGrade = state.quizBookSolvingResult
     val quizzes = state.quizzes
 
@@ -154,8 +151,6 @@ fun QuizResultBottomBar(
     }
 }
 
-
-
 @Preview(showBackground = true)
 @Composable
 fun QuizBookSolvingResultScreenPreview() {
@@ -196,7 +191,7 @@ fun QuizBookSolvingResultScreenPreview() {
                             completedAt = "2025-06-11T15:35:00"
                         )
                     ),
-                    elapsedTime = kotlin.time.Duration.parse("PT9M2S") // 9분 2초
+                    elapsedTime = kotlin.time.Duration.parse("PT9M2S")
                 ),
                 quizzes = listOf(
                     Quiz(
@@ -231,4 +226,3 @@ fun QuizBookSolvingResultScreenPreview() {
         )
     }
 }
-
