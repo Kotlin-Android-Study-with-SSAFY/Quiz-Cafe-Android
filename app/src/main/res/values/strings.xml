@@ -80,5 +80,7 @@
     <string name="quiz_book_description">문제집 설명</string>
     <string name="quiz_list">문제 목록</string>
     <string name="solve_now">바로 문제 풀기</string>
+    <string name="error">오류</string>
+    <string name="confirm">확인</string>
 
 </resources>

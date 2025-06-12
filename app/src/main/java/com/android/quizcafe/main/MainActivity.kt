@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.navigation.compose.rememberNavController
 import com.android.quizcafe.main.navigation.QuizCafeNavHost
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.main.navigation.routes.AuthRoute
@@ -19,15 +20,16 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
     @Inject
     lateinit var authManager: AuthManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             QuizCafeTheme {
+                val navController = rememberNavController()
                 var startDestination: String by remember { mutableStateOf("") }
 
                 LaunchedEffect(Unit) {
@@ -36,11 +38,15 @@ class MainActivity : ComponentActivity() {
                 }
 
                 when (startDestination) {
-                    MainRoute.Graph.route, AuthRoute.Graph.route -> {
-                        QuizCafeNavHost(startDestination = startDestination)
-                    }
+                    MainRoute.Graph.route, AuthRoute.Graph.route -> QuizCafeNavHost(navController, startDestination = startDestination)
                     else -> Unit
                 }
+
+                AppEventsHandler(
+                    authManager = authManager,
+                    navController = navController,
+                    loginRoute = AuthRoute.Graph.route
+                )
             }
         }
     }

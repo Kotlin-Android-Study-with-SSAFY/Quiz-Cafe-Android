@@ -3,6 +3,7 @@ package com.android.quizcafe.core.network.di
 import com.android.quizcafe.BuildConfig
 import com.android.quizcafe.core.datastore.AuthInterceptor
 import com.android.quizcafe.core.datastore.AuthManager
+import com.android.quizcafe.core.network.TokenAuthenticator
 import com.android.quizcafe.core.network.util.calladapter.NetworkResultCallAdapterFactory
 import com.android.quizcafe.core.network.util.convertor.NullOnEmptyConverterFactory
 import dagger.Module
@@ -10,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
+import okhttp3.Authenticator
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -56,6 +58,12 @@ object NetworkModule {
 
     @Provides
     @Singleton
+    fun provideAuthenticator(
+        authManager: AuthManager
+    ): Authenticator = TokenAuthenticator(authManager)
+
+    @Provides
+    @Singleton
     @Named("default")
     fun provideDefaultOkHttpClient(): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
@@ -71,7 +79,8 @@ object NetworkModule {
     @Singleton
     @Named("token")
     fun provideTokenOkHttpClient(
-        authInterceptor: Interceptor
+        authInterceptor: Interceptor,
+        authenticator: Authenticator
     ): OkHttpClient {
         val logging = HttpLoggingInterceptor().apply {
             this.setLevel(HttpLoggingInterceptor.Level.BODY)
@@ -80,6 +89,7 @@ object NetworkModule {
             .connectTimeout(5000, TimeUnit.MILLISECONDS)
             .addInterceptor(authInterceptor)
             .addInterceptor(logging)
+            .authenticator(authenticator)
             .build()
     }
 
