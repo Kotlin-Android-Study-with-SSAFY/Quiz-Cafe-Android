@@ -14,7 +14,7 @@ import com.android.quizcafe.core.database.dao.quiz.QuizDao
 import com.android.quizcafe.core.database.dao.quiz.QuizGradeDao
 import com.android.quizcafe.core.database.dao.quizBook.QuizBookDao
 import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
-import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 import com.android.quizcafe.core.domain.model.Resource

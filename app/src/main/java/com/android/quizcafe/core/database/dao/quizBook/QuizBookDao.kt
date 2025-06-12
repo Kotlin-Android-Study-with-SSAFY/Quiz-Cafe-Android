@@ -3,7 +3,7 @@ package com.android.quizcafe.core.database.dao.quizBook
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
-import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 
 @Dao
 interface QuizBookDao {

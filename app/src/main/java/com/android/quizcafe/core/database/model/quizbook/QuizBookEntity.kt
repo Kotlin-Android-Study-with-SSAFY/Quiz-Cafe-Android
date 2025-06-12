@@ -1,4 +1,4 @@
-package com.android.quizcafe.core.database.model
+package com.android.quizcafe.core.database.model.quizbook
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

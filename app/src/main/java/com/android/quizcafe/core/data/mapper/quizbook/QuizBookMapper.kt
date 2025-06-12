@@ -1,7 +1,7 @@
 package com.android.quizcafe.core.data.mapper.quizbook
 
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
-import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 
 fun QuizBookEntity.toDomain() = QuizBook(

@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.repository
 
+import com.android.quizcafe.core.data.mapper.quiz.toDomain
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
 import com.android.quizcafe.core.data.remote.datasource.QuizRemoteDataSource

@@ -3,7 +3,7 @@ package com.android.quizcafe.usecase
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.quizcafe.core.database.QuizCafeDatabase
-import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.domain.model.Resource
