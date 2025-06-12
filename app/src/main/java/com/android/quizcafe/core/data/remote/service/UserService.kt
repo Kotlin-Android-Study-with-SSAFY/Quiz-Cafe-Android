@@ -20,12 +20,12 @@ interface UserService {
     suspend fun deleteUser(): NetworkResult<ApiResponse<Unit>>
 
     @PATCH("/user")
-    suspend fun updateUser(
-        @Path("nickname") niciName: String
+    suspend fun updateUserNickName(
+        @Path("nickname") nickName: String
     ): NetworkResult<ApiResponse<Unit>>
 
     @PATCH("/user/password")
-    suspend fun changePassword(
+    suspend fun resetPassword(
         @Body request: ChangePasswordRequestDto
     ): NetworkResult<ApiResponse<Unit>>
 

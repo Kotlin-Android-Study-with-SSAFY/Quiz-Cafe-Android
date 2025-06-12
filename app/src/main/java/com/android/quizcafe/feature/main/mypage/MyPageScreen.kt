@@ -17,46 +17,31 @@ import java.util.TimeZone
 
 @Composable
 fun MyPageScreen(
-    userName: String = "빵빠야",
-    solvedCount: Int = 1205,
-    myQuizSetCount: Int = 5,
-    quizSolvingRecord: Map<String, Int> = emptyMap(),
-    startDateStr: String = "",
-    onClick: (Int) -> Unit = {}
+    state: MyPageViewState,
+    onClick: (MyPageIntent) -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 32.dp, start = 18.dp, end = 18.dp)
     ) {
-        MyPageUserName(userName)
-        MyPageSummary(solvedCount, myQuizSetCount)
+        MyPageUserName(state.nickname)
+        MyPageSummary(state.solvedCount, state.myQuizSetCount)
         Spacer(Modifier.height(16.dp))
-        HorizontalDivider(
-            modifier = Modifier.height(1.dp)
-        )
-        MyPageMenu(onClick)
+        HorizontalDivider(modifier = Modifier.height(1.dp))
+        MyPageMenu { menuId ->
+            // 메뉴 클릭 시 intent로 변환해서 전달
+            when (menuId) {
+                0 -> onClick(MyPageIntent.ClickStats(state.solvedCount))
+                1 -> onClick(MyPageIntent.ClickAlarm)
+                2 -> onClick(MyPageIntent.ClickChangePw)
+                3 -> onClick(MyPageIntent.ClickMyQuizSet)
+            }
+        }
         Spacer(Modifier.height(28.dp))
-
-        val kst = TimeZone.getTimeZone("Asia/Seoul")
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-        sdf.timeZone = kst
-        val today = Calendar.getInstance(kst).apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-        val start = (today.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -364) }
-        val quizHistory = mutableMapOf<String, Int>()
-        for (i in 0 until 364) {
-            val cal = (start.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, i) }
-            quizHistory[sdf.format(cal.time)] = (0..4).random()
-        }
-
         QuizGrassGridByCalendar(
-            quizSolvingRecord = quizHistory,
-            joinDateStr = sdf.format(start.time)
+            quizSolvingRecord = state.quizSolvingRecord,
+            joinDateStr = state.joinDateStr
         )
     }
 }
@@ -64,6 +49,7 @@ fun MyPageScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFFDFDFD)
 @Composable
 fun PreviewMyPageScreen() {
+    // 아래는 기존 dummy 생성 코드 활용
     val kst = TimeZone.getTimeZone("Asia/Seoul")
     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     sdf.timeZone = kst
@@ -80,10 +66,13 @@ fun PreviewMyPageScreen() {
         quizHistory[sdf.format(cal.time)] = (0..4).random()
     }
     MyPageScreen(
-        userName = "빵빠야",
-        solvedCount = 1205,
-        myQuizSetCount = 5,
-        quizSolvingRecord = quizHistory,
-        startDateStr = sdf.format(start.time),
+        state = MyPageViewState(
+            nickname = "빵빠야",
+            solvedCount = 1205,
+            myQuizSetCount = 5,
+            quizSolvingRecord = quizHistory,
+            joinDateStr = sdf.format(start.time)
+        ),
+        onClick = {}
     )
 }

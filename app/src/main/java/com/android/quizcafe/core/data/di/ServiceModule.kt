@@ -32,7 +32,7 @@ object ServiceModule {
     @Singleton
     fun provideUserService(
         @Named("token") retrofit: Retrofit
-    ) : UserService = retrofit.create(UserService::java.)
+    ) : UserService = retrofit.create(UserService::class.java)
 
     @Provides
     @Singleton

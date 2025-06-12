@@ -1,20 +1,25 @@
 package com.android.quizcafe.feature.main.mypage
 
+import android.util.Log
+import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.usecase.user.GetUserInfoUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
+import com.android.quizcafe.feature.categorylist.CategoryIntent
+import com.android.quizcafe.feature.categorypicker.CategoryViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    // 실제로는 UserInfoUseCase 등 DI 주입
+    private val getUserInfoUseCase: GetUserInfoUseCase
+
 ) : BaseViewModel<MyPageViewState, MyPageIntent, MyPageEffect>(
     initialState = MyPageViewState()
 ) {
     override suspend fun handleIntent(intent: MyPageIntent) {
         when (intent) {
-            is MyPageIntent.LoadUserInfo -> loadUserInfo()
-            is MyPageIntent.ClickStats -> emitEffect(MyPageEffect.NavigateToStats)
+            is MyPageIntent.LoadUserInfo -> getUserInfo()
             is MyPageIntent.ClickAlarm -> emitEffect(MyPageEffect.NavigateToAlarm)
             is MyPageIntent.ClickChangePw -> emitEffect(MyPageEffect.NavigateToChangePw)
             is MyPageIntent.ClickMyQuizSet -> emitEffect(MyPageEffect.NavigateToMyQuizSet)
@@ -27,7 +32,7 @@ class MyPageViewModel @Inject constructor(
         return when (intent) {
             is MyPageIntent.LoadUserInfo -> currentState.copy(isLoading = true, errorMessage = null)
             is MyPageIntent.SuccessLoadUserInfo -> currentState.copy(
-                userName = intent.userName,
+                nickname = intent.data.nickname,
                 solvedCount = intent.solvedCount,
                 myQuizSetCount = intent.myQuizSetCount,
                 quizSolvingRecord = intent.quizSolvingRecord,
@@ -35,36 +40,29 @@ class MyPageViewModel @Inject constructor(
                 isLoading = false,
                 errorMessage = null
             )
+
             is MyPageIntent.FailLoadUserInfo -> currentState.copy(isLoading = false, errorMessage = intent.errorMessage)
             else -> currentState
         }
     }
 
-    // 임시 Mock Data, 실제에선 UseCase 호출로 대체
-    private suspend fun loadUserInfo() {
-        try {
-            // 예시용: 1초 뒤 샘플 데이터 반환
-            kotlinx.coroutines.delay(500)
-            val sdf = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-            sdf.timeZone = TimeZone.getTimeZone("UTC")
-            val today = Calendar.getInstance(java.util.TimeZone.getTimeZone("UTC"))
-            val start = addDaysToCalendar(today, -364)
-            val quizHistory = mutableMapOf<String, Int>()
-            for (i in 0..364) {
-                val cal = addDaysToCalendar(start, i)
-                quizHistory[sdf.format(cal.time)] = (0..4).random()
+    private suspend fun MyPageViewModel.getUserInfo() {
+        getUserInfoUseCase().collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("myPage", "Update UserInfo Success")
+                    sendIntent(MyPageIntent.SuccessLoadUserInfo(it.data))
+                }
+
+                is Resource.Loading -> {
+                    Log.d("myPage", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("myPage", "Update UserInfo Fail")
+                    sendIntent(MyPageIntent.FailLoadUserInfo(it.errorMessage))
+                }
             }
-            sendIntent(
-                MyPageIntent.SuccessLoadUserInfo(
-                    userName = "빵빠야",
-                    solvedCount = 1205,
-                    myQuizSetCount = 5,
-                    quizSolvingRecord = quizHistory,
-                    joinDateStr = sdf.format(start.time)
-                )
-            )
-        } catch (e: Exception) {
-            sendIntent(MyPageIntent.FailLoadUserInfo(e.message ?: "사용자 정보를 불러오지 못했습니다."))
         }
     }
 }
