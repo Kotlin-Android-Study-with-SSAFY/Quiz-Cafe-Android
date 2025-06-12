@@ -52,10 +52,10 @@
     <string name="feature_title_create_quiz">문제 생성</string>
 
     <!-- Feature Card Descriptions -->
-    <string name="feature_desc_ox_quiz">빠르게 풀며 개념을 정리해요. 직관적으로 익혀요.</string>
+    <string name="feature_desc_ox_quiz">빠르게 풀며 개념을 정리해요.</string>
     <string name="feature_desc_multiple_choice_quiz">보기 중 정답을 골라 핵심 개념을 익혀요.</string>
     <string name="feature_desc_short_answer_quiz">직접 입력하며 확실하게 암기해요.</string>
-    <string name="feature_desc_create_quiz">내가 원하는 문제들을 모아 문제집을 만들어요.</string>
+    <string name="feature_desc_making_quiz">내가 원하는 문제들로 문제집을 만들어요.</string>
 
     <!-- Bottom Navigation Text -->
     <string name="bottom_nav_quiz">퀴즈</string>
@@ -68,8 +68,13 @@
     <string name="tab_title_mypage"> </string>
 
     <!--Quizpage Text -->
-    <string name="quiz_history">풀이기록</string>
+    <string name="quiz_record">풀이기록</string>
     <string name="navigate_forward">앞으로 이동</string>
+    <string name="desc_navigate_to">"%1$s 이동"</string>
+    <string name="quiz_record_empty">텅</string>
+    <string name="quiz_result">%1$d문제 중 %2$d개 정답</string>
+    <string name="quiz_solved_date">%1$s 풀이</string>
+
     <string name="solve_btn_submit">제출하기</string>
     <string name="solve_btn_explanation">해설보기</string>
     <string name="explanation">해설</string>

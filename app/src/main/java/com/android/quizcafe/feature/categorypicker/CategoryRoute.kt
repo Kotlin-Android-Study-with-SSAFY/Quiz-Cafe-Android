@@ -8,9 +8,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
-import com.android.quizcafe.feature.categorylist.CategoryEffect
-import com.android.quizcafe.feature.categorylist.CategoryIntent
-import com.android.quizcafe.feature.categorylist.CategoryListScreen
 
 @Composable
 fun CategoryRoute(
