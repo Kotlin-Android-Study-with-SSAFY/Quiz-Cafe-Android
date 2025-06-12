@@ -20,11 +20,10 @@ fun NavController.navigateSingleTopTo(
 // 백스택 초기화 네비게이트
 fun NavHostController.navigateAndClearBackStack(
     targetRoute: String,
-    popUpToRoute: String? = null,
     inclusive: Boolean = true
 ) {
     this.navigate(targetRoute) {
-        popUpTo(popUpToRoute ?: this@navigateAndClearBackStack.graph.id) {
+        popUpTo(this@navigateAndClearBackStack.graph.id) {
             this.inclusive = inclusive
         }
         launchSingleTop = true

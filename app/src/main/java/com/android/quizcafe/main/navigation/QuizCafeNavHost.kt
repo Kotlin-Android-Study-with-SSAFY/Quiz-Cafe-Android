@@ -51,14 +51,14 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             LoginRoute(
                 navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
                 navigateToHome = {
-                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route)
                 }
             )
         }
         composable(AuthRoute.Signup.route) {
             SignUpRoute(
                 navigateToLogin = {
-                    navController.navigateAndClearBackStack(AuthRoute.Login.route, AuthRoute.Signup.route)
+                    navController.navigateAndClearBackStack(AuthRoute.Login.route)
                 }
             )
         }
