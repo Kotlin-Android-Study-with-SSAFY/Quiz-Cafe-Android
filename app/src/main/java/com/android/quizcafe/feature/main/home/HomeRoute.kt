@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.main.home
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -10,29 +10,30 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun QuizRoute(
+fun HomeRoute(
     navigateToCategory: (String) -> Unit,
-    viewModel: QuizViewModel = hiltViewModel()
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    // side effect 처리
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(HomeIntent.FetchRecord)
+
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is QuizEffect.ShowErrorDialog -> {
+                is HomeEffect.ShowErrorDialog -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is QuizEffect.NavigateToCategory -> {
+                is HomeEffect.NavigateToCategory -> {
                     navigateToCategory(effect.quizType)
                 }
             }
         }
     }
 
-    QuizScreen(
+    HomeScreen(
         state = state,
         sendIntent = viewModel::sendIntent
     )

@@ -1,9 +1,22 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.main.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,18 +27,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
-import com.android.quizcafe.core.designsystem.theme.*
+import com.android.quizcafe.core.designsystem.theme.CreateQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.OxQuizCardColor
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorMultipleChoice
+import com.android.quizcafe.core.designsystem.theme.QuizCardColorShortAnswer
 
 @Composable
-fun QuizModeSection(onClick: () -> Unit) {
+fun QuizModeContent(onClick: () -> Unit) {
     val modeItems = listOf(
-        ModeItem(R.string.feature_title_ox_quiz, R.string.feature_desc_ox_quiz, OxQuizCardColor),
-        ModeItem(R.string.feature_title_multiple_choice_quiz, R.string.feature_desc_multiple_choice_quiz, QuizCardColorMultipleChoice),
-        ModeItem(R.string.feature_title_short_answer_quiz, R.string.feature_desc_short_answer_quiz, QuizCardColorShortAnswer),
-        ModeItem(R.string.feature_title_create_quiz, R.string.feature_desc_create_quiz, CreateQuizCardColor)
+        ModeItem(
+            R.string.feature_title_ox_quiz,
+            R.string.feature_desc_ox_quiz,
+            OxQuizCardColor,
+            R.drawable.ic_quiz_ox
+        ),
+        ModeItem(
+            R.string.feature_title_multiple_choice_quiz,
+            R.string.feature_desc_multiple_choice_quiz,
+            QuizCardColorMultipleChoice,
+            R.drawable.ic_quiz_multiple_choice
+        ),
+        ModeItem(
+            R.string.feature_title_short_answer_quiz,
+            R.string.feature_desc_short_answer_quiz,
+            QuizCardColorShortAnswer,
+            R.drawable.ic_quiz_short_answer
+        ),
+        ModeItem(
+            R.string.feature_title_create_quiz,
+            R.string.feature_desc_making_quiz,
+            CreateQuizCardColor,
+            R.drawable.ic_quiz_making
+        )
     )
 
     Column(
+        modifier = Modifier.padding(12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         modeItems.chunked(2).forEach { rowItems ->
@@ -40,7 +78,8 @@ fun QuizModeSection(onClick: () -> Unit) {
                         title = stringResource(item.titleResId),
                         description = stringResource(item.descResId),
                         backgroundColor = item.backgroundColor,
-                        onClick = onClick
+                        onClick = onClick,
+                        iconResId = item.iconResId
                     )
                 }
 
@@ -57,6 +96,7 @@ fun RowScope.QuizModeCard(
     title: String,
     description: String,
     backgroundColor: Color,
+    iconResId: Int,
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -84,11 +124,12 @@ fun RowScope.QuizModeCard(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface
             )
-            Icon(
-                painter = painterResource(R.drawable.quiz_unfill),
-                contentDescription = "$title 이동",
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier.align(Alignment.End)
+            Image(
+                painter = painterResource(iconResId),
+                contentDescription = stringResource(R.string.desc_navigate_to, title),
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .size(48.dp)
             )
         }
     }
@@ -96,32 +137,8 @@ fun RowScope.QuizModeCard(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewQuizModeSection() {
+fun PreviewQuizModeContent() {
     QuizCafeTheme {
-        QuizModeSection {}
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewQuizModeCard() {
-    QuizCafeTheme {
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .height(160.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            QuizModeCard(
-                title = "문제 풀기",
-                description = "원하는 카테고리를 선택해서 학습해요.",
-                backgroundColor = Color(185, 234, 217, 255)
-            )
-            QuizModeCard(
-                title = "문제 만들기",
-                description = "직접 문제를 만들어보세요.",
-                backgroundColor = Color(255, 240, 200, 255)
-            )
-        }
+        QuizModeContent {}
     }
 }
