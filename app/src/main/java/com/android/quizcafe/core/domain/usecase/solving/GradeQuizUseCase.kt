@@ -39,28 +39,4 @@ class GradeQuizUseCase @Inject constructor(
         }
     }
 
-//
-//    private suspend fun getOrCreateQuizBookGradeId(
-//        quizBookGradeLocalId: QuizBookGradeLocalId?,
-//        quizBookId: QuizBookId,
-//        emit: suspend (Resource<Unit>) -> Unit
-//    ): QuizBookGradeLocalId? {
-//        if (quizBookGradeLocalId != null) return quizBookGradeLocalId
-//        var generatedId: QuizBookGradeLocalId? = null
-//        quizBookSolvingRepository.createEmptyQuizBookGrade(quizBookId).collect { result ->
-//            when (result) {
-//                is Resource.Success -> {
-//                    generatedId = result.data
-//                }
-//                is Resource.Failure -> {
-//                    emit(Resource.Failure(errorMessage = result.errorMessage, code = result.code))
-//                }
-//                is Resource.Loading -> {
-//                    emit(Resource.Loading)
-//                }
-//            }
-//        }
-//        return generatedId
-//    }
-
 }
