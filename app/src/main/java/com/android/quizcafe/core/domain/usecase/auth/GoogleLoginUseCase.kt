@@ -10,5 +10,4 @@ class GoogleLoginUseCase @Inject constructor(
 ) {
     operator fun invoke(idToken: String): Flow<Resource<Unit>> =
         authRepository.googleLogin(idToken)
-
 }
