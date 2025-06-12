@@ -34,7 +34,7 @@ fun AppEventsHandler(
                     showLogoutDialog = true
                 }
 
-                LogoutReason.UserLogout -> TODO()
+                LogoutReason.UserLogout -> Unit
             }
         }
     }
