@@ -39,7 +39,7 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
     Row(
         Modifier
             .fillMaxWidth()
-            .height(60.dp)
+            .height(52.dp)
     ) {
         Box(
             Modifier.weight(1f),
@@ -54,7 +54,7 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     "$solvedCount",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = Color.Black
                 )
             }
@@ -77,7 +77,7 @@ fun MyPageSummary(solvedCount: Int, myQuizSetCount: Int) {
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     "$myQuizSetCount",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                     color = Color.Black
                 )
             }

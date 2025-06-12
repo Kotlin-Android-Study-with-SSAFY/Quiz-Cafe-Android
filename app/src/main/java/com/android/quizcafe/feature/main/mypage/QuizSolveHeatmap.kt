@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,6 +55,10 @@ fun QuizGrassGridByCalendar(
     val yearLabel = remember { getYearLabel(joinDate, today) }
     val (maxStreak, currentStreak) = remember { calcStreakInfo(quizSolvingRecord, joinDate, today, kst) }
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(grid) {
+        scrollState.scrollTo(scrollState.maxValue)
+    }
 
     Column(modifier.fillMaxWidth()) {
         Text(
@@ -124,7 +129,7 @@ private fun MonthRow(monthLabels: List<String>, scrollState: ScrollState) {
             if (idx != monthLabels.lastIndex) {
                 Spacer(modifier = Modifier.width(6.dp))
             } else {
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(14.dp))
             }
         }
     }
