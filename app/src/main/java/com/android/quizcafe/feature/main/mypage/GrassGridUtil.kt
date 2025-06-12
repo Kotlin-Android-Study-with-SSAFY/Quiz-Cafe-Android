@@ -18,7 +18,9 @@ fun getGrassColor(count: Int): Color = when {
 }
 
 fun rememberSdf(timeZone: TimeZone): SimpleDateFormat =
-    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply { this.timeZone = timeZone }
+    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
+        this.timeZone = timeZone
+    }
 
 fun rememberTodayCalendar(timeZone: TimeZone): Calendar =
     Calendar.getInstance(timeZone).apply {
@@ -80,7 +82,7 @@ fun makeMonthLabels(grid: List<List<Calendar?>>): List<String> {
             val firstNotNull = grid[w].firstOrNull { it != null }
             val month = firstNotNull?.get(Calendar.MONTH)
             if (month != null && month != prevMonth) {
-                this[w] = getMonthShort(month)
+                this[w] = (month + 1).toString()
                 prevMonth = month
             }
         }
@@ -129,20 +131,4 @@ fun calcStreakInfo(
         day.add(Calendar.DAY_OF_YEAR, -1)
     }
     return Pair(maxStreak, currentStreak)
-}
-
-fun getMonthShort(month: Int) = when (month) {
-    0 -> "Jan"
-    1 -> "Feb"
-    2 -> "Mar"
-    3 -> "Apr"
-    4 -> "May"
-    5 -> "Jun"
-    6 -> "Jul"
-    7 -> "Aug"
-    8 -> "Sep"
-    9 -> "Oct"
-    10 -> "Nov"
-    11 -> "Dec"
-    else -> ""
 }
