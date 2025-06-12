@@ -36,7 +36,7 @@ fun QuizCafeLogo() {
 }
 
 @Composable
-fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
+fun EmailInputContent(state: LoginUiState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "ID",
         value = state.email,
@@ -48,7 +48,7 @@ fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) 
 }
 
 @Composable
-fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
+fun PasswordInputContent(state: LoginUiState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "PW",
         value = state.password,
@@ -62,7 +62,7 @@ fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Uni
 }
 
 @Composable
-fun LoginButton(state: LoginViewState, onClick: () -> Unit) {
+fun LoginButton(state: LoginUiState, onClick: () -> Unit) {
     QuizCafeButton(
         onClick = onClick,
         modifier = Modifier
@@ -107,9 +107,9 @@ fun QuizCafeLogoPreview() {
 fun EmailInputPreview() {
     QuizCafeTheme {
         Column {
-            EmailInputContent(LoginViewState()) {}
+            EmailInputContent(LoginUiState()) {}
             Spacer(Modifier.height(20.dp))
-            EmailInputContent(LoginViewState(email = "email")) {}
+            EmailInputContent(LoginUiState(email = "email")) {}
         }
     }
 }
@@ -119,9 +119,9 @@ fun EmailInputPreview() {
 fun PasswordInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordInputContent(LoginViewState()) {}
+            PasswordInputContent(LoginUiState()) {}
             Spacer(Modifier.height(20.dp))
-            PasswordInputContent(LoginViewState(password = "password")) {}
+            PasswordInputContent(LoginUiState(password = "password")) {}
         }
     }
 }
@@ -131,9 +131,9 @@ fun PasswordInputPreview() {
 fun LoginButtonPreview() {
     QuizCafeTheme {
         Column {
-            LoginButton(LoginViewState()) {}
+            LoginButton(LoginUiState()) {}
             Spacer(Modifier.height(20.dp))
-            LoginButton(LoginViewState(isLoginEnabled = true)) {}
+            LoginButton(LoginUiState(isLoginEnabled = true)) {}
         }
     }
 }

@@ -22,7 +22,7 @@ import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
 fun QuizBookListScreen(
-    state: QuizBookListViewState = QuizBookListViewState(),
+    state: QuizBookListUiState = QuizBookListUiState(),
     sendIntent: (QuizBookListIntent) -> Unit
 ) {
     var isSheetOpen by remember { mutableStateOf(false) }

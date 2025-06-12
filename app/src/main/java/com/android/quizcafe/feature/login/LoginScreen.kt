@@ -16,7 +16,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
 fun LoginScreen(
-    state: LoginViewState,
+    state: LoginUiState,
     sendIntent: (LoginIntent) -> Unit
 ) {
     LazyColumn(
@@ -57,6 +57,6 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     QuizCafeTheme {
-        LoginScreen(LoginViewState()) {}
+        LoginScreen(LoginUiState()) {}
     }
 }

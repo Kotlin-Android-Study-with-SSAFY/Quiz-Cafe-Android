@@ -19,8 +19,8 @@ class SignUpViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
     private val sendCodeUseCase: SendCodeUseCase,
     private val verifyCodeUseCase: VerifyCodeUseCase
-) : BaseViewModel<SignUpViewState, SignUpIntent, SignUpEffect>(
-    initialState = SignUpViewState()
+) : BaseViewModel<SignUpUiState, SignUpIntent, SignUpEffect>(
+    initialState = SignUpUiState()
 ) {
 
     private val countdownTimer = CountdownTimer(
@@ -100,7 +100,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(state: SignUpViewState, intent: SignUpIntent): SignUpViewState {
+    override fun reduce(state: SignUpUiState, intent: SignUpIntent): SignUpUiState {
         return when (intent) {
             is SignUpIntent.UpdatedEmail -> state.copy(email = intent.email).recalculate()
             is SignUpIntent.UpdatedVerificationCode -> state.copy(
@@ -156,7 +156,7 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    private fun SignUpViewState.recalculate(): SignUpViewState {
+    private fun SignUpUiState.recalculate(): SignUpUiState {
         val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
         val passwordRegex =
             Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")

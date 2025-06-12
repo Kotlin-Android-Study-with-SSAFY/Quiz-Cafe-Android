@@ -65,7 +65,7 @@ data class QuizSolveUiState(
     val review: ReviewState = ReviewState(),
     val timer: TimerState = TimerState(),
     val common: CommonState = CommonState()
-) : BaseContract.ViewState {
+) : BaseContract.UiState {
     val isLastQuestion: Boolean
         get() = question.current == question.total
 

@@ -3,12 +3,12 @@ package com.android.quizcafe.feature.quizbookdetail
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class QuizBookDetailViewState(
+data class QuizBookDetailUiState(
     val quizBookId: Long = 2,
     val quizBookDetail: QuizBookDetail = QuizBookDetail(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
     data object LoadQuizBookDetail : QuizBookDetailIntent()

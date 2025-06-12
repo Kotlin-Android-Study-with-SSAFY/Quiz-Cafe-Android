@@ -3,14 +3,14 @@ package com.android.quizcafe.feature.quizbooklist
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class QuizBookListViewState(
+data class QuizBookListUiState(
     val category: String = "",
     val quizBooks: List<QuizBook> = emptyList(),
     val filteredQuizBooks: List<QuizBook> = emptyList(),
     val currentFilters: FilterState = FilterState(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class QuizBookListIntent : BaseContract.ViewIntent {
     data object LoadQuizBooks : QuizBookListIntent()

@@ -5,13 +5,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CategoryResponseDto(
+data class QuizBookCategoryResponseDto(
     @SerialName("category") val categoryId: String,
     @SerialName("name") val categoryName: String,
     val group: String
 )
 
-fun CategoryResponseDto.toDomain() = Category(
+fun QuizBookCategoryResponseDto.toDomain() = Category(
     id = categoryId,
     name = categoryName,
     group = group
