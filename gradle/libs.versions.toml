@@ -20,6 +20,10 @@ kotlinxSerializationJson = "1.8.0"
 kotlinxSerializationPlugin = "2.0.0"  # 코틀린 버전과 일치
 kotlinxCoroutines = "1.10.1"
 datastorePreferences = "1.1.4"
+google-auth = "20.7.0"
+credential = "1.5.0"
+credential-auth = "1.5.0"
+identity = "1.1.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -50,6 +54,10 @@ retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "conv
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+google-auth = {group = "com.google.android.gms", name = "play-services-auth", version.ref = "google-auth"}
+credential = { group = "androidx.credentials", name = "credentials", version.ref = "credential" }
+credential-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credential-auth" }
+google-identity = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "identity" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

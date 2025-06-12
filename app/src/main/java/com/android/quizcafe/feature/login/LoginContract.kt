@@ -14,6 +14,8 @@ sealed class LoginIntent : BaseContract.ViewIntent {
     data class UpdatedEmail(val email: String) : LoginIntent()
     data class UpdatedPassword(val password: String) : LoginIntent()
 
+    data class GoogleLogin(val idToken: String) : LoginIntent()
+
     data object ClickLogin : LoginIntent()
     data object ClickSignUp : LoginIntent()
 
