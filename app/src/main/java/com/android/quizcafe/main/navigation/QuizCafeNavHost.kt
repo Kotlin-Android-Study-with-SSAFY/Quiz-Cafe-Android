@@ -27,12 +27,12 @@ import com.android.quizcafe.main.navigation.routes.MainRoute
 
 @Composable
 fun QuizCafeNavHost(
-    startDestination: String = AuthRoute.startDestination
+    startDestination: String
 ) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route,
+        startDestination = startDestination,
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
@@ -43,7 +43,7 @@ fun QuizCafeNavHost(
 // 1. 로그인 및 회원가입
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
     navigation(
-        startDestination = AuthRoute.startDestination,
+        startDestination = AuthRoute.Login.route,
         route = AuthRoute.Graph.route
     ) {
         composable(AuthRoute.Login.route) {

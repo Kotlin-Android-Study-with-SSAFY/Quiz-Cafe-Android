@@ -32,6 +32,6 @@ sealed interface MainRoute : NavRoute {
     }
 
     companion object {
-        val startDestination = Quiz.route
+        val startDestination = Graph.route
     }
 }
