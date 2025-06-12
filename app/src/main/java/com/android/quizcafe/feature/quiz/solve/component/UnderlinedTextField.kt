@@ -3,7 +3,9 @@ package com.android.quizcafe.feature.quiz.solve.component
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
@@ -36,12 +38,18 @@ fun UnderlinedTextField(
     answerState: AnswerState = AnswerState.DEFAULT
 ) {
     val bottomLineColor = when (answerState) {
-        AnswerState.DEFAULT -> scrimLight
+        AnswerState.SELECTED, AnswerState.DEFAULT -> scrimLight
+
         AnswerState.CORRECT -> blue_200
         AnswerState.INCORRECT -> error_02
-        AnswerState.SELECTED -> {}
-    } as Color
+    }
 
+    val modifiable = when (answerState) {
+        AnswerState.DEFAULT,
+        AnswerState.SELECTED -> true
+
+        else -> false
+    }
     Column(modifier = modifier.fillMaxWidth()) {
         BasicTextField(
             value = value,
@@ -50,6 +58,7 @@ fun UnderlinedTextField(
             },
             singleLine = true,
             modifier = Modifier.fillMaxWidth(),
+            enabled = modifiable,
             decorationBox = { inner ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -57,16 +66,9 @@ fun UnderlinedTextField(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     inner()
-
                     // 우측 아이콘 (정답/오답일 때만)
-                    when (answerState) {
-                        AnswerState.CORRECT,
-                        AnswerState.INCORRECT -> {
-                            AnswerResultIcon(answerState, bottomLineColor)
-                        }
-                        else -> {
-                            /* Normal 일 땐 아이콘 없음 */
-                        }
+                    if (answerState == AnswerState.CORRECT || answerState == AnswerState.INCORRECT) {
+                        AnswerResultIcon(answerState, bottomLineColor)
                     }
                 }
             }
@@ -77,6 +79,7 @@ fun UnderlinedTextField(
             modifier = Modifier.fillMaxWidth()
         )
         if (showCharCount) {
+            Spacer(modifier = Modifier.height(8.dp))
             LengthCountText(value, maxCharCount)
         }
     }
