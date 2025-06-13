@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.domain.usecase.solving
 
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
 import javax.inject.Inject

@@ -105,7 +105,7 @@ class QuizSolveViewModel @Inject constructor(
 
             is QuizSolveIntent.LoadQuizBookDetail -> currentState.copy(isLoading = true, errorMessage = null)
             is QuizSolveIntent.SuccessGetQuizBookDetail -> {
-                Log.d("test1234",intent.data.toString())
+                Log.d("test1234", intent.data.toString())
                 currentState.copy(
                     quizInfos = intent.data,
                     isLoading = false
@@ -118,7 +118,7 @@ class QuizSolveViewModel @Inject constructor(
                 )
             is QuizSolveIntent.SuccessGetQuizBookGradeResult ->
                 currentState.copy(
-                    quizGrades =  intent.quizBookGrade.quizGrades
+                    quizGrades = intent.quizBookGrade.quizGrades
                 )
             else -> currentState
         }

@@ -14,5 +14,5 @@ data class QuizBook(
     val totalComments: Int = 0,
     val totalSaves: Int,
     val createdAt: String,
-    val quizList : List<Quiz> = emptyList()
+    val quizList: List<Quiz> = emptyList()
 )

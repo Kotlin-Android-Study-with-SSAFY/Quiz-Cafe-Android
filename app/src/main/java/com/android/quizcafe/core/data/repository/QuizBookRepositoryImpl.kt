@@ -39,7 +39,7 @@ class QuizBookRepositoryImpl @Inject constructor(
      TODO : 로컬에서 퀴즈북 with 퀴즈 리스트 가져와서 QuizSolve로 뿌려주기
      */
 
-    override fun getQuizBookById(quizBookId : QuizBookId) : Flow<Resource<QuizBook>> =
+    override fun getQuizBookById(quizBookId: QuizBookId): Flow<Resource<QuizBook>> =
         apiResponseToResourceFlow(mapper = { it.toDomain() }) {
             quizBookRemoteDataSource.getQuizBookWithQuizListById(quizBookId.value)
         }

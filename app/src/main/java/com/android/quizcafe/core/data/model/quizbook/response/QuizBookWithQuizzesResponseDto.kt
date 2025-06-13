@@ -15,5 +15,5 @@ data class QuizBookWithQuizzesResponseDto(
     val createdBy: String,
     val createdAt: String,
     val totalQuizzes: Int,
-    val quizzes : List<QuizResponseDto>
+    val quizzes: List<QuizResponseDto>
 )

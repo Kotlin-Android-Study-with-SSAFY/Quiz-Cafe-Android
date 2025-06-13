@@ -6,7 +6,6 @@ import androidx.room.Relation
 data class QuizWithMcqOptionsRelation(
     @Embedded val quizEntity: QuizEntity,
     @Relation(
-
         parentColumn = "id",
         entityColumn = "quizId"
     )

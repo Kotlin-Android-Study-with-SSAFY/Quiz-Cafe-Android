@@ -14,7 +14,7 @@ interface QuizBookRepository {
 
     fun getAllCategories(categoryRequest: CategoryRequest): Flow<Resource<List<Category>>>
 
-    fun getQuizBookById(quizBookId : QuizBookId) : Flow<Resource<QuizBook>>
+    fun getQuizBookById(quizBookId: QuizBookId): Flow<Resource<QuizBook>>
 
     fun getQuizBookListByCategory(quizBookRequest: QuizBookRequest): Flow<Resource<List<QuizBook>>>
 

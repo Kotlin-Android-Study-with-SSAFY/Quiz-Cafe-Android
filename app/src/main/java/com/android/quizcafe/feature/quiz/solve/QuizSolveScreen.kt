@@ -218,4 +218,3 @@ fun QuizTitleSection(modifier: Modifier = Modifier, questionText: String) {
         modifier = modifier.fillMaxWidth()
     )
 }
-

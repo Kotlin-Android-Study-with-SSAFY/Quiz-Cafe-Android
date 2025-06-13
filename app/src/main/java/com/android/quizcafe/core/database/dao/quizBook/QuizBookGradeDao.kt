@@ -1,7 +1,6 @@
 package com.android.quizcafe.core.database.dao.quizBook
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert

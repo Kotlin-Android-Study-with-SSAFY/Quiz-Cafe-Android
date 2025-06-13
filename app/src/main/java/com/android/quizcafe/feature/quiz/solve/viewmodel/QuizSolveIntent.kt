@@ -6,7 +6,7 @@ import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 sealed class QuizSolveIntent : BaseContract.ViewIntent {
-    data class LoadQuizBookDetail(val quizBookId : Long) : QuizSolveIntent()
+    data class LoadQuizBookDetail(val quizBookId: Long) : QuizSolveIntent()
     data class SuccessGetQuizBookDetail(val data: List<Quiz>) : QuizSolveIntent()
     data class SuccessGetQuizBookLocalId(val quizBookLocalId: QuizBookGradeLocalId) : QuizSolveIntent()
     data class SuccessGetQuizBookGradeResult(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()

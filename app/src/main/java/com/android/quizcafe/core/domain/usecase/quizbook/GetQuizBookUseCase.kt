@@ -7,10 +7,9 @@ import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
 class GetQuizBookUseCase @Inject constructor(
     private val quizBookRepository: QuizBookRepository
 ) {
-    operator fun invoke(quizBookId: QuizBookId) : Flow<Resource<QuizBook>> =
+    operator fun invoke(quizBookId: QuizBookId): Flow<Resource<QuizBook>> =
         quizBookRepository.getQuizBookById(quizBookId)
 }

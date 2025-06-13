@@ -51,7 +51,6 @@ fun QuizBookWithQuizzesResponseDto.toDomain() = QuizBook(
     quizList = quizzes.fastMap { it.toDomain() }
 )
 
-
 fun QuizBookWithQuizRelation.toDomain() = QuizBook(
     id = quizBookEntity.id,
     version = quizBookEntity.version,

@@ -104,8 +104,11 @@ data class QuizSolveUiState(
 
     fun optionState(opt: QuizOption): AnswerState = when (currentPhase) {
         AnswerPhase.ANSWERING ->
-            if (opt.id == mcq.selectedId) AnswerState.SELECTED
-            else AnswerState.DEFAULT
+            if (opt.id == mcq.selectedId) {
+                AnswerState.SELECTED
+            } else {
+                AnswerState.DEFAULT
+            }
 
         AnswerPhase.REVIEW -> currentGrade?.let { gr ->
             when {
@@ -138,5 +141,4 @@ data class QuizSolveUiState(
         val s = seconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
-
 }
