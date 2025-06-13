@@ -8,6 +8,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
@@ -16,7 +17,9 @@ import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun LoginRoute(
@@ -61,6 +64,22 @@ fun LoginRoute(
         } catch (e: Exception) {
             Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             Log.d("googleLogin", "LoginRoute: ${e.message}")
+        }
+    }
+
+    fun handleGoogleLogout(
+        onComplete: () -> Unit = {}
+    ) {
+        viewModel.viewModelScope.launch {
+            try {
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+                Log.d("googleLogout", "Credential 상태 초기화 성공")
+            } catch (e: Exception) {
+                Log.e("googleLogout", "Credential 상태 초기화 실패: ${e.message}", )
+            }
+            withContext(Dispatchers.Main) {
+                onComplete()
+            }
         }
     }
 
