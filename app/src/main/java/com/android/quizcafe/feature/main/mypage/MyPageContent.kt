@@ -19,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.theme.errorLight
+import com.android.quizcafe.core.designsystem.theme.secondaryDark
 
 @Composable
 fun MyPageUserName(userName: String) {
@@ -157,7 +159,7 @@ fun ConfirmDialog(
             TextButton(onClick = onConfirm) {
                 Text(
                     text = stringResource(R.string.dialog_yes),
-                    color = Color(0xFF757575)
+                    color = secondaryDark
                 )
             }
         },
@@ -165,7 +167,7 @@ fun ConfirmDialog(
             TextButton(onClick = onCancel) {
                 Text(
                     text = stringResource(R.string.dialog_no),
-                    color = Color.Red
+                    color = errorLight
                 )
             }
         }

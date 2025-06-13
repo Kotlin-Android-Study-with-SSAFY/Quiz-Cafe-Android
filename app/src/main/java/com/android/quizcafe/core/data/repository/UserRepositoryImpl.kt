@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.data.repository
 
-import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.toDomain
 import com.android.quizcafe.core.data.model.quizsolvingrecord.response.toDomain
@@ -8,13 +7,11 @@ import com.android.quizcafe.core.data.model.user.response.toDomain
 import com.android.quizcafe.core.data.remote.datasource.QuizSolvingRecordRemoteDataSource
 import com.android.quizcafe.core.data.remote.datasource.UserRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.domain.repository.UserRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
-import com.android.quizcafe.core.network.mapper.noContentResponseToResourceFlow
 import com.android.quizcafe.core.network.model.NetworkResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -32,37 +29,34 @@ class UserRepositoryImpl @Inject constructor(
         val recordResult = quizSolvingRecordRemoteDataSource.getAllQuizSolvingRecordsByUser()
 
         val userInfo = (userResult as? NetworkResult.Success)?.data?.data
-        val recordDtoList = (recordResult as? NetworkResult.Success)?.data?.data
+        val recordDtoList = (recordResult as? NetworkResult.Success)?.data?.data ?: emptyList()
 
-        if (userInfo != null && recordDtoList != null) {
-            val records = recordDtoList.map { it.toDomain() }
-            val quizCount = records.sumOf { it.quizzes.size }
-            val quizBookCount = records.map { it.quizBookId }.distinct().count()
-            val joinDateStr = userInfo.joinDateStr
-            val quizSolvingRecord = records
-                .asSequence()
-                .flatMap { it.quizzes }
-                .groupingBy { it.completedAt.take(10) }
-                .eachCount()
-                .toSortedMap()
+        if (userInfo == null) {
+            val error = userResult as? NetworkResult.Error ?: recordResult as? NetworkResult.Error
+            emit(Resource.Failure(error?.message ?: "유저 정보를 불러오지 못했습니다.", error?.code ?: -1))
+            return@flow
+        }
 
-            emit(
-                Resource.Success(
-                    userInfo.toDomain(
-                        quizCount = quizCount,
-                        quizBookCount = quizBookCount,
-                        joinDateStr = joinDateStr,
-                        quizSolvingRecord = quizSolvingRecord
-                    )
+        val records = recordDtoList.map { it.toDomain() }
+        val quizCount = records.sumOf { it.quizzes.size }
+        val quizBookCount = records.map { it.quizBookId }.distinct().count()
+        val quizSolvingRecord = records
+            .asSequence()
+            .flatMap { it.quizzes }
+            .groupingBy { it.completedAt.take(10) }
+            .eachCount()
+            .toSortedMap()
+
+        emit(
+            Resource.Success(
+                userInfo.toDomain(
+                    quizCount = quizCount,
+                    quizBookCount = quizBookCount,
+                    joinDateStr = userInfo.joinDateStr,
+                    quizSolvingRecord = quizSolvingRecord
                 )
             )
-        } else {
-            val error = userResult as? NetworkResult.Error
-                ?: recordResult as? NetworkResult.Error
-            val errorMsg = error?.message ?: "유저 정보를 불러오지 못했습니다."
-            val errorCode = error?.code ?: -1
-            emit(Resource.Failure(errorMsg, errorCode))
-        }
+        )
     }
 
     override fun updateUserNickName(nickName: String): Flow<Resource<Unit>> =
