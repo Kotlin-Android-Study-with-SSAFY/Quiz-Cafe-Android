@@ -13,8 +13,7 @@ fun QuizDto.toEntity() = QuizEntity(
     questionType = questionType,
     content = content,
     answer = answer,
-    explanation = explanation,
-    version = version,
+    explanation = explanation
 )
 
 fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
@@ -24,7 +23,6 @@ fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     content = quizEntity.content,
     answer = quizEntity.answer,
     explanation = quizEntity.explanation,
-    version = quizEntity.version,
     mcqOption = if (mcqOptions.isNotEmpty()) {
         mcqOptions.toDomain()
     } else {

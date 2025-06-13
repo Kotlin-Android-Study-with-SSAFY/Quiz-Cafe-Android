@@ -200,8 +200,7 @@ fun QuizBookSolvingResultScreenPreview() {
                         questionType = "MCQ",
                         content = "스택은 어시기어시기",
                         answer = "O",
-                        explanation = "스택은 LIFO(Last In First Out) 구조입니다.",
-                        version = 1L
+                        explanation = "스택은 LIFO(Last In First Out) 구조입니다."
                     ),
                     Quiz(
                         id = QuizId(2L),
@@ -210,7 +209,6 @@ fun QuizBookSolvingResultScreenPreview() {
                         content = "launch()와 async는 동일하다.",
                         answer = "launch",
                         explanation = "launch와 async는 코루틴을 실행시키기 위한 빌더이지만, 반환 결과에 따른 차이가 존재합니다. launch는 결과를 반환하지 않으며 Job 객체를 반환합니다. 반면, async는 Deferred로 감싸진 결과를 반환하며, 이를 await()메서드를 통해 결과를 얻을 수 있습니다. 따라서, launch는 결과가 필요없이 실행만 하는 경우 사용되고 async는 결과가 필요한 비동기 작업에 사용됩니다.",
-                        version = 1L
                     ),
                     Quiz(
                         id = QuizId(3L),
@@ -219,7 +217,6 @@ fun QuizBookSolvingResultScreenPreview() {
                         content = "Android Architecture Components에서 ViewModel의 역할과 생명주기에 대해 설명하고, Repository 패턴과 함께 사용할 때의 장점을 서술하시오.",
                         answer = "val",
                         explanation = "val은 불변 변수를 선언할 때 사용합니다.",
-                        version = 1L
                     )
                 )
             )

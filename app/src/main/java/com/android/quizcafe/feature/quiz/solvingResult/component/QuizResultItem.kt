@@ -192,7 +192,6 @@ fun QuizResultItemNewStylePreview() {
                 content = "Android Architecture Components에서 ViewModel의 역할과 생명주기에 대해 설명하고, Repository 패턴과 함께 사용할 때의 장점을 서술하시오.",
                 answer = "ViewModel은 UI 관련 데이터를 저장하고 관리하는 클래스",
                 explanation = "ViewModel은 UI 컨트롤러의 생명주기를 고려하여 설계된 클래스입니다.",
-                version = 1L
             ),
             quizGrade = QuizGrade(
                 localId = 1L,
@@ -221,7 +220,6 @@ fun QuizResultItemNewStyleExpandedPreview() {
                 content = "다음 중 Kotlin의 특징이 아닌 것은?\n1. Null Safety\n2. 상호 운용성\n3. 간결성\n4. 메모리 누수",
                 answer = "4",
                 explanation = "Kotlin은 메모리 안전성을 제공하며, 메모리 누수를 방지하는 다양한 기능을 제공합니다.",
-                version = 1L
             ),
             quizGrade = QuizGrade(
                 localId = 2L,
@@ -250,7 +248,6 @@ fun QuizResultItemOXTypePreview() {
                 content = "Room 데이터베이스는 SQLite의 추상화 레이어이다.",
                 answer = "O",
                 explanation = "Room은 SQLite 위에 구축된 추상화 레이어입니다.",
-                version = 1L
             ),
             quizGrade = QuizGrade(
                 localId = 3L,
