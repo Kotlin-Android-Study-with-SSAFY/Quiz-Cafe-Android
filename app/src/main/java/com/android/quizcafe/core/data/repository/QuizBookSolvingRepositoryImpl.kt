@@ -181,7 +181,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         val quizWithOptions = quizDao.getQuizWithOptionsById(quizGrade.quizId)
 
         if (quizWithOptions == null) {
-            // 로그 추가 고려
             return null
         }
 

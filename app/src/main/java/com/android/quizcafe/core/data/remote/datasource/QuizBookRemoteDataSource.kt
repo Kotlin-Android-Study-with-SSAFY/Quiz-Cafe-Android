@@ -6,6 +6,7 @@ import com.android.quizcafe.core.data.model.quizbook.response.QuizBookCategoryRe
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookDetailResponseDto
 import com.android.quizcafe.core.data.model.quizbook.request.QuizBookRequestDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
+import com.android.quizcafe.core.data.model.quizbook.response.QuizBookWithQuizzesResponseDto
 import com.android.quizcafe.core.data.remote.service.QuizBookService
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
@@ -20,6 +21,10 @@ class QuizBookRemoteDataSource @Inject constructor(
 
     suspend fun getAllCategories(): NetworkResult<ApiResponse<QuizBookCategoryResponseDto>> =
         quizBookService.getAllCategories()
+
+    suspend fun getQuizBookWithQuizListById(quizBookId: Long): NetworkResult<ApiResponse<QuizBookWithQuizzesResponseDto>> =
+        quizBookService.getQuizBookWithQuizzesById(quizBookId)
+
     suspend fun getQuizBookDetail(request: QuizBookDetailRequestDto): NetworkResult<ApiResponse<QuizBookDetailResponseDto>> =
         quizBookService.getQuizBookDetail(request.quizBookId)
 

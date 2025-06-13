@@ -8,6 +8,7 @@ import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.model.value.QuizId
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -202,7 +203,7 @@ class QuizBookSolvingRepositoryTest {
         }
 
         // When
-        val solveResults = mutableListOf<Resource<Unit>>()
+        val solveResults = mutableListOf<Resource<QuizBookGradeServerId>>()
         repository.solveQuizBook(quizBookGradeLocalId).collect(solveResults::add)
 
         // Then
@@ -276,7 +277,6 @@ class QuizBookSolvingRepositoryTest {
             content = "Kotlin은 JetBrains에서 개발한 언어이다.",
             answer = "O",
             explanation = "맞습니다. Kotlin은 JetBrains에서 개발했습니다.",
-            version = 1L
         )
         quizEntities.add(quiz1)
 
@@ -288,7 +288,6 @@ class QuizBookSolvingRepositoryTest {
             content = "다음 중 Kotlin의 특징이 아닌 것은?",
             answer = "A",
             explanation = "Kotlin은 null 안전성을 제공합니다.",
-            version = 1L
         )
         quizEntities.add(quiz2)
 
@@ -310,7 +309,6 @@ class QuizBookSolvingRepositoryTest {
             content = "Kotlin에서 변수를 선언할 때 사용하는 키워드 중 불변 변수를 선언하는 키워드는?",
             answer = "val",
             explanation = "val은 불변 변수(읽기 전용)를 선언하는 키워드입니다.",
-            version = 1L
         )
         quizEntities.add(quiz3)
 

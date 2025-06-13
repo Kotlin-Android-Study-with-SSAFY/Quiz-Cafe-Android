@@ -10,6 +10,5 @@ data class Quiz(
     val content: String,
     val answer: String,
     val explanation: String?,
-    val version: Long,
-    val mcqOption: List<McqOption>? = null
+    val mcqOption: List<McqOption> = emptyList()
 )

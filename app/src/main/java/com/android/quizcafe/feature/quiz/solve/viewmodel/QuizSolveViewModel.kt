@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
-import com.android.quizcafe.core.domain.usecase.quiz.GetQuizListByBookIdUseCase
+import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizSolveViewModel @Inject constructor(
-    private val getQuizListByBookIdUseCase: GetQuizListByBookIdUseCase,
+    private val getQuizBookUseCase: GetQuizBookUseCase,
     private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
     private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
@@ -39,7 +39,7 @@ class QuizSolveViewModel @Inject constructor(
             }
 
             is QuizSolveIntent.LoadQuizBookDetail -> {
-                getQuizBookDetail(intent.quizBookId)
+                getQuizBook(intent.quizBookId)
             }
 
             is QuizSolveIntent.GetQuizBookLocalId -> {
@@ -124,22 +124,22 @@ class QuizSolveViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getQuizBookDetail(id: Long) {
-        getQuizListByBookIdUseCase(
+    private suspend fun getQuizBook(id: Long) {
+        getQuizBookUseCase(
             QuizBookId(id)
         ).collect {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("quizBookDetail", "성공했니?")
-                    sendIntent(QuizSolveIntent.SuccessGetQuizBookDetail(it.data))
+                    Log.d("getQuizBook", "${it.data.quizList}")
+                    sendIntent(QuizSolveIntent.SuccessGetQuizBookDetail(it.data.quizList))
                 }
 
                 is Resource.Loading -> {
-                    Log.d("quizBookDetail", "Loading")
+                    Log.d("getQuizBook", "Loading")
                 }
 
                 is Resource.Failure -> {
-                    Log.d("quizBookDetail", it.errorMessage)
+                    Log.d("getQuizBook", it.errorMessage)
                 }
             }
         }

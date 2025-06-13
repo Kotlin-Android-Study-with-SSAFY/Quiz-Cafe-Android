@@ -2,14 +2,15 @@ package com.android.quizcafe.core.domain.usecase.quizbook
 
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
-import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetQuizBookListUseCase @Inject constructor(
+
+class GetQuizBookUseCase @Inject constructor(
     private val quizBookRepository: QuizBookRepository
 ) {
-    operator fun invoke(request: QuizBookRequest): Flow<Resource<List<QuizBook>>> =
-        quizBookRepository.getQuizBookListByCategory(request)
+    operator fun invoke(quizBookId: QuizBookId) : Flow<Resource<QuizBook>> =
+        quizBookRepository.getQuizBookById(quizBookId)
 }

@@ -7,6 +7,7 @@ import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
+import com.android.quizcafe.core.data.model.quizbook.response.QuizBookWithQuizzesResponseDto
 import retrofit2.http.DELETE
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -17,6 +18,11 @@ interface QuizBookService {
     suspend fun getQuizBooksByCategory(
         @Query("category")category: String
     ): NetworkResult<ApiResponse<QuizBookResponseDto>>
+
+    @GET("quiz-book/{quizBookId}")
+    suspend fun getQuizBookWithQuizzesById(
+        @Path("quizBookId") quizBookId: Long
+    ): NetworkResult<ApiResponse<QuizBookWithQuizzesResponseDto>>
 
     @GET("quiz-book/category")
     suspend fun getCategories(
