@@ -50,7 +50,6 @@ fun LoginRoute(
             val credential = result.credential
             val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
             viewModel.sendIntent(LoginIntent.GoogleLogin(googleCredential.idToken))
-
         } catch (e: Exception) {
             Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             Log.d("googleLogin", "LoginRoute: ${e.message}")
