@@ -30,16 +30,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             QuizCafeTheme {
                 val navController = rememberNavController()
-                var startDestination: String by remember { mutableStateOf("") }
+                var startDestination: String? by remember { mutableStateOf(null) }
 
                 LaunchedEffect(Unit) {
                     val accessToken = authManager.getToken()
                     startDestination = if (accessToken != null) MainRoute.Graph.route else AuthRoute.Graph.route
                 }
-
-                when (startDestination) {
-                    MainRoute.Graph.route, AuthRoute.Graph.route -> QuizCafeNavHost(navController, startDestination = startDestination)
-                    else -> Unit
+                startDestination?.let {
+                    QuizCafeNavHost(navController, startDestination = it)
                 }
 
                 AppEventsHandler(
