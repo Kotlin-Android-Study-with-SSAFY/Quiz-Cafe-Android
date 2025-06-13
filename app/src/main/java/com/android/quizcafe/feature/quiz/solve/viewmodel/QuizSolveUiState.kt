@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
@@ -27,6 +28,7 @@ data class QuestionInfo(
 data class McqState(
     val options: List<QuizOption>,
     val selectedId: Long? = null,
+    val selectedContent : String ? = null,
     val correctId: Long? = null
 )
 
@@ -82,7 +84,11 @@ data class QuizSolveUiState(
             current = currentIndex + 1,
             total = quizBook?.totalQuizzes ?: 0,
             text = currentQuiz?.content.orEmpty(),
-            type = QuestionType.MULTIPLE_CHOICE
+            type = when(currentQuiz?.questionType){
+                "MCQ" -> QuestionType.MULTIPLE_CHOICE
+                "OX" -> QuestionType.OX
+                else -> QuestionType.SUBJECTIVE
+            }
         )
     val optionList: List<QuizOption>
         get() = currentQuiz?.mcqOption
@@ -100,12 +106,12 @@ data class QuizSolveUiState(
     private val currentGrade: QuizGrade?
         get() = quizGrades.getOrNull(currentIndex)
 
-    val currentPhase: AnswerPhase
+    private val currentPhase: AnswerPhase
         get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
 
     fun optionState(opt: QuizOption): AnswerState = when (currentPhase) {
         AnswerPhase.ANSWERING ->
-            if (opt.id == mcq.selectedId) {
+            if (opt.text == mcq.selectedContent) {
                 AnswerState.SELECTED
             } else {
                 AnswerState.DEFAULT

@@ -176,7 +176,7 @@ fun SelectMultipleChoiceSection(
                 answerState = uiState.optionState(option),
                 index = idx + 1,
                 content = option.text,
-                onClick = { onIntent(QuizSolveIntent.SelectOption(option.id)) }
+                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
             )
         }
     }
@@ -204,7 +204,7 @@ fun SelectOXSection(
                 modifier = modifier.weight(1F),
                 answerState = uiState.optionState(option),
                 iconPaint = if (option.text == "O") R.drawable.ic_ox_option_o else R.drawable.ic_ox_option_x,
-                onClick = { onIntent(QuizSolveIntent.SelectOption(option.id)) }
+                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
             )
         }
     }

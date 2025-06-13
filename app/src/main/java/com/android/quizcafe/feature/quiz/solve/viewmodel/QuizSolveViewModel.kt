@@ -3,11 +3,13 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GradeQuizUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ import javax.inject.Inject
 class QuizSolveViewModel @Inject constructor(
     private val getQuizBookUseCase: GetQuizBookUseCase,
     private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
-    private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase
+    private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase,
+    private val gradeQuizUseCase: GradeQuizUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
@@ -50,6 +53,10 @@ class QuizSolveViewModel @Inject constructor(
                 getQuizBookGradeResult(intent.quizBookLocalId)
             }
 
+            is QuizSolveIntent.SubmitNext -> {
+                saveQuizToLocal()
+            }
+
             else -> Unit
         }
     }
@@ -78,7 +85,8 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.SelectOption ->
                 currentState.copy(
                     mcq = currentState.mcq.copy(
-                        selectedId = intent.option
+                        selectedId = intent.option.id,
+                        selectedContent = intent.option.text
                     ),
                     common = currentState.common.copy(
                         isButtonEnabled = true
@@ -116,10 +124,16 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     quizBookLocalId = intent.quizBookLocalId
                 )
+
             is QuizSolveIntent.SuccessGetQuizBookGradeResult ->
                 currentState.copy(
                     quizGrades = intent.quizBookGrade.quizGrades
                 )
+            QuizSolveIntent.GradeQuizSuccess -> {
+                currentState.copy(
+                    currentIndex = currentState.currentIndex + 1
+                )
+            }
             else -> currentState
         }
     }
@@ -152,8 +166,8 @@ class QuizSolveViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Log.d("getQuizBookLocalId", "Get QuizBookDetail Success")
+                    // 로컬 id를 uiState에 저장 reduce
                     sendIntent(QuizSolveIntent.GetQuizBookGradeResult(it.data))
-                    sendIntent(QuizSolveIntent.SuccessGetQuizBookLocalId(it.data))
                 }
 
                 is Resource.Loading -> {
@@ -185,6 +199,40 @@ class QuizSolveViewModel @Inject constructor(
                     Log.d("getQuizBookGradeUseCase", it.errorMessage)
                 }
             }
+        }
+    }
+
+    private suspend fun saveQuizToLocal() {
+        val uiState = state.value
+        val quiz = uiState.currentQuiz
+        val localId = uiState.quizBookLocalId
+        val userAnswer = when (uiState.questionInfo.type) {
+            QuestionType.SUBJECTIVE -> uiState.subjective.answer
+            else -> uiState.mcq.selectedContent
+        }
+        if (quiz != null && localId != null && userAnswer != null) {
+            println(localId)
+            gradeQuizUseCase(
+                quiz, localId, userAnswer
+            ).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        sendIntent(QuizSolveIntent.GradeQuizSuccess)
+                        Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")
+                    }
+
+                    is Resource.Loading -> {
+                        Log.d("getQuizBookGradeUseCase", "Loading")
+                    }
+
+                    is Resource.Failure -> {
+                        Log.d("getQuizBookGradeUseCase", it.errorMessage)
+                        sendIntent(QuizSolveIntent.GradeQuizError(it.errorMessage))
+                    }
+                }
+            }
+        }else {
+            sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
         }
     }
 }

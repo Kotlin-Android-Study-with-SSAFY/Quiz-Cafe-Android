@@ -19,7 +19,7 @@ interface QuizBookService {
         @Query("category")category: String
     ): NetworkResult<ApiResponse<QuizBookResponseDto>>
 
-    @GET("quiz-book/{quizBookId}")
+    @GET("quiz-book/all/{quizBookId}")
     suspend fun getQuizBookWithQuizzesById(
         @Path("quizBookId") quizBookId: Long
     ): NetworkResult<ApiResponse<QuizBookWithQuizzesResponseDto>>
