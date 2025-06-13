@@ -1,5 +1,8 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import com.android.quizcafe.core.domain.model.quiz.Quiz
+import com.android.quizcafe.core.domain.model.quiz.QuizGrade
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import java.util.Locale
@@ -35,7 +38,6 @@ data class SubjectiveState(
 )
 
 data class ReviewState(
-    val phase: AnswerPhase = AnswerPhase.ANSWERING,
     val answerState: AnswerState = AnswerState.DEFAULT,
     val showExplanation: Boolean = false,
     val explanation: String = ""
@@ -52,7 +54,12 @@ data class CommonState(
 )
 
 data class QuizSolveUiState(
-    val question: QuestionInfo = QuestionInfo(1, 10, "", QuestionType.MULTIPLE_CHOICE),
+    val isLoading: Boolean = false,
+    val errorMessage: String? = null,
+    val quizBookLocalId: QuizBookGradeLocalId? = null,
+    val quizInfos: List<Quiz> = emptyList(),
+    val quizGrades: List<QuizGrade> = emptyList(),
+    val currentIndex: Int = 0,
     val mcq: McqState = McqState(
         options = listOf(
             QuizOption(101L, "선택지 1"),
@@ -66,24 +73,64 @@ data class QuizSolveUiState(
     val timer: TimerState = TimerState(),
     val common: CommonState = CommonState()
 ) : BaseContract.UiState {
+    val currentQuiz: Quiz?
+        get() = quizInfos.getOrNull(currentIndex)
+
+    val questionInfo: QuestionInfo
+        get() = QuestionInfo(
+            current = currentIndex + 1,
+            total = quizInfos.size,
+            text = currentQuiz?.content.orEmpty(),
+            type = QuestionType.MULTIPLE_CHOICE
+        )
+    val optionList: List<QuizOption>
+        get() = currentQuiz?.mcqOption
+            ?.map { QuizOption(id = it.quizId.value, text = it.optionContent) }
+            ?: listOf(
+                QuizOption(0L, "O"),
+                QuizOption(1L, "X")
+            )
+    val correctAnswerText: String?
+        get() = currentQuiz?.answer
+
+    val explanationText: String?
+        get() = currentQuiz?.explanation
+
+    private val currentGrade: QuizGrade?
+        get() = quizGrades.getOrNull(currentIndex)
+
+    val currentPhase: AnswerPhase
+        get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
+
+    fun optionState(opt: QuizOption): AnswerState = when (currentPhase) {
+        AnswerPhase.ANSWERING ->
+            if (opt.id == mcq.selectedId) AnswerState.SELECTED
+            else AnswerState.DEFAULT
+
+        AnswerPhase.REVIEW -> currentGrade?.let { gr ->
+            when {
+                gr.isCorrect && opt.id.toString() == gr.userAnswer -> AnswerState.CORRECT
+                !gr.isCorrect && opt.id.toString() == gr.userAnswer -> AnswerState.INCORRECT
+                else -> AnswerState.DEFAULT
+            }
+        } ?: AnswerState.DEFAULT
+    }
+
+    val subjectiveAnswerState: AnswerState
+        get() = when (currentPhase) {
+            AnswerPhase.ANSWERING ->
+                if (subjective.answer.isNotBlank()) AnswerState.SELECTED else AnswerState.DEFAULT
+
+            AnswerPhase.REVIEW ->
+                if (currentGrade?.isCorrect == true) AnswerState.CORRECT else AnswerState.INCORRECT
+        }
+
     val isLastQuestion: Boolean
-        get() = question.current == question.total
+        get() = questionInfo.current == questionInfo.total
 
     val isWrongAnswer: Boolean
-        get() = review.answerState == AnswerState.INCORRECT && !review.showExplanation
-
-    fun optionState(opt: QuizOption): AnswerState = when (review.phase) {
-        AnswerPhase.ANSWERING -> when {
-            opt.id == mcq.selectedId -> AnswerState.SELECTED
-            else -> AnswerState.DEFAULT
-        }
-
-        AnswerPhase.REVIEW -> when (opt.id) {
-            mcq.correctId -> AnswerState.CORRECT
-            mcq.selectedId -> AnswerState.INCORRECT
-            else -> AnswerState.DEFAULT
-        }
-    }
+        get() = subjectiveAnswerState == AnswerState.INCORRECT && !review.showExplanation ||
+            optionList.any { optionState(it) == AnswerState.INCORRECT } && !review.showExplanation
 
     fun getTimeText(): String {
         val seconds = if (timer.playMode == PlayMode.TIME_ATTACK) timer.remainingSeconds else timer.elapsedSeconds
@@ -91,4 +138,5 @@ data class QuizSolveUiState(
         val s = seconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
+
 }

@@ -17,33 +17,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
-import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.designsystem.theme.wrongButtonColor
 import com.android.quizcafe.core.designsystem.theme.neutral08
 import com.android.quizcafe.core.designsystem.theme.primaryLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceDimLight
-import com.android.quizcafe.feature.quiz.solve.component.AnswerState
+import com.android.quizcafe.core.designsystem.theme.wrongButtonColor
 import com.android.quizcafe.feature.quiz.solve.component.ExplanationSection
 import com.android.quizcafe.feature.quiz.solve.component.MultipleChoiceOptionButton
 import com.android.quizcafe.feature.quiz.solve.component.OxOptionButton
 import com.android.quizcafe.feature.quiz.solve.component.QuizTopBar
 import com.android.quizcafe.feature.quiz.solve.component.UnderlinedTextField
-import com.android.quizcafe.feature.quiz.solve.viewmodel.AnswerPhase
-import com.android.quizcafe.feature.quiz.solve.viewmodel.CommonState
-import com.android.quizcafe.feature.quiz.solve.viewmodel.McqState
-import com.android.quizcafe.feature.quiz.solve.viewmodel.QuestionInfo
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuestionType
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizOption
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveUiState
-import com.android.quizcafe.feature.quiz.solve.viewmodel.ReviewState
-import com.android.quizcafe.feature.quiz.solve.viewmodel.SubjectiveState
 
 @Composable
 fun QuizSolveScreen(
@@ -71,8 +62,8 @@ fun QuizSolveScreen(
     Scaffold(
         topBar = {
             QuizTopBar(
-                currentQuestion = uiState.question.current,
-                totalQuestions = uiState.question.total,
+                currentQuestion = uiState.questionInfo.current,
+                totalQuestions = uiState.questionInfo.total,
                 timeText = uiState.getTimeText(),
                 onBackClick = { onIntent(QuizSolveIntent.OnBackClick) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
@@ -96,13 +87,13 @@ fun QuizSolveScreen(
                     Spacer(Modifier.height(36.dp))
                 }
                 item {
-                    QuizTitleSection(questionText = uiState.question.text)
+                    QuizTitleSection(questionText = uiState.questionInfo.text)
                 }
                 item {
                     Spacer(Modifier.height(24.dp))
                 }
                 item {
-                    when (uiState.question.type) {
+                    when (uiState.questionInfo.type) {
                         QuestionType.OX -> {
                             SelectOXSection(uiState = uiState, onIntent = onIntent)
                         }
@@ -179,7 +170,7 @@ fun SelectMultipleChoiceSection(
         verticalArrangement = Arrangement.spacedBy(12.dp),
         modifier = Modifier.fillMaxWidth()
     ) {
-        uiState.mcq.options.forEachIndexed { idx, option ->
+        uiState.optionList.forEachIndexed { idx, option ->
             MultipleChoiceOptionButton(
                 modifier = modifier,
                 answerState = uiState.optionState(option),
@@ -228,197 +219,3 @@ fun QuizTitleSection(modifier: Modifier = Modifier, questionText: String) {
     )
 }
 
-// ——————————————————————————————————————
-// OX 풀이 모드
-@Preview(showBackground = true, name = "OX 풀이 모드")
-@Composable
-fun Preview_OX_Answering() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 3,
-                    total = 10,
-                    text = "OX 문제입니다",
-                    type = QuestionType.OX
-                ),
-                mcq = McqState(
-                    options = emptyList(),
-                    selectedId = 0L
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.ANSWERING,
-                    answerState = AnswerState.SELECTED,
-                    showExplanation = false
-                ),
-                common = CommonState(isButtonEnabled = true)
-            ),
-            onIntent = {}
-        )
-    }
-}
-
-// OX 리뷰 모드
-@Preview(showBackground = true, name = "OX 리뷰 모드")
-@Composable
-fun Preview_OX_Review() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 3,
-                    total = 10,
-                    text = "OX 문제입니다",
-                    type = QuestionType.OX
-                ),
-                mcq = McqState(
-                    options = emptyList(),
-                    selectedId = 0L,
-                    correctId = 1L
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.REVIEW,
-                    answerState = AnswerState.INCORRECT,
-                    showExplanation = true,
-                    explanation = "O/X 해설: launch와 async 차이"
-                ),
-                common = CommonState(isButtonEnabled = true)
-            ),
-            onIntent = {}
-        )
-    }
-}
-
-// ——————————————————————————————————————
-// 객관식 풀이 모드
-@Preview(showBackground = true, name = "객관식 풀이 모드")
-@Composable
-fun Preview_MC_Answering() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 2,
-                    total = 10,
-                    text = "객관식 문제입니다",
-                    type = QuestionType.MULTIPLE_CHOICE
-                ),
-                mcq = McqState(
-                    options = listOf(
-                        QuizOption(101L, "선택지 1"),
-                        QuizOption(102L, "선택지 2"),
-                        QuizOption(103L, "선택지 3"),
-                        QuizOption(104L, "선택지 4")
-                    ),
-                    selectedId = 101L
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.ANSWERING,
-                    answerState = AnswerState.SELECTED
-                ),
-                common = CommonState(isButtonEnabled = true)
-            ),
-            onIntent = {}
-        )
-    }
-}
-
-// 객관식 리뷰 모드
-@Preview(showBackground = true, name = "객관식 리뷰 모드")
-@Composable
-fun Preview_MC_Review() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 2,
-                    total = 10,
-                    text = "객관식 문제입니다",
-                    type = QuestionType.MULTIPLE_CHOICE
-                ),
-                mcq = McqState(
-                    options = listOf(
-                        QuizOption(101L, "선택지 1"),
-                        QuizOption(102L, "선택지 2"),
-                        QuizOption(103L, "선택지 3"),
-                        QuizOption(104L, "선택지 4")
-                    ),
-                    selectedId = 103L,
-                    correctId = 102L
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.REVIEW,
-                    answerState = AnswerState.INCORRECT,
-                    showExplanation = true,
-                    explanation = "객관식 해설: 2번이 정답입니다."
-                ),
-                common = CommonState(isButtonEnabled = true)
-            ),
-            onIntent = {}
-        )
-    }
-}
-
-// ——————————————————————————————————————
-// 주관식 풀이 모드
-@Preview(showBackground = true, name = "주관식 풀이 모드")
-@Composable
-fun Preview_Subjective_Answering() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 5,
-                    total = 10,
-                    text = "주관식 문제입니다",
-                    type = QuestionType.SUBJECTIVE
-                ),
-                subjective = SubjectiveState(
-                    answer = "",
-                    hint = "힌트를 확인하세요",
-                    showCharCount = true,
-                    maxCharCount = 30
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.ANSWERING,
-                    answerState = AnswerState.DEFAULT
-                ),
-                common = CommonState(isButtonEnabled = false)
-            ),
-            onIntent = {}
-        )
-    }
-}
-
-// 주관식 리뷰 모드
-@Preview(showBackground = true, name = "주관식 리뷰 모드")
-@Composable
-fun Preview_Subjective_Review() {
-    QuizCafeTheme {
-        QuizSolveScreen(
-            uiState = QuizSolveUiState(
-                question = QuestionInfo(
-                    current = 5,
-                    total = 10,
-                    text = "주관식 문제입니다",
-                    type = QuestionType.SUBJECTIVE
-                ),
-                subjective = SubjectiveState(
-                    answer = "내 답안",
-                    correctAnswer = "모범 답안",
-                    hint = "힌트를 확인하세요",
-                    showCharCount = true,
-                    maxCharCount = 30
-                ),
-                review = ReviewState(
-                    phase = AnswerPhase.REVIEW,
-                    answerState = AnswerState.INCORRECT,
-                    showExplanation = true,
-                    explanation = "주관식 해설입니다."
-                ),
-                common = CommonState(isButtonEnabled = true)
-            ),
-            onIntent = {}
-        )
-    }
-}

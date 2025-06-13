@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "c0a1c83cc4b70eec6d78b17abe3db391",
+    "identityHash": "33db5bc2ece01377a4dad8b52e0c573b",
     "entities": [
       {
         "tableName": "quiz",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `quizBookId` INTEGER NOT NULL, `questionType` TEXT NOT NULL, `content` TEXT NOT NULL, `answer` TEXT NOT NULL, `explanation` TEXT, `version` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `quizBookId` INTEGER NOT NULL, `questionType` TEXT NOT NULL, `content` TEXT NOT NULL, `answer` TEXT NOT NULL, `explanation` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -43,12 +43,6 @@
             "columnName": "explanation",
             "affinity": "TEXT",
             "notNull": false
-          },
-          {
-            "fieldPath": "version",
-            "columnName": "version",
-            "affinity": "INTEGER",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -320,7 +314,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c0a1c83cc4b70eec6d78b17abe3db391')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33db5bc2ece01377a4dad8b52e0c573b')"
     ]
   }
 }

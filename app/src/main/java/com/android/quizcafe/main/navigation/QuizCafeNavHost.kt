@@ -35,12 +35,11 @@ fun QuizCafeNavHost(
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = QuizSolveRoute.Graph.route,
+        startDestination = AuthRoute.Graph.route,
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
         mainGraph(navController)
-        quizSolveGraph(navController)
     }
 }
 
@@ -89,6 +88,8 @@ fun MainBottomNavHost(
         navController = navController,
         startDestination = startDestination
     ) {
+        quizSolveGraph(navController)
+
         composable(MainRoute.Quiz.route) {
             QuizRoute(
                 navigateToCategory = { _ -> navController.navigateSingleTopTo(MainRoute.CategoryList.route) }
@@ -147,8 +148,27 @@ fun MainBottomNavHost(
             QuizBookDetailRoute(
                 quizBookId = quizBookId,
                 navigateToQuizBookPicker = {},
-                navigateToQuizSolve = {},
+                navigateToQuizSolve = { quizBookId -> navController.navigateSingleTopTo("${QuizSolveRoute.QuizSolve.route}/$quizBookId") },
                 navigateToUserPage = {}
+            )
+        }
+
+        composable(
+            route = "quizSolve/quizSolve/{quizBookId}",
+            arguments = listOf(
+                navArgument("quizBookId") {
+                    type = NavType.LongType
+                    nullable = false
+                    defaultValue = 0L
+                }
+            )
+        ) { backStackEntry ->
+            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
+            QuizSolveRoute(
+                quizBookId,
+                navigateToBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }
@@ -160,13 +180,16 @@ fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
         startDestination = QuizSolveRoute.QuizSolve.route,
         route = QuizSolveRoute.Graph.route
     ) {
-        composable(QuizSolveRoute.QuizSolve.route) {
-            QuizSolveRoute(
-                navigateToBack = {
-                    navController.popBackStack()
-                }
-            )
-        }
+        /*
+        * navHost 충돌 문제 발생
+        * */
+//        composable(QuizSolveRoute.QuizSolve.route) {
+//            QuizSolveRoute(
+//                navigateToBack = {
+//                    navController.popBackStack()
+//                }
+//            )
+//        }
 
         composable(
             route = "${QuizSolveRoute.QuizSolvingResult.route}/{quizBookGradeLocalId}",

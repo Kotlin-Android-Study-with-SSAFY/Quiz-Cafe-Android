@@ -66,7 +66,7 @@ fun QuizBookDetailScreen(
                 }
                 Spacer(Modifier.height(8.dp))
                 QuizSolveButton(
-                    onClick = { sendIntent(QuizBookDetailIntent.ClickQuizSolve) }
+                    onClick = { sendIntent(QuizBookDetailIntent.ClickQuizSolve(quizBookDetail.id)) }
                 )
             }
         }

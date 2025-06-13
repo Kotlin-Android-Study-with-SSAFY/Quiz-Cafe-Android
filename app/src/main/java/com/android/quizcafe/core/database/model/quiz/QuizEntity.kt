@@ -13,6 +13,5 @@ data class QuizEntity (
     val questionType: String,
     val content: String,
     val answer: String,
-    val explanation: String?,
-    val version: Long
+    val explanation: String?
 )

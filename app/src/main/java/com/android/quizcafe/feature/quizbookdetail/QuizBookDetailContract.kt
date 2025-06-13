@@ -12,7 +12,7 @@ data class QuizBookDetailUiState(
 
 sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
     data object LoadQuizBookDetail : QuizBookDetailIntent()
-    data object ClickQuizSolve : QuizBookDetailIntent()
+    data class ClickQuizSolve(val quizBookId: Long) : QuizBookDetailIntent()
     data object ClickMarkQuizBook : QuizBookDetailIntent()
     data object ClickUnmarkQuizBook : QuizBookDetailIntent()
     data object ClickUser : QuizBookDetailIntent()
@@ -29,6 +29,6 @@ sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
 sealed class QuizBookDetailEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : QuizBookDetailEffect()
     data object NavigateToQuizBookList : QuizBookDetailEffect()
-    data object NavigateToQuizSolve : QuizBookDetailEffect()
+    data class NavigateToQuizSolve(val quizBookId: Long) : QuizBookDetailEffect()
     data object NavigateToUserPage : QuizBookDetailEffect()
 }
