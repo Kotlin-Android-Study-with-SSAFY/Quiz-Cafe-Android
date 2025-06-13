@@ -30,7 +30,6 @@ fun MyPageScreen(
         Spacer(Modifier.height(16.dp))
         HorizontalDivider(modifier = Modifier.height(1.dp))
         MyPageMenu { menuId ->
-            // 메뉴 클릭 시 intent로 변환해서 전달
             when (menuId) {
                 0 -> onClick(MyPageIntent.ClickStats(state.solvedCount))
                 1 -> onClick(MyPageIntent.ClickAlarm)
@@ -49,7 +48,6 @@ fun MyPageScreen(
 @Preview(showBackground = true, backgroundColor = 0xFFFDFDFD)
 @Composable
 fun PreviewMyPageScreen() {
-    // 아래는 기존 dummy 생성 코드 활용
     val kst = TimeZone.getTimeZone("Asia/Seoul")
     val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
     sdf.timeZone = kst

@@ -9,6 +9,14 @@ data class UserInfoResponseDto(
     val email: String
 )
 
-fun UserInfoResponseDto.toDomain() = UserInfo(
-    nickname = nickname
+fun UserInfoResponseDto.toDomain(
+    quizCount: Int,
+    quizBookCount: Int,
+    quizSolvingRecord: Map<String, Int>
+) = UserInfo(
+    nickname = nickname,
+    email = email,
+    quizCount = quizCount,
+    quizBookCount = quizBookCount,
+    quizSolvingRecord = quizSolvingRecord
 )

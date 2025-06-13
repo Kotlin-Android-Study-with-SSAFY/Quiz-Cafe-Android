@@ -60,9 +60,3 @@ class MyPageViewModel @Inject constructor(
         }
     }
 }
-
-fun addDaysToCalendar(calendar: Calendar, days: Int): Calendar {
-    val cal = calendar.clone() as Calendar
-    cal.add(Calendar.DATE, days)
-    return cal
-}
