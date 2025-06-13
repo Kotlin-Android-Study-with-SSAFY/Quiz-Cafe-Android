@@ -11,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase
-
 ) : BaseViewModel<MyPageViewState, MyPageIntent, MyPageEffect>(
     initialState = MyPageViewState()
 ) {
