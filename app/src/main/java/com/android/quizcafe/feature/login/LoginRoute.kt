@@ -48,19 +48,9 @@ fun LoginRoute(
             )
 
             val credential = result.credential
-            val googleCredential = try {
-                GoogleIdTokenCredential.createFrom(credential.data)
-            } catch (e: Exception) {
-                Log.e("googleLogin", "파싱 실패: ${e.message}")
-                null
-            }
-            Log.d("googleLogin", "credential class: $googleCredential")
-            if (googleCredential != null) {
-                Log.d("googleLogin", "LoginRoute: ${googleCredential.idToken}")
-                viewModel.sendIntent(LoginIntent.GoogleLogin(googleCredential.idToken))
-            } else {
-                Toast.makeText(context, "idToken 획득 실패", Toast.LENGTH_SHORT).show()
-            }
+            val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
+            viewModel.sendIntent(LoginIntent.GoogleLogin(googleCredential.idToken))
+
         } catch (e: Exception) {
             Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             Log.d("googleLogin", "LoginRoute: ${e.message}")
