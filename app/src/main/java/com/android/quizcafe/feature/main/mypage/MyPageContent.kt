@@ -4,10 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -90,12 +92,11 @@ fun MyPageMenu(
     onMenuClick: (Int) -> Unit = {}
 ) {
     val menuItems = listOf(
-        R.string.mypage_menu_stats,
-        R.string.mypage_menu_alarm,
-        R.string.mypage_menu_change_pw,
-        R.string.mypage_menu_my_quiz_set
+        R.string.mypage_menu_change_user_info,
+        R.string.mypage_menu_my_quiz_set,
+        R.string.mypage_menu_logout,
+        R.string.mypage_menu_withdrawal
     )
-
     Column(Modifier.fillMaxWidth()) {
         menuItems.forEachIndexed { idx, labelRes ->
             MyPageMenuItem(
@@ -143,6 +144,65 @@ fun MyPageMenuItem(
     }
 }
 
+@Composable
+fun ConfirmDialog(
+    message: Int,
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onCancel,
+        text = { Text(stringResource(message)) },
+        dismissButton = {
+            TextButton(onClick = onConfirm) {
+                Text(
+                    text = stringResource(R.string.dialog_yes),
+                    color = Color(0xFF757575)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onCancel) {
+                Text(
+                    text = stringResource(R.string.dialog_no),
+                    color = Color.Red
+                )
+            }
+        }
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewConfirmDialogLogout() {
+    ConfirmDialog(
+        message = R.string.dialog_message_logout,
+        onConfirm = {},
+        onCancel = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewConfirmDialogWithdrawalFirst() {
+    ConfirmDialog(
+        message = R.string.dialog_message_withdrawal_first,
+        onConfirm = {},
+        onCancel = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewConfirmDialogWithdrawalFinal() {
+    ConfirmDialog(
+        message = R.string.dialog_message_withdrawal_final,
+        onConfirm = {},
+        onCancel = {}
+    )
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewMyPageSummary() {
@@ -159,10 +219,10 @@ fun PreviewMyPageUserName() {
 @Composable
 fun PreviewMyPageMenu() {
     Column {
-        MyPageMenuItem(title = "학습 통계", onClick = {})
-        MyPageMenuItem(title = "알림 설정", onClick = {})
-        MyPageMenuItem(title = "비밀번호 변경", onClick = {})
-        MyPageMenuItem(title = "내가 만든 문제집 보기", onClick = {}, isLast = true)
+        MyPageMenuItem(title = "회원정보 변경", onClick = {})
+        MyPageMenuItem(title = "내가 만든 문제집 보기", onClick = {})
+        MyPageMenuItem(title = "로그아웃", onClick = {})
+        MyPageMenuItem(title = "회원탈퇴", onClick = {}, isLast = true)
     }
 }
 

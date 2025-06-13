@@ -26,15 +26,15 @@ fun MyPageScreen(
             .padding(top = 32.dp, start = 18.dp, end = 18.dp)
     ) {
         MyPageUserName(state.nickname)
-        MyPageSummary(state.solvedCount, state.myQuizSetCount)
+        MyPageSummary(state.quizCount, state.quizBookCount)
         Spacer(Modifier.height(16.dp))
         HorizontalDivider(modifier = Modifier.height(1.dp))
         MyPageMenu { menuId ->
             when (menuId) {
-                0 -> onClick(MyPageIntent.ClickStats(state.solvedCount))
-                1 -> onClick(MyPageIntent.ClickAlarm)
-                2 -> onClick(MyPageIntent.ClickChangePw)
-                3 -> onClick(MyPageIntent.ClickMyQuizSet)
+                0 -> onClick(MyPageIntent.ClickChangeUserInfo)
+                1 -> onClick(MyPageIntent.ClickMyCreatedQuizBooks)
+                2 -> onClick(MyPageIntent.ClickLogout)
+                3 -> onClick(MyPageIntent.ClickWithdrawal)
             }
         }
         Spacer(Modifier.height(28.dp))
@@ -66,8 +66,8 @@ fun PreviewMyPageScreen() {
     MyPageScreen(
         state = MyPageViewState(
             nickname = "빵빠야",
-            solvedCount = 1205,
-            myQuizSetCount = 5,
+            quizCount = 1205,
+            quizBookCount = 5,
             quizSolvingRecord = quizHistory,
             joinDateStr = sdf.format(start.time)
         ),

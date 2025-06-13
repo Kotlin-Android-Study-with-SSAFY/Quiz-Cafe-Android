@@ -1,7 +1,7 @@
 package com.android.quizcafe.core.data.remote.service
 
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
-import com.android.quizcafe.core.data.model.user.request.ChangePasswordRequestDto
+import com.android.quizcafe.core.data.model.user.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.user.response.UserInfoResponseDto
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
@@ -17,17 +17,17 @@ interface UserService {
     suspend fun getUserInfo(): NetworkResult<ApiResponse<UserInfoResponseDto>>
 
     @DELETE("/user")
-    suspend fun deleteUser(): NetworkResult<ApiResponse<Unit>>
+    suspend fun deleteUser(): NetworkResult<Unit>
 
     @PATCH("/user")
     suspend fun updateUserNickName(
         @Path("nickname") nickName: String
-    ): NetworkResult<ApiResponse<Unit>>
+    ): NetworkResult<Unit>
 
     @PATCH("/user/password")
     suspend fun resetPassword(
-        @Body request: ChangePasswordRequestDto
-    ): NetworkResult<ApiResponse<Unit>>
+        @Body request: ResetPasswordRequestDto
+    ): NetworkResult<Unit>
 
     @GET("/user/quiz-book")
     suspend fun getMyQuizBooks(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>

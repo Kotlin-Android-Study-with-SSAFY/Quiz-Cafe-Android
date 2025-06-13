@@ -5,7 +5,6 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.usecase.user.GetUserInfoUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,10 +16,20 @@ class MyPageViewModel @Inject constructor(
     override suspend fun handleIntent(intent: MyPageIntent) {
         when (intent) {
             is MyPageIntent.LoadUserInfo -> getUserInfo()
-            is MyPageIntent.ClickAlarm -> emitEffect(MyPageEffect.NavigateToAlarm)
-            is MyPageIntent.ClickChangePw -> emitEffect(MyPageEffect.NavigateToChangePw)
-            is MyPageIntent.ClickMyQuizSet -> emitEffect(MyPageEffect.NavigateToMyQuizSet)
+            is MyPageIntent.ClickChangeUserInfo -> emitEffect(MyPageEffect.NavigateToChangeUserInfo)
+            is MyPageIntent.ClickMyCreatedQuizBooks -> emitEffect(MyPageEffect.NavigateToMyCreatedQuizBooks)
             is MyPageIntent.FailLoadUserInfo -> emitEffect(MyPageEffect.ShowError(intent.errorMessage))
+
+            is MyPageIntent.ClickLogout -> emitEffect(MyPageEffect.ShowLogoutDialog)
+            is MyPageIntent.ConfirmLogout -> emitEffect(MyPageEffect.NavigateToLogout)
+            is MyPageIntent.CancelLogout -> Unit
+
+            is MyPageIntent.ClickWithdrawal -> emitEffect(MyPageEffect.ShowWithdrawalFirstDialog)
+            is MyPageIntent.ConfirmWithdrawalFirst -> emitEffect(MyPageEffect.ShowWithdrawalFinalDialog)
+            is MyPageIntent.ConfirmWithdrawalFinal -> emitEffect(MyPageEffect.NavigateToWithdrawal)
+            is MyPageIntent.CancelWithdrawalFirst,
+            is MyPageIntent.CancelWithdrawalFinal -> Unit
+
             else -> Unit
         }
     }
@@ -30,11 +39,19 @@ class MyPageViewModel @Inject constructor(
             is MyPageIntent.LoadUserInfo -> currentState.copy(isLoading = true, errorMessage = null)
             is MyPageIntent.SuccessLoadUserInfo -> currentState.copy(
                 nickname = intent.data.nickname,
+                quizCount = intent.data.quizCount,
+                quizBookCount = intent.data.quizBookCount,
+                quizSolvingRecord = intent.data.quizSolvingRecord,
+                joinDateStr = intent.data.joinDateStr,
                 isLoading = false,
                 errorMessage = null
             )
 
-            is MyPageIntent.FailLoadUserInfo -> currentState.copy(isLoading = false, errorMessage = intent.errorMessage)
+            is MyPageIntent.FailLoadUserInfo -> currentState.copy(
+                isLoading = false,
+                errorMessage = intent.errorMessage
+            )
+
             else -> currentState
         }
     }

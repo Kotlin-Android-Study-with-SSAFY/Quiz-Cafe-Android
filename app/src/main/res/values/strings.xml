@@ -93,8 +93,10 @@
     <string name="mypage_my_quiz_set">문제집</string>
     <string name="mypage_menu_stats">학습 통계</string>
     <string name="mypage_menu_alarm">알림 설정</string>
-    <string name="mypage_menu_change_pw">비밀번호 변경</string>
+    <string name="mypage_menu_change_user_info">회원 정보 변경</string>
     <string name="mypage_menu_my_quiz_set">내가 만든 문제집 보기</string>
+    <string name="mypage_menu_logout">로그아웃</string>
+    <string name="mypage_menu_withdrawal">회원 탈퇴</string>
 
     <string name="mypage_record_title">나의 기록</string>
     <string name="mypage_record_max_streak">한 번도 쉬지 않고 푼 최장 기록: %1$d일</string>
@@ -106,5 +108,12 @@
     <string name="week_fri">fri</string>
     <string name="week_sat">sat</string>
     <string name="week_sun">sun</string>
+
+    <!-- 다이얼로그 -->
+    <string name="dialog_message_logout">정말 로그아웃 하시겠습니까?</string>
+    <string name="dialog_message_withdrawal_first">정말 회원탈퇴를 하시겠습니까?</string>
+    <string name="dialog_message_withdrawal_final">회원탈퇴를 하시면 \n이전 계정은 복구가 되지 않습니다.\n정말 탈퇴하시겠습니까?</string>
+    <string name="dialog_yes">네</string>
+    <string name="dialog_no">아니오</string>
 
 </resources>
