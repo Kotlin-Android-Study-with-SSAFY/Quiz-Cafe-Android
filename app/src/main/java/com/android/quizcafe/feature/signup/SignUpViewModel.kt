@@ -38,7 +38,7 @@ class SignUpViewModel @Inject constructor(
                     SignUpRequest(
                         email = state.value.email,
                         password = state.value.password,
-                        nickName = "jw"
+                        nickName = state.value.nickname
                     )
                 ).collect {
                     when (it) {
@@ -109,6 +109,7 @@ class SignUpViewModel @Inject constructor(
                 )
             ).recalculate()
 
+            is SignUpIntent.UpdatedNickname -> state.copy(nickname = intent.nickname).recalculate()
             is SignUpIntent.UpdatedPassword -> state.copy(password = intent.password).recalculate()
             is SignUpIntent.UpdatedPasswordConfirm -> state.copy(passwordConfirm = intent.password)
                 .recalculate()

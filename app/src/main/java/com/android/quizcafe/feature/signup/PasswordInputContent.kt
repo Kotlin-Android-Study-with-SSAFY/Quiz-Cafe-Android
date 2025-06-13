@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
@@ -24,20 +26,51 @@ fun PasswordInputContent(
     sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
-    val focusRequester = remember { FocusRequester() }
+    val nicknameFocusRequester = remember { FocusRequester() }
+    val passwordFocusRequester = remember { FocusRequester() }
+    val passwordConfirmFocusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         delay(100)
-        focusRequester.requestFocus()
+        nicknameFocusRequester.requestFocus()
     }
 
     AnimatedTitleWithBody(
-        title = stringResource(R.string.input_password),
+        title = stringResource(R.string.input_myInfo),
         innerPadding = innerPadding,
         content = {
-            PasswordInputContent(state, focusRequester, sendIntent)
+            NicknameInputContent(
+                state,
+                nicknameFocusRequester,
+                sendIntent,
+                onImeAction = {passwordFocusRequester.requestFocus()})
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordConfirmInputContent(state, sendIntent)
+            PasswordInputContent(
+                state,
+                passwordFocusRequester,
+                sendIntent,
+                onImeAction = {passwordConfirmFocusRequester.requestFocus()})
+            Spacer(modifier = Modifier.height(32.dp))
+            PasswordConfirmInputContent(state, passwordConfirmFocusRequester, sendIntent)
         }
+    )
+}
+
+@Composable
+fun NicknameInputContent(
+    state: SignUpViewState,
+    focusRequester: FocusRequester?,
+    sendIntent: (SignUpIntent) -> Unit,
+    onImeAction: () -> Unit = {}
+) {
+    LabeledInputField(
+        label = stringResource(R.string.nickname),
+        value = state.nickname,
+        onValueChange = { sendIntent(SignUpIntent.UpdatedNickname(it))},
+        focusRequester = focusRequester,
+        errorMessage = state.nicknameErrorMessage,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        onImeAction = onImeAction
+
     )
 }
 
@@ -45,7 +78,8 @@ fun PasswordInputContent(
 fun PasswordInputContent(
     state: SignUpViewState,
     focusRequester: FocusRequester?,
-    sendIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit,
+    onImeAction: () -> Unit = {}
 ) {
     LabeledInputField(
         label = stringResource(R.string.password),
@@ -53,19 +87,43 @@ fun PasswordInputContent(
         onValueChange = { sendIntent(SignUpIntent.UpdatedPassword(it)) },
         isPassword = true,
         focusRequester = focusRequester,
-        errorMessage = state.passwordErrorMessage
+        errorMessage = state.passwordErrorMessage,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        onImeAction = onImeAction
     )
 }
 
 @Composable
-fun PasswordConfirmInputContent(state: SignUpViewState, sendIntent: (SignUpIntent) -> Unit) {
+fun PasswordConfirmInputContent(
+    state: SignUpViewState,
+    focusRequester: FocusRequester?,
+    sendIntent: (SignUpIntent) -> Unit) {
     LabeledInputField(
         label = stringResource(R.string.password_confirm),
         value = state.passwordConfirm,
         onValueChange = { sendIntent(SignUpIntent.UpdatedPasswordConfirm(it)) },
+        focusRequester = focusRequester,
         isPassword = true,
-        errorMessage = state.passwordConfirmErrorMessage
+        errorMessage = state.passwordConfirmErrorMessage,
+        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NicknameInputPreview() {
+    QuizCafeTheme {
+        Column {
+            NicknameInputContent(SignUpViewState(), null, {}) {}
+            Spacer(Modifier.height(20.dp))
+            NicknameInputContent(SignUpViewState(nickname = "닉네임"), null, {}){}
+            Spacer(Modifier.height(20.dp))
+            NicknameInputContent(
+                SignUpViewState(
+                    nickname = "닉네임",
+                    nicknameErrorMessage = "닉네임은 최대 10글자입니다."), null, {}) {}
+        }
+    }
 }
 
 @Preview(showBackground = true)
@@ -73,16 +131,17 @@ fun PasswordConfirmInputContent(state: SignUpViewState, sendIntent: (SignUpInten
 fun PasswordInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordInputContent(SignUpViewState(), null) {}
+            PasswordInputContent(SignUpViewState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            PasswordInputContent(SignUpViewState(password = "password"), null) {}
+            PasswordInputContent(SignUpViewState(password = "password"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             PasswordInputContent(
                 SignUpViewState(
                     password = "password",
                     passwordErrorMessage = "비밀번호 형식이 올바르지 않습니다."
                 ),
-                null
+                null,
+                {}
             ) {}
         }
     }
@@ -93,15 +152,16 @@ fun PasswordInputPreview() {
 fun PasswordConfirmInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordConfirmInputContent(SignUpViewState()) {}
+            PasswordConfirmInputContent(SignUpViewState(), null) {}
             Spacer(Modifier.height(20.dp))
-            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password")) {}
+            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password"), null) {}
             Spacer(Modifier.height(20.dp))
             PasswordConfirmInputContent(
                 SignUpViewState(
                     passwordConfirm = "password1",
                     passwordConfirmErrorMessage = "비밀번호가 일치하지 않습니다."
-                )
+                ),
+                null
             ) {}
         }
     }
