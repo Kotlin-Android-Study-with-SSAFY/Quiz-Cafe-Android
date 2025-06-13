@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.domain.model.auth.request
 
 data class ResetPasswordRequest(
-    val oldPassword: String,
-    val newPassword: String
+    val email: String,
 )

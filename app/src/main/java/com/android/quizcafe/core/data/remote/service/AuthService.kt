@@ -36,6 +36,6 @@ interface AuthService {
 
     @POST("auth/password/reset")
     suspend fun resetPassword(
-        @Body request: ResetPasswordRequestDto
+        @Query("email") email: String
     ): NetworkResult<ApiResponse<Unit>>
 }

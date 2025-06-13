@@ -3,11 +3,13 @@ package com.android.quizcafe.core.data.repository
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.toDomain
 import com.android.quizcafe.core.data.model.quizsolvingrecord.response.toDomain
+import com.android.quizcafe.core.data.model.user.request.toDto
 import com.android.quizcafe.core.data.model.user.response.toDomain
 import com.android.quizcafe.core.data.remote.datasource.QuizSolvingRecordRemoteDataSource
 import com.android.quizcafe.core.data.remote.datasource.UserRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.user.request.UpdatePasswordRequest
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.domain.repository.UserRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
@@ -69,4 +71,7 @@ class UserRepositoryImpl @Inject constructor(
         apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
             userRemoteDataSource.getMyQuizBooks()
         }
+
+    override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> =
+        emptyApiResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
 }

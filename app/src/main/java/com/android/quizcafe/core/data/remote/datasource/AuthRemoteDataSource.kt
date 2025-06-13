@@ -27,5 +27,5 @@ class AuthRemoteDataSource @Inject constructor(
         authService.login(request)
 
     suspend fun resetPassword(request: ResetPasswordRequestDto): NetworkResult<ApiResponse<Unit>> =
-        authService.resetPassword(request)
+        authService.resetPassword(email = request.email)
 }
