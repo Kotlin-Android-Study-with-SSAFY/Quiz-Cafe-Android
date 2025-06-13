@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">QuizCafe</string>
+  
+    <string name="default_web_client_id">241463982855-4i4re173u4bj88ur6tmmpip6ni25khni.apps.googleusercontent.com</string>
     <string name="password_visibility_toggle">비밀번호 보기 토글</string>
     <string name="clear_text">입력 지우기</string>
     <string name="error_icon">에러 아이콘</string>
@@ -17,6 +19,7 @@
     <string name="verification_code">인증번호</string>
     <string name="success_login">로그인에 성공했습니다.</string>
     <string name="login">로그인</string>
+    <string name="google_login">구글 계정으로 로그인</string>
     <string name="forgot_password">비밀번호를 잊어버리셨나요?</string>
     <string name="quizcafe_logo">QuizCafe Logo</string>
     <string name="resend">재전송</string>
@@ -44,6 +47,7 @@
     <string name="level_very_hard">매우 어려움</string>
     <string name="list_category">카테고리 선택</string>
     <string name="go">Go</string>
+    <string name="google_login_description">Google 로그인</string>
   
     <!-- Feature Card Titles -->
     <string name="feature_title_ox_quiz">O/X 퀴즈</string>

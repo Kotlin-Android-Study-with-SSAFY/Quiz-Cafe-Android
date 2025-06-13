@@ -83,6 +83,12 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+
+    // Google Auth
+    implementation(libs.google.auth)
+    implementation(libs.credential)
+    implementation(libs.credential.auth)
+    implementation(libs.google.identity)
 }
 
 fun getProperty(propertyKey: String): String {

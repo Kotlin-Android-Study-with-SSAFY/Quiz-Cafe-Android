@@ -17,7 +17,8 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 @Composable
 fun LoginScreen(
     state: LoginViewState,
-    sendIntent: (LoginIntent) -> Unit
+    sendIntent: (LoginIntent) -> Unit,
+    onClickGoogleLogin: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -48,6 +49,14 @@ fun LoginScreen(
         }
         item {
             BottomTextOptions(sendIntent)
+        }
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
+            GoogleLoginButton(
+                onClick = {
+                    onClickGoogleLogin()
+                },
+            )
             Spacer(modifier = Modifier.height(40.dp))
         }
     }
@@ -57,6 +66,10 @@ fun LoginScreen(
 @Composable
 fun LoginScreenPreview() {
     QuizCafeTheme {
-        LoginScreen(LoginViewState()) {}
+        LoginScreen(
+            LoginViewState(),
+            sendIntent = {},
+            onClickGoogleLogin = {}
+        )
     }
 }

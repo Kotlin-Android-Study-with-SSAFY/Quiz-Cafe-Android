@@ -1,13 +1,19 @@
 package com.android.quizcafe.feature.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -22,6 +28,8 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.QuizCafeButton
 import com.android.quizcafe.core.designsystem.QuizCafeTextField
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.designsystem.theme.googleBackgroundColor
+import com.android.quizcafe.core.designsystem.theme.googleBorderColor
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 
 @Composable
@@ -71,6 +79,34 @@ fun LoginButton(state: LoginViewState, onClick: () -> Unit) {
         enabled = state.isLoginEnabled
     ) {
         Text(text = stringResource(R.string.login))
+    }
+}
+
+@Composable
+fun GoogleLoginButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp)
+            .background(
+                color = googleBackgroundColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+            .border(
+                width = 1.dp,
+                color = googleBorderColor,
+                shape = RoundedCornerShape(8.dp)
+            )
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.google_logo),
+            contentDescription = stringResource(R.string.google_login_description),
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 
@@ -135,6 +171,14 @@ fun LoginButtonPreview() {
             Spacer(Modifier.height(20.dp))
             LoginButton(LoginViewState(isLoginEnabled = true)) {}
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GoogleLoginButtonPreview() {
+    QuizCafeTheme {
+        GoogleLoginButton {}
     }
 }
 

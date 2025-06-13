@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.data.repository
 
 import com.android.quizcafe.core.common.network.HttpStatus
+import com.android.quizcafe.core.data.model.auth.request.GoogleLoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
 import com.android.quizcafe.core.datastore.AuthManager
@@ -67,4 +68,21 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
         emptyApiResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
+
+    override fun googleLogin(idToken: String): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading)
+        withTimeoutOrNull(3_000L) {
+            remoteDataSource.googleLogin(GoogleLoginRequestDto(idToken))
+                .onSuccess { response ->
+                    response.data?.let {
+                        authManager.saveAccessToken(it.accessToken)
+                        emit(Resource.Success(Unit))
+                    } ?: emit(Resource.Failure("GoogleLoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
+                }
+                .onError { code, message ->
+                    emit(Resource.Failure(message ?: DEFAULT_ERROR_MESSAGE, code))
+                }
+                .onException { e -> emit(handleNetworkException(e)) }
+        } ?: emit(Resource.Failure("요청 시간이 초과되었습니다.", HttpStatus.REQUEST_TIMEOUT))
+    }.flowOn(Dispatchers.IO)
 }
