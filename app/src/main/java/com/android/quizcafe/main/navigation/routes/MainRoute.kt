@@ -1,37 +1,23 @@
 package com.android.quizcafe.main.navigation.routes
 
-import com.android.quizcafe.main.navigation.NavRoute
+import kotlinx.serialization.Serializable
 
-sealed interface MainRoute : NavRoute {
-    data object Graph : MainRoute {
-        override val route = "main"
-    }
+@Serializable
+sealed interface BottomNav {
+    @Serializable
+    data object Quiz : BottomNav
 
-    data object Home : MainRoute {
-        override val route = "${Graph.route}/home"
-    }
+    @Serializable
+    data object MyPage : BottomNav
 
-    data object MyPage : MainRoute {
-        override val route = "${Graph.route}/mypage"
-    }
-
-    data object Workbook : MainRoute {
-        override val route = "${Graph.route}/workbook"
-    }
-
-    data object CategoryList : MainRoute {
-        override val route = "${Graph.route}/category"
-    }
-
-    data object QuizBookList : MainRoute {
-        override val route = "${Graph.route}/quiz-book-list"
-    }
-
-    data object QuizBookDetail : MainRoute {
-        override val route = "${Graph.route}/quiz-book-detail"
-    }
-
-    companion object {
-        val startDestination = Home.route
-    }
+    @Serializable
+    data object WorkBook : BottomNav
 }
+
+@Serializable object Home
+
+@Serializable data class CategoryList(val quizType: String)
+
+@Serializable data class QuizBookList(val category: String)
+
+@Serializable data class QuizBookDetail(val quizBookId: Long)

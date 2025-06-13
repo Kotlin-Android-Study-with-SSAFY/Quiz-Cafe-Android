@@ -5,21 +5,18 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 
-// 연속 네비게이트 방지용
-fun NavController.navigateSingleTopTo(
-    route: String,
+fun <R : Any> NavController.navigateSingleTopTo(
+    route: R,
     builder: (NavOptionsBuilder.() -> Unit)? = null
 ) {
     this.navigate(route) {
         launchSingleTop = true
-        //추가 옵션 지정
         builder?.invoke(this)
     }
 }
 
-// 백스택 초기화 네비게이트
-fun NavHostController.navigateAndClearBackStack(
-    targetRoute: String,
+fun <R : Any> NavHostController.navigateAndClearBackStack(
+    targetRoute: R,
     inclusive: Boolean = true
 ) {
     this.navigate(targetRoute) {
@@ -30,8 +27,8 @@ fun NavHostController.navigateAndClearBackStack(
     }
 }
 
-fun NavController.navigatePopUpToStartDestination(
-    targetRoute: String
+fun <R : Any> NavController.navigatePopUpToStartDestination(
+    targetRoute: R
 ) {
     this.navigate(targetRoute) {
         popUpTo(this@navigatePopUpToStartDestination.graph.findStartDestination().id) {

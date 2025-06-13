@@ -10,11 +10,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
-import com.android.quizcafe.main.navigation.QuizCafeNavHost
-import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.main.navigation.routes.AuthRoute
-import com.android.quizcafe.main.navigation.routes.MainRoute
 import com.android.quizcafe.core.datastore.AuthManager
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.main.navigation.QuizCafeNavHost
+import com.android.quizcafe.main.navigation.routes.Auth
+import com.android.quizcafe.main.navigation.routes.Home
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -30,11 +30,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             QuizCafeTheme {
                 val navController = rememberNavController()
-                var startDestination: String? by remember { mutableStateOf(null) }
+                var startDestination: Any? by remember { mutableStateOf(null) }
 
                 LaunchedEffect(Unit) {
                     val accessToken = authManager.getToken()
-                    startDestination = if (accessToken != null) MainRoute.Graph.route else AuthRoute.Graph.route
+                    startDestination = if (accessToken != null) Home else Auth
                 }
                 startDestination?.let {
                     QuizCafeNavHost(navController, startDestination = it)
@@ -42,8 +42,7 @@ class MainActivity : ComponentActivity() {
 
                 AppEventsHandler(
                     authManager = authManager,
-                    navController = navController,
-                    loginRoute = AuthRoute.Graph.route
+                    navController = navController
                 )
             }
         }

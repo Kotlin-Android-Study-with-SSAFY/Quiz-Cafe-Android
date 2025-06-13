@@ -7,29 +7,34 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
+import androidx.navigation.toRoute
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
-import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.home.HomeRoute
+import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
-import com.android.quizcafe.main.navigation.routes.AuthRoute
-import com.android.quizcafe.main.navigation.routes.MainRoute
-import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
+import com.android.quizcafe.main.navigation.routes.Auth
+import com.android.quizcafe.main.navigation.routes.CategoryList
+import com.android.quizcafe.main.navigation.routes.Home
+import com.android.quizcafe.main.navigation.routes.Login
+import com.android.quizcafe.main.navigation.routes.BottomNav
+import com.android.quizcafe.main.navigation.routes.QuizBookDetail
+import com.android.quizcafe.main.navigation.routes.QuizBookList
+import com.android.quizcafe.main.navigation.routes.Signup
+import com.android.quizcafe.main.navigation.routes.Solve
 
 @Composable
 fun QuizCafeNavHost(
     navController: NavHostController,
-    startDestination: String = AuthRoute.Graph.route
+    startDestination: Any = Auth
 ) {
     NavHost(
         navController = navController,
@@ -43,22 +48,21 @@ fun QuizCafeNavHost(
 
 // 1. 로그인 및 회원가입
 fun NavGraphBuilder.authGraph(navController: NavHostController) {
-    navigation(
-        startDestination = AuthRoute.startDestination,
-        route = AuthRoute.Graph.route
+    navigation<Auth>(
+        startDestination = Login,
     ) {
-        composable(AuthRoute.Login.route) {
+        composable<Login> {
             LoginRoute(
-                navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
+                navigateToSignUp = { navController.navigateSingleTopTo(Signup) },
                 navigateToHome = {
-                    navController.navigateAndClearBackStack(MainRoute.Graph.route)
+                    navController.navigateAndClearBackStack(Home)
                 }
             )
         }
-        composable(AuthRoute.Signup.route) {
+        composable<Signup> {
             SignUpRoute(
                 navigateToLogin = {
-                    navController.navigateAndClearBackStack(AuthRoute.Login.route)
+                    navController.navigateAndClearBackStack(Login)
                 }
             )
         }
@@ -67,100 +71,72 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
 
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
-    navigation(
-        startDestination = MainRoute.Home.route,
-        route = MainRoute.Graph.route
-    ) {
-        composable(MainRoute.Home.route) { MainScreen() }
-        quizSolveGraph(navController)
+    composable<Home> { MainScreen(navController) }
+    composable<Solve> { backStackEntry ->
+        val quizBookId: Long = backStackEntry.toRoute<Solve>().quizBookId
+
+        QuizSolveRoute(
+            navigateToBack = {
+                navController.popBackStack()
+            }
+        )
     }
 }
 
 @Composable
 fun MainBottomNavHost(
+    bottomNavController: NavHostController,
     navController: NavHostController,
-    startDestination: String = MainRoute.startDestination
+    startDestination: Any = BottomNav.Quiz
 ) {
     NavHost(
-        navController = navController,
+        navController = bottomNavController,
         startDestination = startDestination
     ) {
-        composable(MainRoute.Home.route) {
+        composable<BottomNav.Quiz> {
             HomeRoute(
-                navigateToCategory = { _ -> navController.navigateSingleTopTo(MainRoute.CategoryList.route) }
+                navigateToCategory = { quizType -> bottomNavController.navigateSingleTopTo(CategoryList(quizType)) }
             )
         }
-        composable(MainRoute.Workbook.route) {
+        composable<BottomNav.WorkBook> {
             WorkBookRoute(
 //                onItemClick = { id ->
-//                    navController.navigateSingleTopTo("")
+//                    bottomNavController.navigateSingleTopTo("")
 //                }
             )
         }
-        composable(MainRoute.MyPage.route) {
+        composable<BottomNav.MyPage> {
             MyPageRoute(
 //                navigateToSetting = {
-//                    navController.navigateSingleTopTo()
+//                    bottomNavController.navigateSingleTopTo()
 //                }
             )
         }
-        composable(MainRoute.CategoryList.route) {
+        composable<CategoryList> { backStackEntry ->
+            val quizType: String = backStackEntry.toRoute<CategoryList>().quizType
+
             CategoryRoute(
-                navigateToQuizBookList = { category -> navController.navigateSingleTopTo("${MainRoute.QuizBookList.route}/$category") },
-                navigateToHome = { navController.navigateUp() },
+                navigateToQuizBookList = { category -> bottomNavController.navigateSingleTopTo(QuizBookList(category)) },
+                navigateToHome = { bottomNavController.navigateUp() },
             )
         }
-        composable(
-            route = "${MainRoute.QuizBookList.route}/{category}",
-            arguments = listOf(
-                navArgument("category") {
-                    type = NavType.StringType
-                    nullable = false
-                    defaultValue = ""
-                }
-            )
-        ) { backStackEntry ->
-            val category = backStackEntry.arguments?.getString("category") ?: ""
+        composable<QuizBookList> { backStackEntry ->
+            val category: String = backStackEntry.toRoute<QuizBookList>().category
 
             QuizBookListRoute(
                 category = category,
-                navigateToQuizBookDetail = { quizBookId -> navController.navigateSingleTopTo("${MainRoute.QuizBookDetail.route}/$quizBookId") },
-                navigateToCategory = {},
+                navigateToQuizBookDetail = { quizBookId -> bottomNavController.navigateSingleTopTo(QuizBookDetail(quizBookId)) },
+                navigateToCategory = { bottomNavController.navigateUp() },
             )
         }
-        composable(
-            route = "${MainRoute.QuizBookDetail.route}/{quizBookId}",
-            arguments = listOf(
-                navArgument("quizBookId") {
-                    type = NavType.LongType
-                    nullable = false
-                    defaultValue = 0L
-                }
-            )
-        ) { backStackEntry ->
-            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
+        composable<QuizBookDetail> { backStackEntry ->
+            val quizBookId: Long = backStackEntry.toRoute<QuizBookDetail>().quizBookId
 
             QuizBookDetailRoute(
                 quizBookId = quizBookId,
-                navigateToQuizBookPicker = {},
-                navigateToQuizSolve = {},
+                navigateToQuizBookPicker = { bottomNavController.navigateUp() },
+                navigateToQuizSolve = { navController.navigateSingleTopTo(Solve(quizBookId)) },
                 navigateToUserPage = {}
-            )
-        }
-    }
-}
-
-// 퀴즈 풀이
-fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
-    navigation(
-        startDestination = QuizSolveRoute.startDestination,
-        route = QuizSolveRoute.Graph.route
-    ) {
-        composable(QuizSolveRoute.QuizSolve.route) {
-            QuizSolveRoute(
-                navigateToBack = {
-                    navController.popBackStack()
-                }
             )
         }
     }

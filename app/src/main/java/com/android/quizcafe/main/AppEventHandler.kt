@@ -15,13 +15,14 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.datastore.LogoutReason
 import com.android.quizcafe.main.navigation.navigateAndClearBackStack
+import com.android.quizcafe.main.navigation.routes.Auth
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AppEventsHandler(
     authManager: AuthManager,
     navController: NavHostController,
-    loginRoute: String
+    loginRoute: Any = Auth
 ) {
     var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
     var dialogMessage by rememberSaveable { mutableStateOf("") }
