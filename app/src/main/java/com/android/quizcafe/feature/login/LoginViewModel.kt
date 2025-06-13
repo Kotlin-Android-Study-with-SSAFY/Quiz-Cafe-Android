@@ -30,11 +30,33 @@ class LoginViewModel @Inject constructor(
                 ).collect {
                     when (it) {
                         is Resource.Success -> {
-                            Log.d("signup", "SendCode Success")
+                            Log.d("login", "login Success")
                             sendIntent(LoginIntent.SuccessLogin)
                         }
-                        is Resource.Loading -> Log.d("signup", "Loading")
-                        is Resource.Failure -> Log.d("signup", "SendCode Fail")
+
+                        is Resource.Loading -> Log.d("login", "login Loading")
+                        is Resource.Failure -> {
+                            Log.d("login", "login Fail ${it.errorMessage}")
+                            sendIntent(
+                                when (it.code) {
+                                    400 -> {
+                                        LoginIntent.FailLogin("입력하신 정보가 올바르지 않습니다.", ErrorTargetField.PASSWORD)
+                                    }
+
+                                    404 -> {
+                                        LoginIntent.FailLogin("존재하지 않는 이메일 입니다.", ErrorTargetField.EMAIL)
+                                    }
+
+                                    401 -> {
+                                        LoginIntent.FailLogin("비밀번호가 올바르지 않습니다.", ErrorTargetField.PASSWORD)
+                                    }
+
+                                    else -> {
+                                        LoginIntent.FailLogin("다시 시도해 주세요.", ErrorTargetField.PASSWORD)
+                                    }
+                                }
+                            )
+                        }
                     }
                 }
             }
@@ -49,25 +71,26 @@ class LoginViewModel @Inject constructor(
 
     override fun reduce(currentState: LoginViewState, intent: LoginIntent): LoginViewState {
         return when (intent) {
-            is LoginIntent.UpdatedEmail -> currentState.copy(email = intent.email, errorMessage = null)
-                .recalculate()
-
+            is LoginIntent.UpdatedEmail -> currentState.copy(
+                email = intent.email,
+                emailErrorMessage = null,
+                passwordErrorMessage = null
+            )
             is LoginIntent.UpdatedPassword -> currentState.copy(
                 password = intent.password,
-                errorMessage = null
-            ).recalculate()
+                passwordErrorMessage = null
+            )
 
-            LoginIntent.ClickLogin -> currentState.copy(isLoading = true, errorMessage = null)
+            LoginIntent.ClickLogin -> currentState.copy(isLoading = true)
             LoginIntent.ClickSignUp -> currentState.copy(isLoading = false)
 
             LoginIntent.SuccessLogin -> currentState.copy(isLoading = false)
 
-            is LoginIntent.FailLogin -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
+            is LoginIntent.FailLogin -> currentState.copy(
+                isLoading = false,
+                emailErrorMessage = if (intent.targetField == ErrorTargetField.EMAIL) intent.errorMessage else null,
+                passwordErrorMessage = if (intent.targetField == ErrorTargetField.PASSWORD) intent.errorMessage else null
+            )
         }
-    }
-
-    private fun LoginViewState.recalculate(): LoginViewState {
-        val isLoginEnabled = password.isNotBlank() && email.isNotBlank()
-        return this.copy(isLoginEnabled = isLoginEnabled)
     }
 }
