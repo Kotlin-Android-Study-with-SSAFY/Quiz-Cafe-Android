@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.quiz
+package com.android.quizcafe.feature.main.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,12 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
-fun QuizScreen(
-    state: QuizUiState,
-    sendIntent: (QuizIntent) -> Unit
+fun HomeScreen(
+    state: HomeViewState,
+    sendIntent: (HomeIntent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -31,23 +33,34 @@ fun QuizScreen(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { QuizHistorySection(historyList = state.historyList) }
+            item { QuizRecordContent(quizSolving = state.quizSolvingList) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
-            item { QuizModeSection { sendIntent(QuizIntent.ClickQuizCard("")) } }
+            item { QuizModeContent { sendIntent(HomeIntent.ClickHomeCard("")) } }
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun QuizScreenPreview() {
+fun HomeScreenPreview() {
     QuizCafeTheme {
-        QuizScreen(
-            state = QuizUiState(
-                historyList = listOf(
-                    QuizHistory("30분 전", "성준이의 운영체제", 16, 20),
-                    QuizHistory("16시간 전", "성민이의 네트워크", 18, 20),
-                    QuizHistory("04/01", "재용이의 안드로이드", 19, 20)
+        HomeScreen(
+            state = HomeViewState(
+                quizSolvingList = listOf(
+                    QuizBookSolving(
+                        id = 1,
+                        userId = 1,
+                        quizBookId = QuizBookId(1),
+                        version = 1,
+                        level = "EASY",
+                        category = "운영체제",
+                        title = "성준이의 운영체제",
+                        description = "",
+                        totalQuizzes = 20,
+                        correctCount = 16,
+                        completedAt = "2025-06-09T05:14:05.986Z",
+                        quizSolvingList = emptyList()
+                    ),
                 )
             ),
             sendIntent = {}

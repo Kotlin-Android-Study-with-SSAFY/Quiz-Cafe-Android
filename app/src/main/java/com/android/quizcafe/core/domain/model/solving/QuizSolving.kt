@@ -12,5 +12,5 @@ data class QuizSolving(
     val userAnswer: String?,
     val isCorrect: Boolean,
     val completedAt: String,
-    val mcqOptionSolvings: List<McqOptionSolving>?
+    val mcqOptionSolvingList: List<McqOptionSolving> = emptyList()
 )

@@ -12,5 +12,5 @@ data class QuizSolvingResponseDto(
     val userAnswer: String?,
     val isCorrect: Boolean,
     val completedAt: String,
-    val mcqOptions: List<McqOptionSolvingResponseDto>?
+    val mcqOptions: List<McqOptionSolvingResponseDto>
 )

@@ -38,7 +38,7 @@ import com.android.quizcafe.feature.util.safeToRelativeTime
 
 @Composable
 fun QuizRecordContent(
-    quizBookSolvings: List<QuizBookSolving>,
+    quizSolving: List<QuizBookSolving>,
     onQuizRecordClick: (QuizBookSolving) -> Unit = {},
     onHeaderClick: () -> Unit = {}
 ) {
@@ -48,10 +48,10 @@ fun QuizRecordContent(
             .padding(horizontal = 12.dp)
     ) {
         QuizRecordHeader(onClick = onHeaderClick)
-        if (quizBookSolvings.isEmpty()) {
+        if (quizSolving.isEmpty()) {
             QuizRecordEmpty()
         } else {
-            QuizRecordList(quizBookSolvings, onQuizRecordClick)
+            QuizRecordList(quizSolving, onQuizRecordClick)
         }
     }
 }
@@ -95,7 +95,7 @@ fun QuizRecordEmpty() {
 
 @Composable
 fun QuizRecordList(
-    quizBookSolvings: List<QuizBookSolving>,
+    quizSolvingRecords: List<QuizBookSolving>,
     onQuizRecordClick: (QuizBookSolving) -> Unit
 ) {
     LazyColumn(
@@ -105,9 +105,9 @@ fun QuizRecordList(
         contentPadding = PaddingValues(vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        items(quizBookSolvings) { record ->
+        items(quizSolvingRecords) { record ->
             QuizRecordCard(
-                quizBookSolving = record,
+                quizSolvingRecord = record,
                 onClick = { onQuizRecordClick(record) }
             )
         }
@@ -116,7 +116,7 @@ fun QuizRecordList(
 
 @Composable
 fun QuizRecordCard(
-    quizBookSolving: QuizBookSolving,
+    quizSolvingRecord: QuizBookSolving,
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -134,14 +134,14 @@ fun QuizRecordCard(
             Text(
                 text = stringResource(
                     id = R.string.quiz_solved_date,
-                    quizBookSolving.completedAt.safeToRelativeTime()
+                    quizSolvingRecord.completedAt.safeToRelativeTime()
                 ),
                 style = MaterialTheme.typography.labelSmall,
                 color = outlineLight
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = quizBookSolving.title,
+                text = quizSolvingRecord.title,
                 style = MaterialTheme.typography.titleSmall,
                 color = onSurfaceLight
             )
@@ -151,8 +151,8 @@ fun QuizRecordCard(
                 Text(
                     text = stringResource(
                         R.string.quiz_result,
-                        quizBookSolving.totalQuizzes,
-                        quizBookSolving.correctCount
+                        quizSolvingRecord.totalQuizzes,
+                        quizSolvingRecord.correctCount
                     ),
                     style = MaterialTheme.typography.bodySmall
                 )
@@ -166,7 +166,7 @@ fun QuizRecordCard(
 fun Preview_QuizRecordContent() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizBookSolvings = sampleQuizSolvings()
+            quizSolving = sampleQuizSolvings()
         )
     }
 }
@@ -175,7 +175,7 @@ fun Preview_QuizRecordContent() {
 @Composable
 fun Preview_QuizRecordContent_Empty() {
     QuizCafeTheme {
-        QuizRecordContent(quizBookSolvings = emptyList())
+        QuizRecordContent(quizSolving = emptyList())
     }
 }
 
@@ -200,7 +200,7 @@ fun Preview_QuizRecordEmpty() {
 fun Preview_QuizRecordCard() {
     QuizCafeTheme {
         QuizRecordCard(
-            quizBookSolving = QuizBookSolving(
+            quizSolvingRecord = QuizBookSolving(
                 id = 1,
                 userId = 1,
                 quizBookId = QuizBookId(1),
@@ -212,7 +212,7 @@ fun Preview_QuizRecordCard() {
                 totalQuizzes = 20,
                 correctCount = 16,
                 completedAt = "2025-06-09T05:14:05.986Z",
-                quizSolvings = emptyList()
+                quizSolvingList = emptyList()
             )
         )
     }
@@ -232,6 +232,6 @@ fun sampleQuizSolvings() = listOf(
         totalQuizzes = 20,
         correctCount = 16,
         completedAt = "2025-06-09T05:14:05.986Z",
-        quizSolvings = emptyList()
+        quizSolvingList = emptyList()
     )
 )

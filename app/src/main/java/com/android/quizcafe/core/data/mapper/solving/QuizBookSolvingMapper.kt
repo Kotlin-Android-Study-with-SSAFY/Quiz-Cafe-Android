@@ -16,5 +16,5 @@ fun QuizBookSolvingResponseDto.toDomain(): QuizBookSolving = QuizBookSolving(
     totalQuizzes = totalQuizzes,
     correctCount = correctCount,
     completedAt = completedAt,
-    quizSolvings = quizzes.map { it.toDomain() }
+    quizSolvingList = quizzes.map { it.toDomain() }
 )

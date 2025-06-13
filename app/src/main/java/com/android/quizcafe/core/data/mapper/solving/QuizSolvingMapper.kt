@@ -15,5 +15,5 @@ fun QuizSolvingResponseDto.toDomain(): QuizSolving = QuizSolving(
     userAnswer = userAnswer,
     isCorrect = isCorrect,
     completedAt = completedAt,
-    mcqOptionSolvings = mcqOptions?.map { it.toDomain() } ?: emptyList()
+    mcqOptionSolvingList = mcqOptions.map { it.toDomain() }
 )

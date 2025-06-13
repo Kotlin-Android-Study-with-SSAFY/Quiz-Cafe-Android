@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.mapper.quizbook
 
+import androidx.compose.ui.util.fastMap
 import com.android.quizcafe.core.data.mapper.quiz.toDomain
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookWithQuizzesResponseDto
@@ -47,7 +48,7 @@ fun QuizBookWithQuizzesResponseDto.toDomain() = QuizBook(
     totalComments = 0,
     totalSaves = 0,
     createdAt = createdAt,
-    quizList = quizzes.toDomain()
+    quizList = quizzes.fastMap { it.toDomain() }
 )
 
 
@@ -63,5 +64,5 @@ fun QuizBookWithQuizRelation.toDomain() = QuizBook(
     totalComments = 0,
     totalSaves = 0,
     createdAt = quizBookEntity.createdAt,
-    quizList = quizEntities.toDomain()
+    quizList = quizEntities.fastMap { it.toDomain() }
 )

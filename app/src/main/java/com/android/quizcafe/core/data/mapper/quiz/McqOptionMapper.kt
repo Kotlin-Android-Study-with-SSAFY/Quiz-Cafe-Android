@@ -28,7 +28,3 @@ fun McqOption.toEntity() = McqOptionEntity(
     optionContent = optionContent,
     isCorrect = isCorrect
 )
-
-fun List<McqOptionEntity>.toDomain(): List<McqOption> = map { it.toDomain() }
-
-fun List<McqOptionDto>.toDomain(): List<McqOption> = map { it.toDomain() }

@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.mapper.quiz
 
+import androidx.compose.ui.util.fastMap
 import com.android.quizcafe.core.data.model.quiz.QuizResponseDto
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.database.model.quiz.QuizWithMcqOptionsRelation
@@ -23,9 +24,8 @@ fun QuizResponseDto.toDomain() = Quiz(
     content = content,
     answer = answer,
     explanation = explanation,
-    mcqOption = mcqOption.toDomain()
+    mcqOption = mcqOption.fastMap { it.toDomain() }
 )
-
 
 fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     id = QuizId(quizEntity.id),
@@ -34,9 +34,5 @@ fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     content = quizEntity.content,
     answer = quizEntity.answer,
     explanation = quizEntity.explanation,
-    mcqOption = mcqOptions.toDomain()
+    mcqOption = mcqOptions.fastMap { it.toDomain() }
 )
-
-fun List<QuizResponseDto>.toDomain() = map { it.toDomain() }
-
-fun List<QuizWithMcqOptionsRelation>.toDomain() = map { it.toDomain() }

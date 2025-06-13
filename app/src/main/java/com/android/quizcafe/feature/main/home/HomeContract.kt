@@ -11,8 +11,8 @@ data class ModeItem(
     val iconResId: Int
 )
 
-data class HomeUiState(
-    val quizBookSolvings: List<QuizBookSolving> = emptyList(),
+data class HomeViewState(
+    val quizSolvingList: List<QuizBookSolving> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 ) : BaseContract.UiState
@@ -20,7 +20,7 @@ data class HomeUiState(
 sealed class HomeIntent : BaseContract.ViewIntent {
     data object FetchRecord : HomeIntent()
     data object LoadingFetchRecord : HomeIntent()
-    data class SuccessFetchRecord(val quizBookSolvings: List<QuizBookSolving>) : HomeIntent()
+    data class SuccessFetchRecord(val quizSolvingRecords: List<QuizBookSolving>) : HomeIntent()
     data class FailFetchRecord(val errorMessage: String? = null) : HomeIntent()
 
     data class ClickHomeCard(val quizType: String) : HomeIntent()

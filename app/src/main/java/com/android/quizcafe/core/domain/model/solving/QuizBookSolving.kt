@@ -14,5 +14,5 @@ data class QuizBookSolving(
     val totalQuizzes: Int,
     val correctCount: Int,
     val completedAt: String,
-    val quizSolvings: List<QuizSolving>
+    val quizSolvingList: List<QuizSolving>
 )
