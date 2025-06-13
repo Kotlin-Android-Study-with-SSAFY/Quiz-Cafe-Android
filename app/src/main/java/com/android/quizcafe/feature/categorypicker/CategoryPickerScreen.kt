@@ -13,6 +13,8 @@ import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.ui.TitleWithUnderLine
+import com.android.quizcafe.feature.categorylist.CategoryIntent
+import com.android.quizcafe.feature.categorylist.CategoryUiState
 
 @Composable
 fun CategoryPickerScreen(

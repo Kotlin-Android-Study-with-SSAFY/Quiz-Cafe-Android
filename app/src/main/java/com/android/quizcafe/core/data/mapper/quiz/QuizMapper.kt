@@ -16,6 +16,17 @@ fun QuizResponseDto.toEntity() = QuizEntity(
     explanation = explanation
 )
 
+fun QuizResponseDto.toDomain() = Quiz(
+    id = QuizId(id),
+    quizBookId = QuizBookId(quizBookId),
+    questionType = questionType,
+    content = content,
+    answer = answer,
+    explanation = explanation,
+    mcqOption = mcqOption.toDomain()
+)
+
+
 fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     id = QuizId(quizEntity.id),
     quizBookId = QuizBookId(quizEntity.quizBookId),
@@ -25,3 +36,7 @@ fun QuizWithMcqOptionsRelation.toDomain() = Quiz(
     explanation = quizEntity.explanation,
     mcqOption = mcqOptions.toDomain()
 )
+
+fun List<QuizResponseDto>.toDomain() = map { it.toDomain() }
+
+fun List<QuizWithMcqOptionsRelation>.toDomain() = map { it.toDomain() }

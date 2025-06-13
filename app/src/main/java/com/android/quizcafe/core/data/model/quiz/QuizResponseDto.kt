@@ -10,5 +10,5 @@ data class QuizResponseDto(
     val content: String,
     val answer: String,
     val explanation: String?,
-    val mcqOption: List<McqOptionDto>? = null
+    val mcqOption: List<McqOptionDto> = emptyList()
 )

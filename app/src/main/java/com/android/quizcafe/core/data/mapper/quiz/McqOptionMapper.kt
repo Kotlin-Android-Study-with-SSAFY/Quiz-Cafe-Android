@@ -1,10 +1,19 @@
 package com.android.quizcafe.core.data.mapper.quiz
 
+import com.android.quizcafe.core.data.model.quiz.McqOptionDto
 import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 import com.android.quizcafe.core.domain.model.quiz.McqOption
 import com.android.quizcafe.core.domain.model.value.QuizId
 
 fun McqOptionEntity.toDomain() = McqOption(
+    id = id,
+    quizId = QuizId(quizId),
+    optionNumber = optionNumber,
+    optionContent = optionContent,
+    isCorrect = isCorrect
+)
+
+fun McqOptionDto.toDomain() = McqOption(
     id = id,
     quizId = QuizId(quizId),
     optionNumber = optionNumber,
@@ -22,4 +31,4 @@ fun McqOption.toEntity() = McqOptionEntity(
 
 fun List<McqOptionEntity>.toDomain(): List<McqOption> = map { it.toDomain() }
 
-fun List<McqOption>.toEntity(): List<McqOptionEntity> = map { it.toEntity() }
+fun List<McqOptionDto>.toDomain(): List<McqOption> = map { it.toDomain() }
