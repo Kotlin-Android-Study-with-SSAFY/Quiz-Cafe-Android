@@ -15,7 +15,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +28,10 @@ import com.android.quizcafe.core.designsystem.theme.primaryLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceDimLight
-import com.android.quizcafe.core.domain.model.quiz.Quiz
-import com.android.quizcafe.core.domain.model.quiz.QuizGrade
-import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
+import com.android.quizcafe.core.domain.model.solving.McqOptionSolving
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.solving.QuizSolving
 import com.android.quizcafe.core.domain.model.value.QuizBookId
-import com.android.quizcafe.core.domain.model.value.QuizId
 import com.android.quizcafe.feature.quiz.solvingResult.component.QuizResultItem
 
 @Composable
@@ -42,51 +39,49 @@ fun QuizBookSolvingResultScreen(
     state: QuizBookSolvingResultUiState = QuizBookSolvingResultUiState(),
     sendIntent: (QuizBookSolvingResultIntent) -> Unit = {}
 ) {
-    val quizBookGrade = state.quizBookSolvingResult
-    val quizzes = state.quizzes
-
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.surface,
-        bottomBar = {
-            QuizResultBottomBar(
-                onClick = { sendIntent(QuizBookSolvingResultIntent.ClickFinish) }
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-        ) {
-            QuizResultHeader(
-                totalScore = quizBookGrade?.getTotalScore() ?: 0,
-                maxScore = quizzes.size,
-                solvingTime = quizBookGrade?.getSolvingTimeFormatted() ?: "00:00"
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            Card(
+    val quizBookSolving = state.quizBookSolving
+    if (quizBookSolving != null) {
+        Scaffold(
+            containerColor = MaterialTheme.colorScheme.surface,
+            bottomBar = {
+                QuizResultBottomBar(
+                    onClick = { sendIntent(QuizBookSolvingResultIntent.ClickFinish) }
+                )
+            }
+        ) { innerPadding ->
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = 16.dp),
-                shape = RoundedCornerShape(10.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceContainer
-                ),
+                    .fillMaxSize()
+                    .padding(innerPadding),
             ) {
-                LazyColumn(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    contentPadding = PaddingValues(vertical = 16.dp),
-                    verticalArrangement = Arrangement.spacedBy(0.dp)
+                QuizResultHeader(
+                    totalScore = quizBookSolving.correctCount,
+                    maxScore = quizBookSolving.totalQuizzes,
+                    solvingTime = quizBookSolving.getSolvingTimeFormatted()
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(horizontal = 16.dp),
+                    shape = RoundedCornerShape(10.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainer
+                    ),
                 ) {
-                    itemsIndexed(quizzes) { index, quiz ->
-                        val quizGrade = quizBookGrade?.quizGrades?.find { it.quizId == quiz.id }
+                    LazyColumn(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        contentPadding = PaddingValues(vertical = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(0.dp)
+                    ) {
+                        itemsIndexed(quizBookSolving.quizSolvingList) { index, quizSolving ->
 
-                        QuizResultItem(
-                            quiz = quiz,
-                            quizGrade = quizGrade,
-                            questionNumber = index + 1
-                        )
+                            QuizResultItem(
+                                quizSolving = quizSolving,
+                                questionNumber = index + 1
+                            )
+                        }
                     }
                 }
             }
@@ -158,67 +153,233 @@ fun QuizBookSolvingResultScreenPreview() {
         QuizBookSolvingResultScreen(
             state = QuizBookSolvingResultUiState(
                 isLoading = false,
-                quizBookSolvingResult = QuizBookGrade(
-                    localId = QuizBookGradeLocalId(1L),
-                    serverId = null,
+                quizBookSolving = QuizBookSolving(
+                    id = 1L,
+                    userId = 123L,
                     quizBookId = QuizBookId(1L),
-                    quizGrades = listOf(
-                        QuizGrade(
-                            localId = 1L,
-                            quizId = QuizId(1L),
-                            quizBookGradeLocalId = QuizBookGradeLocalId(1L),
-                            userAnswer = "O",
-                            memo = null,
+                    version = 1L,
+                    level = "BEGINNER",
+                    category = "KOTLIN",
+                    title = "Kotlin 기초 퀴즈",
+                    description = "Kotlin의 기본 문법과 개념을 다루는 퀴즈입니다.",
+                    totalQuizzes = 3,
+                    correctCount = 2,
+                    completedAt = "2025-06-13T15:30:00",
+                    elapsedTime = kotlin.time.Duration.parse("PT9M2S"),
+                    quizSolvingList = listOf(
+                        QuizSolving(
+                            id = 101L,
+                            quizBookSolvingId = 1L,
+                            quizId = 1L,
+                            questionType = "MCQ",
+                            content = "다음 중 Kotlin의 특징이 아닌 것은?",
+                            answer = "4",
+                            explanation = "Kotlin은 메모리 안전성을 제공하며, 메모리 누수를 방지하는 다양한 기능을 제공합니다.",
+                            memo = "확실한 답안이었음",
+                            userAnswer = "4",
                             isCorrect = true,
-                            completedAt = "2025-06-11T15:30:00"
+                            completedAt = "2025-06-13T15:25:00",
+                            mcqOptionSolvingList = listOf(
+                                McqOptionSolving(
+                                    id = 1001L,
+                                    quizSolvingId = 101L,
+                                    optionNumber = 1,
+                                    optionContent = "Null Safety",
+                                    isCorrect = false
+                                ),
+                                McqOptionSolving(
+                                    id = 1002L,
+                                    quizSolvingId = 101L,
+                                    optionNumber = 2,
+                                    optionContent = "상호 운용성",
+                                    isCorrect = false
+                                ),
+                                McqOptionSolving(
+                                    id = 1003L,
+                                    quizSolvingId = 101L,
+                                    optionNumber = 3,
+                                    optionContent = "간결성",
+                                    isCorrect = false
+                                ),
+                                McqOptionSolving(
+                                    id = 1004L,
+                                    quizSolvingId = 101L,
+                                    optionNumber = 4,
+                                    optionContent = "메모리 누수",
+                                    isCorrect = true
+                                )
+                            )
                         ),
-                        QuizGrade(
-                            localId = 2L,
-                            quizId = QuizId(2L),
-                            quizBookGradeLocalId = QuizBookGradeLocalId(1L),
-                            userAnswer = "async",
-                            memo = null,
+                        QuizSolving(
+                            id = 102L,
+                            quizBookSolvingId = 1L,
+                            quizId = 2L,
+                            questionType = "OX",
+                            content = "Room 데이터베이스는 SQLite의 추상화 레이어이다.",
+                            answer = "O",
+                            explanation = "Room은 SQLite 위에 구축된 추상화 레이어로, 컴파일 타임 검증과 편리한 API를 제공합니다.",
+                            memo = "헷갈렸던 문제",
+                            userAnswer = "X",
                             isCorrect = false,
-                            completedAt = "2025-06-11T15:32:00"
+                            completedAt = "2025-06-13T15:27:00",
+                            mcqOptionSolvingList = emptyList()
                         ),
-                        QuizGrade(
-                            localId = 3L,
-                            quizId = QuizId(3L),
-                            quizBookGradeLocalId = QuizBookGradeLocalId(1L),
-                            userAnswer = "val",
+                        QuizSolving(
+                            id = 103L,
+                            quizBookSolvingId = 1L,
+                            quizId = 3L,
+                            questionType = "SHORT_ANSWER",
+                            content = "Android에서 비동기 작업을 처리하기 위해 사용하는 Kotlin의 기능은?",
+                            answer = "Coroutines",
+                            explanation = "Kotlin Coroutines는 비동기 프로그래밍을 위한 라이브러리로, suspend 함수와 함께 사용하여 효율적인 비동기 처리를 가능하게 합니다.",
                             memo = null,
+                            userAnswer = "Coroutines",
                             isCorrect = true,
-                            completedAt = "2025-06-11T15:35:00"
+                            completedAt = "2025-06-13T15:30:00",
+                            mcqOptionSolvingList = emptyList()
                         )
-                    ),
-                    elapsedTime = kotlin.time.Duration.parse("PT9M2S")
-                ),
-                quizzes = listOf(
-                    Quiz(
-                        id = QuizId(1L),
-                        quizBookId = QuizBookId(1L),
-                        questionType = "MCQ",
-                        content = "스택은 어시기어시기",
-                        answer = "O",
-                        explanation = "스택은 LIFO(Last In First Out) 구조입니다."
-                    ),
-                    Quiz(
-                        id = QuizId(2L),
-                        quizBookId = QuizBookId(1L),
-                        questionType = "SHORT_ANSWER",
-                        content = "launch()와 async는 동일하다.",
-                        answer = "launch",
-                        explanation = "launch와 async는 코루틴을 실행시키기 위한 빌더이지만, 반환 결과에 따른 차이가 존재합니다. launch는 결과를 반환하지 않으며 Job 객체를 반환합니다. 반면, async는 Deferred로 감싸진 결과를 반환하며, 이를 await()메서드를 통해 결과를 얻을 수 있습니다. 따라서, launch는 결과가 필요없이 실행만 하는 경우 사용되고 async는 결과가 필요한 비동기 작업에 사용됩니다.",
-                    ),
-                    Quiz(
-                        id = QuizId(3L),
-                        quizBookId = QuizBookId(1L),
-                        questionType = "SHORT_ANSWER",
-                        content = "Android Architecture Components에서 ViewModel의 역할과 생명주기에 대해 설명하고, Repository 패턴과 함께 사용할 때의 장점을 서술하시오.",
-                        answer = "val",
-                        explanation = "val은 불변 변수를 선언할 때 사용합니다.",
                     )
                 )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuizBookSolvingResultScreenAdvancedPreview() {
+    QuizCafeTheme {
+        QuizBookSolvingResultScreen(
+            state = QuizBookSolvingResultUiState(
+                isLoading = false,
+                quizBookSolving = QuizBookSolving(
+                    id = 2L,
+                    userId = 123L,
+                    quizBookId = QuizBookId(2L),
+                    version = 2L,
+                    level = "ADVANCED",
+                    category = "ANDROID",
+                    title = "Android 심화 퀴즈",
+                    description = "Android Architecture Components와 Jetpack Compose에 대한 심화 문제들입니다.",
+                    totalQuizzes = 2,
+                    correctCount = 1,
+                    completedAt = "2025-06-13T17:05:42",
+                    elapsedTime = kotlin.time.Duration.parse("PT1H35M42S"),
+                    quizSolvingList = listOf(
+                        QuizSolving(
+                            id = 201L,
+                            quizBookSolvingId = 2L,
+                            quizId = 4L,
+                            questionType = "MCQ",
+                            content = "Android에서 UI를 구성하는 최신 방법은?",
+                            answer = "1",
+                            explanation = "Jetpack Compose는 Android의 최신 선언형 UI 툴킷입니다.",
+                            memo = "Compose 관련 문제",
+                            userAnswer = "1",
+                            isCorrect = true,
+                            completedAt = "2025-06-13T16:30:00",
+                            mcqOptionSolvingList = listOf(
+                                McqOptionSolving(
+                                    id = 2001L,
+                                    quizSolvingId = 201L,
+                                    optionNumber = 1,
+                                    optionContent = "Jetpack Compose",
+                                    isCorrect = true
+                                ),
+                                McqOptionSolving(
+                                    id = 2002L,
+                                    quizSolvingId = 201L,
+                                    optionNumber = 2,
+                                    optionContent = "XML Layout",
+                                    isCorrect = false
+                                ),
+                                McqOptionSolving(
+                                    id = 2003L,
+                                    quizSolvingId = 201L,
+                                    optionNumber = 3,
+                                    optionContent = "React Native",
+                                    isCorrect = false
+                                ),
+                                McqOptionSolving(
+                                    id = 2004L,
+                                    quizSolvingId = 201L,
+                                    optionNumber = 4,
+                                    optionContent = "Flutter",
+                                    isCorrect = false
+                                )
+                            )
+                        ),
+                        QuizSolving(
+                            id = 202L,
+                            quizBookSolvingId = 2L,
+                            quizId = 5L,
+                            questionType = "SHORT_ANSWER",
+                            content = "ViewModel의 생명주기와 Repository 패턴의 장점을 설명하시오.",
+                            answer = "ViewModel은 UI 관련 데이터를 저장하고 관리하는 클래스로, 화면 회전 등의 구성 변경에도 데이터를 유지합니다.",
+                            explanation = "ViewModel은 UI 컨트롤러의 생명주기를 고려하여 설계된 클래스입니다. Repository 패턴과 함께 사용하면 데이터 소스의 추상화와 테스트 용이성을 제공합니다.",
+                            memo = "좀 더 자세히 써야 했는데...",
+                            userAnswer = "ViewModel은 데이터를 관리합니다.",
+                            isCorrect = false,
+                            completedAt = "2025-06-13T17:05:42",
+                            mcqOptionSolvingList = emptyList()
+                        )
+                    )
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuizBookSolvingResultScreenDatabasePreview() {
+    QuizCafeTheme {
+        QuizBookSolvingResultScreen(
+            state = QuizBookSolvingResultUiState(
+                isLoading = false,
+                quizBookSolving = QuizBookSolving(
+                    id = 3L,
+                    userId = 123L,
+                    quizBookId = QuizBookId(3L),
+                    version = 1L,
+                    level = "INTERMEDIATE",
+                    category = "DATABASE",
+                    title = "Room 데이터베이스 퀴즈",
+                    description = "Room 데이터베이스의 기본 개념과 사용법을 다루는 퀴즈입니다.",
+                    totalQuizzes = 1,
+                    correctCount = 1,
+                    completedAt = "2025-06-13T14:15:30",
+                    elapsedTime = kotlin.time.Duration.parse("PT3M15S"),
+                    quizSolvingList = listOf(
+                        QuizSolving(
+                            id = 301L,
+                            quizBookSolvingId = 3L,
+                            quizId = 6L,
+                            questionType = "OX",
+                            content = "@Relation 어노테이션은 Room에서 테이블 간의 관계를 정의할 때 사용됩니다.",
+                            answer = "O",
+                            explanation = "@Relation은 Room에서 1:N 관계를 정의하는 데 사용되는 어노테이션입니다.",
+                            memo = "Room 관련 기본 지식",
+                            userAnswer = "O",
+                            isCorrect = true,
+                            completedAt = "2025-06-13T14:15:30",
+                            mcqOptionSolvingList = emptyList()
+                        )
+                    )
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun QuizBookSolvingResultScreenLoadingPreview() {
+    QuizCafeTheme {
+        QuizBookSolvingResultScreen(
+            state = QuizBookSolvingResultUiState(
+                isLoading = true,
+                quizBookSolving = null
             )
         )
     }

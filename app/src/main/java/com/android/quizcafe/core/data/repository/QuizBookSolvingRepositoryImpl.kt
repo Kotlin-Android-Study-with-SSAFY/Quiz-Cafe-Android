@@ -216,5 +216,4 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         // 3. QuizBook 삭제
         quizBookDao.deleteQuizBook(quizBookId.value)
     }
-
 }
