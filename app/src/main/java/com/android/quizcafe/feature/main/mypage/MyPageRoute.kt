@@ -84,7 +84,6 @@ fun MyPageRoute(
         )
     }
 
-
     MyPageScreen(
         state = state,
         onClick = { intent -> viewModel.sendIntent(intent) }

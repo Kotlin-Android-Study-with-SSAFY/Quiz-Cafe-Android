@@ -202,7 +202,6 @@ fun PreviewConfirmDialogWithdrawalFinal() {
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun PreviewMyPageSummary() {
