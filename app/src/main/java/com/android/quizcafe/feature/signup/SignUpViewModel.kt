@@ -38,7 +38,7 @@ class SignUpViewModel @Inject constructor(
                     SignUpRequest(
                         email = state.value.email,
                         password = state.value.password,
-                        nickName = "jw"
+                        nickName = "name"
                     )
                 ).collect {
                     when (it) {

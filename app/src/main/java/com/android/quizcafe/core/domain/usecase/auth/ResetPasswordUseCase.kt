@@ -9,6 +9,6 @@ import javax.inject.Inject
 class ResetPasswordUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    operator fun invoke(request: ResetPasswordRequest): Flow<Resource<Unit>> =
-        authRepository.resetPassword(request)
+    operator fun invoke(email: String): Flow<Resource<Unit>> =
+        authRepository.resetPassword(ResetPasswordRequest(email = email))
 }
