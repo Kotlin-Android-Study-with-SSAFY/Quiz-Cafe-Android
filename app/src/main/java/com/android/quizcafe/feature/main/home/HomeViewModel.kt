@@ -1,14 +1,14 @@
 package com.android.quizcafe.feature.main.home
 
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.usecase.quizsolvingrecord.GetQuizRecordUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GetAllQuizBookSolvingUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getQuizRecordUseCase: GetQuizRecordUseCase
+    private val getAllQuizBookSolvingUseCase: GetAllQuizBookSolvingUseCase
 ) : BaseViewModel<HomeViewState, HomeIntent, HomeEffect>(
     initialState = HomeViewState()
 ) {
@@ -16,7 +16,7 @@ class HomeViewModel @Inject constructor(
         when (intent) {
             HomeIntent.FetchRecord -> {
                 sendIntent(HomeIntent.LoadingFetchRecord)
-                getQuizRecordUseCase().collect { resource ->
+                getAllQuizBookSolvingUseCase().collect { resource ->
                     when (resource) {
                         is Resource.Success -> sendIntent(HomeIntent.SuccessFetchRecord(resource.data))
                         is Resource.Failure -> sendIntent(HomeIntent.FailFetchRecord(resource.errorMessage))
@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
             is HomeIntent.LoadingFetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
             is HomeIntent.SuccessFetchRecord -> currentState.copy(
                 isLoading = false,
-                quizSolvingRecords = intent.quizSolvingRecords,
+                quizSolvingList = intent.quizSolvingRecords,
                 errorMessage = null
             )
             is HomeIntent.FailFetchRecord -> currentState.copy(

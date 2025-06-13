@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizSolvingRecord
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
@@ -32,7 +33,7 @@ fun HomeScreen(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { QuizRecordContent(quizSolvingRecords = state.quizSolvingRecords) }
+            item { QuizRecordContent(quizSolving = state.quizSolvingList) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item { QuizModeContent { sendIntent(HomeIntent.ClickHomeCard("")) } }
         }
@@ -45,11 +46,11 @@ fun HomeScreenPreview() {
     QuizCafeTheme {
         HomeScreen(
             state = HomeViewState(
-                quizSolvingRecords = listOf(
-                    QuizSolvingRecord(
+                quizSolvingList = listOf(
+                    QuizBookSolving(
                         id = 1,
                         userId = 1,
-                        quizBookId = 1,
+                        quizBookId = QuizBookId(1),
                         version = 1,
                         level = "EASY",
                         category = "운영체제",
@@ -58,7 +59,7 @@ fun HomeScreenPreview() {
                         totalQuizzes = 20,
                         correctCount = 16,
                         completedAt = "2025-06-09T05:14:05.986Z",
-                        quizzes = emptyList()
+                        quizSolvingList = emptyList()
                     ),
                 )
             ),

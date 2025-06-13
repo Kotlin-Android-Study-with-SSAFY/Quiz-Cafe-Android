@@ -11,8 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase
-) : BaseViewModel<LoginViewState, LoginIntent, LoginEffect>(
-    initialState = LoginViewState()
+) : BaseViewModel<LoginUiState, LoginIntent, LoginEffect>(
+    initialState = LoginUiState()
 ) {
 
     override suspend fun handleIntent(intent: LoginIntent) {
@@ -47,26 +47,26 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: LoginViewState, intent: LoginIntent): LoginViewState {
+    override fun reduce(state: LoginUiState, intent: LoginIntent): LoginUiState {
         return when (intent) {
-            is LoginIntent.UpdatedEmail -> currentState.copy(email = intent.email, errorMessage = null)
+            is LoginIntent.UpdatedEmail -> state.copy(email = intent.email, errorMessage = null)
                 .recalculate()
 
-            is LoginIntent.UpdatedPassword -> currentState.copy(
+            is LoginIntent.UpdatedPassword -> state.copy(
                 password = intent.password,
                 errorMessage = null
             ).recalculate()
 
-            LoginIntent.ClickLogin -> currentState.copy(isLoading = true, errorMessage = null)
-            LoginIntent.ClickSignUp -> currentState.copy(isLoading = false)
+            LoginIntent.ClickLogin -> state.copy(isLoading = true, errorMessage = null)
+            LoginIntent.ClickSignUp -> state.copy(isLoading = false)
 
-            LoginIntent.SuccessLogin -> currentState.copy(isLoading = false)
+            LoginIntent.SuccessLogin -> state.copy(isLoading = false)
 
-            is LoginIntent.FailLogin -> currentState.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
+            is LoginIntent.FailLogin -> state.copy(isLoading = false, errorMessage = "로그인에 실패했습니다.")
         }
     }
 
-    private fun LoginViewState.recalculate(): LoginViewState {
+    private fun LoginUiState.recalculate(): LoginUiState {
         val isLoginEnabled = password.isNotBlank() && email.isNotBlank()
         return this.copy(isLoginEnabled = isLoginEnabled)
     }

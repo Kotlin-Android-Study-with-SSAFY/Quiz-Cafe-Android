@@ -20,7 +20,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PasswordInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
@@ -43,7 +43,7 @@ fun PasswordInputContent(
 
 @Composable
 fun PasswordInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     focusRequester: FocusRequester?,
     sendIntent: (SignUpIntent) -> Unit
 ) {
@@ -58,7 +58,7 @@ fun PasswordInputContent(
 }
 
 @Composable
-fun PasswordConfirmInputContent(state: SignUpViewState, sendIntent: (SignUpIntent) -> Unit) {
+fun PasswordConfirmInputContent(state: SignUpUiState, sendIntent: (SignUpIntent) -> Unit) {
     LabeledInputField(
         label = stringResource(R.string.password_confirm),
         value = state.passwordConfirm,
@@ -73,12 +73,12 @@ fun PasswordConfirmInputContent(state: SignUpViewState, sendIntent: (SignUpInten
 fun PasswordInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordInputContent(SignUpViewState(), null) {}
+            PasswordInputContent(SignUpUiState(), null) {}
             Spacer(Modifier.height(20.dp))
-            PasswordInputContent(SignUpViewState(password = "password"), null) {}
+            PasswordInputContent(SignUpUiState(password = "password"), null) {}
             Spacer(Modifier.height(20.dp))
             PasswordInputContent(
-                SignUpViewState(
+                SignUpUiState(
                     password = "password",
                     passwordErrorMessage = "비밀번호 형식이 올바르지 않습니다."
                 ),
@@ -93,12 +93,12 @@ fun PasswordInputPreview() {
 fun PasswordConfirmInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordConfirmInputContent(SignUpViewState()) {}
+            PasswordConfirmInputContent(SignUpUiState()) {}
             Spacer(Modifier.height(20.dp))
-            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password")) {}
+            PasswordConfirmInputContent(SignUpUiState(passwordConfirm = "password")) {}
             Spacer(Modifier.height(20.dp))
             PasswordConfirmInputContent(
-                SignUpViewState(
+                SignUpUiState(
                     passwordConfirm = "password1",
                     passwordConfirmErrorMessage = "비밀번호가 일치하지 않습니다."
                 )

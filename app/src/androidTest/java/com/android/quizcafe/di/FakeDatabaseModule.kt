@@ -1,0 +1,29 @@
+package com.android.quizcafe.di
+
+import android.content.Context
+import androidx.room.Room
+import com.android.quizcafe.core.database.QuizCafeDatabase
+import com.android.quizcafe.core.database.di.DatabaseModule
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import dagger.hilt.testing.TestInstallIn
+import javax.inject.Singleton
+
+@Module
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces = [DatabaseModule::class]
+)
+object FakeDatabaseModule {
+
+    @Provides
+    @Singleton
+    fun provideInMemoryDatabase(@ApplicationContext context: Context): QuizCafeDatabase {
+        return Room.inMemoryDatabaseBuilder(
+            context,
+            QuizCafeDatabase::class.java
+        ).allowMainThreadQueries().build()
+    }
+}

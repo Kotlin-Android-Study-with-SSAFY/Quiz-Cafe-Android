@@ -1,7 +1,15 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
+import com.android.quizcafe.core.domain.model.value.QuizBookId
+import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -9,12 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuizSolveViewModel @Inject constructor(
-    /*
-     * 1. 문제집 정보 가져오는 UseCase -> 총 퀴즈수랑 각각의 퀴즈 id 가져올 수 있게
-     * 2. 퀴즈id를 통한 문제 정보(객관식은 보기까지) 가져오는 UseCase
-     * 3. 문제 채점 UseCase(아직 API가 없는듯?)
-     * 4. 다음문제로 넘어갈때 로컬?혹은 서버로 현재 문제 state 저장하는 UseCase
-     * */
+    private val getQuizBookUseCase: GetQuizBookUseCase,
+    private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
+    private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
@@ -33,6 +38,18 @@ class QuizSolveViewModel @Inject constructor(
                 emitEffect(QuizSolveEffect.NavigatePopBack)
             }
 
+            is QuizSolveIntent.LoadQuizBook -> {
+                getQuizBook(intent.quizBookId)
+            }
+
+            is QuizSolveIntent.GetQuizBookLocalId -> {
+                getQuizBookLocalId(intent.quizBookId)
+            }
+
+            is QuizSolveIntent.GetQuizBookGradeResult -> {
+                getQuizBookGradeResult(intent.quizBookLocalId)
+            }
+
             else -> Unit
         }
     }
@@ -40,37 +57,134 @@ class QuizSolveViewModel @Inject constructor(
     override fun reduce(currentState: QuizSolveUiState, intent: QuizSolveIntent): QuizSolveUiState {
         return when (intent) {
             QuizSolveIntent.TickTime -> {
-                when (currentState.playMode) {
-                    PlayMode.TIME_ATTACK -> {
-                        if (currentState.remainingSeconds > 0) {
-                            currentState.copy(remainingSeconds = currentState.remainingSeconds - 1)
-                        } else {
-                            currentState
-                        }
-                    }
+                val timer = currentState.timer
+                when (timer.playMode) {
+                    PlayMode.TIME_ATTACK ->
+                        currentState.copy(
+                            timer = timer.copy(
+                                remainingSeconds = (timer.remainingSeconds - 1).coerceAtLeast(0)
+                            )
+                        )
 
-                    PlayMode.NO_TIME_ATTACK -> {
-                        currentState.copy(elapsedSeconds = currentState.elapsedSeconds + 1)
-                    }
+                    PlayMode.NO_TIME_ATTACK ->
+                        currentState.copy(
+                            timer = timer.copy(
+                                elapsedSeconds = timer.elapsedSeconds + 1
+                            )
+                        )
                 }
             }
 
-            is QuizSolveIntent.SelectOption -> {
+            is QuizSolveIntent.SelectOption ->
                 currentState.copy(
-                    selectedOptionId = intent.option,
-                    isButtonEnabled = true
+                    mcq = currentState.mcq.copy(
+                        selectedId = intent.option
+                    ),
+                    common = currentState.common.copy(
+                        isButtonEnabled = true
+                    )
                 )
-            }
 
             is QuizSolveIntent.UpdatedSubjectiveAnswer ->
                 currentState.copy(
-                    subjectiveAnswer = intent.answer,
-                    isButtonEnabled = intent.answer.isNotBlank()
+                    subjective = currentState.subjective.copy(
+                        answer = intent.answer
+                    ),
+                    common = currentState.common.copy(
+                        isButtonEnabled = intent.answer.isNotBlank()
+                    )
                 )
-            QuizSolveIntent.ShowExplanation -> {
-                currentState.copy(showExplanation = true)
+
+            // ─── 4) 해설보기 토글 ─────────────────────────────────────────
+            QuizSolveIntent.ShowExplanation ->
+                currentState.copy(
+                    review = currentState.review.copy(
+                        showExplanation = true
+                    )
+                )
+
+            is QuizSolveIntent.LoadQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizSolveIntent.SuccessGetQuizBook -> {
+                Log.d("test1234", intent.data.toString())
+                currentState.copy(
+                    quizBook = intent.data,
+                    isLoading = false
+                )
             }
+
+            is QuizSolveIntent.GetQuizBookGradeResult ->
+                currentState.copy(
+                    quizBookLocalId = intent.quizBookLocalId
+                )
+            is QuizSolveIntent.SuccessGetQuizBookGradeResult ->
+                currentState.copy(
+                    quizGrades = intent.quizBookGrade.quizGrades
+                )
             else -> currentState
+        }
+    }
+
+    private suspend fun getQuizBook(id: Long) {
+        getQuizBookUseCase(
+            QuizBookId(id)
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("getQuizBook", "${it.data.quizList}")
+                    sendIntent(QuizSolveIntent.SuccessGetQuizBook(it.data))
+                }
+
+                is Resource.Loading -> {
+                    Log.d("getQuizBook", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("getQuizBook", it.errorMessage)
+                }
+            }
+        }
+    }
+
+    private suspend fun getQuizBookLocalId(id: Long) {
+        getQuizBookLocalIdUseCase(
+            QuizBookId(id)
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("getQuizBookLocalId", "Get QuizBookDetail Success")
+                    sendIntent(QuizSolveIntent.GetQuizBookGradeResult(it.data))
+                    sendIntent(QuizSolveIntent.SuccessGetQuizBookLocalId(it.data))
+                }
+
+                is Resource.Loading -> {
+                    Log.d("getQuizBookLocalId", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("getQuizBookLocalId", it.errorMessage)
+                }
+            }
+        }
+    }
+
+    private suspend fun getQuizBookGradeResult(id: QuizBookGradeLocalId) {
+        getQuizBookGradeUseCase(
+            id
+        ).collect {
+            when (it) {
+                is Resource.Success -> {
+                    Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")
+                    sendIntent(QuizSolveIntent.SuccessGetQuizBookGradeResult(it.data))
+                }
+
+                is Resource.Loading -> {
+                    Log.d("getQuizBookGradeUseCase", "Loading")
+                }
+
+                is Resource.Failure -> {
+                    Log.d("getQuizBookGradeUseCase", it.errorMessage)
+                }
+            }
         }
     }
 }

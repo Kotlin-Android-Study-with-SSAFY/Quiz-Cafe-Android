@@ -13,7 +13,7 @@ import com.android.quizcafe.R
 fun QuizBookDetailRoute(
     quizBookId: Long,
     navigateToQuizBookPicker: () -> Unit,
-    navigateToQuizSolve: () -> Unit,
+    navigateToQuizSolve: (Long) -> Unit,
     navigateToUserPage: () -> Unit,
     viewModel: QuizBookDetailViewModel = hiltViewModel()
 ) {
@@ -28,8 +28,8 @@ fun QuizBookDetailRoute(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                QuizBookDetailEffect.NavigateToQuizSolve -> {
-                    navigateToQuizSolve()
+                is QuizBookDetailEffect.NavigateToQuizSolve -> {
+                    navigateToQuizSolve(effect.quizBookId)
                 }
 
                 QuizBookDetailEffect.NavigateToQuizBookList -> {

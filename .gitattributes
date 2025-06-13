@@ -1,3 +1,7 @@
 * text eol=lf
 gradlew text eol=lf
 *.sh text eol=lf
+*.ttf binary
+*.eot binary
+*.woff binary
+*.svg binary
