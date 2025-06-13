@@ -36,6 +36,18 @@ fun QuizBookResponseDto.toDomain() = QuizBook(
     createdAt = createdAt
 )
 
+fun QuizBookWithQuizzesResponseDto.toEntity() = QuizBookEntity(
+    id = quizBookId,
+    version = version,
+    category = category,
+    title = title,
+    description = description,
+    level = level,
+    createdBy = createdBy,
+    totalQuizzes = totalQuizzes,
+    createdAt = createdAt
+)
+
 fun QuizBookWithQuizzesResponseDto.toDomain() = QuizBook(
     id = quizBookId,
     version = version,

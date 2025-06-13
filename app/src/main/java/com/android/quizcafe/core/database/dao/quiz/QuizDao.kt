@@ -27,4 +27,10 @@ interface QuizDao {
 
     @Query("SELECT * FROM mcq_option WHERE quizId = :quizId")
     suspend fun getMcqOptionsByQuizId(quizId: Long): List<McqOptionEntity>
+
+    @Query("DELETE FROM quiz WHERE quizBookId = :quizBookId")
+    suspend fun deleteQuizzesByQuizBookId(quizBookId: Long)
+
+    @Query("DELETE FROM mcq_option WHERE quizId IN (SELECT id FROM quiz WHERE quizBookId = :quizBookId)")
+    suspend fun deleteMcqOptionsByQuizBookId(quizBookId: Long)
 }

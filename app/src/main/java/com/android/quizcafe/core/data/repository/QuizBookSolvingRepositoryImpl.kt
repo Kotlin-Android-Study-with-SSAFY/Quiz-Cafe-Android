@@ -124,7 +124,9 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             .onSuccess { response ->
                 response.data?.let { serverId ->
                     quizBookGradeDao.deleteQuizBookGrade(localId.value)
-                    // TODO : 삭제 실패 했을 때 처리
+                    deleteQuizBookFromLocal(
+                        QuizBookId(quizBookGradeEntity.quizBookId)
+                    )
                     emit(Resource.Success(QuizBookGradeServerId(serverId)))
                 } ?: emit(Resource.Failure("서버 응답 데이터가 null입니다", HttpStatus.UNKNOWN))
             }
@@ -202,4 +204,17 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             }
         )
     }
+
+    // 퀴즈북 관련 로컬 데이터 모두 삭제
+    suspend fun deleteQuizBookFromLocal(quizBookId: QuizBookId) {
+        // 1. McqOption 삭제 (외래키 관계로 먼저 삭제)
+        quizDao.deleteMcqOptionsByQuizBookId(quizBookId.value)
+
+        // 2. Quiz 삭제
+        quizDao.deleteQuizzesByQuizBookId(quizBookId.value)
+
+        // 3. QuizBook 삭제
+        quizBookDao.deleteQuizBook(quizBookId.value)
+    }
+
 }

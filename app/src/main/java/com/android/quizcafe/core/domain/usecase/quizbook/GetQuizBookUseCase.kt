@@ -11,5 +11,5 @@ class GetQuizBookUseCase @Inject constructor(
     private val quizBookRepository: QuizBookRepository
 ) {
     operator fun invoke(quizBookId: QuizBookId): Flow<Resource<QuizBook>> =
-        quizBookRepository.getQuizBookById(quizBookId)
+        quizBookRepository.getQuizBookFromRemote(quizBookId)
 }
