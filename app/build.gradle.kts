@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.credential)
     implementation(libs.credential.auth)
     implementation(libs.google.identity)
+    implementation(libs.browser)
 }
 
 fun getProperty(propertyKey: String): String {
