@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
@@ -29,17 +28,16 @@ import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 
 @Composable
 fun QuizCafeNavHost(
+    navController: NavHostController,
     startDestination: String = AuthRoute.Graph.route
 ) {
-    val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route,
+        startDestination = startDestination,
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
         mainGraph(navController)
-        quizSolveGraph(navController)
     }
 }
 
@@ -53,14 +51,14 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             LoginRoute(
                 navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
                 navigateToHome = {
-                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route)
                 }
             )
         }
         composable(AuthRoute.Signup.route) {
             SignUpRoute(
                 navigateToLogin = {
-                    navController.navigateAndClearBackStack(AuthRoute.Login.route, AuthRoute.Signup.route)
+                    navController.navigateAndClearBackStack(AuthRoute.Login.route)
                 }
             )
         }
@@ -73,16 +71,15 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         startDestination = MainRoute.Home.route,
         route = MainRoute.Graph.route
     ) {
-        composable(MainRoute.Home.route) {
-            MainScreen()
-        }
+        composable(MainRoute.Home.route) { MainScreen() }
+        quizSolveGraph(navController)
     }
 }
 
 @Composable
 fun MainBottomNavHost(
     navController: NavHostController,
-    startDestination: String = MainRoute.Home.route
+    startDestination: String = MainRoute.startDestination
 ) {
     NavHost(
         navController = navController,
@@ -156,7 +153,7 @@ fun MainBottomNavHost(
 // 퀴즈 풀이
 fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
     navigation(
-        startDestination = QuizSolveRoute.QuizSolve.route,
+        startDestination = QuizSolveRoute.startDestination,
         route = QuizSolveRoute.Graph.route
     ) {
         composable(QuizSolveRoute.QuizSolve.route) {
