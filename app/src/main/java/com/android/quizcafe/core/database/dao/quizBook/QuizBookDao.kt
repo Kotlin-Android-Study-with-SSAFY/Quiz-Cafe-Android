@@ -29,4 +29,7 @@ interface QuizBookDao {
 
     @Query("SELECT id FROM quiz_book WHERE category = :category")
     suspend fun getQuizBookIdsByCategory(category: String): List<Long>
+
+    @Query("DELETE FROM quiz_book WHERE id = :quizBookId")
+    suspend fun deleteQuizBook(quizBookId: Long)
 }

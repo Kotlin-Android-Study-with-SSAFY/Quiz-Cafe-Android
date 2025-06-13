@@ -79,14 +79,11 @@ class GradeQuizUseCaseTest {
             userAnswer = "O"
         ).collect(results::add)
 
-        println("results: $results")
-
         // Then
         assertEquals(2, results.size)
         assertTrue(results[0] is Resource.Loading)
         assertTrue(results[1] is Resource.Success)
 
-        // 저장된 데이터 검증 - null 체크 추가
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeLocalId.value)
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertTrue("QuizGrade entities should not be empty", savedGrade!!.quizGradeEntities.isNotEmpty())
@@ -100,7 +97,7 @@ class GradeQuizUseCaseTest {
 
     @Test
     fun gradeOXQuiz_wrongAnswer_withExistingGradeId() = runTest {
-        // Given - 완전히 고유한 ID 사용
+        // Given
         val uniqueId = generateUniqueId()
         val quizBookId = QuizBookId(uniqueId)
         val quizId = QuizId(uniqueId + 10)
@@ -131,7 +128,6 @@ class GradeQuizUseCaseTest {
         assertTrue(results[0] is Resource.Loading)
         assertTrue(results[1] is Resource.Success)
 
-        // 저장된 데이터 검증 - null 체크 추가
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeId.value)
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertTrue("QuizGrade entities should not be empty", savedGrade!!.quizGradeEntities.isNotEmpty())
@@ -139,19 +135,19 @@ class GradeQuizUseCaseTest {
         val savedQuizGrade = savedGrade.quizGradeEntities.first()
         assertEquals(quizId.value, savedQuizGrade.quizId)
         assertEquals("X", savedQuizGrade.userAnswer)
-        assertEquals(false, savedQuizGrade.isCorrect) // 틀림
+        assertEquals(false, savedQuizGrade.isCorrect)
     }
 
     @Test
     fun gradeMCQQuiz_correctAnswer_withExistingGradeId() = runTest {
-        // Given - 완전히 고유한 ID 사용
+        // Given
         val uniqueId = generateUniqueId()
         val quizBookId = QuizBookId(uniqueId)
         val quizId = QuizId(uniqueId + 20)
         val gradeId = QuizBookGradeLocalId(uniqueId + 1000)
 
         setupTestData(quizBookId, uniqueId)
-        setupExistingQuizBookGrade(gradeId, quizBookId) // QuizBookGrade 미리 생성
+        setupExistingQuizBookGrade(gradeId, quizBookId)
 
         val mcqQuiz = Quiz(
             id = quizId,
@@ -174,7 +170,6 @@ class GradeQuizUseCaseTest {
         assertTrue(results[0] is Resource.Loading)
         assertTrue(results[1] is Resource.Success)
 
-        // 저장된 데이터 검증 - null 체크 추가
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeId.value)
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertTrue("QuizGrade entities should not be empty", savedGrade!!.quizGradeEntities.isNotEmpty())
@@ -219,7 +214,6 @@ class GradeQuizUseCaseTest {
         assertTrue(results[0] is Resource.Loading)
         assertTrue(results[1] is Resource.Success)
 
-        // 저장된 데이터 검증 - null 체크 추가
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeId.value)
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertTrue("QuizGrade entities should not be empty", savedGrade!!.quizGradeEntities.isNotEmpty())
@@ -232,7 +226,7 @@ class GradeQuizUseCaseTest {
 
     @Test
     fun gradeMultipleQuizzes_differentTypes() = runTest {
-        // Given - 완전히 고유한 ID 사용
+        // Given
         val uniqueId = generateUniqueId()
         val quizBookId = QuizBookId(uniqueId)
         val gradeId = QuizBookGradeLocalId(uniqueId + 1000)
@@ -241,14 +235,14 @@ class GradeQuizUseCaseTest {
         setupExistingQuizBookGrade(gradeId, quizBookId)
 
         val quizzes = listOf(
-            Quiz(QuizId(uniqueId + 10), quizBookId, "OX", "OX 문제", "O", "설명", 1L),
-            Quiz(QuizId(uniqueId + 20), quizBookId, "MCQ", "MCQ 문제", "A", "설명", 1L),
-            Quiz(QuizId(uniqueId + 30), quizBookId, "SHORT_ANSWER", "주관식 문제", "val", "설명", 1L)
+            Quiz(QuizId(uniqueId + 10), quizBookId, "OX", "OX 문제", "O", "설명"),
+            Quiz(QuizId(uniqueId + 20), quizBookId, "MCQ", "MCQ 문제", "A", "설명"),
+            Quiz(QuizId(uniqueId + 30), quizBookId, "SHORT_ANSWER", "주관식 문제", "val", "설명")
         )
 
         val userAnswers = listOf("O", "A", "val")
 
-        // When - 같은 gradeId로 여러 퀴즈 채점
+        // When
         quizzes.forEachIndexed { index, quiz ->
             val result = gradeQuizUseCase(
                 quiz = quiz,
@@ -259,20 +253,18 @@ class GradeQuizUseCaseTest {
 
         // Then
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeId.value)
-        println("savedGrade: $savedGrade")
-
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertEquals(3, savedGrade!!.quizGradeEntities.size)
 
         savedGrade.quizGradeEntities.forEach { savedQuizGrade ->
-            assertEquals(true, savedQuizGrade.isCorrect) // 모두 정답
+            assertEquals(true, savedQuizGrade.isCorrect)
             assertEquals(gradeId.value, savedQuizGrade.quizBookGradeLocalId)
         }
     }
 
     @Test
     fun gradeQuiz_mixedAnswers() = runTest {
-        // Given - 완전히 고유한 ID 사용
+        // Given
         val uniqueId = generateUniqueId()
         val quizBookId = QuizBookId(uniqueId)
         val gradeId = QuizBookGradeLocalId(uniqueId + 1000)
@@ -280,11 +272,11 @@ class GradeQuizUseCaseTest {
         setupTestData(quizBookId, uniqueId)
         setupExistingQuizBookGrade(gradeId, quizBookId)
 
-        // When - 일부는 맞고 일부는 틀림
+        // When
         val testCases = listOf(
-            Triple(Quiz(QuizId(uniqueId + 10), quizBookId, "OX", "OX 문제", "O", "설명", 1L), "X", false),
-            Triple(Quiz(QuizId(uniqueId + 20), quizBookId, "MCQ", "MCQ 문제", "A", "설명", 1L), "A", true),
-            Triple(Quiz(QuizId(uniqueId + 30), quizBookId, "SHORT_ANSWER", "주관식 문제", "val", "설명", 1L), "var", false)
+            Triple(Quiz(QuizId(uniqueId + 10), quizBookId, "OX", "OX 문제", "O", "설명"), "X", false),
+            Triple(Quiz(QuizId(uniqueId + 20), quizBookId, "MCQ", "MCQ 문제", "A", "설명"), "A", true),
+            Triple(Quiz(QuizId(uniqueId + 30), quizBookId, "SHORT_ANSWER", "주관식 문제", "val", "설명"), "var", false)
         )
 
         testCases.forEach { (quiz, userAnswer, expectedCorrect) ->
@@ -295,25 +287,24 @@ class GradeQuizUseCaseTest {
             ).first { it is Resource.Success }
         }
 
-        // Then - null 체크 추가
+        // Then
         val savedGrade = database.quizBookGradeDao().getQuizBookGrade(gradeId.value)
         assertNotNull("QuizBookGrade should not be null", savedGrade)
         assertEquals(3, savedGrade!!.quizGradeEntities.size)
 
         val correctCount = savedGrade.quizGradeEntities.count { it.isCorrect == true }
-        assertEquals(1, correctCount) // 3개 중 1개만 맞음
+        assertEquals(1, correctCount)
     }
 
     @Test
     fun gradeQuiz_nonExistentGradeId_shouldFail() = runTest {
-        // Given - 존재하지 않는 gradeId 사용
+        // Given
         val uniqueId = generateUniqueId()
         val quizBookId = QuizBookId(uniqueId)
         val quizId = QuizId(uniqueId + 10)
-        val nonExistentGradeId = QuizBookGradeLocalId(uniqueId + 9999) // 존재하지 않는 ID
+        val nonExistentGradeId = QuizBookGradeLocalId(uniqueId + 9999)
 
         setupTestData(quizBookId, uniqueId)
-        // setupExistingQuizBookGrade 호출하지 않음
 
         val oxQuiz = Quiz(
             id = quizId,
@@ -332,12 +323,11 @@ class GradeQuizUseCaseTest {
             userAnswer = "O"
         ).collect(results::add)
 
-        // Then - 실패해야 함
+        // Then
         assertTrue(results.any { it is Resource.Loading })
         assertTrue(results.any { it is Resource.Failure })
     }
 
-    // QuizBook 데이터 삽입 - 고유한 값들 사용
     private suspend fun setupTestData(quizBookId: QuizBookId, baseId: Long) {
         val quizBookEntity = QuizBookEntity(
             id = quizBookId.value,
@@ -352,11 +342,10 @@ class GradeQuizUseCaseTest {
         )
         database.quizBookDao().upsertQuizBook(quizBookEntity)
 
-        // Quiz 데이터 삽입 - 고유한 ID 사용
         val quizEntities = mutableListOf<QuizEntity>()
         val mcqOptions = mutableListOf<McqOptionEntity>()
 
-        // 1번 문제: OX 문제
+        // OX 문제
         val quiz1 = QuizEntity(
             id = baseId + 10,
             quizBookId = quizBookId.value,
@@ -367,7 +356,7 @@ class GradeQuizUseCaseTest {
         )
         quizEntities.add(quiz1)
 
-        // 2번 문제: MCQ 문제
+        // MCQ 문제
         val quiz2 = QuizEntity(
             id = baseId + 20,
             quizBookId = quizBookId.value,
@@ -378,7 +367,6 @@ class GradeQuizUseCaseTest {
         )
         quizEntities.add(quiz2)
 
-        // 2번 문제의 MCQ 선택지 - 고유한 ID 사용
         val mcqOptionsForQuiz2 = listOf(
             McqOptionEntity(baseId + 100, baseId + 20, 1, "메모리 관리가 어렵다", true),
             McqOptionEntity(baseId + 101, baseId + 20, 2, "Null 안전성을 제공한다", false),
@@ -388,7 +376,7 @@ class GradeQuizUseCaseTest {
         )
         mcqOptions.addAll(mcqOptionsForQuiz2)
 
-        // 3번 문제: SHORT_ANSWER 문제
+        // SHORT_ANSWER 문제
         val quiz3 = QuizEntity(
             id = baseId + 30,
             quizBookId = quizBookId.value,

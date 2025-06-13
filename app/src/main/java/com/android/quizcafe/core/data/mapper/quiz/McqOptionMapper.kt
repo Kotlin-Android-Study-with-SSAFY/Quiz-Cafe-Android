@@ -21,9 +21,9 @@ fun McqOptionDto.toDomain() = McqOption(
     isCorrect = isCorrect
 )
 
-fun McqOption.toEntity() = McqOptionEntity(
+fun McqOptionDto.toEntity() = McqOptionEntity(
     id = id,
-    quizId = quizId.value,
+    quizId = quizId,
     optionNumber = optionNumber,
     optionContent = optionContent,
     isCorrect = isCorrect

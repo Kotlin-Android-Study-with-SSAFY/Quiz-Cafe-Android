@@ -13,19 +13,6 @@ data class QuizBookGrade(
     val quizGrades: List<QuizGrade> = listOf(),
     val elapsedTime: Duration = Duration.Companion.ZERO
 ) {
-    /**
-     * 정답 개수를 반환
-     */
-    fun getTotalScore(): Int {
-        return quizGrades.count { it.isCorrect }
-    }
-
-    /**
-     * 전체 문제 개수를 반환
-     */
-    fun getTotalQuestions(): Int {
-        return quizGrades.size
-    }
 
     /**
      * 경과 시간을 적절한 형식으로 반환
