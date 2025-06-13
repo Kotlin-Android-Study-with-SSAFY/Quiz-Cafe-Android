@@ -8,6 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
@@ -23,8 +24,8 @@ fun AppEventsHandler(
     navController: NavHostController,
     loginRoute: String
 ) {
-    var showLogoutDialog by remember { mutableStateOf(false) }
-    var dialogMessage by remember { mutableStateOf("") }
+    var showLogoutDialog by rememberSaveable { mutableStateOf(false) }
+    var dialogMessage by rememberSaveable { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         authManager.logoutEvent.collectLatest { reason ->
