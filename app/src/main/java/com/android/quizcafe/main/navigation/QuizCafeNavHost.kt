@@ -10,17 +10,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
-import com.android.quizcafe.feature.main.quiz.QuizRoute
+import com.android.quizcafe.feature.main.home.HomeRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
-import com.android.quizcafe.feature.quiz.solvingResult.QuizBookSolvingResultRoute
 import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
@@ -30,12 +28,12 @@ import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 
 @Composable
 fun QuizCafeNavHost(
+    navController: NavHostController,
     startDestination: String = AuthRoute.Graph.route
 ) {
-    val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthRoute.Graph.route,
+        startDestination = startDestination,
         modifier = Modifier.windowInsetsPadding(WindowInsets.safeDrawing)
     ) {
         authGraph(navController)
@@ -53,14 +51,14 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
             LoginRoute(
                 navigateToSignUp = { navController.navigateSingleTopTo(AuthRoute.Signup.route) },
                 navigateToHome = {
-                    navController.navigateAndClearBackStack(MainRoute.Graph.route, AuthRoute.Login.route)
+                    navController.navigateAndClearBackStack(MainRoute.Graph.route)
                 }
             )
         }
         composable(AuthRoute.Signup.route) {
             SignUpRoute(
                 navigateToLogin = {
-                    navController.navigateAndClearBackStack(AuthRoute.Login.route, AuthRoute.Signup.route)
+                    navController.navigateAndClearBackStack(AuthRoute.Login.route)
                 }
             )
         }
@@ -70,28 +68,25 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
 // 메인 탭
 fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     navigation(
-        startDestination = MainRoute.Quiz.route,
+        startDestination = MainRoute.Home.route,
         route = MainRoute.Graph.route
     ) {
-        composable(MainRoute.Quiz.route) {
-            MainScreen()
-        }
+        composable(MainRoute.Home.route) { MainScreen() }
+        quizSolveGraph(navController)
     }
 }
 
 @Composable
 fun MainBottomNavHost(
     navController: NavHostController,
-    startDestination: String = MainRoute.Quiz.route
+    startDestination: String = MainRoute.startDestination
 ) {
     NavHost(
         navController = navController,
         startDestination = startDestination
     ) {
-        quizSolveGraph(navController)
-
-        composable(MainRoute.Quiz.route) {
-            QuizRoute(
+        composable(MainRoute.Home.route) {
+            HomeRoute(
                 navigateToCategory = { _ -> navController.navigateSingleTopTo(MainRoute.CategoryList.route) }
             )
         }
@@ -148,27 +143,8 @@ fun MainBottomNavHost(
             QuizBookDetailRoute(
                 quizBookId = quizBookId,
                 navigateToQuizBookPicker = {},
-                navigateToQuizSolve = { quizBookId -> navController.navigateSingleTopTo("${QuizSolveRoute.QuizSolve.route}/$quizBookId") },
+                navigateToQuizSolve = {},
                 navigateToUserPage = {}
-            )
-        }
-
-        composable(
-            route = "quizSolve/quizSolve/{quizBookId}",
-            arguments = listOf(
-                navArgument("quizBookId") {
-                    type = NavType.LongType
-                    nullable = false
-                    defaultValue = 0L
-                }
-            )
-        ) { backStackEntry ->
-            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
-            QuizSolveRoute(
-                quizBookId,
-                navigateToBack = {
-                    navController.popBackStack()
-                }
             )
         }
     }
@@ -177,35 +153,13 @@ fun MainBottomNavHost(
 // 퀴즈 풀이
 fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
     navigation(
-        startDestination = QuizSolveRoute.QuizSolve.route,
+        startDestination = QuizSolveRoute.startDestination,
         route = QuizSolveRoute.Graph.route
     ) {
-        /*
-        * navHost 충돌 문제 발생
-        * */
-//        composable(QuizSolveRoute.QuizSolve.route) {
-//            QuizSolveRoute(
-//                navigateToBack = {
-//                    navController.popBackStack()
-//                }
-//            )
-//        }
-
-        composable(
-            route = "${QuizSolveRoute.QuizSolvingResult.route}/{quizBookGradeLocalId}",
-            arguments = listOf(
-                navArgument("quizBookGradeLocalId") {
-                    type = NavType.LongType
-                    nullable = false
-                    defaultValue = 0L
-                }
-            )
-        ) { backStackEntry ->
-            val quizBookGradeLocalId = backStackEntry.arguments?.getLong("quizBookGradeLocalId") ?: 0L
-            QuizBookSolvingResultRoute(
-                quizBookGradeLocalId = quizBookGradeLocalId,
-                navigateToMain = {
-                    navController.navigateAndClearBackStack(MainRoute.Graph.route, QuizSolveRoute.QuizSolve.route)
+        composable(QuizSolveRoute.QuizSolve.route) {
+            QuizSolveRoute(
+                navigateToBack = {
+                    navController.popBackStack()
                 }
             )
         }
