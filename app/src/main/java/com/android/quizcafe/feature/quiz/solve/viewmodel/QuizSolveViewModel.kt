@@ -38,7 +38,7 @@ class QuizSolveViewModel @Inject constructor(
                 emitEffect(QuizSolveEffect.NavigatePopBack)
             }
 
-            is QuizSolveIntent.LoadQuizBookDetail -> {
+            is QuizSolveIntent.LoadQuizBook -> {
                 getQuizBook(intent.quizBookId)
             }
 
@@ -103,11 +103,11 @@ class QuizSolveViewModel @Inject constructor(
                     )
                 )
 
-            is QuizSolveIntent.LoadQuizBookDetail -> currentState.copy(isLoading = true, errorMessage = null)
-            is QuizSolveIntent.SuccessGetQuizBookDetail -> {
+            is QuizSolveIntent.LoadQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizSolveIntent.SuccessGetQuizBook -> {
                 Log.d("test1234", intent.data.toString())
                 currentState.copy(
-                    quizInfos = intent.data,
+                    quizBook = intent.data,
                     isLoading = false
                 )
             }
@@ -131,7 +131,7 @@ class QuizSolveViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Log.d("getQuizBook", "${it.data.quizList}")
-                    sendIntent(QuizSolveIntent.SuccessGetQuizBookDetail(it.data.quizList))
+                    sendIntent(QuizSolveIntent.SuccessGetQuizBook(it.data))
                 }
 
                 is Resource.Loading -> {

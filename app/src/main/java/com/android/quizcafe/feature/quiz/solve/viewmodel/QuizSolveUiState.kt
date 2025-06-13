@@ -2,6 +2,7 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
+import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
@@ -57,7 +58,7 @@ data class QuizSolveUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val quizBookLocalId: QuizBookGradeLocalId? = null,
-    val quizInfos: List<Quiz> = emptyList(),
+    val quizBook: QuizBook? = null,
     val quizGrades: List<QuizGrade> = emptyList(),
     val currentIndex: Int = 0,
     val mcq: McqState = McqState(
@@ -74,12 +75,12 @@ data class QuizSolveUiState(
     val common: CommonState = CommonState()
 ) : BaseContract.UiState {
     val currentQuiz: Quiz?
-        get() = quizInfos.getOrNull(currentIndex)
+        get() = quizBook?.quizList?.getOrNull(currentIndex)
 
     val questionInfo: QuestionInfo
         get() = QuestionInfo(
             current = currentIndex + 1,
-            total = quizInfos.size,
+            total = quizBook?.totalQuizzes ?: 0,
             text = currentQuiz?.content.orEmpty(),
             type = QuestionType.MULTIPLE_CHOICE
         )

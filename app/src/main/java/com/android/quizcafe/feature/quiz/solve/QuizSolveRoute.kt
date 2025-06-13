@@ -22,7 +22,7 @@ fun QuizSolveRoute(
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(QuizSolveIntent.LoadQuizBookDetail(quizBookId))
+        viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
         viewModel.sendIntent(QuizSolveIntent.GetQuizBookLocalId(quizBookId))
     }
     LaunchedEffect(Unit) {
