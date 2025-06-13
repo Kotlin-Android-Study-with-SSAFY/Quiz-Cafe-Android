@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.data.remote.service
 
 import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
+import com.android.quizcafe.core.data.model.auth.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SendCodeRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SignUpRequestDto
 import com.android.quizcafe.core.data.model.auth.request.VerifyCodeRequestDto
@@ -35,6 +36,6 @@ interface AuthService {
 
     @POST("auth/password/reset")
     suspend fun resetPassword(
-        @Query("email") email: String
+        @Body request: ResetPasswordRequestDto
     ): NetworkResult<ApiResponse<Unit>>
 }

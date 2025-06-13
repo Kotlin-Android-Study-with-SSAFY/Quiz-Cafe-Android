@@ -5,10 +5,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ResetPasswordRequestDto(
-    val email: String
+    val oldPassword: String,
+    val newPassword: String
 )
 
 fun ResetPasswordRequest.toDto() =
     ResetPasswordRequestDto(
-        email = this.email
+        oldPassword = this.oldPassword,
+        newPassword = this.newPassword
     )

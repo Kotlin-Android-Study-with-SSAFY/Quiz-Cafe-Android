@@ -1,18 +1,19 @@
 package com.android.quizcafe.core.data.repository
 
+import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.model.quizbook.response.toDomain
 import com.android.quizcafe.core.data.model.quizsolvingrecord.response.toDomain
-import com.android.quizcafe.core.data.model.user.request.toDto
 import com.android.quizcafe.core.data.model.user.response.toDomain
 import com.android.quizcafe.core.data.remote.datasource.QuizSolvingRecordRemoteDataSource
 import com.android.quizcafe.core.data.remote.datasource.UserRemoteDataSource
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
-import com.android.quizcafe.core.domain.model.user.requst.ResetPasswordRequest
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.domain.repository.UserRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
+import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
 import com.android.quizcafe.core.network.mapper.noContentResponseToResourceFlow
 import com.android.quizcafe.core.network.model.NetworkResult
 import kotlinx.coroutines.flow.Flow
@@ -65,13 +66,10 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun updateUserNickName(nickName: String): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickName) }
-
-    override fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { userRemoteDataSource.resetPassword(request.toDto()) }
+        emptyApiResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickName) }
 
     override fun deleteUser(): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { userRemoteDataSource.deleteUser() }
+        emptyApiResponseToResourceFlow { userRemoteDataSource.deleteUser() }
 
     override fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>> =
         apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
