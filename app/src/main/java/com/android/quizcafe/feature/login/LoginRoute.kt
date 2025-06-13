@@ -75,7 +75,7 @@ fun LoginRoute(
                 credentialManager.clearCredentialState(ClearCredentialStateRequest())
                 Log.d("googleLogout", "Credential 상태 초기화 성공")
             } catch (e: Exception) {
-                Log.e("googleLogout", "Credential 상태 초기화 실패: ${e.message}", )
+                Log.e("googleLogout", "Credential 상태 초기화 실패: ${e.message}",)
             }
             withContext(Dispatchers.Main) {
                 onComplete()
