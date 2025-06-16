@@ -1,6 +1,5 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
-import com.android.quizcafe.core.domain.model.QuizType
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
@@ -28,7 +27,7 @@ data class QuestionInfo(
 data class McqState(
     val options: List<QuizOption>,
     val selectedId: Long? = null,
-    val selectedContent : String ? = null,
+    val selectedContent: String? = null,
     val correctId: Long? = null
 )
 
@@ -84,7 +83,7 @@ data class QuizSolveUiState(
             current = currentIndex + 1,
             total = quizBook?.totalQuizzes ?: 0,
             text = currentQuiz?.content.orEmpty(),
-            type = when(currentQuiz?.questionType){
+            type = when (currentQuiz?.questionType) {
                 "MCQ" -> QuestionType.MULTIPLE_CHOICE
                 "OX" -> QuestionType.OX
                 else -> QuestionType.SUBJECTIVE

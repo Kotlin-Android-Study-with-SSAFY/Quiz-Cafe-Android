@@ -64,7 +64,6 @@ fun MainScreen(rootNavController: NavHostController) {
     }
 }
 
-
 @Composable
 fun MainBottomNavHost(
     rootNavController: NavHostController,
@@ -137,6 +136,5 @@ fun MainBottomNavHost(
                 navigateToUserPage = {}
             )
         }
-
     }
 }

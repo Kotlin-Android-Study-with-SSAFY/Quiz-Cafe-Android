@@ -3,15 +3,14 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 import android.util.Log
 import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GradeQuizUseCase
+import com.android.quizcafe.core.domain.usecase.solving.SolveQuizBookUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
-
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -22,7 +21,8 @@ class QuizSolveViewModel @Inject constructor(
     private val getQuizBookUseCase: GetQuizBookUseCase,
     private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
     private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase,
-    private val gradeQuizUseCase: GradeQuizUseCase
+    private val gradeQuizUseCase: GradeQuizUseCase,
+    private val solveQuizBookUseCase: SolveQuizBookUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
@@ -56,7 +56,12 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.SubmitNext -> {
                 saveQuizToLocal()
             }
-
+            is QuizSolveIntent.SubmitAnswer -> {
+                submitQuizAnswer()
+            }
+            is QuizSolveIntent.GradeQuizError -> {
+                emitEffect(QuizSolveEffect.ShowErrorDialog(intent.message ?: ""))
+            }
             else -> Unit
         }
     }
@@ -131,8 +136,13 @@ class QuizSolveViewModel @Inject constructor(
                 )
             QuizSolveIntent.GradeQuizSuccess -> {
                 currentState.copy(
-                    currentIndex = currentState.currentIndex + 1
+                    currentIndex = currentState.currentIndex + 1,
+                    common = CommonState(false)
                 )
+            }
+            QuizSolveIntent.SolveQuizSuccess -> {
+                // Todo : 채점 성공, 채점 결과 화면으로 Navigation
+                currentState
             }
             else -> currentState
         }
@@ -213,7 +223,9 @@ class QuizSolveViewModel @Inject constructor(
         if (quiz != null && localId != null && userAnswer != null) {
             println(localId)
             gradeQuizUseCase(
-                quiz, localId, userAnswer
+                quiz,
+                localId,
+                userAnswer
             ).collect {
                 when (it) {
                     is Resource.Success -> {
@@ -231,7 +243,33 @@ class QuizSolveViewModel @Inject constructor(
                     }
                 }
             }
-        }else {
+        } else {
+            sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
+        }
+    }
+    private suspend fun submitQuizAnswer() {
+        val localId = state.value.quizBookLocalId
+        if (localId != null) {
+            solveQuizBookUseCase(
+                localId
+            ).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        sendIntent(QuizSolveIntent.SolveQuizSuccess)
+                        Log.d("solveQuizBookUseCase", "채점 Success")
+                    }
+
+                    is Resource.Loading -> {
+                        Log.d("solveQuizBookUseCase", "Loading")
+                    }
+
+                    is Resource.Failure -> {
+                        Log.d("solveQuizBookUseCase", it.errorMessage)
+                        sendIntent(QuizSolveIntent.GradeQuizError(it.errorMessage))
+                    }
+                }
+            }
+        } else {
             sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
         }
     }
