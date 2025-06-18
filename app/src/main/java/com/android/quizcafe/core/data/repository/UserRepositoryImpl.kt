@@ -7,6 +7,8 @@ import com.android.quizcafe.core.data.model.user.request.toDto
 import com.android.quizcafe.core.data.model.user.response.toDomain
 import com.android.quizcafe.core.data.remote.datasource.QuizSolvingRecordRemoteDataSource
 import com.android.quizcafe.core.data.remote.datasource.UserRemoteDataSource
+import com.android.quizcafe.core.datastore.AuthManager
+import com.android.quizcafe.core.datastore.LogoutReason
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.user.request.UpdatePasswordRequest
@@ -14,6 +16,7 @@ import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.domain.repository.UserRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.handleNetworkException
 import com.android.quizcafe.core.network.model.NetworkResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -22,6 +25,7 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
     private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource,
+    private val authManager: AuthManager
 ) : UserRepository {
 
     override fun getUserInfo(): Flow<Resource<UserInfo>> = flow {
@@ -61,8 +65,9 @@ class UserRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun updateUserNickName(nickName: String): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickName) }
+    override fun updateUserNickName(nickname: String): Flow<Resource<Unit>> =
+        emptyApiResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickname) }
+
 
     override fun deleteUser(): Flow<Resource<Unit>> =
         emptyApiResponseToResourceFlow { userRemoteDataSource.deleteUser() }

@@ -22,13 +22,14 @@ sealed class MyPageIntent : BaseContract.ViewIntent {
     data object ClickChangeUserInfo : MyPageIntent()
     data object ClickMyCreatedQuizBooks : MyPageIntent()
 
-    data object ClickLogout : MyPageIntent()
-    data object ClickWithdrawal : MyPageIntent()
+    data object ClickChangeNickname : MyPageIntent()
+    data object ClickChangePassword : MyPageIntent()
 
-    data object RequestLogout : MyPageIntent()
-    data object RequestWithdrawal : MyPageIntent()
+    data object ClickLogout : MyPageIntent()
     data object ConfirmLogout : MyPageIntent()
     data object CancelLogout : MyPageIntent()
+
+    data object ClickWithdrawal : MyPageIntent()
     data object ConfirmWithdrawalFirst : MyPageIntent()
     data object CancelWithdrawalFirst : MyPageIntent()
     data object ConfirmWithdrawalFinal : MyPageIntent()
@@ -36,11 +37,9 @@ sealed class MyPageIntent : BaseContract.ViewIntent {
 }
 
 sealed class MyPageEffect : BaseContract.ViewEffect {
-    data object NavigateToChangeUserInfo : MyPageEffect()
     data object NavigateToMyCreatedQuizBooks : MyPageEffect()
-    data object NavigateToLogout : MyPageEffect()
-    data object NavigateToWithdrawal : MyPageEffect()
 
+    data object ShowUserInfoDialog : MyPageEffect()
     data object ShowLogoutDialog : MyPageEffect()
     data object ShowWithdrawalFirstDialog : MyPageEffect()
     data object ShowWithdrawalFinalDialog : MyPageEffect()

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
 
     fun getUserInfo(): Flow<Resource<UserInfo>>
-    fun updateUserNickName(nickName: String): Flow<Resource<Unit>>
+    fun updateUserNickName(nickname: String): Flow<Resource<Unit>>
     fun deleteUser(): Flow<Resource<Unit>>
     fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>>
     fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>>

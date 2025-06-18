@@ -34,7 +34,9 @@ fun AppEventsHandler(
                     showLogoutDialog = true
                 }
 
-                LogoutReason.UserLogout -> Unit
+                LogoutReason.UserLogout -> {
+                    navController.navigateAndClearBackStack(loginRoute)
+                }
             }
         }
     }

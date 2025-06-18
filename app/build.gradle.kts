@@ -69,7 +69,7 @@ dependencies {
     implementation(libs.okhttp.mockwebserver)
 
     testImplementation(libs.junit)
-    testImplementation("org.json:json:20220924")
+    testImplementation(libs.json)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.androidx.datastore.preferences)
     androidTestImplementation(libs.androidx.junit)

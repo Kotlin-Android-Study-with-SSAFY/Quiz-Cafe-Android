@@ -1,13 +1,25 @@
 package com.android.quizcafe.feature.main.mypage
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -146,6 +158,54 @@ fun MyPageMenuItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInfoBottomSheet(
+    onDismiss: () -> Unit,
+    onClickNicknameChange: () -> Unit,
+    onClickPasswordChange: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
+        dragHandle = null,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.dialog_title_change_user_info),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+            Text(
+                text = stringResource(R.string.dialog_nickname_change),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onClickNicknameChange()
+                        onDismiss()
+                    }
+                    .padding(vertical = 12.dp),
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                text = stringResource(R.string.dialog_password_change),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        onClickPasswordChange()
+                        onDismiss()
+                    }
+                    .padding(vertical = 12.dp),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+    }
+}
+
 @Composable
 fun ConfirmDialog(
     message: Int,
@@ -231,4 +291,14 @@ fun PreviewMyPageMenu() {
 @Composable
 fun PreviewMyPageMenuItem() {
     MyPageMenuItem(title = "학습 통계", onClick = {})
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewUserInfoDialog() {
+    UserInfoBottomSheet(
+        onDismiss = {},
+        onClickNicknameChange = {},
+        onClickPasswordChange = {}
+    )
 }
