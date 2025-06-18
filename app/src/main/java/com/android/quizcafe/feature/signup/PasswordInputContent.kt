@@ -10,8 +10,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
@@ -29,6 +31,7 @@ fun PasswordInputContent(
     val nicknameFocusRequester = remember { FocusRequester() }
     val passwordFocusRequester = remember { FocusRequester() }
     val passwordConfirmFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(Unit) {
         delay(100)
         nicknameFocusRequester.requestFocus()
@@ -50,7 +53,7 @@ fun PasswordInputContent(
                 sendIntent,
                 onImeAction = {passwordConfirmFocusRequester.requestFocus()})
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordConfirmInputContent(state, passwordConfirmFocusRequester, sendIntent)
+            PasswordConfirmInputContent(state, passwordConfirmFocusRequester, sendIntent, onImeAction = {keyboardController?.hide()})
         }
     )
 }
@@ -88,7 +91,10 @@ fun PasswordInputContent(
         isPassword = true,
         focusRequester = focusRequester,
         errorMessage = state.passwordErrorMessage,
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Password
+        ),
         onImeAction = onImeAction
     )
 }
@@ -97,7 +103,9 @@ fun PasswordInputContent(
 fun PasswordConfirmInputContent(
     state: SignUpViewState,
     focusRequester: FocusRequester?,
-    sendIntent: (SignUpIntent) -> Unit) {
+    sendIntent: (SignUpIntent) -> Unit,
+    onImeAction: () -> Unit
+) {
     LabeledInputField(
         label = stringResource(R.string.password_confirm),
         value = state.passwordConfirm,
@@ -105,7 +113,11 @@ fun PasswordConfirmInputContent(
         focusRequester = focusRequester,
         isPassword = true,
         errorMessage = state.passwordConfirmErrorMessage,
-        keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
+        keyboardOptions = KeyboardOptions.Default.copy(
+            imeAction = ImeAction.Done,
+            keyboardType = KeyboardType.Password
+        ),
+        onImeAction = onImeAction
     )
 }
 
@@ -152,16 +164,17 @@ fun PasswordInputPreview() {
 fun PasswordConfirmInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordConfirmInputContent(SignUpViewState(), null) {}
+            PasswordConfirmInputContent(SignUpViewState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password"), null) {}
+            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             PasswordConfirmInputContent(
                 SignUpViewState(
                     passwordConfirm = "password1",
                     passwordConfirmErrorMessage = "비밀번호가 일치하지 않습니다."
                 ),
-                null
+                null,
+                {}
             ) {}
         }
     }
