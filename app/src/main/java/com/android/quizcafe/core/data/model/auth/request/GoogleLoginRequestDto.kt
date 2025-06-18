@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GoogleLoginRequestDto(
-    @SerialName("id_token")
     val idToken: String
 )
