@@ -45,15 +45,17 @@ fun PasswordInputContent(
                 state,
                 nicknameFocusRequester,
                 sendIntent,
-                onImeAction = {passwordFocusRequester.requestFocus()})
+                onImeAction = { passwordFocusRequester.requestFocus() }
+            )
             Spacer(modifier = Modifier.height(32.dp))
             PasswordInputContent(
                 state,
                 passwordFocusRequester,
                 sendIntent,
-                onImeAction = {passwordConfirmFocusRequester.requestFocus()})
+                onImeAction = { passwordConfirmFocusRequester.requestFocus() }
+            )
             Spacer(modifier = Modifier.height(32.dp))
-            PasswordConfirmInputContent(state, passwordConfirmFocusRequester, sendIntent, onImeAction = {keyboardController?.hide()})
+            PasswordConfirmInputContent(state, passwordConfirmFocusRequester, sendIntent, onImeAction = { keyboardController?.hide() })
         }
     )
 }
@@ -68,12 +70,11 @@ fun NicknameInputContent(
     LabeledInputField(
         label = stringResource(R.string.nickname),
         value = state.nickname,
-        onValueChange = { sendIntent(SignUpIntent.UpdatedNickname(it))},
+        onValueChange = { sendIntent(SignUpIntent.UpdatedNickname(it)) },
         focusRequester = focusRequester,
         errorMessage = state.nicknameErrorMessage,
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Next),
         onImeAction = onImeAction
-
     )
 }
 
@@ -128,12 +129,16 @@ fun NicknameInputPreview() {
         Column {
             NicknameInputContent(SignUpViewState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            NicknameInputContent(SignUpViewState(nickname = "닉네임"), null, {}){}
+            NicknameInputContent(SignUpViewState(nickname = "닉네임"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             NicknameInputContent(
                 SignUpViewState(
                     nickname = "닉네임",
-                    nicknameErrorMessage = "닉네임은 최대 10글자입니다."), null, {}) {}
+                    nicknameErrorMessage = "닉네임은 최대 10글자입니다."
+                ),
+                null,
+                {}
+            ) {}
         }
     }
 }
