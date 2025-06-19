@@ -292,13 +292,3 @@ fun PreviewMyPageMenu() {
 fun PreviewMyPageMenuItem() {
     MyPageMenuItem(title = "학습 통계", onClick = {})
 }
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewUserInfoDialog() {
-    UserInfoBottomSheet(
-        onDismiss = {},
-        onClickNicknameChange = {},
-        onClickPasswordChange = {}
-    )
-}

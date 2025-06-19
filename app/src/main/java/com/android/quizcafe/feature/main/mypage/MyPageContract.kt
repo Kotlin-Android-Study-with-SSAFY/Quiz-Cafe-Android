@@ -44,5 +44,5 @@ sealed class MyPageEffect : BaseContract.ViewEffect {
     data object ShowWithdrawalFirstDialog : MyPageEffect()
     data object ShowWithdrawalFinalDialog : MyPageEffect()
 
-    data class ShowError(val message: String) : MyPageEffect()
+    data class ShowToast(val message: String) : MyPageEffect()
 }

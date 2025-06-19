@@ -37,7 +37,7 @@ fun MyPageRoute(
                 is MyPageEffect.ShowLogoutDialog -> showLogoutDialog = true
                 is MyPageEffect.ShowWithdrawalFirstDialog -> showWithdrawalFirstDialog = true
                 is MyPageEffect.ShowWithdrawalFinalDialog -> showWithdrawalFinalDialog = true
-                is MyPageEffect.ShowError -> {
+                is MyPageEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
             }

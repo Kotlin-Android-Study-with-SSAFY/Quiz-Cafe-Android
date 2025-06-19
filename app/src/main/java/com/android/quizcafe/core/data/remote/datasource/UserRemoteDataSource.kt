@@ -16,7 +16,7 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun getUserInfo(): NetworkResult<ApiResponse<UserInfoResponseDto>> =
         userService.getUserInfo()
 
-    suspend fun deleteUser(): NetworkResult<ApiResponse<Unit>> = userService.deleteUser()
+    suspend fun deleteUser(): NetworkResult<Unit> = userService.deleteUser()
 
     suspend fun updateUserNickName(nickName: String): NetworkResult<ApiResponse<Unit>> =
         userService.updateUserNickName(nickName = nickName)

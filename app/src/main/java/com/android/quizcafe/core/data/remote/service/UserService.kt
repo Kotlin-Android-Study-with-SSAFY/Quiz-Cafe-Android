@@ -18,7 +18,7 @@ interface UserService {
     suspend fun getUserInfo(): NetworkResult<ApiResponse<UserInfoResponseDto>>
 
     @DELETE("/user")
-    suspend fun deleteUser(): NetworkResult<ApiResponse<Unit>>
+    suspend fun deleteUser(): NetworkResult<Unit>
 
     @PATCH("/user")
     suspend fun updateUserNickName(

@@ -27,7 +27,7 @@ class MyPageViewModel @Inject constructor(
             is MyPageIntent.LoadUserInfo -> getUserInfo()
             is MyPageIntent.ClickChangeUserInfo -> emitEffect(MyPageEffect.ShowUserInfoDialog)
             is MyPageIntent.ClickMyCreatedQuizBooks -> emitEffect(MyPageEffect.NavigateToMyCreatedQuizBooks)
-            is MyPageIntent.FailLoadUserInfo -> emitEffect(MyPageEffect.ShowError(intent.errorMessage))
+            is MyPageIntent.FailLoadUserInfo -> emitEffect(MyPageEffect.ShowToast(intent.errorMessage))
 
             is MyPageIntent.ClickLogout -> emitEffect(MyPageEffect.ShowLogoutDialog)
             is MyPageIntent.ConfirmLogout -> logout()
@@ -36,10 +36,7 @@ class MyPageViewModel @Inject constructor(
 
             is MyPageIntent.ClickWithdrawal -> emitEffect(MyPageEffect.ShowWithdrawalFirstDialog)
             is MyPageIntent.ConfirmWithdrawalFirst -> emitEffect(MyPageEffect.ShowWithdrawalFinalDialog)
-            is MyPageIntent.ConfirmWithdrawalFinal -> {
-                deleteUser()
-                logout()
-            }
+            is MyPageIntent.ConfirmWithdrawalFinal -> deleteUser()
 
             is MyPageIntent.CancelWithdrawalFirst,
             is MyPageIntent.CancelWithdrawalFinal -> Unit
@@ -75,6 +72,7 @@ class MyPageViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Log.d("myPage", "logout Success")
+                    emitEffect(MyPageEffect.ShowToast("성공적으로 로그아웃하였습니다."))
                 }
 
                 is Resource.Loading -> {
@@ -83,6 +81,7 @@ class MyPageViewModel @Inject constructor(
 
                 is Resource.Failure -> {
                     Log.d("myPage", "logout Fail")
+                    emitEffect(MyPageEffect.ShowToast("로그 아웃에 실패했습니다."))
                 }
             }
         }
@@ -113,6 +112,7 @@ class MyPageViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Log.d("myPage", "deleteUser Success")
+                    emitEffect(MyPageEffect.ShowToast("성공적으로 회원탈퇴하였습니다."))
                 }
 
                 is Resource.Loading -> {
@@ -120,7 +120,9 @@ class MyPageViewModel @Inject constructor(
                 }
 
                 is Resource.Failure -> {
+                    it.printError()
                     Log.d("myPage", "deleteUser Fail")
+                    emitEffect(MyPageEffect.ShowToast("회원 탈퇴에 실패했습니다."))
                 }
             }
         }

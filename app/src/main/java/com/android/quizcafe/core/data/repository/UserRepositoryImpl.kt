@@ -16,16 +16,14 @@ import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.domain.repository.UserRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.emptyApiResponseToResourceFlow
-import com.android.quizcafe.core.network.mapper.handleNetworkException
+import com.android.quizcafe.core.network.mapper.noContentResponseToResourceFlow
 import com.android.quizcafe.core.network.model.NetworkResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val userRemoteDataSource: UserRemoteDataSource,
-    private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource,
-    private val authManager: AuthManager
+    private val userRemoteDataSource: UserRemoteDataSource, private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource, private val authManager: AuthManager
 ) : UserRepository {
 
     override fun getUserInfo(): Flow<Resource<UserInfo>> = flow {
@@ -46,37 +44,35 @@ class UserRepositoryImpl @Inject constructor(
         val records = recordDtoList.map { it.toDomain() }
         val quizCount = records.sumOf { it.quizzes.size }
         val quizBookCount = records.map { it.quizBookId }.distinct().count()
-        val quizSolvingRecord = records
-            .asSequence()
-            .flatMap { it.quizzes }
-            .groupingBy { it.completedAt.take(10) }
-            .eachCount()
-            .toSortedMap()
+        val quizSolvingRecord = records.asSequence().flatMap { it.quizzes }.groupingBy { it.completedAt.take(10) }.eachCount().toSortedMap()
 
         emit(
             Resource.Success(
                 userInfo.toDomain(
-                    quizCount = quizCount,
-                    quizBookCount = quizBookCount,
-                    joinDateStr = userInfo.joinDateStr,
-                    quizSolvingRecord = quizSolvingRecord
+                    quizCount = quizCount, quizBookCount = quizBookCount, joinDateStr = userInfo.joinDateStr, quizSolvingRecord = quizSolvingRecord
                 )
             )
         )
     }
 
-    override fun updateUserNickName(nickname: String): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickname) }
+    override fun updateUserNickName(nickname: String): Flow<Resource<Unit>> = emptyApiResponseToResourceFlow { userRemoteDataSource.updateUserNickName(nickname) }
 
+    override fun deleteUser(): Flow<Resource<Unit>> = flow {
+        noContentResponseToResourceFlow {
+            userRemoteDataSource.deleteUser()
+        }.collect { result ->
+            emit(result)
 
-    override fun deleteUser(): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { userRemoteDataSource.deleteUser() }
-
-    override fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>> =
-        apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
-            userRemoteDataSource.getMyQuizBooks()
+            if (result is Resource.Success) {
+                authManager.logout(LogoutReason.UserLogout)
+            }
         }
+    }
+
+    override fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>> = apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
+        userRemoteDataSource.getMyQuizBooks()
+    }
 
     override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> =
-        emptyApiResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
+        noContentResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
 }
