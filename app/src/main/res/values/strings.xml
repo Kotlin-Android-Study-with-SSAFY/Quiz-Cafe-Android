@@ -85,8 +85,12 @@
     <string name="quiz_book_description">문제집 설명</string>
     <string name="quiz_list">문제 목록</string>
     <string name="solve_now">바로 문제 풀기</string>
-    <string name="error">오류</string>
+    <string name="notification">알림</string>
+    <string name="dialog_message_user_logout">성공적으로 로그아웃하였습니다.</string>
+    <string name="dialog_message_user_withdrawal">성공적으로 회원탈퇴하였습니다.</string>
+    <string name="dialog_message_password_updated">비밀번호가 변경되어 다시 로그인해주세요.</string>
     <string name="confirm">확인</string>
+
 
     <!-- MyPage -->
     <string name="mypage_solved_problem">푼 문제</string>

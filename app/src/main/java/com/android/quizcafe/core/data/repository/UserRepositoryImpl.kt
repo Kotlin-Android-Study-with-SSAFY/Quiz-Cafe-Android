@@ -64,7 +64,7 @@ class UserRepositoryImpl @Inject constructor(
             emit(result)
 
             if (result is Resource.Success) {
-                authManager.logout(LogoutReason.UserLogout)
+                authManager.logout(LogoutReason.UserWithdrawal)
             }
         }
     }
@@ -74,5 +74,5 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> =
-        noContentResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
+        emptyApiResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
 }
