@@ -23,7 +23,9 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val userRemoteDataSource: UserRemoteDataSource, private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource, private val authManager: AuthManager
+    private val userRemoteDataSource: UserRemoteDataSource,
+    private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource,
+    private val authManager: AuthManager
 ) : UserRepository {
 
     override fun getUserInfo(): Flow<Resource<UserInfo>> = flow {
@@ -49,7 +51,10 @@ class UserRepositoryImpl @Inject constructor(
         emit(
             Resource.Success(
                 userInfo.toDomain(
-                    quizCount = quizCount, quizBookCount = quizBookCount, joinDateStr = userInfo.joinDateStr, quizSolvingRecord = quizSolvingRecord
+                    quizCount = quizCount,
+                    quizBookCount = quizBookCount,
+                    joinDateStr = userInfo.joinDateStr,
+                    quizSolvingRecord = quizSolvingRecord
                 )
             )
         )

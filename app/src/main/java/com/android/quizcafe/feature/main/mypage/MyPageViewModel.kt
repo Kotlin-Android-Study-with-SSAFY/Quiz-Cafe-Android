@@ -18,7 +18,6 @@ class MyPageViewModel @Inject constructor(
     private val updatePasswordUseCase: UpdatePasswordUseCase,
     private val updateUserNickNameUseCase: UpdateUserNickNameUseCase,
     private val logoutUseCase: LogoutUseCase
-
 ) : BaseViewModel<MyPageViewState, MyPageIntent, MyPageEffect>(
     initialState = MyPageViewState()
 ) {

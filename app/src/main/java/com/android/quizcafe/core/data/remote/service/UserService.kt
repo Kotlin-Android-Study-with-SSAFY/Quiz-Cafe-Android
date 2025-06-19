@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.data.remote.service
 
-import com.android.quizcafe.core.data.model.auth.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
 import com.android.quizcafe.core.data.model.user.request.UpdatePasswordRequestDto
 import com.android.quizcafe.core.data.model.user.response.UserInfoResponseDto

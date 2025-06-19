@@ -12,4 +12,3 @@ fun UpdatePasswordRequest.toDto() =
         oldPassword = this.oldPassword,
         newPassword = this.newPassword
     )
-
