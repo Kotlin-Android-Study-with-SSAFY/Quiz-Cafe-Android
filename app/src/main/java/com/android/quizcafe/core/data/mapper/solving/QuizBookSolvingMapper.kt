@@ -3,6 +3,7 @@ package com.android.quizcafe.core.data.mapper.solving
 import com.android.quizcafe.core.data.model.solving.response.QuizBookSolvingResponseDto
 import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import kotlin.time.Duration.Companion.seconds
 
 fun QuizBookSolvingResponseDto.toDomain(): QuizBookSolving = QuizBookSolving(
     id = id,
@@ -16,5 +17,6 @@ fun QuizBookSolvingResponseDto.toDomain(): QuizBookSolving = QuizBookSolving(
     totalQuizzes = totalQuizzes,
     correctCount = correctCount,
     completedAt = completedAt,
+    elapsedTime = solvingTime.seconds,
     quizSolvingList = quizzes.map { it.toDomain() }
 )

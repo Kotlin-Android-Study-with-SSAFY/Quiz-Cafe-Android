@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveEffect
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
@@ -16,6 +17,7 @@ import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
 fun QuizSolveRoute(
     quizBookId: Long,
     navigateToBack: () -> Unit,
+    navigateToQuizBookSolvingResult: (QuizBookGradeServerId) -> Unit,
     viewModel: QuizSolveViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -30,6 +32,9 @@ fun QuizSolveRoute(
             when (effect) {
                 QuizSolveEffect.NavigatePopBack -> {
                     navigateToBack()
+                }
+                is QuizSolveEffect.NavigateToQuizBookSolvingResult -> {
+                    navigateToQuizBookSolvingResult(effect.quizBookGradeServerId)
                 }
 
                 is QuizSolveEffect.ShowErrorDialog -> {

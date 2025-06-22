@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.remote.datasource
 
+import android.util.Log
 import com.android.quizcafe.core.data.model.solving.request.QuizBookSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.response.QuizBookSolvingResponseDto
 import com.android.quizcafe.core.data.remote.service.QuizBookSolvingService
@@ -16,8 +17,10 @@ class QuizBookSolvingRemoteDataSource @Inject constructor(
 
     suspend fun getQuizBookSolving(
         quizBookSolvingId: Long
-    ): NetworkResult<ApiResponse<QuizBookSolvingResponseDto>> =
-        quizBookSolvingService.getQuizBookSolving(quizBookSolvingId)
+    ): NetworkResult<ApiResponse<QuizBookSolvingResponseDto>> {
+        Log.d("test", "QuizBookSolvingRemoteDataSource getQuizBookSolving: $quizBookSolvingId")
+        return quizBookSolvingService.getQuizBookSolving(quizBookSolvingId)
+    }
 
     suspend fun solveQuizBook(
         request: QuizBookSolvingRequestDto

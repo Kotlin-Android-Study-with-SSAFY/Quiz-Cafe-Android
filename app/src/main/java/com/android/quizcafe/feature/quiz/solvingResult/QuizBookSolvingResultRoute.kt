@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solvingResult
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,18 +11,16 @@ import androidx.compose.runtime.getValue
 
 @Composable
 fun QuizBookSolvingResultRoute(
-    quizBookGradeLocalId: Long,
+    quizBookGradeServerId: Long,
     navigateToMain: () -> Unit,
     viewModel: QuizBookSolvingResultViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(quizBookGradeLocalId) {
-        viewModel.sendIntent(QuizBookSolvingResultIntent.InitWithQuizBookGradeId(quizBookGradeLocalId))
-    }
-
     LaunchedEffect(Unit) {
+        Log.d("test", "LaunchedEffect quizBookGradeServerId : $quizBookGradeServerId")
+        viewModel.sendIntent(QuizBookSolvingResultIntent.InitWithQuizBookGradeId(quizBookGradeServerId))
         viewModel.effect.collect { effect ->
             when (effect) {
                 QuizBookSolvingResultEffect.NavigateToMain -> {

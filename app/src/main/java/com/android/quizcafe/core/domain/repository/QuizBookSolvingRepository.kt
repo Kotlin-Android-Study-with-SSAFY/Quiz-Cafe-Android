@@ -26,5 +26,8 @@ interface QuizBookSolvingRepository {
     fun upsertQuizGrade(quizGrade: QuizGrade): Flow<Resource<Unit>>
 
     // 퀴즈북 풀이 완료 -> 기록 저장 API 호출
-    fun solveQuizBook(quizBookGradeLocalId: QuizBookGradeLocalId): Flow<Resource<QuizBookGradeServerId>>
+    fun solveQuizBook(
+        quizBookGradeLocalId: QuizBookGradeLocalId,
+        elapsedTimeInSeconds: Long
+    ): Flow<Resource<QuizBookGradeServerId>>
 }

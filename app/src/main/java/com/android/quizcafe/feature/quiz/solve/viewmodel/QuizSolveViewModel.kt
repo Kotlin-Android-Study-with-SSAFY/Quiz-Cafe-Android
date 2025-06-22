@@ -59,6 +59,11 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.SubmitAnswer -> {
                 submitQuizAnswer()
             }
+
+            is QuizSolveIntent.SolveQuizSuccess -> {
+                emitEffect(QuizSolveEffect.NavigateToQuizBookSolvingResult(intent.quizBookGradeServerId))
+            }
+
             is QuizSolveIntent.GradeQuizError -> {
                 emitEffect(QuizSolveEffect.ShowErrorDialog(intent.message ?: ""))
             }
@@ -139,10 +144,6 @@ class QuizSolveViewModel @Inject constructor(
                     currentIndex = currentState.currentIndex + 1,
                     common = CommonState(false)
                 )
-            }
-            QuizSolveIntent.SolveQuizSuccess -> {
-                // Todo : 채점 성공, 채점 결과 화면으로 Navigation
-                currentState
             }
             else -> currentState
         }
@@ -249,13 +250,15 @@ class QuizSolveViewModel @Inject constructor(
     }
     private suspend fun submitQuizAnswer() {
         val localId = state.value.quizBookLocalId
+        val elapsedTimeInSeconds: Long = state.value.timer.elapsedSeconds.toLong()
         if (localId != null) {
             solveQuizBookUseCase(
-                localId
+                quizBookGradeLocalId = localId,
+                elapsedTimeInSeconds = elapsedTimeInSeconds
             ).collect {
                 when (it) {
                     is Resource.Success -> {
-                        sendIntent(QuizSolveIntent.SolveQuizSuccess)
+                        sendIntent(QuizSolveIntent.SolveQuizSuccess(it.data))
                         Log.d("solveQuizBookUseCase", "채점 Success")
                     }
 

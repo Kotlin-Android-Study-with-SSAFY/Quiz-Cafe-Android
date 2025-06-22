@@ -13,7 +13,7 @@ fun QuizSolvingResponseDto.toDomain(): QuizSolving = QuizSolving(
     explanation = explanation,
     memo = memo,
     userAnswer = userAnswer,
-    isCorrect = isCorrect,
-    completedAt = completedAt,
+    isCorrect = isCorrect ?: false,
+    completedAt = completedAt ?: "",
     mcqOptionSolvingList = mcqOptions.map { it.toDomain() }
 )

@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.repository
 
+import android.util.Log
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
@@ -26,7 +27,7 @@ import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
-import com.android.quizcafe.core.network.mapper.apiResponseToResourceFlow
+import com.android.quizcafe.core.network.mapper.apiResponseToResource
 import com.android.quizcafe.core.network.model.onErrorOrException
 import com.android.quizcafe.core.network.model.onSuccess
 import kotlinx.coroutines.flow.Flow
@@ -39,7 +40,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     private val quizDao: QuizDao,
     private val quizBookDao: QuizBookDao,
     private val quizBookGradeDao: QuizBookGradeDao,
-    private val remoteDataSource: QuizBookSolvingRemoteDataSource
+    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource
 ) : QuizBookSolvingRepository {
 
     /**
@@ -81,15 +82,18 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             emit(Resource.Failure("quizBookGradeServerId가 null입니다", HttpStatus.UNKNOWN))
             return@flow
         } else {
-            apiResponseToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
-                remoteDataSource.getQuizBookSolving(quizBookSolvingId)
-            }
+            Log.d("test", "QuizBookSolvingRepositoryImpl getQuizBookSolving: $quizBookSolvingId")
+            emit(
+                apiResponseToResource(mapper = QuizBookSolvingResponseDto::toDomain) {
+                    quizBookSolvingRemoteDataSource.getQuizBookSolving(quizBookSolvingId)
+                }
+            )
         }
     }
 
     override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> = flow {
         apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
-            remoteDataSource.getAllQuizBookSolvingByUser()
+            quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
         }
     }
 
@@ -109,7 +113,10 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     }
 
     // 로컬에서 퀴즈북 풀이 기록 가져와 requestDto로 변환 후 퀴즈북 풀이 완료 API 요청하기
-    override fun solveQuizBook(localId: QuizBookGradeLocalId): Flow<Resource<QuizBookGradeServerId>> = flow {
+    override fun solveQuizBook(
+        localId: QuizBookGradeLocalId,
+        elapsedTimeInSeconds: Long
+    ): Flow<Resource<QuizBookGradeServerId>> = flow {
         emit(Resource.Loading)
         val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeData(localId)
         val quizBookEntity = getQuizBookEntity(quizBookGradeEntity.quizBookId)
@@ -117,10 +124,11 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         val requestDto = createQuizBookSolvingRequest(
             quizBookGradeEntity = quizBookGradeEntity,
             quizBookEntity = quizBookEntity,
-            quizGradeEntities = quizGradeEntities
+            quizGradeEntities = quizGradeEntities,
+            elapsedTimeInSeconds = elapsedTimeInSeconds
         )
 
-        remoteDataSource.solveQuizBook(requestDto)
+        quizBookSolvingRemoteDataSource.solveQuizBook(requestDto)
             .onSuccess { response ->
                 response.data?.let { serverId ->
                     quizBookGradeDao.deleteQuizBookGrade(localId.value)
@@ -160,7 +168,8 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     private suspend fun createQuizBookSolvingRequest(
         quizBookGradeEntity: QuizBookGradeEntity,
         quizBookEntity: QuizBookEntity,
-        quizGradeEntities: List<QuizGradeEntity>
+        quizGradeEntities: List<QuizGradeEntity>,
+        elapsedTimeInSeconds: Long
     ): QuizBookSolvingRequestDto {
         val correctCount = quizGradeEntities.count { it.isCorrect == true }
         val quizzes = quizGradeEntities.mapNotNull { quizGrade ->
@@ -172,6 +181,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             version = quizBookEntity.version,
             totalQuizzes = quizGradeEntities.size,
             correctCount = correctCount,
+            solvingTime = elapsedTimeInSeconds,
             quizzes = quizzes
         )
     }

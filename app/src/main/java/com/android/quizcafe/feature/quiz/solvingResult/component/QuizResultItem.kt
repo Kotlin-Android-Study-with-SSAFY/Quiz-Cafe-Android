@@ -30,6 +30,7 @@ import com.android.quizcafe.core.designsystem.theme.checkedColor
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.domain.model.solving.McqOptionSolving
 import com.android.quizcafe.core.domain.model.solving.QuizSolving
+import com.android.quizcafe.core.domain.model.solving.getCorrectAnswerText
 import com.android.quizcafe.feature.quiz.solve.component.ExplanationSection
 
 @Composable
@@ -145,7 +146,7 @@ fun QuizExpandedContent(
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "정답: ${quizSolving.answer}",
+            text = "정답: ${quizSolving.getCorrectAnswerText()}",
             style = quizCafeTypography().bodySmall,
             color = checkedColor
         )

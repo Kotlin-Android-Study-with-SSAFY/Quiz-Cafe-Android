@@ -1,5 +1,8 @@
 package com.android.quizcafe.core.data.model.solving.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class McqOptionSolvingResponseDto(
     val id: Long,
     val quizSolvingId: Long,

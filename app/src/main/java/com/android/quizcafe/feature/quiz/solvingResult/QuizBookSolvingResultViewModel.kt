@@ -5,9 +5,11 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookSolvingUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class QuizBookSolvingResultViewModel @Inject constructor(
     private val getQuizBookSolvingUseCase: GetQuizBookSolvingUseCase,
 ) : BaseViewModel<QuizBookSolvingResultUiState, QuizBookSolvingResultIntent, QuizBookSolvingResultEffect>(

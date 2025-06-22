@@ -7,7 +7,7 @@ import com.android.quizcafe.core.network.model.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface QuizBookSolvingService {
 
@@ -19,8 +19,8 @@ interface QuizBookSolvingService {
         @Body request: QuizBookSolvingRequestDto
     ): NetworkResult<ApiResponse<Long>>
 
-    @GET("/quiz-book-solving")
+    @GET("/quiz-book-solving/{id}")
     suspend fun getQuizBookSolving(
-        @Query("id") quizBookSolvingId: Long
+        @Path("id") quizBookSolvingId: Long
     ): NetworkResult<ApiResponse<QuizBookSolvingResponseDto>>
 }

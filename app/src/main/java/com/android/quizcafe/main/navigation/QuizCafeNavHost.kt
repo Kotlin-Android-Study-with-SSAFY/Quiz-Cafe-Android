@@ -92,22 +92,27 @@ fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
                 quizBookId,
                 navigateToBack = {
                     navController.popBackStack()
+                },
+                navigateToQuizBookSolvingResult = { quizBookGradeServerId ->
+                    navController.navigate(
+                        "${QuizSolveRoute.QuizSolvingResult.route}/${quizBookGradeServerId.value}"
+                    )
                 }
             )
         }
         composable(
-            route = "${QuizSolveRoute.QuizSolvingResult.route}/{quizBookGradeLocalId}",
+            route = "${QuizSolveRoute.QuizSolvingResult.route}/{quizBookGradeServerId}",
             arguments = listOf(
-                navArgument("quizBookGradeLocalId") {
+                navArgument("quizBookGradeServerId") {
                     type = NavType.LongType
                     nullable = false
                     defaultValue = 0L
                 }
             )
         ) { backStackEntry ->
-            val quizBookGradeLocalId = backStackEntry.arguments?.getLong("quizBookGradeLocalId") ?: 0L
+            val quizBookGradeServerId = backStackEntry.arguments?.getLong("quizBookGradeServerId") ?: 6L
             QuizBookSolvingResultRoute(
-                quizBookGradeLocalId = quizBookGradeLocalId,
+                quizBookGradeServerId = quizBookGradeServerId,
                 navigateToMain = {
                     navController.navigateAndClearBackStack(MainRoute.Graph.route)
                 }

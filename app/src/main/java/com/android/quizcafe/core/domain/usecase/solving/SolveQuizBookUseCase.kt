@@ -13,6 +13,12 @@ import javax.inject.Inject
 class SolveQuizBookUseCase @Inject constructor(
     private val quizBookSolvingRepository: QuizBookSolvingRepository
 ) {
-    operator fun invoke(quizBookGradeLocalId: QuizBookGradeLocalId): Flow<Resource<QuizBookGradeServerId>> =
-        quizBookSolvingRepository.solveQuizBook(quizBookGradeLocalId)
+    operator fun invoke(
+        quizBookGradeLocalId: QuizBookGradeLocalId,
+        elapsedTimeInSeconds: Long
+    ): Flow<Resource<QuizBookGradeServerId>> =
+        quizBookSolvingRepository.solveQuizBook(
+            quizBookGradeLocalId = quizBookGradeLocalId,
+            elapsedTimeInSeconds = elapsedTimeInSeconds
+        )
 }

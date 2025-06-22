@@ -10,7 +10,13 @@ class OxGradingStrategy : GradingStrategy {
 
 class McqGradingStrategy : GradingStrategy {
     override fun grade(quiz: Quiz, userAnswer: String): Boolean {
-        return quiz.answer == userAnswer
+        return try {
+            val correctIndex = quiz.answer.toInt() - 1
+            val correctAnswer = quiz.mcqOption[correctIndex].optionContent
+            correctAnswer.equals(userAnswer, ignoreCase = true)
+        } catch (e: Exception) {
+            false
+        }
     }
 }
 

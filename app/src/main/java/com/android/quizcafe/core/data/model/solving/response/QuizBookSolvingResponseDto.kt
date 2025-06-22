@@ -1,5 +1,8 @@
 package com.android.quizcafe.core.data.model.solving.response
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class QuizBookSolvingResponseDto(
     val id: Long,
     val userId: Long,
@@ -12,5 +15,6 @@ data class QuizBookSolvingResponseDto(
     val totalQuizzes: Int,
     val correctCount: Int,
     val completedAt: String,
+    val solvingTime: Long,
     val quizzes: List<QuizSolvingResponseDto>
 )

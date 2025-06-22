@@ -14,3 +14,15 @@ data class QuizSolving(
     val completedAt: String,
     val mcqOptionSolvingList: List<McqOptionSolving> = emptyList()
 )
+
+fun QuizSolving.getCorrectAnswerText(): String {
+    return when (questionType) {
+        "MCQ" -> {
+            val answerNumber = answer.toIntOrNull()
+            answerNumber?.let { num ->
+                mcqOptionSolvingList.firstOrNull { it.optionNumber == num }?.optionContent
+            } ?: "정답을 찾을 수 없습니다."
+        }
+        else -> answer
+    }
+}
