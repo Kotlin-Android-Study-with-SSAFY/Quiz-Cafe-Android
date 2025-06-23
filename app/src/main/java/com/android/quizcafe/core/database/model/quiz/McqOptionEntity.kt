@@ -4,8 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.android.quizcafe.core.database.model.quiz.QuizEntity
-import com.android.quizcafe.core.domain.model.value.QuizId
 
 @Entity(
     tableName = "mcq_option",

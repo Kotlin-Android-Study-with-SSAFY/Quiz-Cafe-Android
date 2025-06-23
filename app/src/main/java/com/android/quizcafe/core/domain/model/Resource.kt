@@ -24,5 +24,4 @@ sealed class Resource<out R> {
             )
         }
     }
-
 }

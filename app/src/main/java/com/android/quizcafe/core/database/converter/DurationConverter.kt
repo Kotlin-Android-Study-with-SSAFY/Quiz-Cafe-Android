@@ -9,6 +9,7 @@ class DurationConverter {
     fun fromDuration(duration: Duration): Long {
         return duration.inWholeMilliseconds
     }
+
     @TypeConverter
     fun toDuration(value: Long): Duration {
         return value.milliseconds

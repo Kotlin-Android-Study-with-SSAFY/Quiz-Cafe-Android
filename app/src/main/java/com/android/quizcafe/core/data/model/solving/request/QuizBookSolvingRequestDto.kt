@@ -8,5 +8,6 @@ data class QuizBookSolvingRequestDto(
     val version: Long,
     val totalQuizzes: Int,
     val correctCount: Int,
+    val solvingTime: Long,
     val quizzes: List<QuizSolvingRequestDto>
 )

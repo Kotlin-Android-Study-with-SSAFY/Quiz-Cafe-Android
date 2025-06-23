@@ -7,10 +7,10 @@ import kotlin.time.Duration
 @Entity
 data class QuizBookGradeEntity(
     @PrimaryKey(autoGenerate = true)
-    val localId : Long = 0,
-    val serverId : Long? = null,
-    val quizBookId : Long,
-    val elapsedTime : Duration = Duration.ZERO
+    val localId: Long = 0,
+    val serverId: Long? = null,
+    val quizBookId: Long,
+    val elapsedTime: Duration = Duration.ZERO
 )
 
 /**

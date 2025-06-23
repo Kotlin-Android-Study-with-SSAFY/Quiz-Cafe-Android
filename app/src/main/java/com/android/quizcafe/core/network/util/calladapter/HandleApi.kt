@@ -17,7 +17,7 @@ fun <T : Any> handleApi(
         if (response.isSuccessful && body != null) {
             NetworkResult.Success(body)
         } else if (response.isSuccessful && body == null) {
-            if (resultType == Unit::class) {
+            if (resultType == Unit::class.java) {
                 @Suppress("UNCHECKED_CAST")
                 NetworkResult.Success(Unit as T)
             } else {

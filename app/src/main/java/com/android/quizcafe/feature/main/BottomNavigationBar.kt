@@ -32,7 +32,7 @@ fun BottomNavigationBar(
             labelResId = R.string.bottom_nav_workbook
         ),
         BottomNavItem(
-            iconResId = R.drawable.quiz_unfill,
+            iconResId = R.drawable.ic_person_outline,
             labelResId = R.string.bottom_nav_mypage
         )
     )

@@ -23,5 +23,4 @@ object DatabaseModule {
             "QuizCafeDatabase"
         ).build()
     }
-
 }

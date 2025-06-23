@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.categorypicker
+package com.android.quizcafe.feature.categorylist
 
 import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.ui.base.BaseContract
@@ -12,7 +12,7 @@ data class CategoryUiState(
 
 sealed class CategoryIntent : BaseContract.ViewIntent {
     data object LoadCategories : CategoryIntent()
-    data class ClickCategory(val categoryId: String) : CategoryIntent()
+    data class ClickCategory(val categoryName: String) : CategoryIntent()
 
     data class SuccessGetCategories(val data: List<Category>) : CategoryIntent()
     data class FailGetCategories(val errorMessage: String? = null) : CategoryIntent()
@@ -21,5 +21,5 @@ sealed class CategoryIntent : BaseContract.ViewIntent {
 sealed class CategoryEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : CategoryEffect()
     data object NavigateToHome : CategoryEffect()
-    data class NavigateToQuizBooks(val categoryId: String) : CategoryEffect()
+    data class NavigateToQuizBooks(val categoryName: String) : CategoryEffect()
 }

@@ -26,5 +26,4 @@ object FakeDatabaseModule {
             QuizCafeDatabase::class.java
         ).allowMainThreadQueries().build()
     }
-
 }

@@ -23,8 +23,10 @@ data class QuizUiState(
 
 sealed class QuizIntent : BaseContract.ViewIntent {
     data class LoadHistory(val histories: List<QuizHistory>) : QuizIntent()
+    data class ClickQuizCard(val quizType: String) : QuizIntent()
 }
 
 sealed class QuizEffect : BaseContract.ViewEffect {
     data class ShowErrorDialog(val message: String) : QuizEffect()
+    data class NavigateToCategory(val quizType: String) : QuizEffect()
 }

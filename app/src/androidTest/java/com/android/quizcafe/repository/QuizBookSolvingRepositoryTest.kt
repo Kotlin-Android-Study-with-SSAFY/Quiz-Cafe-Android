@@ -3,11 +3,12 @@ package com.android.quizcafe.repository
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.quizcafe.core.data.repository.QuizBookSolvingRepositoryImpl
 import com.android.quizcafe.core.database.QuizCafeDatabase
-import com.android.quizcafe.core.database.model.QuizBookEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.database.model.quiz.McqOptionEntity
 import com.android.quizcafe.core.database.model.quiz.QuizEntity
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.model.value.QuizId
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -46,7 +47,6 @@ class QuizBookSolvingRepositoryTest {
 
     private val mockWebServer = MockWebServer()
 
-
     @Before
     fun setup() {
         mockWebServer.start(8080)
@@ -55,19 +55,20 @@ class QuizBookSolvingRepositoryTest {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(200)
-                .setBody("""
+                .setBody(
+                    """
                     {
                         "status": "success",
                         "code": 200,
                         "message": "퀴즈북 풀이 완료",
                         "data": 1
                     }
-                """.trimIndent())
+                    """.trimIndent()
+                )
                 .addHeader("Content-Type", "application/json")
         )
 
         hiltRule.inject()
-
     }
 
     @After
@@ -75,7 +76,6 @@ class QuizBookSolvingRepositoryTest {
         database.close()
         mockWebServer.shutdown()
     }
-
 
     @Test
     fun createEmptyQuizBookGrade_success() = runTest {
@@ -121,7 +121,10 @@ class QuizBookSolvingRepositoryTest {
 
         // Then - 로컬 데이터베이스에서 실제 저장된 데이터 조회 및 비교
         val savedQuizBookGrade = database.quizBookGradeDao().getQuizBookGrade(quizBookGradeLocalId.value)
-        val savedQuizGrades = savedQuizBookGrade.quizGradeEntities
+        if (savedQuizBookGrade == null) {
+            fail("Saved QuizBookGrade should not be null")
+        }
+        val savedQuizGrades = savedQuizBookGrade!!.quizGradeEntities
 
         // 저장된 퀴즈 답안이 1개인지 확인
         assertEquals(1, savedQuizGrades.size)
@@ -170,7 +173,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 1L,
                 quizId = QuizId(1L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "X", // 정답은 "O"인데 "X"로 답함
+                userAnswer = "X",
                 isCorrect = false,
                 completedAt = "2023-01-01T00:00:00Z"
             ),
@@ -179,7 +182,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 2L,
                 quizId = QuizId(2L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "A", // 정답
+                userAnswer = "A",
                 isCorrect = true,
                 completedAt = "2023-01-01T00:00:01Z"
             ),
@@ -188,7 +191,7 @@ class QuizBookSolvingRepositoryTest {
                 localId = 3L,
                 quizId = QuizId(3L),
                 quizBookGradeLocalId = quizBookGradeLocalId,
-                userAnswer = "val", // 정답
+                userAnswer = "val",
                 isCorrect = true,
                 completedAt = "2023-01-01T00:00:02Z"
             )
@@ -200,7 +203,7 @@ class QuizBookSolvingRepositoryTest {
         }
 
         // When
-        val solveResults = mutableListOf<Resource<Unit>>()
+        val solveResults = mutableListOf<Resource<QuizBookGradeServerId>>()
         repository.solveQuizBook(quizBookGradeLocalId).collect(solveResults::add)
 
         // Then
@@ -245,17 +248,20 @@ class QuizBookSolvingRepositoryTest {
         assertEquals(3L, quiz3?.get("quizId")?.jsonPrimitive?.long)
         assertEquals("val", quiz3?.get("userAnswer")?.jsonPrimitive?.content)
         assertEquals(true, quiz3?.get("isCorrect")?.jsonPrimitive?.boolean)
-
     }
 
     private suspend fun setupTestData(quizBookId: QuizBookId) {
-        // QuizBook 데이터 삽입
+        // QuizBook 데이터 삽입 - 새로운 필드 포함
         val quizBookEntity = QuizBookEntity(
             id = quizBookId.value,
-            title = "테스트 퀴즈북",
-            category = "TEST",
             version = 1L,
-            description = "테스트 퀴즈북입니다."
+            category = "TEST",
+            title = "테스트 퀴즈북",
+            description = "테스트 퀴즈북입니다.",
+            level = "BEGINNER",
+            createdBy = "testuser",
+            createdAt = "2023-01-01T00:00:00Z",
+            totalQuizzes = 3
         )
         database.quizBookDao().upsertQuizBook(quizBookEntity)
 
@@ -271,7 +277,6 @@ class QuizBookSolvingRepositoryTest {
             content = "Kotlin은 JetBrains에서 개발한 언어이다.",
             answer = "O",
             explanation = "맞습니다. Kotlin은 JetBrains에서 개발했습니다.",
-            version = 1L
         )
         quizEntities.add(quiz1)
 
@@ -283,7 +288,6 @@ class QuizBookSolvingRepositoryTest {
             content = "다음 중 Kotlin의 특징이 아닌 것은?",
             answer = "A",
             explanation = "Kotlin은 null 안전성을 제공합니다.",
-            version = 1L
         )
         quizEntities.add(quiz2)
 
@@ -305,7 +309,6 @@ class QuizBookSolvingRepositoryTest {
             content = "Kotlin에서 변수를 선언할 때 사용하는 키워드 중 불변 변수를 선언하는 키워드는?",
             answer = "val",
             explanation = "val은 불변 변수(읽기 전용)를 선언하는 키워드입니다.",
-            version = 1L
         )
         quizEntities.add(quiz3)
 

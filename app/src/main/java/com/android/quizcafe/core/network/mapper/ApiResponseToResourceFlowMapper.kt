@@ -54,3 +54,19 @@ private fun <T : Any, R : Any> resourceFlowFromNetworkResult(
         is NetworkResult.Exception -> emit(handleNetworkException(result.e))
     }
 }.flowOn(Dispatchers.IO)
+
+fun noContentResponseToResourceFlow(
+    call: suspend () -> NetworkResult<Unit>
+): Flow<Resource<Unit>> = flow {
+    emit(Resource.Loading)
+
+    val result = withTimeoutOrNull(3_000L) {
+        call()
+    } ?: return@flow emit(Resource.Failure("요청 시간이 초과되었습니다.", HttpStatus.REQUEST_TIMEOUT))
+
+    when (result) {
+        is NetworkResult.Success -> emit(Resource.Success(Unit))
+        is NetworkResult.Error -> emit(Resource.Failure(result.message ?: DEFAULT_ERROR_MESSAGE, result.code))
+        is NetworkResult.Exception -> emit(handleNetworkException(result.e))
+    }
+}.flowOn(Dispatchers.IO)
