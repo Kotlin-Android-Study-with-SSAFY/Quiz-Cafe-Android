@@ -56,6 +56,7 @@ fun AppEventsHandler(
     }
 
     if (showLogoutDialog) {
+        navController.navigateAndClearBackStack(loginRoute)
         AlertDialog(
             onDismissRequest = { },
             title = { Text(text = stringResource(R.string.notification)) },
@@ -63,7 +64,6 @@ fun AppEventsHandler(
             confirmButton = {
                 TextButton(onClick = {
                     showLogoutDialog = false
-                    navController.navigateAndClearBackStack(loginRoute)
                 }) {
                     Text(text = stringResource(R.string.confirm))
                 }

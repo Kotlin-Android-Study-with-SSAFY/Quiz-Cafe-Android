@@ -83,6 +83,14 @@ class UserRepositoryImpl @Inject constructor(
             userRemoteDataSource.getMyQuizBooks()
         }
 
-    override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> =
+    override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> = flow {
         emptyApiResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
+            .collect { result ->
+                emit(result)
+
+                if (result is Resource.Success) {
+                    authManager.logout(LogoutReason.PasswordUpdated)
+                }
+            }
+    }
 }
