@@ -3,6 +3,7 @@ package com.android.quizcafe.feature.login
 import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
+import com.android.quizcafe.core.domain.usecase.auth.GoogleLoginUseCase
 import com.android.quizcafe.core.domain.usecase.auth.LoginUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val googleLoginUseCase: GoogleLoginUseCase
 ) : BaseViewModel<LoginViewState, LoginIntent, LoginEffect>(
     initialState = LoginViewState()
 ) {
@@ -61,6 +63,21 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginIntent.GoogleLogin -> {
+                googleLoginUseCase(intent.idToken).collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            sendIntent(LoginIntent.SuccessLogin)
+                        }
+                        is Resource.Failure -> {
+                            Log.d("googleLogin", "handleIntent: ${result.errorMessage}")
+                            emitEffect(LoginEffect.ShowErrorDialog("구글 로그인 실패"))
+                        }
+                        else -> Unit
+                    }
+                }
+            }
+
             LoginIntent.SuccessLogin -> {
                 emitEffect(LoginEffect.NavigateToHome)
             }
@@ -86,6 +103,7 @@ class LoginViewModel @Inject constructor(
 
             LoginIntent.SuccessLogin -> currentState.copy(isLoading = false)
 
+            is LoginIntent.GoogleLogin -> currentState
             is LoginIntent.FailLogin -> currentState.copy(
                 isLoading = false,
                 emailErrorMessage = if (intent.targetField == ErrorTargetField.EMAIL) intent.errorMessage else null,
