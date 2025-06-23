@@ -133,6 +133,7 @@ class SignUpViewModel @Inject constructor(
                 )
             ).recalculate()
 
+            is SignUpIntent.UpdatedNickname -> state.copy(nickname = intent.nickname).recalculate()
             is SignUpIntent.UpdatedPassword -> state.copy(password = intent.password).recalculate()
             is SignUpIntent.UpdatedPasswordConfirm -> state.copy(passwordConfirm = intent.password)
                 .recalculate()
@@ -185,16 +186,19 @@ class SignUpViewModel @Inject constructor(
         val emailRegex = Regex("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$")
         val passwordRegex =
             Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
+        val nicknameRegex = Regex("^[a-zA-Z가-힣]{1,10}$")
 
         val isEmailValid = email.isNotBlank() && email.matches(emailRegex)
         val isCodeValid = verificationCode.length == 6
+        val isNicknameValid = nickname.isNotBlank() && nickname.matches(nicknameRegex)
         val isPasswordValid = password.isNotBlank() && password.matches(passwordRegex)
         val isPasswordConfirmed = passwordConfirm.isNotBlank() && password == passwordConfirm
 
         return this.copy(
             isNextEnabled = if (isCodeSent) isEmailValid && isCodeValid else isEmailValid,
-            isSignUpEnabled = isPasswordValid && isPasswordConfirmed,
+            isSignUpEnabled = isNicknameValid && isPasswordValid && isPasswordConfirmed,
             emailErrorMessage = if (!isEmailValid) "이메일 형식이 올바르지 않습니다." else null,
+            nicknameErrorMessage = if (nickname.isNotBlank() && !isNicknameValid) "닉네임은 한글 또는 영문 10자 이내로 입력하세요." else null,
             passwordErrorMessage = if (password.isNotBlank() && !isPasswordValid) "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다." else null,
             passwordConfirmErrorMessage = if (passwordConfirm.isNotBlank() && !isPasswordConfirmed) "비밀번호가 일치하지 않습니다." else null
         )

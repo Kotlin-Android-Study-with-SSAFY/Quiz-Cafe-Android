@@ -10,7 +10,9 @@
     <string name="signup">회원가입</string>
     <string name="navigate_up">뒤로가기</string>
     <string name="next">다음</string>
+    <string name="input_myInfo">내 정보 입력</string>
     <string name="input_password">비밀번호 입력</string>
+    <string name="nickname">닉네임</string>
     <string name="password">비밀번호</string>
     <string name="password_confirm">비밀번호 확인</string>
     <string name="verify_email">이메일 인증</string>
