@@ -128,6 +128,7 @@ fun VerificationInputField(
             .fillMaxWidth()
             .height(56.dp)
             .focusRequester(focusRequester),
+        errorMessage = state.verificationCodeErrorMessage,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
     )
 }
