@@ -11,7 +11,7 @@ data class ModeItem(
     val iconResId: Int
 )
 
-data class HomeViewState(
+data class HomeUiState(
     val quizSolvingList: List<QuizBookSolving> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null

@@ -39,10 +39,10 @@ fun LoginScreen(
         }
         item {
             LoginButton(
+                isLoginEnabled = state.isLoginEnabled,
                 onClick = {
                     sendIntent(LoginIntent.ClickLogin)
-                },
-                state = state
+                }
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

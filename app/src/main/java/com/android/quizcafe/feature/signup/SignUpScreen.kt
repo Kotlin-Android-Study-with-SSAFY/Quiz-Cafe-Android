@@ -30,7 +30,8 @@ import com.android.quizcafe.core.ui.TopAppBarTitle
 fun SignUpScreen(
     step: Int,
     state: SignUpUiState,
-    sendIntent: (SignUpIntent) -> Unit
+    sendIntent: (SignUpIntent) -> Unit,
+    navigateToBack: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -40,7 +41,7 @@ fun SignUpScreen(
             QuizCafeTopAppBar(
                 title = TopAppBarTitle.Text(stringResource(R.string.signup)),
                 navigationIcon = {
-                    IconButton(onClick = { /* TODO */ }) {
+                    IconButton(onClick = navigateToBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.navigate_up)
@@ -94,7 +95,7 @@ fun BottomActionButton(state: SignUpUiState, onClick: () -> Unit) {
 @Composable
 fun SignUpEmailVerificationPreview() {
     QuizCafeTheme {
-        SignUpScreen(0, SignUpUiState()) {}
+        SignUpScreen(0, SignUpUiState(), {}) {}
     }
 }
 
@@ -102,6 +103,6 @@ fun SignUpEmailVerificationPreview() {
 @Composable
 fun SignUpPasswordPreview() {
     QuizCafeTheme {
-        SignUpScreen(1, SignUpUiState()) {}
+        SignUpScreen(1, SignUpUiState(), {}) {}
     }
 }

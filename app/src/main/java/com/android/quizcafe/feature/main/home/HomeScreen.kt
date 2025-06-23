@@ -20,7 +20,7 @@ import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
 fun HomeScreen(
-    state: HomeViewState,
+    state: HomeUiState,
     sendIntent: (HomeIntent) -> Unit
 ) {
     Column(
@@ -45,7 +45,7 @@ fun HomeScreen(
 fun HomeScreenPreview() {
     QuizCafeTheme {
         HomeScreen(
-            state = HomeViewState(
+            state = HomeUiState(
                 quizSolvingList = listOf(
                     QuizBookSolving(
                         id = 1,
