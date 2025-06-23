@@ -41,7 +41,7 @@ fun QuizSolveScreen(
     uiState: QuizSolveUiState,
     onIntent: (QuizSolveIntent) -> Unit
 ) {
-    val textRes = when {
+    val textRightRes = when {
         uiState.isWrongAnswer -> R.string.solve_btn_explanation
         uiState.isLastQuestion -> R.string.solve_btn_submit
         else -> R.string.solve_btn_next_text
@@ -200,12 +200,11 @@ fun SelectOXSection(
     uiState: QuizSolveUiState,
     onIntent: (QuizSolveIntent) -> Unit
 ) {
-    val oxOptions = uiState.mcq.options.ifEmpty {
-        listOf(
-            QuizOption(id = 0L, text = "O"),
-            QuizOption(id = 1L, text = "X")
-        )
-    }
+    val oxOptions = listOf(
+        QuizOption(id = 0L, text = "O"),
+        QuizOption(id = 1L, text = "X")
+    )
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth(),
