@@ -6,6 +6,7 @@ import com.android.quizcafe.core.ui.base.BaseContract
 data class QuizBookDetailUiState(
     val quizBookId: Long = 2,
     val quizBookDetail: QuizBookDetail = QuizBookDetail(),
+    val isCheckedReviewMode : Boolean,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 ) : BaseContract.UiState
