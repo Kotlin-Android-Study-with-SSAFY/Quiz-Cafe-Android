@@ -18,6 +18,7 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
     data class UpdatedSubjectiveAnswer(val answer: String) : QuizSolveIntent()
     data object SubmitAnswer : QuizSolveIntent()
     data object SubmitNext : QuizSolveIntent()
+    data object SubmitPrev : QuizSolveIntent()
     data object GradeQuizSuccess : QuizSolveIntent()
     data class SolveQuizSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
     data class GradeQuizError(val message: String?) : QuizSolveIntent()
