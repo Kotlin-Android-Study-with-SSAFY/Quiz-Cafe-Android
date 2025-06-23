@@ -5,9 +5,11 @@ import com.android.quizcafe.core.ui.base.BaseContract
 data class SignUpUiState(
     val email: String = "",
     val verificationCode: String = "",
+    val nickname: String = "",
     val password: String = "",
     val passwordConfirm: String = "",
     val emailErrorMessage: String? = null,
+    val nicknameErrorMessage: String? = null,
     val passwordErrorMessage: String? = null,
     val passwordConfirmErrorMessage: String? = null,
     val verificationCodeErrorMessage: String? = null,
@@ -24,6 +26,7 @@ data class SignUpUiState(
 sealed class SignUpIntent : BaseContract.ViewIntent {
     data class UpdatedEmail(val email: String) : SignUpIntent()
     data class UpdatedVerificationCode(val code: String) : SignUpIntent()
+    data class UpdatedNickname(val nickname: String) : SignUpIntent()
     data class UpdatedPassword(val password: String) : SignUpIntent()
     data class UpdatedPasswordConfirm(val password: String) : SignUpIntent()
     data class UpdatedTimer(val remainingSeconds: Int) : SignUpIntent()

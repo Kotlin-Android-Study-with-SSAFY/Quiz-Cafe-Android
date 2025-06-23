@@ -9,27 +9,32 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object DaoModule {
 
     @Provides
+    @Singleton
     fun provideQuizDao(
         database: QuizCafeDatabase
     ): QuizDao = database.quizDao()
 
     @Provides
+    @Singleton
     fun provideQuizBookDao(
         database: QuizCafeDatabase
     ): QuizBookDao = database.quizBookDao()
 
     @Provides
+    @Singleton
     fun provideQuizGradingRecordDao(
         database: QuizCafeDatabase
     ): QuizGradeDao = database.quizGradeDao()
 
     @Provides
+    @Singleton
     fun provideQuizBookGradingRecordDao(
         database: QuizCafeDatabase
     ): QuizBookGradeDao = database.quizBookGradeDao()

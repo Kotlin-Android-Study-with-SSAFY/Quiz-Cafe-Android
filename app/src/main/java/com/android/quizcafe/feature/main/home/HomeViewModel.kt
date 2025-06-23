@@ -9,8 +9,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getAllQuizBookSolvingUseCase: GetAllQuizBookSolvingUseCase
-) : BaseViewModel<HomeViewState, HomeIntent, HomeEffect>(
-    initialState = HomeViewState()
+) : BaseViewModel<HomeUiState, HomeIntent, HomeEffect>(
+    initialState = HomeUiState()
 ) {
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
@@ -32,7 +32,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: HomeViewState, intent: HomeIntent): HomeViewState {
+    override fun reduce(currentState: HomeUiState, intent: HomeIntent): HomeUiState {
         return when (intent) {
             HomeIntent.FetchRecord,
             is HomeIntent.LoadingFetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
