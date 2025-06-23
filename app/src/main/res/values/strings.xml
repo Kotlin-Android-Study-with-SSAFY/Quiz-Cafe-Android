@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">QuizCafe</string>
-  
-    <string name="default_web_client_id">241463982855-4i4re173u4bj88ur6tmmpip6ni25khni.apps.googleusercontent.com</string>
+
     <string name="password_visibility_toggle">비밀번호 보기 토글</string>
     <string name="clear_text">입력 지우기</string>
     <string name="error_icon">에러 아이콘</string>

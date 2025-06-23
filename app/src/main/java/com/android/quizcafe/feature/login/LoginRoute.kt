@@ -14,6 +14,7 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.GetCredentialResponse
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewModelScope
+import com.android.quizcafe.BuildConfig
 import com.android.quizcafe.R
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -34,7 +35,7 @@ fun LoginRoute(
     suspend fun handleGoogleLogin() {
         try {
             val googleIdOption = GetGoogleIdOption.Builder()
-                .setServerClientId(context.getString(R.string.default_web_client_id))
+                .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
                 .setFilterByAuthorizedAccounts(false)
                 .build()
 

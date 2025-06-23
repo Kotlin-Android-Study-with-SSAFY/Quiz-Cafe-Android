@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner = "com.android.quizcafe.QuizCafeTestRunner"
 
         buildConfigField("String", "BASE_URL", "\"${getProperty("BASE_URL")}\"")
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${getProperty("GOOGLE_CLIENT_ID")}\"")
     }
 
     buildTypes {
