@@ -43,7 +43,8 @@ fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) 
         onValueChange = { sendIntent(LoginIntent.UpdatedEmail(it)) },
         modifier = Modifier
             .fillMaxWidth()
-            .height(56.dp)
+            .height(56.dp),
+        errorMessage = state.emailErrorMessage
     )
 }
 
@@ -57,18 +58,19 @@ fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Uni
             .fillMaxWidth()
             .height(56.dp),
         isPassword = true,
+        errorMessage = state.passwordErrorMessage,
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
     )
 }
 
 @Composable
-fun LoginButton(state: LoginViewState, onClick: () -> Unit) {
+fun LoginButton(isLoginEnabled: Boolean, onClick: () -> Unit) {
     QuizCafeButton(
         onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .height(48.dp),
-        enabled = state.isLoginEnabled
+        enabled = isLoginEnabled
     ) {
         Text(text = stringResource(R.string.login))
     }
@@ -131,9 +133,9 @@ fun PasswordInputPreview() {
 fun LoginButtonPreview() {
     QuizCafeTheme {
         Column {
-            LoginButton(LoginViewState()) {}
+            LoginButton(false) {}
             Spacer(Modifier.height(20.dp))
-            LoginButton(LoginViewState(isLoginEnabled = true)) {}
+            LoginButton(true) {}
         }
     }
 }
