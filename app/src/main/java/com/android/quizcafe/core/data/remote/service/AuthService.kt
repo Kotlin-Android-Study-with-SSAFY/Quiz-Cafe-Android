@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.remote.service
 
+import com.android.quizcafe.core.data.model.auth.request.GoogleLoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SendCodeRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SignUpRequestDto
@@ -31,6 +32,11 @@ interface AuthService {
     @POST("auth/sign-in")
     suspend fun login(
         @Body request: LoginRequestDto
+    ): NetworkResult<ApiResponse<LoginResponseDto>>
+
+    @POST("/auth/google-login")
+    suspend fun googleLogin(
+        @Body request: GoogleLoginRequestDto
     ): NetworkResult<ApiResponse<LoginResponseDto>>
 
     @POST("auth/password/reset")

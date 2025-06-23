@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.remote.datasource
 
+import com.android.quizcafe.core.data.model.auth.request.GoogleLoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.LoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.ResetPasswordRequestDto
 import com.android.quizcafe.core.data.model.auth.request.SendCodeRequestDto
@@ -28,4 +29,7 @@ class AuthRemoteDataSource @Inject constructor(
 
     suspend fun resetPassword(request: ResetPasswordRequestDto): NetworkResult<ApiResponse<Unit>> =
         authService.resetPassword(email = request.email)
+
+    suspend fun googleLogin(request: GoogleLoginRequestDto): NetworkResult<ApiResponse<LoginResponseDto>> =
+        authService.googleLogin(request)
 }
