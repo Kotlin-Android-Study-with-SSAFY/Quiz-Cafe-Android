@@ -12,8 +12,6 @@ data class QuizBookSolvingResultUiState(
 
 sealed class QuizBookSolvingResultIntent : BaseContract.ViewIntent {
 
-    data object StartLoading : QuizBookSolvingResultIntent()
-
     data class InitWithQuizBookGradeId(val quizBookGradeServerId: Long) : QuizBookSolvingResultIntent()
 
     data class SuccessLoadData(

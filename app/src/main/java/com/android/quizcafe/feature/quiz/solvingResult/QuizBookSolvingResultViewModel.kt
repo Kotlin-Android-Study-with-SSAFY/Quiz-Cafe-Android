@@ -40,9 +40,6 @@ class QuizBookSolvingResultViewModel @Inject constructor(
         state: QuizBookSolvingResultUiState,
         intent: QuizBookSolvingResultIntent
     ): QuizBookSolvingResultUiState = when (intent) {
-        QuizBookSolvingResultIntent.StartLoading -> {
-            state.copy(isLoading = true, errorMessage = null)
-        }
         is QuizBookSolvingResultIntent.SuccessLoadData -> {
             state.copy(
                 quizBookSolving = intent.quizBookSolving,
@@ -60,8 +57,6 @@ class QuizBookSolvingResultViewModel @Inject constructor(
     }
 
     private fun getQuizBookSolving(quizBookGradeServerId: QuizBookGradeServerId) = viewModelScope.launch {
-        sendIntent(QuizBookSolvingResultIntent.StartLoading)
-
         getQuizBookSolvingUseCase(quizBookGradeServerId)
             .collect { gradeResource ->
                 when (gradeResource) {

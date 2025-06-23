@@ -53,33 +53,29 @@ fun QuizResultItem(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(
-                        if (isCorrect) {
-                            R.drawable.ic_subjective_correct
-                        } else {
-                            R.drawable.ic_subjective_incorrect
-                        }
-                    ),
-                    contentDescription = null,
-                    tint = if (isCorrect) checkedColor else MaterialTheme.colorScheme.error
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = "$questionNumber. " + quizSolving.content,
-                    style = quizCafeTypography().titleSmall,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    onTextLayout = { textLayoutResult ->
-                        hasTextOverflow = textLayoutResult.hasVisualOverflow
+            Icon(
+                painter = painterResource(
+                    if (isCorrect) {
+                        R.drawable.ic_subjective_correct
+                    } else {
+                        R.drawable.ic_subjective_incorrect
                     }
-                )
-            }
+                ),
+                contentDescription = null,
+                tint = if (isCorrect) checkedColor else MaterialTheme.colorScheme.error
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "$questionNumber. " + quizSolving.content,
+                style = quizCafeTypography().titleSmall,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                onTextLayout = { textLayoutResult ->
+                    hasTextOverflow = textLayoutResult.hasVisualOverflow
+                }
+            )
             Text(
                 text = "${getQuestionTypeDisplayName(quizSolving.questionType)}",
                 style = quizCafeTypography().labelMedium,

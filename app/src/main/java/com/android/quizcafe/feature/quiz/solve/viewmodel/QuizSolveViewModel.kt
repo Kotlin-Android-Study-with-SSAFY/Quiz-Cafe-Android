@@ -123,7 +123,6 @@ class QuizSolveViewModel @Inject constructor(
 
             is QuizSolveIntent.LoadQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             is QuizSolveIntent.SuccessGetQuizBook -> {
-                Log.d("test1234", intent.data.toString())
                 currentState.copy(
                     quizBook = intent.data,
                     isLoading = false

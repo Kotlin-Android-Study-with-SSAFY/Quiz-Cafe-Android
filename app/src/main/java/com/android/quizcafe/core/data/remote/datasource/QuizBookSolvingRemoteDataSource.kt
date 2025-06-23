@@ -18,7 +18,6 @@ class QuizBookSolvingRemoteDataSource @Inject constructor(
     suspend fun getQuizBookSolving(
         quizBookSolvingId: Long
     ): NetworkResult<ApiResponse<QuizBookSolvingResponseDto>> {
-        Log.d("test", "QuizBookSolvingRemoteDataSource getQuizBookSolving: $quizBookSolvingId")
         return quizBookSolvingService.getQuizBookSolving(quizBookSolvingId)
     }
 

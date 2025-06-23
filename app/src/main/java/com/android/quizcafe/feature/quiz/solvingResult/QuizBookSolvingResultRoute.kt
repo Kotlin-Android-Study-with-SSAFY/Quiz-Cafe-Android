@@ -19,7 +19,6 @@ fun QuizBookSolvingResultRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        Log.d("test", "LaunchedEffect quizBookGradeServerId : $quizBookGradeServerId")
         viewModel.sendIntent(QuizBookSolvingResultIntent.InitWithQuizBookGradeId(quizBookGradeServerId))
         viewModel.effect.collect { effect ->
             when (effect) {
