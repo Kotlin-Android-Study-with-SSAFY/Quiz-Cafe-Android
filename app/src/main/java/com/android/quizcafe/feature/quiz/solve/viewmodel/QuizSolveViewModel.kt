@@ -56,6 +56,7 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.SubmitNext -> {
                 saveQuizToLocal()
             }
+
             is QuizSolveIntent.SubmitAnswer -> {
                 submitQuizAnswer()
             }
@@ -67,6 +68,7 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.GradeQuizError -> {
                 emitEffect(QuizSolveEffect.ShowErrorDialog(intent.message ?: ""))
             }
+
             else -> Unit
         }
     }
@@ -123,7 +125,6 @@ class QuizSolveViewModel @Inject constructor(
 
             is QuizSolveIntent.LoadQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             is QuizSolveIntent.SuccessGetQuizBook -> {
-                Log.d("test1234", intent.data.toString())
                 currentState.copy(
                     quizBook = intent.data,
                     isLoading = false
@@ -139,12 +140,17 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     quizGrades = intent.quizBookGrade.quizGrades
                 )
+
             QuizSolveIntent.GradeQuizSuccess -> {
-                currentState.copy(
-                    currentIndex = currentState.currentIndex + 1,
-                    common = CommonState(false)
-                )
+                if (!currentState.isLastQuestion) {
+                    currentState.copy(
+                        currentIndex = currentState.currentIndex + 1,
+                        common = CommonState(false)
+                    )
+                } else
+                    currentState
             }
+
             else -> currentState
         }
     }
@@ -231,6 +237,9 @@ class QuizSolveViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {
                         sendIntent(QuizSolveIntent.GradeQuizSuccess)
+                        if(uiState.isLastQuestion){
+                            sendIntent(QuizSolveIntent.SubmitAnswer)
+                        }
                         Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")
                     }
 
@@ -248,6 +257,7 @@ class QuizSolveViewModel @Inject constructor(
             sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
         }
     }
+
     private suspend fun submitQuizAnswer() {
         val localId = state.value.quizBookLocalId
         val elapsedTimeInSeconds: Long = state.value.timer.elapsedSeconds.toLong()

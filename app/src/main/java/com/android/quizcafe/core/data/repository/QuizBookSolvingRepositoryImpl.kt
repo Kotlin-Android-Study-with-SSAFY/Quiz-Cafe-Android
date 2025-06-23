@@ -82,7 +82,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
             emit(Resource.Failure("quizBookGradeServerId가 null입니다", HttpStatus.UNKNOWN))
             return@flow
         } else {
-            Log.d("test", "QuizBookSolvingRepositoryImpl getQuizBookSolving: $quizBookSolvingId")
             emit(
                 apiResponseToResource(mapper = QuizBookSolvingResponseDto::toDomain) {
                     quizBookSolvingRemoteDataSource.getQuizBookSolving(quizBookSolvingId)

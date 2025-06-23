@@ -25,7 +25,7 @@ import com.android.quizcafe.core.designsystem.theme.primaryLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceDimLight
-import com.android.quizcafe.core.designsystem.theme.wrongButtonColor
+import com.android.quizcafe.core.designsystem.theme.yellow_200
 import com.android.quizcafe.feature.quiz.solve.component.ExplanationSection
 import com.android.quizcafe.feature.quiz.solve.component.MultipleChoiceOptionButton
 import com.android.quizcafe.feature.quiz.solve.component.OxOptionButton
@@ -49,15 +49,8 @@ fun QuizSolveScreen(
     val onClickAction = {
         when {
             uiState.isWrongAnswer -> onIntent(QuizSolveIntent.ShowExplanation)
-            uiState.isLastQuestion -> onIntent(QuizSolveIntent.SubmitAnswer)
             else -> onIntent(QuizSolveIntent.SubmitNext)
         }
-    }
-
-    val containerColor = when {
-        uiState.isWrongAnswer -> wrongButtonColor
-        uiState.isLastQuestion -> wrongButtonColor
-        else -> primaryLight
     }
     Scaffold(
         topBar = {
@@ -67,6 +60,15 @@ fun QuizSolveScreen(
                 timeText = uiState.getTimeText(),
                 onBackClick = { onIntent(QuizSolveIntent.OnBackClick) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
+            )
+        },
+        bottomBar = {
+            QuizSolveBottomBar(
+                isEnabled = uiState.common.isButtonEnabled,
+                isLastQuestion = uiState.isLastQuestion,
+                isWrongAnswer = uiState.isWrongAnswer,
+                onClickAction = onClickAction,
+                textRes = textRes
             )
         }
     ) { padding ->
@@ -114,27 +116,37 @@ fun QuizSolveScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.weight(1F))
-            QuizCafeButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                enabled = uiState.common.isButtonEnabled,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = containerColor,
-                    contentColor = scrimLight,
-                    disabledContainerColor = surfaceDimLight
-                ),
-                onClick = onClickAction,
-                text = {
-                    Text(
-                        text = stringResource(textRes),
-                        style = quizCafeTypography().titleSmall
-                    )
-                }
-            )
+
         }
     }
+}
+
+@Composable
+private fun QuizSolveBottomBar(
+    isEnabled: Boolean,
+    isLastQuestion: Boolean,
+    isWrongAnswer: Boolean,
+    onClickAction: () -> Unit,
+    textRes: Int
+) {
+    QuizCafeButton(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        enabled = isEnabled,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isLastQuestion || isWrongAnswer) yellow_200 else primaryLight,
+            contentColor = scrimLight,
+            disabledContainerColor = surfaceDimLight
+        ),
+        onClick = onClickAction,
+        text = {
+            Text(
+                text = stringResource(textRes),
+                style = quizCafeTypography().titleSmall
+            )
+        }
+    )
 }
 
 @Composable
@@ -173,7 +185,7 @@ fun SelectMultipleChoiceSection(
         uiState.optionList.forEachIndexed { idx, option ->
             MultipleChoiceOptionButton(
                 modifier = modifier,
-                answerState = uiState.optionState(option),
+                answerState = uiState.getOptionState(option),
                 index = idx + 1,
                 content = option.text,
                 onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
@@ -202,7 +214,7 @@ fun SelectOXSection(
         oxOptions.forEach { option ->
             OxOptionButton(
                 modifier = modifier.weight(1F),
-                answerState = uiState.optionState(option),
+                answerState = uiState.getOptionState(option),
                 iconPaint = if (option.text == "O") R.drawable.ic_ox_option_o else R.drawable.ic_ox_option_x,
                 onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
             )

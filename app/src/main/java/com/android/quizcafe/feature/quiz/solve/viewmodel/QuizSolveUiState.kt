@@ -96,11 +96,6 @@ data class QuizSolveUiState(
                 QuizOption(0L, "O"),
                 QuizOption(1L, "X")
             )
-    val correctAnswerText: String?
-        get() = currentQuiz?.answer
-
-    val explanationText: String?
-        get() = currentQuiz?.explanation
 
     private val currentGrade: QuizGrade?
         get() = quizGrades.getOrNull(currentIndex)
@@ -108,7 +103,7 @@ data class QuizSolveUiState(
     private val currentPhase: AnswerPhase
         get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
 
-    fun optionState(opt: QuizOption): AnswerState = when (currentPhase) {
+    fun getOptionState(opt: QuizOption): AnswerState = when (currentPhase) {
         AnswerPhase.ANSWERING ->
             if (opt.text == mcq.selectedContent) {
                 AnswerState.SELECTED
@@ -125,21 +120,11 @@ data class QuizSolveUiState(
         } ?: AnswerState.DEFAULT
     }
 
-    val subjectiveAnswerState: AnswerState
-        get() = when (currentPhase) {
-            AnswerPhase.ANSWERING ->
-                if (subjective.answer.isNotBlank()) AnswerState.SELECTED else AnswerState.DEFAULT
-
-            AnswerPhase.REVIEW ->
-                if (currentGrade?.isCorrect == true) AnswerState.CORRECT else AnswerState.INCORRECT
-        }
-
     val isLastQuestion: Boolean
         get() = questionInfo.current == questionInfo.total
 
     val isWrongAnswer: Boolean
-        get() = subjectiveAnswerState == AnswerState.INCORRECT && !review.showExplanation ||
-            optionList.any { optionState(it) == AnswerState.INCORRECT } && !review.showExplanation
+        get() = !review.showExplanation && (currentGrade?.isCorrect == false || optionList.any { getOptionState(it) == AnswerState.INCORRECT })
 
     fun getTimeText(): String {
         val seconds = if (timer.playMode == PlayMode.TIME_ATTACK) timer.remainingSeconds else timer.elapsedSeconds
