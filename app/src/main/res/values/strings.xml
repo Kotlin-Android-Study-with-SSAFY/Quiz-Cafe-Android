@@ -108,7 +108,6 @@
     <string name="mypage_menu_withdrawal">회원 탈퇴</string>
 
     <string name="update_nickname_title">닉네임 변경</string>
-    <string name="nickname">닉네임</string>
     <string name="update_password_title">비밀번호 변경</string>
     <string name="current_password">기존 비밀번호</string>
     <string name="new_password">새 비밀번호</string>
