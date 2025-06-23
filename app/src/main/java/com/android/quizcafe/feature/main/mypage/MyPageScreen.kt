@@ -31,7 +31,7 @@ fun MyPageScreen(
         HorizontalDivider(modifier = Modifier.height(1.dp))
         MyPageMenu { menuId ->
             when (menuId) {
-                0 -> onClick(MyPageIntent.ClickChangeUserInfo)
+                0 -> onClick(MyPageIntent.ClickUpdateUserInfo)
                 1 -> onClick(MyPageIntent.ClickMyCreatedQuizBooks)
                 2 -> onClick(MyPageIntent.ClickLogout)
                 3 -> onClick(MyPageIntent.ClickWithdrawal)

@@ -15,7 +15,8 @@ import com.android.quizcafe.R
 @Composable
 fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
-    onNavigateToMyCreatedQuizBooks: () -> Unit = {},
+    navigateToMyCreatedQuizBooks: () -> Unit = {},
+    navigateToUpdateUserInfo: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -32,7 +33,8 @@ fun MyPageRoute(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is MyPageEffect.NavigateToMyCreatedQuizBooks -> onNavigateToMyCreatedQuizBooks()
+                is MyPageEffect.NavigateToMyCreatedQuizBooks -> navigateToMyCreatedQuizBooks()
+                is MyPageEffect.NavigateToUpdateUserInfo -> navigateToUpdateUserInfo(effect.step)
                 is MyPageEffect.ShowUserInfoDialog -> showUserInfoDialog = true
                 is MyPageEffect.ShowLogoutDialog -> showLogoutDialog = true
                 is MyPageEffect.ShowWithdrawalFirstDialog -> showWithdrawalFirstDialog = true
@@ -48,11 +50,11 @@ fun MyPageRoute(
         UserInfoBottomSheet(
             onDismiss = { showUserInfoDialog = false },
             onClickNicknameChange = {
-                viewModel.sendIntent(MyPageIntent.ClickChangeNickname)
+                viewModel.sendIntent(MyPageIntent.ClickUpdateNickname)
                 showUserInfoDialog = false
             },
             onClickPasswordChange = {
-                viewModel.sendIntent(MyPageIntent.ClickChangePassword)
+                viewModel.sendIntent(MyPageIntent.ClickUpdatePassword)
                 showUserInfoDialog = false
             }
         )

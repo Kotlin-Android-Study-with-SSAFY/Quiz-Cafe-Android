@@ -5,8 +5,6 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.usecase.auth.LogoutUseCase
 import com.android.quizcafe.core.domain.usecase.user.DeleteUserUseCase
 import com.android.quizcafe.core.domain.usecase.user.GetUserInfoUseCase
-import com.android.quizcafe.core.domain.usecase.user.UpdatePasswordUseCase
-import com.android.quizcafe.core.domain.usecase.user.UpdateUserNickNameUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -15,8 +13,6 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
-    private val updatePasswordUseCase: UpdatePasswordUseCase,
-    private val updateUserNickNameUseCase: UpdateUserNickNameUseCase,
     private val logoutUseCase: LogoutUseCase
 ) : BaseViewModel<MyPageViewState, MyPageIntent, MyPageEffect>(
     initialState = MyPageViewState()
@@ -24,7 +20,10 @@ class MyPageViewModel @Inject constructor(
     override suspend fun handleIntent(intent: MyPageIntent) {
         when (intent) {
             is MyPageIntent.LoadUserInfo -> getUserInfo()
-            is MyPageIntent.ClickChangeUserInfo -> emitEffect(MyPageEffect.ShowUserInfoDialog)
+            is MyPageIntent.ClickUpdateUserInfo -> emitEffect(MyPageEffect.ShowUserInfoDialog)
+            is MyPageIntent.ClickUpdateNickname -> emitEffect(MyPageEffect.NavigateToUpdateUserInfo(0))
+            is MyPageIntent.ClickUpdatePassword -> emitEffect(MyPageEffect.NavigateToUpdateUserInfo(1))
+
             is MyPageIntent.ClickMyCreatedQuizBooks -> emitEffect(MyPageEffect.NavigateToMyCreatedQuizBooks)
             is MyPageIntent.FailLoadUserInfo -> emitEffect(MyPageEffect.ShowError(intent.errorMessage))
 

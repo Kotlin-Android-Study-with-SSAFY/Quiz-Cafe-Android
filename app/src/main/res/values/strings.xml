@@ -102,6 +102,16 @@
     <string name="mypage_menu_logout">로그아웃</string>
     <string name="mypage_menu_withdrawal">회원 탈퇴</string>
 
+    <string name="update_nickname_title">닉네임 변경</string>
+    <string name="nickname">닉네임</string>
+    <string name="update_password_title">비밀번호 변경</string>
+    <string name="current_password">기존 비밀번호</string>
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_confirm">새 비밀번호 확인</string>
+    <string name="update">변경하기</string>
+    <string name="update_nickname_button">닉네임 변경</string>
+    <string name="update_password_button">비밀번호 변경</string>
+
     <string name="mypage_record_title">나의 기록</string>
     <string name="mypage_record_max_streak">한 번도 쉬지 않고 푼 최장 기록: %1$d일</string>
     <string name="mypage_record_current_streak">연속 풀이 챌린지 달성: %1$d일</string>
@@ -119,7 +129,7 @@
     <string name="dialog_message_withdrawal_final">회원탈퇴를 하시면 \n이전 계정은 복구가 되지 않습니다.\n정말 탈퇴하시겠습니까?</string>
     <string name="dialog_yes">네</string>
     <string name="dialog_no">아니오</string>
-    <string name="dialog_title_change_user_info">회원 정보 변경</string>
+    <string name="update_user_info">회원정보 변경</string>
     <string name="dialog_nickname_change">닉네임 변경</string>
     <string name="dialog_password_change">비밀번호 변경</string>
     <string name="dialog_cancel">취소</string>

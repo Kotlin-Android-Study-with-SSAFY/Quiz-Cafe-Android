@@ -19,11 +19,11 @@ sealed class MyPageIntent : BaseContract.ViewIntent {
     data class SuccessLoadUserInfo(val data: UserInfo) : MyPageIntent()
     data class FailLoadUserInfo(val errorMessage: String) : MyPageIntent()
 
-    data object ClickChangeUserInfo : MyPageIntent()
+    data object ClickUpdateUserInfo : MyPageIntent()
     data object ClickMyCreatedQuizBooks : MyPageIntent()
 
-    data object ClickChangeNickname : MyPageIntent()
-    data object ClickChangePassword : MyPageIntent()
+    data object ClickUpdateNickname : MyPageIntent()
+    data object ClickUpdatePassword : MyPageIntent()
 
     data object ClickLogout : MyPageIntent()
     data object ConfirmLogout : MyPageIntent()
@@ -38,6 +38,7 @@ sealed class MyPageIntent : BaseContract.ViewIntent {
 
 sealed class MyPageEffect : BaseContract.ViewEffect {
     data object NavigateToMyCreatedQuizBooks : MyPageEffect()
+    data class NavigateToUpdateUserInfo(val step: Int) : MyPageEffect()
 
     data object ShowUserInfoDialog : MyPageEffect()
     data object ShowLogoutDialog : MyPageEffect()

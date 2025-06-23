@@ -15,7 +15,6 @@ import androidx.navigation.navigation
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
-import com.android.quizcafe.feature.main.mypage.MyPageRoute
 import com.android.quizcafe.feature.main.home.HomeRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
@@ -98,11 +97,11 @@ fun MainBottomNavHost(
             )
         }
         composable(MainRoute.MyPage.route) {
-            MyPageRoute(
+//            MyPageRoute(
 //                navigateToSetting = {
 //                    navController.navigateSingleTopTo()
 //                }
-            )
+//            )
         }
         composable(MainRoute.CategoryList.route) {
             CategoryRoute(

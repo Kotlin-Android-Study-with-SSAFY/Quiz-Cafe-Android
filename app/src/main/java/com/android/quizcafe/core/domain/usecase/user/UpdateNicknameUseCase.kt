@@ -5,7 +5,7 @@ import com.android.quizcafe.core.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UpdateUserNickNameUseCase @Inject constructor(
+class UpdateNicknameUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     operator fun invoke(nickname: String): Flow<Resource<Unit>> =

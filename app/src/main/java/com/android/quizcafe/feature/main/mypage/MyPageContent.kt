@@ -176,7 +176,7 @@ fun UserInfoBottomSheet(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = stringResource(R.string.dialog_title_change_user_info),
+                text = stringResource(R.string.update_user_info),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(bottom = 16.dp)
             )
