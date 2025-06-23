@@ -60,7 +60,7 @@ fun NavGraphBuilder.authGraph(navController: NavHostController) {
                 navigateToLogin = {
                     navController.navigateAndClearBackStack(AuthRoute.Login.route)
                 },
-                onNavigateUp = {
+                navigateToBack = {
                     navController.navigateUp()
                 }
             )

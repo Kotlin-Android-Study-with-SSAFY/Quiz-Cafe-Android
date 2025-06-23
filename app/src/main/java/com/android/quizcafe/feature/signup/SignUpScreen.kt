@@ -31,7 +31,7 @@ fun SignUpScreen(
     step: Int,
     state: SignUpViewState,
     sendIntent: (SignUpIntent) -> Unit,
-    onNavigateUp: () -> Unit
+    navigateToBack: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -41,7 +41,7 @@ fun SignUpScreen(
             QuizCafeTopAppBar(
                 title = TopAppBarTitle.Text(stringResource(R.string.signup)),
                 navigationIcon = {
-                    IconButton(onClick = onNavigateUp) {
+                    IconButton(onClick = navigateToBack) {
                         Icon(
                             Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.navigate_up)

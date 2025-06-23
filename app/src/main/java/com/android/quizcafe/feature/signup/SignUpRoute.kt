@@ -15,7 +15,7 @@ import com.android.quizcafe.R
 @Composable
 fun SignUpRoute(
     navigateToLogin: () -> Unit,
-    onNavigateUp: () -> Unit,
+    navigateToBack: () -> Unit,
     viewModel: SignUpViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -59,6 +59,6 @@ fun SignUpRoute(
         step = step,
         state = state,
         sendIntent = viewModel::sendIntent,
-        onNavigateUp = onNavigateUp
+        navigateToBack = navigateToBack
     )
 }
