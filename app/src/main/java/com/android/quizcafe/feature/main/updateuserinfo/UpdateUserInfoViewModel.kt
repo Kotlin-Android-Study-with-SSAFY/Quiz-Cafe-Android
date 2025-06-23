@@ -1,10 +1,10 @@
 package com.android.quizcafe.feature.main.updateuserinfo
 
+import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.usecase.user.UpdateNicknameUseCase
 import com.android.quizcafe.core.domain.usecase.user.UpdatePasswordUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,15 +17,36 @@ class UpdateUserInfoViewModel @Inject constructor(
     override suspend fun handleIntent(intent: UpdateUserInfoIntent) {
         when (intent) {
             is UpdateUserInfoIntent.ConfirmNickname -> {
-                // 닉네임 변경 API 호출 가정
-                delay(300)
-                emitEffect(UpdateUserInfoEffect.NavigateBack)
+                updateNicknameUseCase(state.value.nickname).collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            emitEffect(UpdateUserInfoEffect.ShowToast("닉네임이 변경되었습니다."))
+                            emitEffect(UpdateUserInfoEffect.NavigateBack)
+                        }
+                        is Resource.Failure -> {
+                            emitEffect(UpdateUserInfoEffect.ShowToast(result.errorMessage ?: "닉네임 변경에 실패했습니다."))
+                        }
+                        else -> Unit
+                    }
+                }
             }
 
             is UpdateUserInfoIntent.ConfirmPassword -> {
-                // 비밀번호 변경 API 호출 가정
-                delay(300)
-                emitEffect(UpdateUserInfoEffect.NavigateBack)
+                updatePasswordUseCase(
+                    oldPassword = state.value.currentPassword,
+                    newPassword = state.value.newPassword
+                ).collect { result ->
+                    when (result) {
+                        is Resource.Success -> {
+                            emitEffect(UpdateUserInfoEffect.ShowToast("비밀번호가 변경되었습니다."))
+                            emitEffect(UpdateUserInfoEffect.NavigateBack)
+                        }
+                        is Resource.Failure -> {
+                            emitEffect(UpdateUserInfoEffect.ShowToast(result.errorMessage ?: "비밀번호 변경에 실패했습니다."))
+                        }
+                        else -> Unit
+                    }
+                }
             }
 
             else -> Unit

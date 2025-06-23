@@ -1,7 +1,9 @@
 package com.android.quizcafe.core.data.model.user.request
 
 import com.android.quizcafe.core.domain.model.user.request.UpdatePasswordRequest
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class UpdatePasswordRequestDto(
     val oldPassword: String,
     val newPassword: String

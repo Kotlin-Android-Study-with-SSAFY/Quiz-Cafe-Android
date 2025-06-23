@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.data.remote.datasource
 
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
+import com.android.quizcafe.core.data.model.user.request.UpdateNicknameRequestDto
 import com.android.quizcafe.core.data.model.user.request.UpdatePasswordRequestDto
 import com.android.quizcafe.core.data.model.user.response.UserInfoResponseDto
 import com.android.quizcafe.core.data.remote.service.UserService
@@ -17,8 +18,8 @@ class UserRemoteDataSource @Inject constructor(
 
     suspend fun deleteUser(): NetworkResult<Unit> = userService.deleteUser()
 
-    suspend fun updateUserNickName(nickName: String): NetworkResult<ApiResponse<Unit>> =
-        userService.updateUserNickName(nickName = nickName)
+    suspend fun updateUserNickName(request: UpdateNicknameRequestDto): NetworkResult<ApiResponse<Unit>> =
+        userService.updateUserNickName(request = request)
 
     suspend fun getMyQuizBooks(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>> =
         userService.getMyQuizBooks()
