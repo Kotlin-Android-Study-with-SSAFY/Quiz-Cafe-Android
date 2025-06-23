@@ -82,9 +82,12 @@ class QuizBookRepositoryImpl @Inject constructor(
         val quizEntities = quizBookDto.quizzes.map { it.toEntity() }
         quizDao.upsertQuizList(quizEntities)
 
-        val mcqOptionEntities = quizBookDto.quizzes.flatMap { quizDto ->
-            quizDto.mcqOption.map { it.toEntity() }
-        }
+        val mcqOptionEntities = quizBookDto.quizzes
+            .flatMap { quizDto ->
+                quizDto.mcqOption
+                    ?.map { it.toEntity() }
+                    ?: emptyList()
+            }
         if (mcqOptionEntities.isNotEmpty()) {
             quizDao.upsertMcqOptions(mcqOptionEntities)
         }

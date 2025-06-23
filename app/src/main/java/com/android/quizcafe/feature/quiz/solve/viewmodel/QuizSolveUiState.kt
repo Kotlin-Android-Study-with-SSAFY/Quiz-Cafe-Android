@@ -133,6 +133,8 @@ data class QuizSolveUiState(
             AnswerPhase.REVIEW ->
                 if (currentGrade?.isCorrect == true) AnswerState.CORRECT else AnswerState.INCORRECT
         }
+    val isFirstQuestion: Boolean
+        get() = questionInfo.current == 1
 
     val isLastQuestion: Boolean
         get() = questionInfo.current == questionInfo.total

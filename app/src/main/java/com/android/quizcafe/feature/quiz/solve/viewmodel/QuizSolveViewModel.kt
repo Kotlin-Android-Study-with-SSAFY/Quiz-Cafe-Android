@@ -139,10 +139,20 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     quizGrades = intent.quizBookGrade.quizGrades
                 )
+            is QuizSolveIntent.SubmitPrev ->
+                currentState.copy(
+                    currentIndex = currentState.currentIndex - 1,
+                )
             QuizSolveIntent.GradeQuizSuccess -> {
                 currentState.copy(
                     currentIndex = currentState.currentIndex + 1,
-                    common = CommonState(false)
+                    common = CommonState(false),
+                    subjective = currentState.subjective.copy(
+                        answer = ""
+                    ) ,
+                    mcq = currentState.mcq.copy(
+                        selectedContent = ""
+                    )
                 )
             }
             else -> currentState

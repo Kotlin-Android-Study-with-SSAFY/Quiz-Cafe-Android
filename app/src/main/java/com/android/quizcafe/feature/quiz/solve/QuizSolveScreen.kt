@@ -41,7 +41,7 @@ fun QuizSolveScreen(
     uiState: QuizSolveUiState,
     onIntent: (QuizSolveIntent) -> Unit
 ) {
-    val textRes = when {
+    val textRightRes = when {
         uiState.isWrongAnswer -> R.string.solve_btn_explanation
         uiState.isLastQuestion -> R.string.solve_btn_submit
         else -> R.string.solve_btn_next_text
@@ -115,24 +115,54 @@ fun QuizSolveScreen(
             }
 
             Spacer(modifier = Modifier.weight(1F))
-            QuizCafeButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                enabled = uiState.common.isButtonEnabled,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = containerColor,
-                    contentColor = scrimLight,
-                    disabledContainerColor = surfaceDimLight
-                ),
-                onClick = onClickAction,
-                text = {
-                    Text(
-                        text = stringResource(textRes),
-                        style = quizCafeTypography().titleSmall
+            Row(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (!uiState.isFirstQuestion) {
+                    QuizCafeButton(
+                        modifier = Modifier
+                            .weight(1F)
+                            .padding(horizontal = 16.dp),
+                        enabled = true,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = wrongButtonColor,
+                            contentColor = scrimLight,
+                            disabledContainerColor = surfaceDimLight
+                        ),
+                        onClick = { onIntent(QuizSolveIntent.SubmitPrev) },
+                        text = {
+                            Text(
+                                text = stringResource(R.string.solve_btn_prev_text),
+                                style = quizCafeTypography().titleSmall
+                            )
+                        }
+                    )
+                } else {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1F)
+                            .padding(horizontal = 16.dp)
                     )
                 }
-            )
+                QuizCafeButton(
+                    modifier = Modifier
+                        .weight(1F)
+                        .padding(horizontal = 16.dp),
+                    enabled = uiState.common.isButtonEnabled,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = containerColor,
+                        contentColor = scrimLight,
+                        disabledContainerColor = surfaceDimLight
+                    ),
+                    onClick = onClickAction,
+                    text = {
+                        Text(
+                            text = stringResource(textRightRes),
+                            style = quizCafeTypography().titleSmall
+                        )
+                    }
+                )
+            }
         }
     }
 }
@@ -188,12 +218,11 @@ fun SelectOXSection(
     uiState: QuizSolveUiState,
     onIntent: (QuizSolveIntent) -> Unit
 ) {
-    val oxOptions = uiState.mcq.options.ifEmpty {
-        listOf(
-            QuizOption(id = 0L, text = "O"),
-            QuizOption(id = 1L, text = "X")
-        )
-    }
+    val oxOptions = listOf(
+        QuizOption(id = 0L, text = "O"),
+        QuizOption(id = 1L, text = "X")
+    )
+
     Row(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxWidth(),
