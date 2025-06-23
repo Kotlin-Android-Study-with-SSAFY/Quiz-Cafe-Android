@@ -22,6 +22,7 @@ android {
         testInstrumentationRunner = "com.android.quizcafe.QuizCafeTestRunner"
 
         buildConfigField("String", "BASE_URL", "\"${getProperty("BASE_URL")}\"")
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"${getProperty("GOOGLE_CLIENT_ID")}\"")
     }
 
     buildTypes {
@@ -83,6 +84,13 @@ dependencies {
 
     // DataStore
     implementation(libs.androidx.datastore.preferences)
+
+    // Google Auth
+    implementation(libs.google.auth)
+    implementation(libs.credential)
+    implementation(libs.credential.auth)
+    implementation(libs.google.identity)
+    implementation(libs.browser)
 }
 
 fun getProperty(propertyKey: String): String {

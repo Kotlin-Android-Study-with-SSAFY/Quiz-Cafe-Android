@@ -96,3 +96,6 @@ val grass2 = Color(0xFF6E9DD8)
 val grass3 = Color(0xFF3853A4)
 val gridBorder = Color(0xFFE0E0E0)
 val weekLabelColor = Color(0xFF90A4AE)
+
+val googleBackgroundColor = Color(0xFFF2F2F2)
+val googleBorderColor = Color(0xFFCCCCCC)

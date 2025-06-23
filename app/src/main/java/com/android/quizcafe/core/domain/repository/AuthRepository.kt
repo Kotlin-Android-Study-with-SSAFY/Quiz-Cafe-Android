@@ -20,5 +20,7 @@ interface AuthRepository {
 
     fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>>
 
+    fun googleLogin(idToken: String): Flow<Resource<Unit>>
+
     fun logout(): Flow<Resource<Unit>>
 }
