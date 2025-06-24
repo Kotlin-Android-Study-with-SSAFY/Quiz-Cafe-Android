@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "33db5bc2ece01377a4dad8b52e0c573b",
+    "identityHash": "f3458608bcd684e447bc7970cc8cdfdd",
     "entities": [
       {
         "tableName": "quiz",
@@ -241,7 +241,17 @@
             "localId"
           ]
         },
-        "indices": [],
+        "indices": [
+          {
+            "name": "index_QuizBookGradeEntity_quizBookId",
+            "unique": true,
+            "columnNames": [
+              "quizBookId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_QuizBookGradeEntity_quizBookId` ON `${TABLE_NAME}` (`quizBookId`)"
+          }
+        ],
         "foreignKeys": []
       },
       {
@@ -314,7 +324,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '33db5bc2ece01377a4dad8b52e0c573b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f3458608bcd684e447bc7970cc8cdfdd')"
     ]
   }
 }

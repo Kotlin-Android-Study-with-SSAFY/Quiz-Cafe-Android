@@ -1,10 +1,18 @@
 package com.android.quizcafe.core.database.model.grading
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlin.time.Duration
 
-@Entity
+@Entity(
+    indices = [
+        Index(
+            value = ["quizBookId"],
+            unique = true
+        )
+    ]
+)
 data class QuizBookGradeEntity(
     @PrimaryKey(autoGenerate = true)
     val localId: Long = 0,

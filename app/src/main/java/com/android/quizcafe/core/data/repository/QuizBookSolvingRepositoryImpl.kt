@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.data.repository
 
-import android.util.Log
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
@@ -47,33 +46,27 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
      * 퀴즈북 풀기 시작할 때 호출
      * localId값 반환
      */
-    override fun createEmptyQuizBookGrade(quizBookId: QuizBookId): Flow<Resource<QuizBookGradeLocalId>> = flow {
+    override fun getOrCreateQuizBookGrade(quizBookId: QuizBookId): Flow<Resource<QuizBookGrade>> = flow {
         emit(Resource.Loading)
-        val entity = QuizBookGradeEntity(quizBookId = quizBookId.value)
-        val generatedId = quizBookGradeDao.upsertQuizBookGrade(entity)
+        val quizBookGradeRelation = quizBookGradeDao.getQuizBookGrade(quizBookId.value)
 
-        if (generatedId <= 0L) {
-            emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 실패", code = LocalErrorCode.ROOM_ERROR))
-        } else {
-            emit(Resource.Success(QuizBookGradeLocalId(generatedId)))
+        if(quizBookGradeRelation != null){
+            emit(Resource.Success(quizBookGradeRelation.toDomain()))
+        }else{
+            val entity = QuizBookGradeEntity(quizBookId = quizBookId.value)
+            val quizBookGradeLocalId = quizBookGradeDao.upsertQuizBookGrade(entity)
+
+            if (quizBookGradeLocalId <= 0L) {
+                emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 실패", code = LocalErrorCode.ROOM_ERROR))
+            } else {
+                val relation = quizBookGradeDao.getQuizBookGradeByLocalId(quizBookGradeLocalId)
+                relation?.let {
+                    emit(Resource.Success(it.toDomain()))
+                } ?: emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 후 조회 실패", code = LocalErrorCode.ROOM_ERROR))
+            }
         }
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
-    }
-
-    // 퀴즈북 풀이 기록 가져오기
-    override fun getQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<QuizBookGrade>> = flow {
-        emit(Resource.Loading)
-        val quizBookGradeRelation = quizBookGradeDao.getQuizBookGrade(id.value)
-
-        if (quizBookGradeRelation == null) {
-            emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록을 찾을 수 없습니다", code = LocalErrorCode.ROOM_ERROR))
-        } else {
-            val quizBookGrade = quizBookGradeRelation.toDomain()
-            emit(Resource.Success(quizBookGrade))
-        }
-    }.catch { e ->
-        emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
     override fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>> = flow {
@@ -102,10 +95,9 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> = flow {
+    override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> =
         apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
             quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
-        }
     }
 
     // 퀴즈 1개 풀이 기록 저장 및 수정

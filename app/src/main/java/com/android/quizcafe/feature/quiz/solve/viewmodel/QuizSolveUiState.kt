@@ -3,6 +3,7 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
@@ -52,15 +53,15 @@ data class TimerState(
 )
 
 data class CommonState(
-    val isButtonEnabled: Boolean = false
+    val isButtonEnabled: Boolean = false,
+    val isTimerActive: Boolean = false
 )
 
 data class QuizSolveUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val quizBookLocalId: QuizBookGradeLocalId? = null,
     val quizBook: QuizBook? = null,
-    val quizGrades: List<QuizGrade> = emptyList(),
+    val quizBookGrade : QuizBookGrade? = null,
     val currentIndex: Int = 0,
     val mcq: McqState = McqState(
         options = listOf(
@@ -98,7 +99,7 @@ data class QuizSolveUiState(
             )
 
     private val currentGrade: QuizGrade?
-        get() = quizGrades.getOrNull(currentIndex)
+        get() = quizBookGrade?.quizGrades?.getOrNull(currentIndex)
 
     private val currentPhase: AnswerPhase
         get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING

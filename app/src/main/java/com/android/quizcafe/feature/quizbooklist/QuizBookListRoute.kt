@@ -8,11 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 @Composable
 fun QuizBookListRoute(
     category: String,
-    navigateToQuizBookDetail: (Long) -> Unit,
+    navigateToQuizBookDetail: (QuizBookId) -> Unit,
     navigateToCategory: () -> Unit,
     viewModel: QuizBookListViewModel = hiltViewModel()
 ) {

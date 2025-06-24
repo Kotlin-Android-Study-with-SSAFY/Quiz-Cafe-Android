@@ -32,11 +32,12 @@ import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 @Composable
 fun QuizBookCardList(
     quizBooks: List<QuizBook>,
-    onQuizBookClick: (Long) -> Unit
+    onQuizBookClick: (QuizBookId) -> Unit
 ) {
     LazyColumn {
         items(quizBooks) { quizBook ->
@@ -48,7 +49,7 @@ fun QuizBookCardList(
 @Composable
 fun QuizBookCard(
     quizBook: QuizBook,
-    onQuizBookClick: (Long) -> Unit
+    onQuizBookClick: (QuizBookId) -> Unit
 ) {
     Spacer(Modifier.height(8.dp))
     Card(
@@ -181,7 +182,7 @@ fun QuizBookFilterButton(
 fun QuizBookCardListPreview() {
     val sampleQuizBooks = listOf(
         QuizBook(
-            id = 1L,
+            id = QuizBookId(1L),
             ownerName = "시스템 관리자",
             category = "운영체제",
             title = "모두의 운영체제",
@@ -194,7 +195,7 @@ fun QuizBookCardListPreview() {
             level = TODO()
         ),
         QuizBook(
-            id = 2L,
+            id = QuizBookId(2L),
             ownerName = "싸피_박성준",
             category = "운영체제",
             title = "성준이의 운영체제",

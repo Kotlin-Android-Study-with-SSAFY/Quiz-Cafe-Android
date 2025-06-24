@@ -84,7 +84,7 @@ class QuizBookSolvingRepositoryTest {
         setupTestData(quizBookId)
 
         val results = mutableListOf<Resource<*>>()
-        repository.createEmptyQuizBookGrade(quizBookId).collect(results::add)
+        repository.getOrCreateQuizBookGrade(quizBookId).collect(results::add)
 
         assertEquals(2, results.size)
         assertTrue(results[0] is Resource.Loading)
@@ -98,7 +98,7 @@ class QuizBookSolvingRepositoryTest {
         setupTestData(quizBookId)
 
         // 먼저 퀴즈북 풀이 생성
-        val quizBookGradeLocalId = repository.createEmptyQuizBookGrade(quizBookId).first { it is Resource.Success }
+        val quizBookGradeLocalId = repository.getOrCreateQuizBookGrade(quizBookId).first { it is Resource.Success }
             .let { (it as Resource.Success).data }
 
         val quizGrade = QuizGrade(
@@ -162,7 +162,7 @@ class QuizBookSolvingRepositoryTest {
         val quizBookId = QuizBookId(1L)
         setupTestData(quizBookId)
 
-        val quizBookGradeLocalId = repository.createEmptyQuizBookGrade(quizBookId)
+        val quizBookGradeLocalId = repository.getOrCreateQuizBookGrade(quizBookId)
             .first { it is Resource.Success }
             .let { (it as Resource.Success).data }
 

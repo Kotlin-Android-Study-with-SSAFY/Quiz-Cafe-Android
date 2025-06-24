@@ -13,10 +13,13 @@ interface QuizBookGradeDao {
     @Upsert
     suspend fun upsertQuizBookGrade(entity: QuizBookGradeEntity): Long
 
-    // QuizBookGradeEntity LocalId로 QuizQuizBookSolvingResult 리스트 반환
+
     @Transaction
-    @Query("SELECT * FROM QuizBookGradeEntity WHERE localId = :localId")
-    suspend fun getQuizBookGrade(localId: Long): QuizBookGradeWithQuizGradesRelation?
+    @Query("SELECT * FROM QuizBookGradeEntity WHERE localId = :quizBookGradeLocalId")
+    suspend fun getQuizBookGradeByLocalId(quizBookGradeLocalId: Long): QuizBookGradeWithQuizGradesRelation?
+    @Transaction
+    @Query("SELECT * FROM QuizBookGradeEntity WHERE quizBookId = :quizBookId")
+    suspend fun getQuizBookGrade(quizBookId: Long): QuizBookGradeWithQuizGradesRelation?
 
     @Query("DELETE FROM QuizBookGradeEntity WHERE localId = :localId")
     suspend fun deleteQuizBookGrade(localId: Long) : Int

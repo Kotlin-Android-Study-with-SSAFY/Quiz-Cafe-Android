@@ -2,17 +2,16 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 sealed class QuizSolveIntent : BaseContract.ViewIntent {
-    data class LoadQuizBook(val quizBookId: Long) : QuizSolveIntent()
-    data class SuccessGetQuizBook(val data: QuizBook) : QuizSolveIntent()
-    data class SuccessGetQuizBookGradeResult(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
-    data class GetQuizBookLocalId(val quizBookId: Long) : QuizSolveIntent()
+    data class StartSolving(val quizBookId: Long) : QuizSolveIntent()
+    data class ResumeSolving(val resumeWithNewSolving : Boolean) : QuizSolveIntent()
 
-    data class GetQuizBookGradeResult(val quizBookLocalId: QuizBookGradeLocalId) : QuizSolveIntent()
+    data class SuccessGetQuizBook(val data: QuizBook) : QuizSolveIntent()
+    data class SuccessGetQuizBookGrade(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
+    data object StartTimer : QuizSolveIntent()
 
     data class SelectOption(val option: QuizOption) : QuizSolveIntent()
     data class UpdatedSubjectiveAnswer(val answer: String) : QuizSolveIntent()

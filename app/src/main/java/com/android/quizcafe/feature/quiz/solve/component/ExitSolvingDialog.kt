@@ -18,7 +18,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
-fun ExitConfirmDialog(
+fun ExitSolvingDialog(
     onDismissRequest: () -> Unit,
     onExitWithDelete: () -> Unit,
     onExitWithSave: () -> Unit
@@ -101,11 +101,11 @@ fun ExitConfirmDialog(
 }
 
 
-@Preview(name = "Exit Confirmation Dialog", showBackground = true)
+@Preview(name = "ExitSolvingDialog", showBackground = true)
 @Composable
-fun ExitConfirmationDialogPreview() {
+fun ExitSolvingDialogPreview() {
     QuizCafeTheme {
-        ExitConfirmDialog (
+        ExitSolvingDialog (
             onDismissRequest = {},
             onExitWithDelete = {},
             onExitWithSave = {}

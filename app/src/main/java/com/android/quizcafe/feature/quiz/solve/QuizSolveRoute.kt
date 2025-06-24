@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solve
 
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -13,7 +14,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
-import com.android.quizcafe.feature.quiz.solve.component.ExitConfirmDialog
+import com.android.quizcafe.feature.quiz.solve.component.ExitSolvingDialog
+import com.android.quizcafe.feature.quiz.solve.component.ResumeSolvingDialog
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveEffect
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
@@ -28,32 +30,18 @@ fun QuizSolveRoute(
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     var showExitDialog by remember { mutableStateOf(false)}
-
-    BackHandler(enabled = !showExitDialog) {
-        viewModel.sendIntent(QuizSolveIntent.OnBackClick)
-    }
-
-    if (showExitDialog) {
-        ExitConfirmDialog(
-            onDismissRequest = {
-                showExitDialog = false
-            },
-            onExitWithDelete = {
-                viewModel.sendIntent(QuizSolveIntent.ExitWithDelete)
-            },
-            onExitWithSave = {
-                viewModel.sendIntent(QuizSolveIntent.ExitWithSave)
-            },
-        )
-    }
+    var showResumeDialog by remember { mutableStateOf(false)}
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
-        viewModel.sendIntent(QuizSolveIntent.GetQuizBookLocalId(quizBookId))
-    }
-    LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizSolveIntent.StartSolving(quizBookId))
         viewModel.effect.collect { effect ->
             when (effect) {
+                QuizSolveEffect.ShowResumeDialog -> {
+                    showResumeDialog = true
+                }
+                QuizSolveEffect.CloseResumeDialog -> {
+                    showResumeDialog = false
+                }
                 QuizSolveEffect.ShowExitDialog -> {
                     showExitDialog = true
                 }
@@ -73,6 +61,35 @@ fun QuizSolveRoute(
                 }
             }
         }
+    }
+
+    BackHandler(enabled = !showExitDialog) {
+        viewModel.sendIntent(QuizSolveIntent.OnBackClick)
+    }
+
+    if (showResumeDialog){
+        ResumeSolvingDialog(
+            onResume = {
+                viewModel.sendIntent(QuizSolveIntent.ResumeSolving(resumeWithNewSolving = false))
+            },
+            onStartNew = {
+                viewModel.sendIntent(QuizSolveIntent.ResumeSolving(resumeWithNewSolving = true))
+            }
+        )
+    }
+
+    if (showExitDialog) {
+        ExitSolvingDialog(
+            onDismissRequest = {
+                showExitDialog = false
+            },
+            onExitWithDelete = {
+                viewModel.sendIntent(QuizSolveIntent.ExitWithDelete)
+            },
+            onExitWithSave = {
+                viewModel.sendIntent(QuizSolveIntent.ExitWithSave)
+            },
+        )
     }
 
     QuizSolveScreen(
