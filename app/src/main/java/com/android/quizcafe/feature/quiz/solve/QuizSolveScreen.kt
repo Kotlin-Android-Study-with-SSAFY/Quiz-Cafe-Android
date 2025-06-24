@@ -66,9 +66,10 @@ fun QuizSolveScreen(
             QuizSolveBottomBar(
                 isEnabled = uiState.common.isButtonEnabled,
                 isLastQuestion = uiState.isLastQuestion,
-                isWrongAnswer = uiState.isWrongAnswer,
-                onClickAction = onClickAction,
-                textRes = textRes
+                isFirstQuestion = uiState.isFirstQuestion,
+                onClickActionPrev = { onIntent(QuizSolveIntent.SubmitPrev) },
+                onClickActionNext = onClickAction,
+                textRes = textRightRes
             )
         }
     ) { padding ->
@@ -125,28 +126,59 @@ fun QuizSolveScreen(
 private fun QuizSolveBottomBar(
     isEnabled: Boolean,
     isLastQuestion: Boolean,
-    isWrongAnswer: Boolean,
-    onClickAction: () -> Unit,
+    isFirstQuestion: Boolean,
+    onClickActionPrev: () -> Unit,
+    onClickActionNext: () -> Unit,
     textRes: Int
 ) {
-    QuizCafeButton(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
-        enabled = isEnabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = if (isLastQuestion || isWrongAnswer) yellow_200 else primaryLight,
-            contentColor = scrimLight,
-            disabledContainerColor = surfaceDimLight
-        ),
-        onClick = onClickAction,
-        text = {
-            Text(
-                text = stringResource(textRes),
-                style = quizCafeTypography().titleSmall
+    Row(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        if (!isFirstQuestion) {
+            QuizCafeButton(
+                modifier = Modifier
+                    .weight(1F)
+                    .padding(horizontal = 16.dp),
+                enabled = true,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (isLastQuestion) primaryLight else yellow_200,
+                    contentColor = scrimLight,
+                    disabledContainerColor = surfaceDimLight
+                ),
+                onClick = onClickActionPrev,
+                text = {
+                    Text(
+                        text = stringResource(R.string.solve_btn_prev_text),
+                        style = quizCafeTypography().titleSmall
+                    )
+                }
+            )
+        } else {
+            Spacer(
+                modifier = Modifier
+                    .weight(1F)
+                    .padding(horizontal = 16.dp)
             )
         }
-    )
+        QuizCafeButton(
+            modifier = Modifier
+                .weight(1F)
+                .padding(horizontal = 16.dp),
+            enabled = isEnabled,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = yellow_200,
+                contentColor = scrimLight,
+                disabledContainerColor = surfaceDimLight
+            ),
+            onClick = onClickActionNext,
+            text = {
+                Text(
+                    text = stringResource(textRes),
+                    style = quizCafeTypography().titleSmall
+                )
+            }
+        )
+    }
 }
 
 @Composable
