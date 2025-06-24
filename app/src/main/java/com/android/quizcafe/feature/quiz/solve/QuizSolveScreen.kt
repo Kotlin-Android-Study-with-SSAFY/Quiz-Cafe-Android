@@ -141,7 +141,7 @@ private fun QuizSolveBottomBar(
                     .padding(horizontal = 16.dp),
                 enabled = true,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = if (isLastQuestion) primaryLight else yellow_200,
+                    containerColor = yellow_200,
                     contentColor = scrimLight,
                     disabledContainerColor = surfaceDimLight
                 ),
@@ -166,7 +166,7 @@ private fun QuizSolveBottomBar(
                 .padding(horizontal = 16.dp),
             enabled = isEnabled,
             colors = ButtonDefaults.buttonColors(
-                containerColor = yellow_200,
+                containerColor = if (isLastQuestion) yellow_200 else primaryLight,
                 contentColor = scrimLight,
                 disabledContainerColor = surfaceDimLight
             ),
