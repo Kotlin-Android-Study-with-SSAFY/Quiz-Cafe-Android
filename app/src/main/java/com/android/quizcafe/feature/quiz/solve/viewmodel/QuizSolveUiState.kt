@@ -119,6 +119,8 @@ data class QuizSolveUiState(
             }
         } ?: AnswerState.DEFAULT
     }
+    val isFirstQuestion: Boolean
+        get() = questionInfo.current == 1
 
     val isLastQuestion: Boolean
         get() = questionInfo.current == questionInfo.total

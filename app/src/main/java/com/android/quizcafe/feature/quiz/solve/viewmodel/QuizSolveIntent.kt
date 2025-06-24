@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
@@ -19,7 +20,8 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
     data object SubmitAnswer : QuizSolveIntent()
     data object SubmitNext : QuizSolveIntent()
     data object SubmitPrev : QuizSolveIntent()
-    data object GradeQuizSuccess : QuizSolveIntent()
+    data object GradeQuizBookSuccess : QuizSolveIntent()
+    data class GradeQuizSuccess(val quizGrade: QuizGrade?) : QuizSolveIntent()
     data class SolveQuizSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
     data class GradeQuizError(val message: String?) : QuizSolveIntent()
     data object ShowExplanation : QuizSolveIntent()

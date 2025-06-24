@@ -7,11 +7,15 @@ import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import com.android.quizcafe.core.domain.model.value.QuizId
 import kotlinx.coroutines.flow.Flow
 
 interface QuizBookSolvingRepository {
 
     fun createEmptyQuizBookGrade(id: QuizBookId): Flow<Resource<QuizBookGradeLocalId>>
+
+    // 퀴즈 풀이 로컬 기록 가져오기
+    fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>>
 
     // 퀴즈북 풀이 로컬 기록 가져오기
     fun getQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<QuizBookGrade>>

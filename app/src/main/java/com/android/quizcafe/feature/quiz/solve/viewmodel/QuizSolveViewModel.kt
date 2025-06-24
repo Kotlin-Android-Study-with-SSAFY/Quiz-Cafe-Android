@@ -1,6 +1,7 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
 import android.util.Log
+import androidx.compose.runtime.snapshotFlow
 import androidx.lifecycle.viewModelScope
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
@@ -8,11 +9,13 @@ import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
+import com.android.quizcafe.core.domain.usecase.solving.GetQuizGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GradeQuizUseCase
 import com.android.quizcafe.core.domain.usecase.solving.SolveQuizBookUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,7 +25,8 @@ class QuizSolveViewModel @Inject constructor(
     private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
     private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase,
     private val gradeQuizUseCase: GradeQuizUseCase,
-    private val solveQuizBookUseCase: SolveQuizBookUseCase
+    private val solveQuizBookUseCase: SolveQuizBookUseCase,
+    private val getQuizGradeUseCase: GetQuizGradeUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
@@ -68,7 +72,12 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.GradeQuizError -> {
                 emitEffect(QuizSolveEffect.ShowErrorDialog(intent.message ?: ""))
             }
-
+            is QuizSolveIntent.SubmitPrev -> {
+                getQuizAnswer()
+            }
+            QuizSolveIntent.GradeQuizBookSuccess -> {
+                getQuizAnswer()
+            }
             else -> Unit
         }
     }
@@ -145,18 +154,36 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     currentIndex = currentState.currentIndex - 1,
                 )
-            QuizSolveIntent.GradeQuizSuccess -> {
+             is QuizSolveIntent.GradeQuizSuccess -> {
+                 val quizGrade = intent.quizGrade
+                 if(quizGrade == null){
+                     currentState
+                 }
+                 else {
+                     currentState.copy(
+                         common = CommonState(true),
+                         subjective = currentState.subjective.copy(
+                             answer = quizGrade.userAnswer
+                         ),
+                         mcq = currentState.mcq.copy(
+                             selectedContent = quizGrade.userAnswer
+                         )
+                     )
+                 }
+             }
+            QuizSolveIntent.GradeQuizBookSuccess -> {
                 if (!currentState.isLastQuestion) {
                     currentState.copy(
                         currentIndex = currentState.currentIndex + 1,
                         common = CommonState(false),
                         subjective = currentState.subjective.copy(
                             answer = ""
-                        ) ,
+                        ),
                         mcq = currentState.mcq.copy(
                             selectedContent = ""
                         )
                     )
+
                 } else
                     currentState
             }
@@ -245,7 +272,7 @@ class QuizSolveViewModel @Inject constructor(
             ).collect {
                 when (it) {
                     is Resource.Success -> {
-                        sendIntent(QuizSolveIntent.GradeQuizSuccess)
+                        sendIntent(QuizSolveIntent.GradeQuizBookSuccess)
                         if(uiState.isLastQuestion){
                             sendIntent(QuizSolveIntent.SubmitAnswer)
                         }
@@ -287,6 +314,34 @@ class QuizSolveViewModel @Inject constructor(
 
                     is Resource.Failure -> {
                         Log.d("solveQuizBookUseCase", it.errorMessage)
+                        sendIntent(QuizSolveIntent.GradeQuizError(it.errorMessage))
+                    }
+                }
+            }
+        } else {
+            sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
+        }
+    }
+    private suspend fun getQuizAnswer() {
+        val localId = state.value.quizBookLocalId
+        val quizId = state.value.currentQuiz?.id
+        if (localId != null && quizId != null) {
+            getQuizGradeUseCase(
+                quizBookGradeLocalId = localId,
+                quizId = quizId
+            ).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        sendIntent(QuizSolveIntent.GradeQuizSuccess(it.data))
+                        Log.d("getQuizGradeUseCase", "Success")
+                    }
+
+                    is Resource.Loading -> {
+                        Log.d("getQuizGradeUseCase", "Loading")
+                    }
+
+                    is Resource.Failure -> {
+                        Log.d("getQuizGradeUseCase", it.errorMessage)
                         sendIntent(QuizSolveIntent.GradeQuizError(it.errorMessage))
                     }
                 }
