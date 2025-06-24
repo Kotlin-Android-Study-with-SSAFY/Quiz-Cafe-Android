@@ -26,7 +26,6 @@ val mainTabs = listOf(
     MainTab(MainRoute.MyPage.route, R.string.tab_title_mypage)
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
