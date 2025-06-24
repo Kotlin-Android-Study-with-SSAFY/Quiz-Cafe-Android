@@ -156,7 +156,9 @@ class QuizSolveViewModel @Inject constructor(
                 if (!currentState.isLastQuestion) {
                     currentState.copy(
                         currentIndex = currentState.currentIndex + 1,
-                        common = CommonState(false)
+                        common = currentState.common.copy(
+                            isButtonEnabled = false
+                        )
                     )
                 } else {
                     currentState
@@ -199,6 +201,8 @@ class QuizSolveViewModel @Inject constructor(
                     val isResume = it.data.quizGrades.isNotEmpty()
                     if (isResume) {
                         emitEffect(QuizSolveEffect.ShowResumeDialog)
+                    }else{
+                        sendIntent(QuizSolveIntent.StartTimer)
                     }
                     sendIntent(QuizSolveIntent.SuccessGetQuizBookGrade(it.data))
                 }
