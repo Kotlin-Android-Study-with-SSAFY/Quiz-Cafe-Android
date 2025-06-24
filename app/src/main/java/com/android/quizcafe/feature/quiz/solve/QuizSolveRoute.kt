@@ -1,6 +1,5 @@
 package com.android.quizcafe.feature.quiz.solve
 
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
@@ -29,8 +28,8 @@ fun QuizSolveRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    var showExitDialog by remember { mutableStateOf(false)}
-    var showResumeDialog by remember { mutableStateOf(false)}
+    var showExitDialog by remember { mutableStateOf(false) }
+    var showResumeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.sendIntent(QuizSolveIntent.StartSolving(quizBookId))
@@ -46,7 +45,7 @@ fun QuizSolveRoute(
                     showExitDialog = true
                 }
                 QuizSolveEffect.NavigateToBack -> {
-                    if(showExitDialog) showExitDialog = false
+                    if (showExitDialog) showExitDialog = false
                     navigateToBack()
                 }
                 is QuizSolveEffect.NavigateToQuizBookSolvingResult -> {
@@ -67,7 +66,7 @@ fun QuizSolveRoute(
         viewModel.sendIntent(QuizSolveIntent.OnBackClick)
     }
 
-    if (showResumeDialog){
+    if (showResumeDialog) {
         ResumeSolvingDialog(
             onResume = {
                 viewModel.sendIntent(QuizSolveIntent.ResumeSolving(resumeWithNewSolving = false))

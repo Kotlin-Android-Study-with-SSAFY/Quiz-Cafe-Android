@@ -29,7 +29,7 @@ class QuizSolveViewModel @Inject constructor(
         viewModelScope.launch {
             while (true) {
                 delay(1_000L)
-                if(state.value.common.isTimerActive){
+                if (state.value.common.isTimerActive) {
                     sendIntent(QuizSolveIntent.TickTime)
                 }
             }
@@ -37,7 +37,6 @@ class QuizSolveViewModel @Inject constructor(
     }
 
     override suspend fun handleIntent(intent: QuizSolveIntent) {
-
         when (intent) {
             is QuizSolveIntent.StartSolving -> {
                 val quizBookId = QuizBookId(intent.quizBookId)
@@ -45,7 +44,7 @@ class QuizSolveViewModel @Inject constructor(
                 getQuizBookGrade(quizBookId)
             }
             is QuizSolveIntent.ResumeSolving -> {
-                if(intent.resumeWithNewSolving){
+                if (intent.resumeWithNewSolving) {
                     val quizBookId = state.value.quizBook?.id
                     deleteQuizBookGrade()
                     quizBookId?.let {
@@ -147,7 +146,7 @@ class QuizSolveViewModel @Inject constructor(
                 )
             }
 
-            is QuizSolveIntent.SuccessGetQuizBookGrade ->{
+            is QuizSolveIntent.SuccessGetQuizBookGrade -> {
                 currentState.copy(
                     quizBookGrade = intent.quizBookGrade,
                     currentIndex = intent.quizBookGrade.quizGrades.size
@@ -159,8 +158,9 @@ class QuizSolveViewModel @Inject constructor(
                         currentIndex = currentState.currentIndex + 1,
                         common = CommonState(false)
                     )
-                } else
+                } else {
                     currentState
+                }
             }
             else -> currentState
         }
@@ -186,17 +186,18 @@ class QuizSolveViewModel @Inject constructor(
             }
         }
     }
+
     // 여기서 QuizGrade 정보들이 있냐없냐로 ResumeDialog 띄울지 말지 결정
     private suspend fun getQuizBookGrade(
         quizBookId: QuizBookId,
-    ){
+    ) {
         getOrCreateQuizBookGradeUseCase(quizBookId = quizBookId).collect {
             when (it) {
                 is Resource.Success -> {
                     Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")
                     Log.d("getOrCreateQuizBookGradeUseCase", "quizBookGrade : ${it.data}")
                     val isResume = it.data.quizGrades.isNotEmpty()
-                    if(isResume){
+                    if (isResume) {
                         emitEffect(QuizSolveEffect.ShowResumeDialog)
                     }
                     sendIntent(QuizSolveIntent.SuccessGetQuizBookGrade(it.data))
@@ -226,7 +227,7 @@ class QuizSolveViewModel @Inject constructor(
                     else -> Unit
                 }
             }
-        }?: Log.d("deleteQuizBookGrade", "quizBookLocalId is null")
+        } ?: Log.d("deleteQuizBookGrade", "quizBookLocalId is null")
     }
     private suspend fun saveQuizToLocal() {
         val uiState = state.value
@@ -246,7 +247,7 @@ class QuizSolveViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {
                         sendIntent(QuizSolveIntent.GradeQuizSuccess)
-                        if(uiState.isLastQuestion){
+                        if (uiState.isLastQuestion) {
                             sendIntent(QuizSolveIntent.SubmitAnswer)
                         }
                         Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")

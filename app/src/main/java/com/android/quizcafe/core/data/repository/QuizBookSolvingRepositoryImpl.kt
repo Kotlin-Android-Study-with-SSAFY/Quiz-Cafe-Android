@@ -50,9 +50,9 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Loading)
         val quizBookGradeRelation = quizBookGradeDao.getQuizBookGrade(quizBookId.value)
 
-        if(quizBookGradeRelation != null){
+        if (quizBookGradeRelation != null) {
             emit(Resource.Success(quizBookGradeRelation.toDomain()))
-        }else{
+        } else {
             val entity = QuizBookGradeEntity(quizBookId = quizBookId.value)
             val quizBookGradeLocalId = quizBookGradeDao.upsertQuizBookGrade(entity)
 
@@ -74,7 +74,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         val deletedCnt = quizBookGradeDao.deleteQuizBookGrade(id.value)
         if (deletedCnt == 1) {
             emit(Resource.Success(Unit))
-        }else{
+        } else {
             emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류 : deletedCnt = $deletedCnt", code = LocalErrorCode.ROOM_ERROR))
         }
     }.catch { e ->
@@ -98,7 +98,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> =
         apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
             quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
-    }
+        }
 
     // 퀴즈 1개 풀이 기록 저장 및 수정
     override fun upsertQuizGrade(quizGrade: QuizGrade): Flow<Resource<Unit>> = flow {

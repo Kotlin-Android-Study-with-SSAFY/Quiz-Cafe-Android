@@ -93,19 +93,17 @@ fun ExitSolvingDialog(
                             Text(text = stringResource(R.string.dialog_exit_with_save))
                         }
                     }
-
                 }
             }
         }
     }
 }
 
-
 @Preview(name = "ExitSolvingDialog", showBackground = true)
 @Composable
 fun ExitSolvingDialogPreview() {
     QuizCafeTheme {
-        ExitSolvingDialog (
+        ExitSolvingDialog(
             onDismissRequest = {},
             onExitWithDelete = {},
             onExitWithSave = {}

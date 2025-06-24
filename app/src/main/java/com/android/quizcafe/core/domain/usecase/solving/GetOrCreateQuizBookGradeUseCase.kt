@@ -9,7 +9,7 @@ import javax.inject.Inject
 
 class GetOrCreateQuizBookGradeUseCase @Inject constructor(
     private val quizBookSolvingRepository: QuizBookSolvingRepository
-){
-    operator fun invoke(quizBookId: QuizBookId) : Flow<Resource<QuizBookGrade>> =
-            quizBookSolvingRepository.getOrCreateQuizBookGrade(quizBookId)
+) {
+    operator fun invoke(quizBookId: QuizBookId): Flow<Resource<QuizBookGrade>> =
+        quizBookSolvingRepository.getOrCreateQuizBookGrade(quizBookId)
 }

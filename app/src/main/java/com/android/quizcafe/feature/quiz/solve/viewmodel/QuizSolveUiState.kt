@@ -4,7 +4,6 @@ import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import java.util.Locale
@@ -61,7 +60,7 @@ data class QuizSolveUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
     val quizBook: QuizBook? = null,
-    val quizBookGrade : QuizBookGrade? = null,
+    val quizBookGrade: QuizBookGrade? = null,
     val currentIndex: Int = 0,
     val mcq: McqState = McqState(
         options = listOf(

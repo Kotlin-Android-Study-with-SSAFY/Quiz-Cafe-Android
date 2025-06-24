@@ -7,7 +7,7 @@ import com.android.quizcafe.core.ui.base.BaseContract
 
 sealed class QuizSolveIntent : BaseContract.ViewIntent {
     data class StartSolving(val quizBookId: Long) : QuizSolveIntent()
-    data class ResumeSolving(val resumeWithNewSolving : Boolean) : QuizSolveIntent()
+    data class ResumeSolving(val resumeWithNewSolving: Boolean) : QuizSolveIntent()
 
     data class SuccessGetQuizBook(val data: QuizBook) : QuizSolveIntent()
     data class SuccessGetQuizBookGrade(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
