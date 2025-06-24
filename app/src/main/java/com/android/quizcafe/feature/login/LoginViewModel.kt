@@ -1,6 +1,7 @@
 package com.android.quizcafe.feature.login
 
 import android.util.Log
+import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.usecase.auth.GoogleLoginUseCase
@@ -12,7 +13,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
-    private val googleLoginUseCase: GoogleLoginUseCase
+    private val googleLoginUseCase: GoogleLoginUseCase,
+    private val authManager: AuthManager
 ) : BaseViewModel<LoginViewState, LoginIntent, LoginEffect>(
     initialState = LoginViewState()
 ) {
@@ -63,6 +65,15 @@ class LoginViewModel @Inject constructor(
                 }
             }
 
+            is LoginIntent.ClickGoogleLogin -> {
+                val idToken = authManager.signInWithGoogle()
+                if (idToken != null) {
+                    sendIntent(LoginIntent.GoogleLogin(idToken))
+                } else {
+                    sendIntent(LoginIntent.FailLogin("구글 로그인에 실패했습니다.", ErrorTargetField.GENERAL))
+                }
+            }
+
             is LoginIntent.GoogleLogin -> {
                 googleLoginUseCase(intent.idToken).collect { result ->
                     when (result) {
@@ -99,8 +110,8 @@ class LoginViewModel @Inject constructor(
             )
 
             LoginIntent.ClickLogin -> currentState.copy(isLoading = true)
+            LoginIntent.ClickGoogleLogin -> currentState.copy(isLoading = true)
             LoginIntent.ClickSignUp -> currentState.copy(isLoading = false)
-
             LoginIntent.SuccessLogin -> currentState.copy(isLoading = false)
 
             is LoginIntent.GoogleLogin -> currentState
@@ -109,6 +120,8 @@ class LoginViewModel @Inject constructor(
                 emailErrorMessage = if (intent.targetField == ErrorTargetField.EMAIL) intent.errorMessage else null,
                 passwordErrorMessage = if (intent.targetField == ErrorTargetField.PASSWORD) intent.errorMessage else null
             )
+            is LoginIntent.GoogleLoginSuccess,
+            is LoginIntent.GoogleLoginFailure -> currentState.copy(isLoading = false)
         }
     }
 }

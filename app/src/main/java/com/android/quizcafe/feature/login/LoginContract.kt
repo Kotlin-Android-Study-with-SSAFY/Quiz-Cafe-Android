@@ -19,10 +19,14 @@ sealed class LoginIntent : BaseContract.ViewIntent {
     data class GoogleLogin(val idToken: String) : LoginIntent()
 
     data object ClickLogin : LoginIntent()
+
+    data object ClickGoogleLogin : LoginIntent()
+    data class GoogleLoginSuccess(val idToken: String) : LoginIntent()
+    data class GoogleLoginFailure(val errorMessage: String? = null) : LoginIntent()
+
     data object ClickSignUp : LoginIntent()
 
     data object SuccessLogin : LoginIntent()
-
     data class FailLogin(val errorMessage: String? = null, val targetField: ErrorTargetField) : LoginIntent()
 }
 
