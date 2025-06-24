@@ -3,6 +3,7 @@ package com.android.quizcafe.di
 import com.android.quizcafe.core.data.di.ServiceModule
 import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.data.remote.service.QuizBookService
+import com.android.quizcafe.core.data.remote.service.QuizBookSolvingService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -26,7 +27,13 @@ object FakeServiceModule {
 
     @Provides
     @Singleton
-    fun provideQuizBookService(@Named("token") retrofit: Retrofit): QuizBookService {
+    fun provideQuizBookService(@Named("default") retrofit: Retrofit): QuizBookService {
         return retrofit.create(QuizBookService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuizBookSolvingService(@Named("default") retrofit: Retrofit): QuizBookSolvingService {
+        return retrofit.create(QuizBookSolvingService::class.java)
     }
 }

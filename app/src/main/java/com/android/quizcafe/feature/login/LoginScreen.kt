@@ -16,7 +16,7 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 
 @Composable
 fun LoginScreen(
-    state: LoginViewState,
+    state: LoginUiState,
     sendIntent: (LoginIntent) -> Unit,
     onClickGoogleLogin: () -> Unit
 ) {
@@ -67,7 +67,7 @@ fun LoginScreen(
 fun LoginScreenPreview() {
     QuizCafeTheme {
         LoginScreen(
-            LoginViewState(),
+            LoginUiState(),
             sendIntent = {},
             onClickGoogleLogin = {}
         )

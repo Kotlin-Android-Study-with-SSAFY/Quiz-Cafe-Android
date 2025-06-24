@@ -11,8 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class QuizBookListViewModel @Inject constructor(
     private val getQuizBookListUseCase: GetQuizBookListUseCase
-) : BaseViewModel<QuizBookListViewState, QuizBookListIntent, QuizBookListEffect>(
-    initialState = QuizBookListViewState()
+) : BaseViewModel<QuizBookListUiState, QuizBookListIntent, QuizBookListEffect>(
+    initialState = QuizBookListUiState()
 ) {
 
     override suspend fun handleIntent(intent: QuizBookListIntent) {
@@ -26,7 +26,7 @@ class QuizBookListViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: QuizBookListViewState, intent: QuizBookListIntent): QuizBookListViewState {
+    override fun reduce(currentState: QuizBookListUiState, intent: QuizBookListIntent): QuizBookListUiState {
         return when (intent) {
             QuizBookListIntent.LoadQuizBooks -> currentState.copy(isLoading = true, errorMessage = null)
             is QuizBookListIntent.ClickQuizBook -> currentState.copy(isLoading = false, errorMessage = null)

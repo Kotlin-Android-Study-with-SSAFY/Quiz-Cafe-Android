@@ -8,6 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
+import com.android.quizcafe.feature.categorylist.CategoryEffect
+import com.android.quizcafe.feature.categorylist.CategoryIntent
 
 @Composable
 fun CategoryRoute(
@@ -44,7 +46,7 @@ fun CategoryRoute(
         }
     }
 
-    CategoryListScreen(
+    CategoryPickerScreen(
         state = state,
         sendIntent = viewModel::sendIntent
     )

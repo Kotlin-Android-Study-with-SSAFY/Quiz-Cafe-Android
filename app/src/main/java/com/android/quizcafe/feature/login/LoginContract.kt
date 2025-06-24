@@ -2,13 +2,13 @@ package com.android.quizcafe.feature.login
 
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class LoginViewState(
+data class LoginUiState(
     val email: String = "",
     val password: String = "",
     val isLoading: Boolean = false,
     val emailErrorMessage: String? = null,
     val passwordErrorMessage: String? = null,
-) : BaseContract.ViewState {
+) : BaseContract.UiState {
     val isLoginEnabled get() = password.isNotBlank() && email.isNotBlank() && emailErrorMessage == null && passwordErrorMessage == null
 }
 

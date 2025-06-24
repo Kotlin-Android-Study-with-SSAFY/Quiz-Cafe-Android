@@ -1,7 +1,7 @@
 package com.android.quizcafe.core.ui.base
 
-interface BaseContract<State : BaseContract.ViewState, Intent : BaseContract.ViewIntent, Effect : BaseContract.ViewEffect> {
-    interface ViewState
+interface BaseContract<State : BaseContract.UiState, Intent : BaseContract.ViewIntent, Effect : BaseContract.ViewEffect> {
+    interface UiState
 
     interface ViewIntent
 
