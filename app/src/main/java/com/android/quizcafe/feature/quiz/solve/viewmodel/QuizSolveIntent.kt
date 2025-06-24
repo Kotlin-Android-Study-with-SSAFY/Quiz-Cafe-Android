@@ -25,4 +25,6 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
 
     data object OnBackClick : QuizSolveIntent()
     data object TickTime : QuizSolveIntent()
+    data object ExitWithDelete : QuizSolveIntent()
+    data object ExitWithSave : QuizSolveIntent()
 }

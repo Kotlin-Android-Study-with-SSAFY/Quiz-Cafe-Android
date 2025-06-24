@@ -6,6 +6,7 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.usecase.quizbook.GetQuizBookUseCase
+import com.android.quizcafe.core.domain.usecase.solving.DeleteQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GetQuizBookLocalIdUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GradeQuizUseCase
@@ -22,7 +23,8 @@ class QuizSolveViewModel @Inject constructor(
     private val getQuizBookLocalIdUseCase: GetQuizBookLocalIdUseCase,
     private val getQuizBookGradeUseCase: GetQuizBookGradeUseCase,
     private val gradeQuizUseCase: GradeQuizUseCase,
-    private val solveQuizBookUseCase: SolveQuizBookUseCase
+    private val solveQuizBookUseCase: SolveQuizBookUseCase,
+    private val deleteQuizBookGradeUseCase: DeleteQuizBookGradeUseCase
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
 ) {
@@ -38,7 +40,7 @@ class QuizSolveViewModel @Inject constructor(
     override suspend fun handleIntent(intent: QuizSolveIntent) {
         when (intent) {
             QuizSolveIntent.OnBackClick -> {
-                emitEffect(QuizSolveEffect.NavigatePopBack)
+                emitEffect(QuizSolveEffect.ShowExitDialog)
             }
 
             is QuizSolveIntent.LoadQuizBook -> {
@@ -50,17 +52,22 @@ class QuizSolveViewModel @Inject constructor(
             }
 
             is QuizSolveIntent.GetQuizBookGradeResult -> {
-                getQuizBookGradeResult(intent.quizBookLocalId)
+                getQuizBookGrade(intent.quizBookLocalId)
             }
 
             is QuizSolveIntent.SubmitNext -> {
                 saveQuizToLocal()
             }
-
             is QuizSolveIntent.SubmitAnswer -> {
                 submitQuizAnswer()
             }
 
+            is QuizSolveIntent.ExitWithDelete -> {
+                deleteQuizBookGrade()
+            }
+            is QuizSolveIntent.ExitWithSave -> {
+                emitEffect(QuizSolveEffect.NavigateToBack)
+            }
             is QuizSolveIntent.SolveQuizSuccess -> {
                 emitEffect(QuizSolveEffect.NavigateToQuizBookSolvingResult(intent.quizBookGradeServerId))
             }
@@ -68,7 +75,6 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.GradeQuizError -> {
                 emitEffect(QuizSolveEffect.ShowErrorDialog(intent.message ?: ""))
             }
-
             else -> Unit
         }
     }
@@ -140,7 +146,6 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     quizGrades = intent.quizBookGrade.quizGrades
                 )
-
             QuizSolveIntent.GradeQuizSuccess -> {
                 if (!currentState.isLastQuestion) {
                     currentState.copy(
@@ -150,7 +155,6 @@ class QuizSolveViewModel @Inject constructor(
                 } else
                     currentState
             }
-
             else -> currentState
         }
     }
@@ -197,8 +201,7 @@ class QuizSolveViewModel @Inject constructor(
             }
         }
     }
-
-    private suspend fun getQuizBookGradeResult(id: QuizBookGradeLocalId) {
+    private suspend fun getQuizBookGrade(id: QuizBookGradeLocalId) {
         getQuizBookGradeUseCase(
             id
         ).collect {
@@ -218,7 +221,23 @@ class QuizSolveViewModel @Inject constructor(
             }
         }
     }
-
+    private suspend fun deleteQuizBookGrade() {
+        val quizBookLocalId = state.value.quizBookLocalId
+        quizBookLocalId?.let {
+            deleteQuizBookGradeUseCase(it).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        Log.d("deleteQuizBookGradeUseCase", "Get QuizBookDetail Success")
+                        emitEffect(QuizSolveEffect.NavigateToBack)
+                    }
+                    is Resource.Failure -> {
+                        Log.d("deleteQuizBookGradeUseCase", it.errorMessage)
+                    }
+                    else -> Unit
+                }
+            }
+        }?: Log.d("deleteQuizBookGrade", "quizBookLocalId is null")
+    }
     private suspend fun saveQuizToLocal() {
         val uiState = state.value
         val quiz = uiState.currentQuiz
@@ -257,7 +276,6 @@ class QuizSolveViewModel @Inject constructor(
             sendIntent(QuizSolveIntent.GradeQuizError("문제 발생"))
         }
     }
-
     private suspend fun submitQuizAnswer() {
         val localId = state.value.quizBookLocalId
         val elapsedTimeInSeconds: Long = state.value.timer.elapsedSeconds.toLong()

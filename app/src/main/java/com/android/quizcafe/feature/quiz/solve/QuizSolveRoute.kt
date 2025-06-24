@@ -1,14 +1,19 @@
 package com.android.quizcafe.feature.quiz.solve
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
+import com.android.quizcafe.feature.quiz.solve.component.ExitConfirmDialog
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveEffect
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
@@ -22,6 +27,25 @@ fun QuizSolveRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
+    var showExitDialog by remember { mutableStateOf(false)}
+
+    BackHandler(enabled = !showExitDialog) {
+        viewModel.sendIntent(QuizSolveIntent.OnBackClick)
+    }
+
+    if (showExitDialog) {
+        ExitConfirmDialog(
+            onDismissRequest = {
+                showExitDialog = false
+            },
+            onExitWithDelete = {
+                viewModel.sendIntent(QuizSolveIntent.ExitWithDelete)
+            },
+            onExitWithSave = {
+                viewModel.sendIntent(QuizSolveIntent.ExitWithSave)
+            },
+        )
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
@@ -30,13 +54,16 @@ fun QuizSolveRoute(
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
-                QuizSolveEffect.NavigatePopBack -> {
+                QuizSolveEffect.ShowExitDialog -> {
+                    showExitDialog = true
+                }
+                QuizSolveEffect.NavigateToBack -> {
+                    if(showExitDialog) showExitDialog = false
                     navigateToBack()
                 }
                 is QuizSolveEffect.NavigateToQuizBookSolvingResult -> {
                     navigateToQuizBookSolvingResult(effect.quizBookGradeServerId)
                 }
-
                 is QuizSolveEffect.ShowErrorDialog -> {
                     Toast.makeText(
                         context,

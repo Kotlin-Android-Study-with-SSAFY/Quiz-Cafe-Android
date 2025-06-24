@@ -204,7 +204,7 @@ class QuizBookSolvingRepositoryTest {
 
         // When
         val solveResults = mutableListOf<Resource<QuizBookGradeServerId>>()
-        repository.solveQuizBook(quizBookGradeLocalId).collect(solveResults::add)
+        repository.solveQuizBook(quizBookGradeLocalId,1L).collect(solveResults::add)
 
         // Then
         assertEquals(2, solveResults.size)

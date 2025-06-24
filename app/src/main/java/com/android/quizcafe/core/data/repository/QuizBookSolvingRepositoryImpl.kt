@@ -76,6 +76,18 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
+    override fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading)
+        val deletedCnt = quizBookGradeDao.deleteQuizBookGrade(id.value)
+        if (deletedCnt == 1) {
+            emit(Resource.Success(Unit))
+        }else{
+            emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류 : deletedCnt = $deletedCnt", code = LocalErrorCode.ROOM_ERROR))
+        }
+    }.catch { e ->
+        emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
+    }
+
     override fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>> = flow {
         val quizBookSolvingId = id.value
         if (quizBookSolvingId == null) {

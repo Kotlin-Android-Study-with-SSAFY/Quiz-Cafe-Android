@@ -19,5 +19,5 @@ interface QuizBookGradeDao {
     suspend fun getQuizBookGrade(localId: Long): QuizBookGradeWithQuizGradesRelation?
 
     @Query("DELETE FROM QuizBookGradeEntity WHERE localId = :localId")
-    suspend fun deleteQuizBookGrade(localId: Long)
+    suspend fun deleteQuizBookGrade(localId: Long) : Int
 }
