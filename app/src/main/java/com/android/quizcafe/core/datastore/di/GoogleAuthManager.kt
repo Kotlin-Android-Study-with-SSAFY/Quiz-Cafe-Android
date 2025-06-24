@@ -2,7 +2,6 @@ package com.android.quizcafe.core.datastore.di
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.credentials.ClearCredentialStateRequest
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
@@ -37,7 +36,6 @@ class GoogleAuthManager @Inject constructor(
             val googleCredential = GoogleIdTokenCredential.createFrom(credential.data)
             googleCredential.idToken
         } catch (e: Exception) {
-            Toast.makeText(context, "Google 로그인 실패: ${e.message}", Toast.LENGTH_SHORT).show()
             Log.d("googleLogin", "LoginRoute: ${e.message}")
             null
         }
