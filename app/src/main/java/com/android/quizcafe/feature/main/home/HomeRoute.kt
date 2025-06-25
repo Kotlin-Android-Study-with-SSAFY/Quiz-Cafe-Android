@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.android.quizcafe.feature.main.mypage.MyPageIntent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -19,7 +20,9 @@ fun HomeRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sendIntent(HomeIntent.FetchRecord)
+    }
 
+    LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is HomeEffect.ShowErrorDialog -> {

@@ -1,9 +1,9 @@
 package com.android.quizcafe.core.data.repository
 
 import com.android.quizcafe.core.common.network.HttpStatus
-import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
 import com.android.quizcafe.core.data.mapper.quizbook.toDomain
+import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.model.solving.request.McqOptionSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizBookSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizSolvingRequestDto
@@ -14,13 +14,13 @@ import com.android.quizcafe.core.database.dao.quiz.QuizDao
 import com.android.quizcafe.core.database.dao.quiz.QuizGradeDao
 import com.android.quizcafe.core.database.dao.quizBook.QuizBookDao
 import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
-import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
+import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
-import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.collections.map
+
 class QuizBookSolvingRepositoryImpl @Inject constructor(
     private val quizGradeDao: QuizGradeDao,
     private val quizDao: QuizDao,
@@ -89,11 +89,10 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> = flow {
+    override fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>> =
         apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
             quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
         }
-    }
 
     // 퀴즈 1개 풀이 기록 저장 및 수정
     override fun upsertQuizGrade(quizGrade: QuizGrade): Flow<Resource<Unit>> = flow {
