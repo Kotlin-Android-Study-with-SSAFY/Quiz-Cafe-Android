@@ -11,14 +11,14 @@ import java.util.TimeZone
 
 fun getGrassColor(count: Int): Color = when {
     count == 0 -> Color.White
-    count == 1 -> grass1
-    count in 2..3 -> grass2
-    count >= 4 -> grass3
+    count in 1..10 -> grass1
+    count in 11..30 -> grass2
+    count >= 31 -> grass3
     else -> Color.LightGray
 }
 
 fun rememberSdf(timeZone: TimeZone): SimpleDateFormat =
-    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()).apply {
+    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
         this.timeZone = timeZone
     }
 

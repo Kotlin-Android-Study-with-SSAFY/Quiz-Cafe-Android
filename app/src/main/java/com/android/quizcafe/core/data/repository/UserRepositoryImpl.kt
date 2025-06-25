@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.repository
 
+import android.util.Log
 import com.android.quizcafe.core.data.mapper.quizbook.toDomain
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
@@ -48,8 +49,13 @@ class UserRepositoryImpl @Inject constructor(
         val quizCount = records.sumOf { it.quizSolvingList.size }
         val quizBookCount = records.map { it.quizBookId }.distinct().count()
         val quizSolvingRecord =
-            records.asSequence().flatMap { it.quizSolvingList }.groupingBy { it.completedAt.take(10) }
-                .eachCount().toSortedMap()
+            records.asSequence()
+                .flatMap { it.quizSolvingList }
+                .filter { it.completedAt.isNotBlank() }
+                .map { it.completedAt.take(10) }
+                .groupingBy { it }
+                .eachCount()
+                .toSortedMap()
 
         emit(
             Resource.Success(

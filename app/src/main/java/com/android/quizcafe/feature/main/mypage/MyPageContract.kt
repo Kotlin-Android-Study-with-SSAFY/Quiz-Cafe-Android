@@ -9,7 +9,8 @@ data class MyPageUiState(
     val quizCount: Int = 0,
     val quizBookCount: Int = 0,
     val quizSolvingRecord: Map<String, Int> = emptyMap(),
-    val joinDateStr: String = "",
+    // TODO : 사용자 회원가입일
+    val joinDateStr: String = "2025-06-20T06:48:33",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
 ) : BaseContract.UiState
