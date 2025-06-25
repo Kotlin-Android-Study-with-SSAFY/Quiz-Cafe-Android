@@ -25,7 +25,7 @@ interface UserService {
     ): NetworkResult<ApiResponse<Unit>>
 
     @GET("/user/quiz-book")
-    suspend fun getMyQuizBooks(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>
+    suspend fun getCreatedQuizBooksByMe(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>
 
     @PATCH("/user/password")
     suspend fun updatePassword(

@@ -3,7 +3,7 @@ package com.android.quizcafe.feature.main.mypage
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class MyPageViewState(
+data class MyPageUiState(
     val nickname: String = "",
     val email: String = "",
     val quizCount: Int = 0,
@@ -12,7 +12,7 @@ data class MyPageViewState(
     val joinDateStr: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class MyPageIntent : BaseContract.ViewIntent {
     data object LoadUserInfo : MyPageIntent()

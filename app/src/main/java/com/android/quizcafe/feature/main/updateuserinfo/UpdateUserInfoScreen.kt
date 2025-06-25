@@ -22,7 +22,7 @@ import com.android.quizcafe.core.ui.TopAppBarTitle
 @Composable
 fun UpdateUserInfoScreen(
     step: Int,
-    state: UpdateUserInfoViewState,
+    state: UpdateUserInfoUiState,
     intent: (UpdateUserInfoIntent) -> Unit = {},
     onNavigateBack: () -> Unit
 ) {
@@ -79,7 +79,7 @@ fun UpdateUserInfoScreen(
 fun PreviewUpdateUserInfoScreen_Nickname() {
     UpdateUserInfoScreen(
         step = 0,
-        state = UpdateUserInfoViewState(
+        state = UpdateUserInfoUiState(
             nickname = "새로운닉네임",
             nicknameError = null,
             isUpdateNicknameEnabled = true
@@ -94,7 +94,7 @@ fun PreviewUpdateUserInfoScreen_Nickname() {
 fun PreviewUpdateUserInfoScreen_Nickname_Error() {
     UpdateUserInfoScreen(
         step = 0,
-        state = UpdateUserInfoViewState(
+        state = UpdateUserInfoUiState(
             nickname = "짧음",
             nicknameError = "닉네임은 2자 이상이어야 합니다.",
             isUpdateNicknameEnabled = false
@@ -109,7 +109,7 @@ fun PreviewUpdateUserInfoScreen_Nickname_Error() {
 fun PreviewUpdateUserInfoScreen_Password() {
     UpdateUserInfoScreen(
         step = 1,
-        state = UpdateUserInfoViewState(
+        state = UpdateUserInfoUiState(
             currentPassword = "",
             newPassword = "",
             confirmPassword = "",
@@ -125,7 +125,7 @@ fun PreviewUpdateUserInfoScreen_Password() {
 fun PreviewUpdateUserInfoScreen_Password_Error() {
     UpdateUserInfoScreen(
         step = 1,
-        state = UpdateUserInfoViewState(
+        state = UpdateUserInfoUiState(
             currentPassword = "wrongpw",
             newPassword = "123",
             confirmPassword = "12",

@@ -11,8 +11,8 @@ import javax.inject.Inject
 class UpdateUserInfoViewModel @Inject constructor(
     private val updateNicknameUseCase: UpdateNicknameUseCase,
     private val updatePasswordUseCase: UpdatePasswordUseCase
-) : BaseViewModel<UpdateUserInfoViewState, UpdateUserInfoIntent, UpdateUserInfoEffect>(
-    initialState = UpdateUserInfoViewState()
+) : BaseViewModel<UpdateUserInfoUiState, UpdateUserInfoIntent, UpdateUserInfoEffect>(
+    initialState = UpdateUserInfoUiState()
 ) {
     override suspend fun handleIntent(intent: UpdateUserInfoIntent) {
         when (intent) {
@@ -54,9 +54,9 @@ class UpdateUserInfoViewModel @Inject constructor(
     }
 
     override fun reduce(
-        currentState: UpdateUserInfoViewState,
+        currentState: UpdateUserInfoUiState,
         intent: UpdateUserInfoIntent
-    ): UpdateUserInfoViewState {
+    ): UpdateUserInfoUiState {
         return when (intent) {
             is UpdateUserInfoIntent.UpdatedNickname -> {
                 currentState.copy(nickname = intent.nickname)
@@ -82,7 +82,7 @@ class UpdateUserInfoViewModel @Inject constructor(
         }
     }
 
-    private fun UpdateUserInfoViewState.recalculate(): UpdateUserInfoViewState {
+    private fun UpdateUserInfoUiState.recalculate(): UpdateUserInfoUiState {
         val passwordRegex =
             Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
         val nicknameRegex = Regex("^[a-zA-Z가-힣]{1,10}$")

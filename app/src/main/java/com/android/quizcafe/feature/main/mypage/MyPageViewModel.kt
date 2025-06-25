@@ -14,8 +14,8 @@ class MyPageViewModel @Inject constructor(
     private val getUserInfoUseCase: GetUserInfoUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
     private val logoutUseCase: LogoutUseCase
-) : BaseViewModel<MyPageViewState, MyPageIntent, MyPageEffect>(
-    initialState = MyPageViewState()
+) : BaseViewModel<MyPageUiState, MyPageIntent, MyPageEffect>(
+    initialState = MyPageUiState()
 ) {
     override suspend fun handleIntent(intent: MyPageIntent) {
         when (intent) {
@@ -43,7 +43,7 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: MyPageViewState, intent: MyPageIntent): MyPageViewState {
+    override fun reduce(currentState: MyPageUiState, intent: MyPageIntent): MyPageUiState {
         return when (intent) {
             is MyPageIntent.LoadUserInfo -> currentState.copy(isLoading = true, errorMessage = null)
             is MyPageIntent.SuccessLoadUserInfo -> currentState.copy(

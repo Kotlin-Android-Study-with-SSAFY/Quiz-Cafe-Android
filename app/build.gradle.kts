@@ -102,10 +102,10 @@ dependencies {
     // 단위 테스트
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
-    testImplementation(libs.json)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.turbine)
     testImplementation(libs.okhttp.mockwebserver)
+    testImplementation(libs.json)
 
     // 통합 테스트
     androidTestImplementation(libs.androidx.junit)

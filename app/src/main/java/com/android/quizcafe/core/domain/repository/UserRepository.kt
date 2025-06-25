@@ -12,6 +12,6 @@ interface UserRepository {
     fun getUserInfo(): Flow<Resource<UserInfo>>
     fun updateUserNickName(request: UpdateNicknameRequest): Flow<Resource<Unit>>
     fun deleteUser(): Flow<Resource<Unit>>
-    fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>>
+    fun getCreatedQuizBooksByMe(): Flow<Resource<List<QuizBook>>>
     fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>>
 }

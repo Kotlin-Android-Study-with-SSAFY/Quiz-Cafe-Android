@@ -1,11 +1,11 @@
 package com.android.quizcafe.core.data.repository
 
+import com.android.quizcafe.core.data.mapper.quizbook.toDomain
+import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.model.quizbook.response.QuizBookResponseDto
-import com.android.quizcafe.core.data.model.quizbook.response.toDomain
-import com.android.quizcafe.core.data.model.quizsolvingrecord.response.toDomain
 import com.android.quizcafe.core.data.model.user.request.toDto
 import com.android.quizcafe.core.data.model.user.response.toDomain
-import com.android.quizcafe.core.data.remote.datasource.QuizSolvingRecordRemoteDataSource
+import com.android.quizcafe.core.data.remote.datasource.QuizBookSolvingRemoteDataSource
 import com.android.quizcafe.core.data.remote.datasource.UserRemoteDataSource
 import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.datastore.LogoutReason
@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
-    private val quizSolvingRecordRemoteDataSource: QuizSolvingRecordRemoteDataSource,
+    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource,
     private val authManager: AuthManager
 ) : UserRepository {
 
@@ -33,7 +33,7 @@ class UserRepositoryImpl @Inject constructor(
         emit(Resource.Loading)
 
         val userResult = userRemoteDataSource.getUserInfo()
-        val recordResult = quizSolvingRecordRemoteDataSource.getAllQuizSolvingRecordsByUser()
+        val recordResult = quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
 
         val userInfo = (userResult as? NetworkResult.Success)?.data?.data
         val recordDtoList = (recordResult as? NetworkResult.Success)?.data?.data ?: emptyList()
@@ -45,10 +45,10 @@ class UserRepositoryImpl @Inject constructor(
         }
 
         val records = recordDtoList.map { it.toDomain() }
-        val quizCount = records.sumOf { it.quizzes.size }
+        val quizCount = records.sumOf { it.quizSolvingList.size }
         val quizBookCount = records.map { it.quizBookId }.distinct().count()
         val quizSolvingRecord =
-            records.asSequence().flatMap { it.quizzes }.groupingBy { it.completedAt.take(10) }
+            records.asSequence().flatMap { it.quizSolvingList }.groupingBy { it.completedAt.take(10) }
                 .eachCount().toSortedMap()
 
         emit(
@@ -78,9 +78,9 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getMyQuizBooks(): Flow<Resource<List<QuizBook>>> =
+    override fun getCreatedQuizBooksByMe(): Flow<Resource<List<QuizBook>>> =
         apiResponseListToResourceFlow(mapper = QuizBookResponseDto::toDomain) {
-            userRemoteDataSource.getMyQuizBooks()
+            userRemoteDataSource.getCreatedQuizBooksByMe()
         }
 
     override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> = flow {

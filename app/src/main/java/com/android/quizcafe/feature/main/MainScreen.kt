@@ -18,6 +18,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.feature.categorypicker.CategoryRoute
 import com.android.quizcafe.feature.main.home.HomeRoute
 import com.android.quizcafe.feature.main.mypage.MyPageRoute
+import com.android.quizcafe.feature.main.updateuserinfo.UpdateUserInfoRoute
 import com.android.quizcafe.feature.main.workbook.WorkBookRoute
 import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
@@ -88,9 +89,19 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.MyPage.route) {
             MyPageRoute(
-//                navigateToSetting = {
-//                    navController.navigateSingleTopTo()
-//                }
+                navigateToUpdateUserInfo = { step ->
+                    rootNavController.navigateSingleTopTo("${MainRoute.UpdateUserInfo.route}/$step")
+                }
+            )
+        }
+        composable(
+            route = "${MainRoute.UpdateUserInfo.route}/{step}",
+            arguments = listOf(navArgument("step") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val step = backStackEntry.arguments?.getInt("step") ?: 0
+            UpdateUserInfoRoute(
+                step = step,
+                onNavigateBack = { rootNavController.popBackStack() }
             )
         }
         composable(MainRoute.CategoryList.route) {

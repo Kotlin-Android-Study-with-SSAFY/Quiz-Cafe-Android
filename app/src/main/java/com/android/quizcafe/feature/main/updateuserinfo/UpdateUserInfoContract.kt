@@ -2,7 +2,7 @@ package com.android.quizcafe.feature.main.updateuserinfo
 
 import com.android.quizcafe.core.ui.base.BaseContract
 
-data class UpdateUserInfoViewState(
+data class UpdateUserInfoUiState(
     val nickname: String = "",
     val currentPassword: String = "",
     val newPassword: String = "",
@@ -14,7 +14,7 @@ data class UpdateUserInfoViewState(
     val isLoading: Boolean = false,
     val isUpdateNicknameEnabled: Boolean = false,
     val isUpdatePasswordEnabled: Boolean = false
-) : BaseContract.ViewState
+) : BaseContract.UiState
 
 sealed class UpdateUserInfoIntent : BaseContract.ViewIntent {
     data class UpdatedNickname(val nickname: String) : UpdateUserInfoIntent()

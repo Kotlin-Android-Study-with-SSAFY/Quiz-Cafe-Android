@@ -115,8 +115,6 @@ fun QuizSolveScreen(
                     }
                 }
             }
-
-
         }
     }
 }

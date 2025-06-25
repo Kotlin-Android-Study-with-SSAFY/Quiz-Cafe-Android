@@ -17,7 +17,7 @@ import java.util.TimeZone
 
 @Composable
 fun MyPageScreen(
-    state: MyPageViewState,
+    state: MyPageUiState,
     onClick: (MyPageIntent) -> Unit = {}
 ) {
     Column(
@@ -64,7 +64,7 @@ fun PreviewMyPageScreen() {
         quizHistory[sdf.format(cal.time)] = (0..4).random()
     }
     MyPageScreen(
-        state = MyPageViewState(
+        state = MyPageUiState(
             nickname = "빵빠야",
             quizCount = 1205,
             quizBookCount = 5,

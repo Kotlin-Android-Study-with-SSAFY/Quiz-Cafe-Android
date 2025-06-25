@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.data.repository
 
-import android.util.Log
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
@@ -47,9 +46,9 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
      * 퀴즈북 풀기 시작할 때 호출
      * localId값 반환
      */
-    override fun createEmptyQuizBookGrade(quizBookId: QuizBookId): Flow<Resource<QuizBookGradeLocalId>> = flow {
+    override fun createEmptyQuizBookGrade(id: QuizBookId): Flow<Resource<QuizBookGradeLocalId>> = flow {
         emit(Resource.Loading)
-        val entity = QuizBookGradeEntity(quizBookId = quizBookId.value)
+        val entity = QuizBookGradeEntity(quizBookId = id.value)
         val generatedId = quizBookGradeDao.upsertQuizBookGrade(entity)
 
         if (generatedId <= 0L) {
@@ -113,11 +112,11 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
 
     // 로컬에서 퀴즈북 풀이 기록 가져와 requestDto로 변환 후 퀴즈북 풀이 완료 API 요청하기
     override fun solveQuizBook(
-        localId: QuizBookGradeLocalId,
+        quizBookGradeLocalId: QuizBookGradeLocalId,
         elapsedTimeInSeconds: Long
     ): Flow<Resource<QuizBookGradeServerId>> = flow {
         emit(Resource.Loading)
-        val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeData(localId)
+        val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeData(quizBookGradeLocalId)
         val quizBookEntity = getQuizBookEntity(quizBookGradeEntity.quizBookId)
 
         val requestDto = createQuizBookSolvingRequest(
@@ -130,7 +129,7 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         quizBookSolvingRemoteDataSource.solveQuizBook(requestDto)
             .onSuccess { response ->
                 response.data?.let { serverId ->
-                    quizBookGradeDao.deleteQuizBookGrade(localId.value)
+                    quizBookGradeDao.deleteQuizBookGrade(quizBookGradeLocalId.value)
                     deleteQuizBookFromLocal(
                         QuizBookId(quizBookGradeEntity.quizBookId)
                     )

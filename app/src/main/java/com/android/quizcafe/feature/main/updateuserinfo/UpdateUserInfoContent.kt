@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun UpdateNicknameContent(
-    state: UpdateUserInfoViewState,
+    state: UpdateUserInfoUiState,
     intent: (UpdateUserInfoIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
@@ -54,7 +54,7 @@ fun UpdateNicknameContent(
 
 @Composable
 fun UpdatePasswordContent(
-    state: UpdateUserInfoViewState,
+    state: UpdateUserInfoUiState,
     intent: (UpdateUserInfoIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
@@ -106,7 +106,7 @@ fun UpdatePasswordContent(
 @Composable
 fun BottomActionButton(
     step: Int,
-    state: UpdateUserInfoViewState,
+    state: UpdateUserInfoUiState,
     onClick: () -> Unit
 ) {
     val isEnabled = when (step) {
@@ -144,7 +144,7 @@ fun UpdateNicknameContentPreview() {
     QuizCafeTheme {
         Column {
             UpdateNicknameContent(
-                state = UpdateUserInfoViewState(nickname = ""),
+                state = UpdateUserInfoUiState(nickname = ""),
                 intent = {},
                 innerPadding = PaddingValues(16.dp)
             )
@@ -158,7 +158,7 @@ fun UpdatePasswordContentPreview() {
     QuizCafeTheme {
         Column {
             UpdatePasswordContent(
-                state = UpdateUserInfoViewState(
+                state = UpdateUserInfoUiState(
                     currentPassword = "",
                     newPassword = "",
                     confirmPassword = ""

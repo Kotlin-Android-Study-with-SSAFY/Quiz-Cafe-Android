@@ -5,7 +5,6 @@ import com.android.quizcafe.core.data.remote.service.QuizBookService
 import com.android.quizcafe.core.data.remote.service.QuizBookSolvingService
 import com.android.quizcafe.core.data.remote.service.QuizService
 import com.android.quizcafe.core.data.remote.service.UserService
-import com.android.quizcafe.core.data.remote.service.QuizSolvingRecordService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
