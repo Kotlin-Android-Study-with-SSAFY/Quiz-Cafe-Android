@@ -90,7 +90,7 @@ fun MainBottomNavHost(
         composable(MainRoute.MyPage.route) {
             MyPageRoute(
                 navigateToUpdateUserInfo = { step ->
-                    rootNavController.navigateSingleTopTo("${MainRoute.UpdateUserInfo.route}/$step")
+                    bottomNavController.navigateSingleTopTo("${MainRoute.UpdateUserInfo.route}/$step")
                 }
             )
         }
@@ -101,7 +101,7 @@ fun MainBottomNavHost(
             val step = backStackEntry.arguments?.getInt("step") ?: 0
             UpdateUserInfoRoute(
                 step = step,
-                onNavigateBack = { rootNavController.popBackStack() }
+                onNavigateBack = { bottomNavController.popBackStack() }
             )
         }
         composable(MainRoute.CategoryList.route) {
