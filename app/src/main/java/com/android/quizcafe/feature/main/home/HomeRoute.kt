@@ -7,7 +7,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.android.quizcafe.feature.main.mypage.MyPageIntent
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

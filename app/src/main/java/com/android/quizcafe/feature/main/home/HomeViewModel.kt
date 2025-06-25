@@ -15,7 +15,6 @@ class HomeViewModel @Inject constructor(
 ) {
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
-
             HomeIntent.FetchRecord -> {
                 sendIntent(HomeIntent.LoadingFetchRecord)
                 getAllQuizBookSolvingUseCase().collect { resource ->
