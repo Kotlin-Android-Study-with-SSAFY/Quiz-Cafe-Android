@@ -44,7 +44,7 @@ fun QuizCafeLogo() {
 }
 
 @Composable
-fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
+fun EmailInputContent(state: LoginUiState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "ID",
         value = state.email,
@@ -57,7 +57,7 @@ fun EmailInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) 
 }
 
 @Composable
-fun PasswordInputContent(state: LoginViewState, sendIntent: (LoginIntent) -> Unit) {
+fun PasswordInputContent(state: LoginUiState, sendIntent: (LoginIntent) -> Unit) {
     QuizCafeTextField(
         label = "PW",
         value = state.password,
@@ -145,9 +145,9 @@ fun QuizCafeLogoPreview() {
 fun EmailInputPreview() {
     QuizCafeTheme {
         Column {
-            EmailInputContent(LoginViewState()) {}
+            EmailInputContent(LoginUiState()) {}
             Spacer(Modifier.height(20.dp))
-            EmailInputContent(LoginViewState(email = "email")) {}
+            EmailInputContent(LoginUiState(email = "email")) {}
         }
     }
 }
@@ -157,9 +157,9 @@ fun EmailInputPreview() {
 fun PasswordInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordInputContent(LoginViewState()) {}
+            PasswordInputContent(LoginUiState()) {}
             Spacer(Modifier.height(20.dp))
-            PasswordInputContent(LoginViewState(password = "password")) {}
+            PasswordInputContent(LoginUiState(password = "password")) {}
         }
     }
 }

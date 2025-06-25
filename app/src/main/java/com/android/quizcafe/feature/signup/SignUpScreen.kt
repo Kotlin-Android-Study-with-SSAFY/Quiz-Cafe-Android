@@ -29,7 +29,7 @@ import com.android.quizcafe.core.ui.TopAppBarTitle
 @Composable
 fun SignUpScreen(
     step: Int,
-    state: SignUpViewState,
+    state: SignUpUiState,
     sendIntent: (SignUpIntent) -> Unit,
     navigateToBack: () -> Unit
 ) {
@@ -73,7 +73,7 @@ fun SignUpScreen(
 }
 
 @Composable
-fun BottomActionButton(state: SignUpViewState, onClick: () -> Unit) {
+fun BottomActionButton(state: SignUpUiState, onClick: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +95,7 @@ fun BottomActionButton(state: SignUpViewState, onClick: () -> Unit) {
 @Composable
 fun SignUpEmailVerificationPreview() {
     QuizCafeTheme {
-        SignUpScreen(0, SignUpViewState(), {}) {}
+        SignUpScreen(0, SignUpUiState(), {}) {}
     }
 }
 
@@ -103,6 +103,6 @@ fun SignUpEmailVerificationPreview() {
 @Composable
 fun SignUpPasswordPreview() {
     QuizCafeTheme {
-        SignUpScreen(1, SignUpViewState(), {}) {}
+        SignUpScreen(1, SignUpUiState(), {}) {}
     }
 }

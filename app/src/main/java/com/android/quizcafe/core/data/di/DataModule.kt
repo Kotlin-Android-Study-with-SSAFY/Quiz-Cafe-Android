@@ -4,10 +4,14 @@ import com.android.quizcafe.core.data.repository.AuthRepositoryImpl
 import com.android.quizcafe.core.data.repository.QuizBookRepositoryImpl
 import com.android.quizcafe.core.data.repository.QuizSolvingRecordRepositoryImpl
 import com.android.quizcafe.core.data.repository.UserRepositoryImpl
+import com.android.quizcafe.core.data.repository.QuizBookSolvingRepositoryImpl
+import com.android.quizcafe.core.data.repository.QuizRepositoryImpl
 import com.android.quizcafe.core.domain.repository.AuthRepository
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import com.android.quizcafe.core.domain.repository.QuizSolvingRecordRepository
 import com.android.quizcafe.core.domain.repository.UserRepository
+import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
+import com.android.quizcafe.core.domain.repository.QuizRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -32,9 +36,15 @@ internal interface DataModule {
 
     @Singleton
     @Binds
-    fun bindQuizSolvingRecordRepository(
-        quizSolvingRecordRepositoryImpl: QuizSolvingRecordRepositoryImpl
-    ): QuizSolvingRecordRepository
+    fun bindQuizRepository(
+        quizRepository: QuizRepositoryImpl
+    ): QuizRepository
+
+    @Singleton
+    @Binds
+    fun bindQuizBookSolvingRepository(
+        quizBookSolvingRepository: QuizBookSolvingRepositoryImpl
+    ): QuizBookSolvingRepository
 
     @Singleton
     @Binds

@@ -24,7 +24,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun PasswordInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     sendIntent: (SignUpIntent) -> Unit,
     innerPadding: PaddingValues
 ) {
@@ -62,7 +62,7 @@ fun PasswordInputContent(
 
 @Composable
 fun NicknameInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     focusRequester: FocusRequester?,
     sendIntent: (SignUpIntent) -> Unit,
     onImeAction: () -> Unit = {}
@@ -80,7 +80,7 @@ fun NicknameInputContent(
 
 @Composable
 fun PasswordInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     focusRequester: FocusRequester?,
     sendIntent: (SignUpIntent) -> Unit,
     onImeAction: () -> Unit = {}
@@ -102,7 +102,7 @@ fun PasswordInputContent(
 
 @Composable
 fun PasswordConfirmInputContent(
-    state: SignUpViewState,
+    state: SignUpUiState,
     focusRequester: FocusRequester?,
     sendIntent: (SignUpIntent) -> Unit,
     onImeAction: () -> Unit
@@ -127,12 +127,12 @@ fun PasswordConfirmInputContent(
 fun NicknameInputPreview() {
     QuizCafeTheme {
         Column {
-            NicknameInputContent(SignUpViewState(), null, {}) {}
+            NicknameInputContent(SignUpUiState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            NicknameInputContent(SignUpViewState(nickname = "닉네임"), null, {}) {}
+            NicknameInputContent(SignUpUiState(nickname = "닉네임"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             NicknameInputContent(
-                SignUpViewState(
+                SignUpUiState(
                     nickname = "닉네임",
                     nicknameErrorMessage = "닉네임은 최대 10글자입니다."
                 ),
@@ -148,12 +148,12 @@ fun NicknameInputPreview() {
 fun PasswordInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordInputContent(SignUpViewState(), null, {}) {}
+            PasswordInputContent(SignUpUiState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            PasswordInputContent(SignUpViewState(password = "password"), null, {}) {}
+            PasswordInputContent(SignUpUiState(password = "password"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             PasswordInputContent(
-                SignUpViewState(
+                SignUpUiState(
                     password = "password",
                     passwordErrorMessage = "비밀번호 형식이 올바르지 않습니다."
                 ),
@@ -169,12 +169,12 @@ fun PasswordInputPreview() {
 fun PasswordConfirmInputPreview() {
     QuizCafeTheme {
         Column {
-            PasswordConfirmInputContent(SignUpViewState(), null, {}) {}
+            PasswordConfirmInputContent(SignUpUiState(), null, {}) {}
             Spacer(Modifier.height(20.dp))
-            PasswordConfirmInputContent(SignUpViewState(passwordConfirm = "password"), null, {}) {}
+            PasswordConfirmInputContent(SignUpUiState(passwordConfirm = "password"), null, {}) {}
             Spacer(Modifier.height(20.dp))
             PasswordConfirmInputContent(
-                SignUpViewState(
+                SignUpUiState(
                     passwordConfirm = "password1",
                     passwordConfirmErrorMessage = "비밀번호가 일치하지 않습니다."
                 ),
