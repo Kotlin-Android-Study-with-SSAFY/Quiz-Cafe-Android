@@ -6,6 +6,7 @@ import com.android.quizcafe.core.designsystem.theme.grass2
 import com.android.quizcafe.core.designsystem.theme.grass3
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -37,14 +38,35 @@ fun rememberJoinDate(
     kst: TimeZone
 ): Calendar {
     val cal = Calendar.getInstance(kst)
-    val parsed = sdf.runCatching { parse(joinDateStr) }.getOrNull()
+
+    // 1) ISO 포맷 먼저 시도 (예: 2025-06-20T06:48:33)
+    val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).apply {
+        timeZone = kst
+    }
+
+    val parsed: Date? = runCatching { isoFormat.parse(joinDateStr) }
+        .getOrNull()
+    // 2) ISO 실패 시, yyyy-MM-dd 로도 시도
+        ?: runCatching { sdf.parse(joinDateStr) }
+            .getOrNull()
+
     return if (parsed != null) {
         cal.time = parsed
-        cal
+        // 시간은 0시로 초기화
+        cal.apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
     } else {
-        (today.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -6) }
+        // 둘 다 실패했을 땐 오늘-6일
+        (today.clone() as Calendar).apply {
+            add(Calendar.DAY_OF_YEAR, -6)
+        }
     }
 }
+
 
 fun makeDayList(start: Calendar, end: Calendar): List<Calendar> {
     val list = mutableListOf<Calendar>()
@@ -101,34 +123,39 @@ fun calcStreakInfo(
     end: Calendar,
     timeZone: TimeZone = TimeZone.getTimeZone("Asia/Seoul")
 ): Pair<Int, Int> {
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
-    sdf.timeZone = timeZone
+    val simpleRecord = record.entries
+        .mapNotNull { (rawKey, value) ->
+            val dayKey = rawKey.substringBefore('T')
+            if (value > 0) dayKey to value else null
+        }
+        .toMap()
+
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
+        this.timeZone = timeZone
+    }
+
     var maxStreak = 0
     var curStreak = 0
-    var day = start.clone() as Calendar
-    while (!day.after(end)) {
-        val dateKey = sdf.format(day.time)
-        val solved = (record[dateKey] ?: 0) > 0
-        if (solved) {
+
+    val iter = (start.clone() as Calendar)
+    while (!iter.after(end)) {
+        val key = sdf.format(iter.time)
+        if (simpleRecord[key] != null) {
             curStreak++
-        } else {
             if (curStreak > maxStreak) maxStreak = curStreak
+        } else {
             curStreak = 0
         }
-        day.add(Calendar.DAY_OF_YEAR, 1)
+        iter.add(Calendar.DAY_OF_YEAR, 1)
     }
-    if (curStreak > maxStreak) maxStreak = curStreak
+
+    // 3. 끝→시작 거꾸로 순회하면서 currentStreak 계산
     var currentStreak = 0
-    day = end.clone() as Calendar
-    while (!day.before(start)) {
-        val dateKey = sdf.format(day.time)
-        val solved = (record[dateKey] ?: 0) > 0
-        if (solved) {
-            currentStreak++
-        } else {
-            break
-        }
-        day.add(Calendar.DAY_OF_YEAR, -1)
+    val rev = (end.clone() as Calendar)
+    while (!rev.before(start) && simpleRecord[sdf.format(rev.time)] != null) {
+        currentStreak++
+        rev.add(Calendar.DAY_OF_YEAR, -1)
     }
-    return Pair(maxStreak, currentStreak)
+
+    return maxStreak to currentStreak
 }

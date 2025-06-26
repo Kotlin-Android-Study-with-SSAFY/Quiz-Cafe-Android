@@ -61,7 +61,6 @@ class UserRepositoryImpl @Inject constructor(
                 userInfo.toDomain(
                     quizCount = quizCount,
                     quizBookCount = quizBookCount,
-                    joinDateStr = userInfo.joinDateStr,
                     quizSolvingRecord = quizSolvingRecord
                 )
             )

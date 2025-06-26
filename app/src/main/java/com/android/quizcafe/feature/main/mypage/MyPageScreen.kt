@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.main.mypage
 
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,6 +39,7 @@ fun MyPageScreen(
             }
         }
         Spacer(Modifier.height(28.dp))
+        Log.d("MyPage Screen", state.quizSolvingRecord.toString())
         QuizGrassGridByCalendar(
             quizSolvingRecord = state.quizSolvingRecord,
             joinDateStr = state.joinDateStr
@@ -49,7 +51,7 @@ fun MyPageScreen(
 @Composable
 fun PreviewMyPageScreen() {
     val kst = TimeZone.getTimeZone("Asia/Seoul")
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
     sdf.timeZone = kst
     val today = Calendar.getInstance(kst).apply {
         set(Calendar.HOUR_OF_DAY, 0)

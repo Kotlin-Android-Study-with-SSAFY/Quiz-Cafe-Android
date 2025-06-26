@@ -7,19 +7,18 @@ import kotlinx.serialization.Serializable
 data class UserInfoResponseDto(
     val nickname: String,
     val email: String,
-    val joinDateStr: String = ""
+    val createdAt: String = ""
 )
 
 fun UserInfoResponseDto.toDomain(
     quizCount: Int,
     quizBookCount: Int,
-    joinDateStr: String,
     quizSolvingRecord: Map<String, Int>
 ) = UserInfo(
     nickname = nickname,
     email = email,
     quizCount = quizCount,
     quizBookCount = quizBookCount,
-    joinDateStr = joinDateStr,
+    joinDateStr = createdAt,
     quizSolvingRecord = quizSolvingRecord
 )
