@@ -66,8 +66,8 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     override fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>> = flow {
         emit(Resource.Loading)
         val quizGradeRelation = quizGradeDao.getQuizGradeByQuizId(quizId.value, quizBookGradeLocalId.value)
-        val quizBookGrade = quizGradeRelation?.toDomain()
-        emit(Resource.Success(quizBookGrade))
+        val quizGrade = quizGradeRelation?.toDomain()
+        emit(Resource.Success(quizGrade))
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈 한문제씩 가져오다가 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
