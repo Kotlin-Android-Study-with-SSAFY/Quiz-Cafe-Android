@@ -27,12 +27,12 @@ class WorkBookViewModel @Inject constructor(
 
     override fun reduce(currentState: WorkBookUiState, intent: WorkBookIntent): WorkBookUiState {
         return when (intent) {
-            is WorkBookIntent.ClickWorkBookCard -> currentState
+            is WorkBookIntent.ClickWorkBookCard -> currentState.copy(isLoading = false)
 
-            WorkBookIntent.LoadWorkBookList -> currentState
+            WorkBookIntent.LoadWorkBookList -> currentState.copy(isLoading = true)
 
-            is WorkBookIntent.SuccessSolvedQuizBookList -> currentState.copy(solvedQuizBooks = intent.qbs)
-            is WorkBookIntent.SuccessSolvingQuizBookList -> currentState.copy(solvingQuizBooks = intent.qbg)
+            is WorkBookIntent.SuccessSolvedQuizBookList -> currentState.copy(solvedQuizBooks = intent.qbs, isLoading = false)
+            is WorkBookIntent.SuccessSolvingQuizBookList -> currentState.copy(solvingQuizBooks = intent.qbg, isLoading = false)
         }
     }
 
@@ -42,6 +42,7 @@ class WorkBookViewModel @Inject constructor(
                 is Resource.Failure -> {}
                 Resource.Loading -> {}
                 is Resource.Success -> {
+                    Log.d("loadWorkBook", it.data.get(1).quizBookGrade.toString())
                     sendIntent(WorkBookIntent.SuccessSolvingQuizBookList(it.data))
                 }
             }
@@ -52,7 +53,7 @@ class WorkBookViewModel @Inject constructor(
             when (it) {
                 is Resource.Success -> {
                     Log.d("LoadWorkBookData", it.data.toString())
-                    sendIntent(WorkBookIntent.SuccessSolvedQuizBookList(it.data))
+                    sendIntent(WorkBookIntent.SuccessSolvedQuizBookList(it.data.sortedByDescending { it.completedAt }))
                 }
                 is Resource.Failure -> {
                     Log.d("LoadWorkBookData", "실패")

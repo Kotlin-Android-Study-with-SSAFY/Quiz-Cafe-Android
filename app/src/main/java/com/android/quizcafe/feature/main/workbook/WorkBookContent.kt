@@ -22,17 +22,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onPrimaryLight
 import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 import toRelativeDate
 
 @Composable
-fun NoWorkBookContent() {
+fun NoWorkBookContent(text: String) {
     Text(
-        text = "풀어본 문제가 없어요",
+        text = text,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 32.dp),
@@ -137,7 +139,48 @@ fun QuizSolveProgressBar(
         Spacer(Modifier.height(4.dp))
         LinearProgressIndicator(
             progress = { if (totalQuizzes > 0) solvedQuizzes.toFloat() / totalQuizzes else 0f },
-            modifier = Modifier.padding(end = 20.dp)
+            modifier = Modifier.padding(end = 20.dp),
+            color = MaterialTheme.colorScheme.tertiary
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WorkBookCardPreviewUnsolved() {
+    QuizCafeTheme {
+        WorkBookCard(
+            category = "데이터베이스",
+            title = "SQL 기초 문제",
+            count = 5,
+            totalQuizzes = 10,
+            completedAt = "2024-06-26",
+            isSolved = false,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun WorkBookCardPreviewSolved() {
+    QuizCafeTheme {
+        WorkBookCard(
+            category = "운영체제",
+            title = "프로세스 관리 심화",
+            count = 10,
+            totalQuizzes = 10,
+            completedAt = "2024-06-25",
+            isSolved = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun NoWorkBookContentPreview() {
+    QuizCafeTheme {
+        NoWorkBookContent(text = "아직 생성된 문제집이 없어요.")
     }
 }

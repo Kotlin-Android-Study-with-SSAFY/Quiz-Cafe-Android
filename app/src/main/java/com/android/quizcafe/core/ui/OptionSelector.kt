@@ -29,7 +29,6 @@ import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceVariantLight
 import com.android.quizcafe.core.designsystem.theme.tertiaryLight
 
-
 @Composable
 fun <T> OptionSelector(
     options: List<T>,

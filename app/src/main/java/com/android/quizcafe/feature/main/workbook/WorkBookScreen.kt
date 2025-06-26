@@ -3,18 +3,26 @@ package com.android.quizcafe.feature.main.workbook
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.android.quizcafe.R
+import com.android.quizcafe.core.designsystem.LoadingIndicator
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.domain.model.solving.QuizBookGradeWithQuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.ui.OutLinedOptionSelector
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
@@ -26,24 +34,40 @@ fun WorkbookScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        TitleWithUnderLine("풀이 기록")
-        Spacer(modifier = Modifier.height(20.dp))
-        if (state.solvingQuizBooks.isNotEmpty()) {
-            SolvingCardList("풀고있어요", state.solvingQuizBooks) { }
+        TitleWithUnderLine(stringResource(R.string.solving_history))
+        Spacer(modifier = Modifier.height(16.dp))
+
+        var currentWorkBookState by remember { mutableStateOf(WorkBookState.SOLVED) }
+
+        OutLinedOptionSelector(
+            modifier = Modifier.fillMaxWidth(),
+            options = WorkBookState.entries,
+            selectedOption = currentWorkBookState,
+            onOptionSelected = { currentWorkBookState = it },
+            optionToText = { it.resId }
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        if (state.isLoading) {
+            LoadingIndicator()
+        } else {
+            if (currentWorkBookState == WorkBookState.SOLVING) {
+                SolvingCardList(state.solvingQuizBooks) { }
+            } else {
+                SolvedCardList(state.solvedQuizBooks) { }
+            }
         }
-        SolvedCardList("풀어봤어요", state.solvedQuizBooks) { }
     }
 }
 
 @Composable
 fun SolvingCardList(
-    title: String,
     quizBooks: List<QuizBookGradeWithQuizBook>,
     onClick: (Long) -> Unit
 ) {
-    Text(title)
-    Spacer(modifier = Modifier.height(12.dp))
-
+    if (quizBooks.isEmpty()) {
+        NoWorkBookContent(stringResource(R.string.no_solving_quizbook))
+    }
     LazyColumn {
         items(quizBooks) { solvingBook ->
             WorkBookCard(
@@ -62,15 +86,11 @@ fun SolvingCardList(
 
 @Composable
 fun SolvedCardList(
-    title: String,
     quizBooks: List<QuizBookSolving>,
     onClick: (Long) -> Unit
 ) {
-    Text(title)
-    Spacer(modifier = Modifier.height(12.dp))
-
     if (quizBooks.isEmpty()) {
-        NoWorkBookContent()
+        NoWorkBookContent(stringResource(R.string.no_solved_quizbook))
     }
     LazyColumn {
         items(quizBooks) { solvedBook ->
