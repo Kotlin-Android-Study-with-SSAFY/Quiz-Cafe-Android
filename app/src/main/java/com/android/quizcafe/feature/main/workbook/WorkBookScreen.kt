@@ -10,8 +10,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,12 +20,15 @@ import com.android.quizcafe.core.designsystem.LoadingIndicator
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.domain.model.solving.QuizBookGradeWithQuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.OutLinedOptionSelector
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
 fun WorkbookScreen(
-    state: WorkBookUiState
+    state: WorkBookUiState,
+    sendIntent: (WorkBookIntent) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -37,13 +38,11 @@ fun WorkbookScreen(
         TitleWithUnderLine(stringResource(R.string.solving_history))
         Spacer(modifier = Modifier.height(16.dp))
 
-        var currentWorkBookState by remember { mutableStateOf(WorkBookState.SOLVED) }
-
         OutLinedOptionSelector(
             modifier = Modifier.fillMaxWidth(),
             options = WorkBookState.entries,
-            selectedOption = currentWorkBookState,
-            onOptionSelected = { currentWorkBookState = it },
+            selectedOption = state.currentWorkBookState,
+            onOptionSelected = { sendIntent(WorkBookIntent.UpdateWorkBookState(it)) },
             optionToText = { it.resId }
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -51,10 +50,10 @@ fun WorkbookScreen(
         if (state.isLoading) {
             LoadingIndicator()
         } else {
-            if (currentWorkBookState == WorkBookState.SOLVING) {
-                SolvingCardList(state.solvingQuizBooks) { }
+            if (state.currentWorkBookState == WorkBookState.SOLVING) {
+                SolvingCardList(state.solvingQuizBooks) { sendIntent(WorkBookIntent.ClickSolvingCard(it)) }
             } else {
-                SolvedCardList(state.solvedQuizBooks) { }
+                SolvedCardList(state.solvedQuizBooks) { sendIntent(WorkBookIntent.ClickSolvedCard(it)) }
             }
         }
     }
@@ -63,7 +62,7 @@ fun WorkbookScreen(
 @Composable
 fun SolvingCardList(
     quizBooks: List<QuizBookGradeWithQuizBook>,
-    onClick: (Long) -> Unit
+    onClick: (QuizBookId) -> Unit
 ) {
     if (quizBooks.isEmpty()) {
         NoWorkBookContent(stringResource(R.string.no_solving_quizbook))
@@ -77,7 +76,7 @@ fun SolvingCardList(
                 totalQuizzes = solvingBook.quizBook.totalQuizzes,
                 completedAt = "",
                 isSolved = false,
-                onClick = { onClick(solvingBook.quizBookGrade.localId.value) }
+                onClick = { onClick(QuizBookId(solvingBook.quizBook.id)) }
             )
         }
     }
@@ -87,7 +86,7 @@ fun SolvingCardList(
 @Composable
 fun SolvedCardList(
     quizBooks: List<QuizBookSolving>,
-    onClick: (Long) -> Unit
+    onClick: (QuizBookGradeServerId) -> Unit
 ) {
     if (quizBooks.isEmpty()) {
         NoWorkBookContent(stringResource(R.string.no_solved_quizbook))
@@ -101,7 +100,7 @@ fun SolvedCardList(
                 totalQuizzes = solvedBook.totalQuizzes,
                 completedAt = solvedBook.completedAt,
                 isSolved = true,
-                onClick = { onClick(solvedBook.id) }
+                onClick = { onClick(QuizBookGradeServerId(solvedBook.id)) }
             )
         }
     }
@@ -111,6 +110,6 @@ fun SolvedCardList(
 @Composable
 fun WorkbookScreenPreview() {
     QuizCafeTheme {
-        WorkbookScreen(WorkBookUiState())
+        WorkbookScreen(WorkBookUiState()) {}
     }
 }

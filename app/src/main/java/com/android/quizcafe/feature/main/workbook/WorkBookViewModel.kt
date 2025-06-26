@@ -19,7 +19,11 @@ class WorkBookViewModel @Inject constructor(
     override suspend fun handleIntent(intent: WorkBookIntent) {
         when (intent) {
             WorkBookIntent.LoadWorkBookList -> loadWorkBookData()
-            is WorkBookIntent.ClickWorkBookCard -> { }
+            is WorkBookIntent.UpdateWorkBookState -> Unit
+
+            is WorkBookIntent.ClickSolvingCard -> emitEffect(WorkBookEffect.NavigateToSolveQuiz(intent.id))
+            is WorkBookIntent.ClickSolvedCard -> emitEffect(WorkBookEffect.NavigateToGradeResult(intent.id))
+
             is WorkBookIntent.SuccessSolvedQuizBookList -> Unit
             is WorkBookIntent.SuccessSolvingQuizBookList -> Unit
         }
@@ -27,9 +31,11 @@ class WorkBookViewModel @Inject constructor(
 
     override fun reduce(currentState: WorkBookUiState, intent: WorkBookIntent): WorkBookUiState {
         return when (intent) {
-            is WorkBookIntent.ClickWorkBookCard -> currentState.copy(isLoading = false)
-
             WorkBookIntent.LoadWorkBookList -> currentState.copy(isLoading = true)
+            is WorkBookIntent.UpdateWorkBookState -> currentState.copy(isLoading = false, currentWorkBookState = intent.workBookState)
+
+            is WorkBookIntent.ClickSolvingCard -> currentState.copy(isLoading = false)
+            is WorkBookIntent.ClickSolvedCard -> currentState.copy(isLoading = false)
 
             is WorkBookIntent.SuccessSolvedQuizBookList -> currentState.copy(solvedQuizBooks = intent.qbs, isLoading = false)
             is WorkBookIntent.SuccessSolvingQuizBookList -> currentState.copy(solvingQuizBooks = intent.qbg, isLoading = false)
@@ -37,6 +43,7 @@ class WorkBookViewModel @Inject constructor(
     }
 
     private suspend fun loadWorkBookData() {
+        // 로컬에서 풀고있는 퀴즈북 목록 가져오기
         getAllQuizBookGradeWithQuizBookUseCase().collect {
             when (it) {
                 is Resource.Failure -> {}
@@ -52,14 +59,14 @@ class WorkBookViewModel @Inject constructor(
         getAllQuizBookSolvingUseCase().collect {
             when (it) {
                 is Resource.Success -> {
-                    Log.d("LoadWorkBookData", it.data.toString())
+                    Log.d("LoadWorkBookFromServer", it.data.toString())
                     sendIntent(WorkBookIntent.SuccessSolvedQuizBookList(it.data.sortedByDescending { it.completedAt }))
                 }
                 is Resource.Failure -> {
-                    Log.d("LoadWorkBookData", "실패")
+                    Log.d("LoadWorkBookFromServer", "실패")
                 }
                 Resource.Loading -> {
-                    Log.d("LoadWorkBookData", "로딩")
+                    Log.d("LoadWorkBookFromServer", "로딩")
                 }
             }
         }

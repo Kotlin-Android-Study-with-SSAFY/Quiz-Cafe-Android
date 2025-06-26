@@ -81,9 +81,8 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.Workbook.route) {
             WorkBookRoute(
-//                onItemClick = { id ->
-//                    navController.navigateSingleTopTo("")
-//                }
+                navigateToSolveQuiz = { id -> rootNavController.navigateSingleTopTo("${QuizSolveRoute.QuizSolve.route}/${id.value}") },
+                navigateToGradeResult = { id -> rootNavController.navigateSingleTopTo("${QuizSolveRoute.QuizSolvingResult.route}/${id.value}") }
             )
         }
         composable(MainRoute.MyPage.route) {
