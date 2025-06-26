@@ -153,9 +153,11 @@ private fun WeekLabelColumn(weekLabels: List<String>) {
 
 @Composable
 private fun GrassGridContent(
-    grid: List<List<Calendar?>>, scrollState: ScrollState,
+    grid: List<List<Calendar?>>,
+    scrollState: ScrollState,
     quizSolvingRecord: Map<String, Int>,
-    joinDate: Calendar, today: Calendar,
+    joinDate: Calendar,
+    today: Calendar,
     sdf: SimpleDateFormat
 ) {
     Row(

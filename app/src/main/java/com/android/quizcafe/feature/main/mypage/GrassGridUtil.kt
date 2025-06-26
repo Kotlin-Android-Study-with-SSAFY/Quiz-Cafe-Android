@@ -46,7 +46,7 @@ fun rememberJoinDate(
 
     val parsed: Date? = runCatching { isoFormat.parse(joinDateStr) }
         .getOrNull()
-    // 2) ISO 실패 시, yyyy-MM-dd 로도 시도
+        // 2) ISO 실패 시, yyyy-MM-dd 로도 시도
         ?: runCatching { sdf.parse(joinDateStr) }
             .getOrNull()
 
@@ -66,7 +66,6 @@ fun rememberJoinDate(
         }
     }
 }
-
 
 fun makeDayList(start: Calendar, end: Calendar): List<Calendar> {
     val list = mutableListOf<Calendar>()
