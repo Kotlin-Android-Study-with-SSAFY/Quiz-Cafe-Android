@@ -46,19 +46,13 @@ fun QuizSolveScreen(
         uiState.isLastQuestion -> R.string.solve_btn_submit
         else -> R.string.solve_btn_next_text
     }
-    val onClickAction = {
-        when {
-            uiState.isWrongAnswer -> onIntent(QuizSolveIntent.ShowExplanation)
-            else -> onIntent(QuizSolveIntent.SubmitNext)
-        }
-    }
     Scaffold(
         topBar = {
             QuizTopBar(
                 currentQuestion = uiState.questionInfo.current,
                 totalQuestions = uiState.questionInfo.total,
                 timeText = uiState.getTimeText(),
-                onBackClick = { onIntent(QuizSolveIntent.OnBackClick) },
+                onBackClick = { onIntent(QuizSolveIntent.NavigateBack) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
             )
         },
@@ -67,8 +61,8 @@ fun QuizSolveScreen(
                 isEnabled = uiState.common.isButtonEnabled,
                 isLastQuestion = uiState.isLastQuestion,
                 isFirstQuestion = uiState.isFirstQuestion,
-                onClickActionPrev = { onIntent(QuizSolveIntent.SubmitPrev) },
-                onClickActionNext = onClickAction,
+                onClickActionPrev = { onIntent(QuizSolveIntent.NavigateToPreviousQuestion) },
+                onClickActionNext = { onIntent(QuizSolveIntent.NavigateToNextQuestion) },
                 textRes = textRightRes
             )
         }
@@ -153,12 +147,6 @@ private fun QuizSolveBottomBar(
                     )
                 }
             )
-        } else {
-            Spacer(
-                modifier = Modifier
-                    .weight(1F)
-                    .padding(horizontal = 16.dp)
-            )
         }
         QuizCafeButton(
             modifier = Modifier
@@ -190,7 +178,7 @@ fun SubjectiveAnswerSection(
     UnderlinedTextField(
         modifier = modifier,
         value = uiState.subjective.answer,
-        onValueChange = { onIntent(QuizSolveIntent.UpdatedSubjectiveAnswer(it)) },
+        onValueChange = { onIntent(QuizSolveIntent.UpdateSubjectiveAnswer(it)) },
         maxCharCount = uiState.subjective.maxCharCount,
         showCharCount = uiState.subjective.showCharCount,
         answerState = uiState.review.answerState
@@ -220,7 +208,7 @@ fun SelectMultipleChoiceSection(
                 answerState = uiState.getOptionState(option),
                 index = idx + 1,
                 content = option.text,
-                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
+                onClick = { onIntent(QuizSolveIntent.SelectAnswer(option)) }
             )
         }
     }
@@ -247,7 +235,7 @@ fun SelectOXSection(
                 modifier = modifier.weight(1F),
                 answerState = uiState.getOptionState(option),
                 iconPaint = if (option.text == "O") R.drawable.ic_ox_option_o else R.drawable.ic_ox_option_x,
-                onClick = { onIntent(QuizSolveIntent.SelectOption(option)) }
+                onClick = { onIntent(QuizSolveIntent.SelectAnswer(option)) }
             )
         }
     }
@@ -256,7 +244,7 @@ fun SelectOXSection(
 @Composable
 fun QuizTitleSection(modifier: Modifier = Modifier, questionText: String) {
     Text(
-        text = "Q.$questionText",
+        text = questionText,
         style = quizCafeTypography().titleMedium,
         modifier = modifier.fillMaxWidth()
     )

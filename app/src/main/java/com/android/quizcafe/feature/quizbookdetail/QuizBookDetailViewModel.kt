@@ -21,7 +21,13 @@ class QuizBookDetailViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: QuizBookDetailIntent) {
         when (intent) {
-            is QuizBookDetailIntent.ClickQuizSolve -> emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId))
+            is QuizBookDetailIntent.ClickQuizSolve -> {
+                // 한문제씩 풀기 모드면 음수로 quizBookId 전달
+                if(state.value.isReviewModeChecked)
+                    emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId * -1))
+                else
+                    emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId))
+            }
             QuizBookDetailIntent.ClickMarkQuizBook -> markQuizBook()
             QuizBookDetailIntent.ClickUnmarkQuizBook -> unmarkQuizBook()
             QuizBookDetailIntent.ClickUser -> emitEffect(QuizBookDetailEffect.NavigateToUserPage)
@@ -32,6 +38,7 @@ class QuizBookDetailViewModel @Inject constructor(
             is QuizBookDetailIntent.UpdateQuizBookId -> {}
             is QuizBookDetailIntent.FailGetQuizBookDetail -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
             is QuizBookDetailIntent.FailUpdateSaveState -> emitEffect(QuizBookDetailEffect.ShowError(intent.errorMessage ?: ""))
+            is QuizBookDetailIntent.ClickReviewMode -> {}
         }
     }
 
@@ -42,7 +49,7 @@ class QuizBookDetailViewModel @Inject constructor(
             QuizBookDetailIntent.ClickMarkQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickUnmarkQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickUser -> currentState.copy(isLoading = true, errorMessage = null)
-
+            is QuizBookDetailIntent.ClickReviewMode -> currentState.copy(isReviewModeChecked = intent.isChecked)
             is QuizBookDetailIntent.UpdateQuizBookId -> currentState.copy(quizBookId = intent.quizBookId)
 
             is QuizBookDetailIntent.SuccessGetQuizBookDetail -> currentState.copy(

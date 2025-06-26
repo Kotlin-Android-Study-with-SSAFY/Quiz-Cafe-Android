@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import android.util.Log
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
@@ -9,7 +10,7 @@ import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import java.util.Locale
 
 enum class QuestionType { OX, MULTIPLE_CHOICE, SUBJECTIVE }
-enum class PlayMode { TIME_ATTACK, NO_TIME_ATTACK }
+enum class PlayMode { DEFAULT, REVIEW_MODE }
 enum class AnswerPhase { ANSWERING, REVIEW }
 
 data class QuizOption(
@@ -28,7 +29,7 @@ data class McqState(
     val options: List<QuizOption>,
     val selectedId: Long? = null,
     val selectedContent: String? = null,
-    val correctId: Long? = null
+    val correctContent: String? = null
 )
 
 data class SubjectiveState(
@@ -46,7 +47,6 @@ data class ReviewState(
 )
 
 data class TimerState(
-    val playMode: PlayMode = PlayMode.NO_TIME_ATTACK,
     val remainingSeconds: Int = 600,
     val elapsedSeconds: Int = 0
 )
@@ -60,7 +60,9 @@ data class QuizSolveUiState(
     val errorMessage: String? = null,
     val quizBookLocalId: QuizBookGradeLocalId? = null,
     val quizBook: QuizBook? = null,
+    val playMode: PlayMode = PlayMode.DEFAULT,
     val quizGrades: List<QuizGrade> = emptyList(),
+    val currentGrade: QuizGrade? = null,
     val currentIndex: Int = 0,
     val mcq: McqState = McqState(
         options = listOf(
@@ -97,24 +99,28 @@ data class QuizSolveUiState(
                 QuizOption(1L, "X")
             )
 
-    private val currentGrade: QuizGrade?
-        get() = quizGrades.getOrNull(currentIndex)
+
 
     private val currentPhase: AnswerPhase
         get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
 
     fun getOptionState(opt: QuizOption): AnswerState = when (currentPhase) {
-        AnswerPhase.ANSWERING ->
+
+        AnswerPhase.ANSWERING -> {
             if (opt.text == mcq.selectedContent) {
                 AnswerState.SELECTED
             } else {
                 AnswerState.DEFAULT
             }
+        }
 
         AnswerPhase.REVIEW -> currentGrade?.let { gr ->
+            Log.d("test1234",mcq.correctContent.toString())
             when {
-                gr.isCorrect && opt.id.toString() == gr.userAnswer -> AnswerState.CORRECT
-                !gr.isCorrect && opt.id.toString() == gr.userAnswer -> AnswerState.INCORRECT
+                gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.CORRECT
+                !gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.INCORRECT
+                opt.text == mcq.correctContent ->{
+                    AnswerState.CORRECT}
                 else -> AnswerState.DEFAULT
             }
         } ?: AnswerState.DEFAULT
@@ -129,7 +135,7 @@ data class QuizSolveUiState(
         get() = !review.showExplanation && (currentGrade?.isCorrect == false || optionList.any { getOptionState(it) == AnswerState.INCORRECT })
 
     fun getTimeText(): String {
-        val seconds = if (timer.playMode == PlayMode.TIME_ATTACK) timer.remainingSeconds else timer.elapsedSeconds
+        val seconds = timer.elapsedSeconds
         val m = seconds / 60
         val s = seconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
