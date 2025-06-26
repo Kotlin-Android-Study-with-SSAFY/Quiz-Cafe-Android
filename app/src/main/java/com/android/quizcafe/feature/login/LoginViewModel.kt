@@ -15,8 +15,8 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val googleLoginUseCase: GoogleLoginUseCase,
     private val authManager: AuthManager
-) : BaseViewModel<LoginViewState, LoginIntent, LoginEffect>(
-    initialState = LoginViewState()
+) : BaseViewModel<LoginUiState, LoginIntent, LoginEffect>(
+    initialState = LoginUiState()
 ) {
 
     override suspend fun handleIntent(intent: LoginIntent) {
@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: LoginViewState, intent: LoginIntent): LoginViewState {
+    override fun reduce(currentState: LoginUiState, intent: LoginIntent): LoginUiState {
         return when (intent) {
             is LoginIntent.UpdatedEmail -> currentState.copy(
                 email = intent.email,

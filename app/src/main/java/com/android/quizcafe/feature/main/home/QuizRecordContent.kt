@@ -32,13 +32,14 @@ import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
 import com.android.quizcafe.core.designsystem.theme.onSurfaceLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
 import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
-import com.android.quizcafe.core.domain.model.quizsolvingrecord.response.QuizSolvingRecord
+import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.feature.util.safeToRelativeTime
 
 @Composable
 fun QuizRecordContent(
-    quizSolvingRecords: List<QuizSolvingRecord>,
-    onQuizRecordClick: (QuizSolvingRecord) -> Unit = {},
+    quizSolving: List<QuizBookSolving>,
+    onQuizRecordClick: (QuizBookSolving) -> Unit = {},
     onHeaderClick: () -> Unit = {}
 ) {
     Column(
@@ -47,10 +48,10 @@ fun QuizRecordContent(
             .padding(horizontal = 12.dp)
     ) {
         QuizRecordHeader(onClick = onHeaderClick)
-        if (quizSolvingRecords.isEmpty()) {
+        if (quizSolving.isEmpty()) {
             QuizRecordEmpty()
         } else {
-            QuizRecordList(quizSolvingRecords, onQuizRecordClick)
+            QuizRecordList(quizSolving, onQuizRecordClick)
         }
     }
 }
@@ -94,8 +95,8 @@ fun QuizRecordEmpty() {
 
 @Composable
 fun QuizRecordList(
-    quizSolvingRecords: List<QuizSolvingRecord>,
-    onQuizRecordClick: (QuizSolvingRecord) -> Unit
+    quizSolvingRecords: List<QuizBookSolving>,
+    onQuizRecordClick: (QuizBookSolving) -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -115,7 +116,7 @@ fun QuizRecordList(
 
 @Composable
 fun QuizRecordCard(
-    quizSolvingRecord: QuizSolvingRecord,
+    quizSolvingRecord: QuizBookSolving,
     onClick: () -> Unit = {}
 ) {
     Card(
@@ -165,7 +166,7 @@ fun QuizRecordCard(
 fun Preview_QuizRecordContent() {
     QuizCafeTheme {
         QuizRecordContent(
-            quizSolvingRecords = sampleQuizSolvingRecords()
+            quizSolving = sampleQuizSolvings()
         )
     }
 }
@@ -174,7 +175,7 @@ fun Preview_QuizRecordContent() {
 @Composable
 fun Preview_QuizRecordContent_Empty() {
     QuizCafeTheme {
-        QuizRecordContent(quizSolvingRecords = emptyList())
+        QuizRecordContent(quizSolving = emptyList())
     }
 }
 
@@ -199,10 +200,10 @@ fun Preview_QuizRecordEmpty() {
 fun Preview_QuizRecordCard() {
     QuizCafeTheme {
         QuizRecordCard(
-            quizSolvingRecord = QuizSolvingRecord(
+            quizSolvingRecord = QuizBookSolving(
                 id = 1,
                 userId = 1,
-                quizBookId = 1,
+                quizBookId = QuizBookId(1),
                 version = 1,
                 level = "EASY",
                 category = "운영체제",
@@ -211,18 +212,18 @@ fun Preview_QuizRecordCard() {
                 totalQuizzes = 20,
                 correctCount = 16,
                 completedAt = "2025-06-09T05:14:05.986Z",
-                quizzes = emptyList()
+                quizSolvingList = emptyList()
             )
         )
     }
 }
 
 // 샘플 데이터 함수
-fun sampleQuizSolvingRecords() = listOf(
-    QuizSolvingRecord(
+fun sampleQuizSolvings() = listOf(
+    QuizBookSolving(
         id = 1,
         userId = 1,
-        quizBookId = 1,
+        quizBookId = QuizBookId(1),
         version = 1,
         level = "EASY",
         category = "운영체제",
@@ -231,6 +232,6 @@ fun sampleQuizSolvingRecords() = listOf(
         totalQuizzes = 20,
         correctCount = 16,
         completedAt = "2025-06-09T05:14:05.986Z",
-        quizzes = emptyList()
+        quizSolvingList = emptyList()
     )
 )

@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-abstract class BaseViewModel<State : BaseContract.ViewState, Intent : BaseContract.ViewIntent, Effect : BaseContract.ViewEffect>(
+abstract class BaseViewModel<State : BaseContract.UiState, Intent : BaseContract.ViewIntent, Effect : BaseContract.ViewEffect>(
     initialState: State,
 ) : ViewModel() {
     private val _state: MutableStateFlow<State> = MutableStateFlow(initialState)

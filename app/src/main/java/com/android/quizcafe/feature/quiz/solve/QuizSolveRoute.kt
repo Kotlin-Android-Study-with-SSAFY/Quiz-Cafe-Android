@@ -8,22 +8,33 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.android.quizcafe.R
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveEffect
+import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
 
 @Composable
 fun QuizSolveRoute(
+    quizBookId: Long,
     navigateToBack: () -> Unit,
+    navigateToQuizBookSolvingResult: (QuizBookGradeServerId) -> Unit,
     viewModel: QuizSolveViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
+        viewModel.sendIntent(QuizSolveIntent.GetQuizBookLocalId(quizBookId))
+    }
+    LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 QuizSolveEffect.NavigatePopBack -> {
                     navigateToBack()
+                }
+                is QuizSolveEffect.NavigateToQuizBookSolvingResult -> {
+                    navigateToQuizBookSolvingResult(effect.quizBookGradeServerId)
                 }
 
                 is QuizSolveEffect.ShowErrorDialog -> {

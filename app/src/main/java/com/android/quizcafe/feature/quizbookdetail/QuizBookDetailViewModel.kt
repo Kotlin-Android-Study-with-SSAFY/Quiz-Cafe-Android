@@ -15,13 +15,13 @@ class QuizBookDetailViewModel @Inject constructor(
     private val getQuizBookDetailUseCase: GetQuizBookDetailUseCase,
     private val markQuizBookUseCase: MarkQuizBookUseCase,
     private val unmarkQuizBookUseCase: UnmarkQuizBookUseCase
-) : BaseViewModel<QuizBookDetailViewState, QuizBookDetailIntent, QuizBookDetailEffect>(
-    initialState = QuizBookDetailViewState()
+) : BaseViewModel<QuizBookDetailUiState, QuizBookDetailIntent, QuizBookDetailEffect>(
+    initialState = QuizBookDetailUiState()
 ) {
 
     override suspend fun handleIntent(intent: QuizBookDetailIntent) {
         when (intent) {
-            QuizBookDetailIntent.ClickQuizSolve -> emitEffect(QuizBookDetailEffect.NavigateToQuizSolve)
+            is QuizBookDetailIntent.ClickQuizSolve -> emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId))
             QuizBookDetailIntent.ClickMarkQuizBook -> markQuizBook()
             QuizBookDetailIntent.ClickUnmarkQuizBook -> unmarkQuizBook()
             QuizBookDetailIntent.ClickUser -> emitEffect(QuizBookDetailEffect.NavigateToUserPage)
@@ -35,10 +35,10 @@ class QuizBookDetailViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: QuizBookDetailViewState, intent: QuizBookDetailIntent): QuizBookDetailViewState {
+    override fun reduce(currentState: QuizBookDetailUiState, intent: QuizBookDetailIntent): QuizBookDetailUiState {
         return when (intent) {
             QuizBookDetailIntent.LoadQuizBookDetail -> currentState.copy(isLoading = true, errorMessage = null)
-            QuizBookDetailIntent.ClickQuizSolve -> currentState.copy(isLoading = true, errorMessage = null)
+            is QuizBookDetailIntent.ClickQuizSolve -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickMarkQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickUnmarkQuizBook -> currentState.copy(isLoading = true, errorMessage = null)
             QuizBookDetailIntent.ClickUser -> currentState.copy(isLoading = true, errorMessage = null)

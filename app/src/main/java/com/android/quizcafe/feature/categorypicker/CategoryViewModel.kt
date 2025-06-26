@@ -5,14 +5,17 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
 import com.android.quizcafe.core.domain.usecase.quizbook.GetCategoryListUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
+import com.android.quizcafe.feature.categorylist.CategoryEffect
+import com.android.quizcafe.feature.categorylist.CategoryIntent
+import com.android.quizcafe.feature.categorylist.CategoryUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     private val getCategoryUseCase: GetCategoryListUseCase
-) : BaseViewModel<CategoryViewState, CategoryIntent, CategoryEffect>(
-    initialState = CategoryViewState()
+) : BaseViewModel<CategoryUiState, CategoryIntent, CategoryEffect>(
+    initialState = CategoryUiState()
 ) {
 
     override suspend fun handleIntent(intent: CategoryIntent) {
@@ -24,7 +27,7 @@ class CategoryViewModel @Inject constructor(
         }
     }
 
-    override fun reduce(currentState: CategoryViewState, intent: CategoryIntent): CategoryViewState {
+    override fun reduce(currentState: CategoryUiState, intent: CategoryIntent): CategoryUiState {
         return when (intent) {
             CategoryIntent.LoadCategories -> currentState.copy(isLoading = true, errorMessage = null)
             is CategoryIntent.ClickCategory -> currentState.copy(isLoading = true, errorMessage = null)
