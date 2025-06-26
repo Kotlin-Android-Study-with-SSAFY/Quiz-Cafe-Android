@@ -10,5 +10,10 @@ class UpdatePasswordUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     operator fun invoke(oldPassword: String, newPassword: String): Flow<Resource<Unit>> =
-        userRepository.updatePassword(UpdatePasswordRequest(oldPassword = oldPassword, newPassword = newPassword))
+        userRepository.updatePassword(
+            UpdatePasswordRequest(
+                oldPassword = oldPassword,
+                newPassword = newPassword
+            )
+        )
 }

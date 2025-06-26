@@ -30,5 +30,5 @@ interface UserService {
     @PATCH("/user/password")
     suspend fun updatePassword(
         @Body request: UpdatePasswordRequestDto
-    ): NetworkResult<ApiResponse<Unit>>
+    ): NetworkResult<Unit>
 }

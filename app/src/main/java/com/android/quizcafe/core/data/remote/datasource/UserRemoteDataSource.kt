@@ -24,6 +24,6 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun getCreatedQuizBooksByMe(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>> =
         userService.getCreatedQuizBooksByMe()
 
-    suspend fun updatePassword(request: UpdatePasswordRequestDto): NetworkResult<ApiResponse<Unit>> =
+    suspend fun updatePassword(request: UpdatePasswordRequestDto): NetworkResult<Unit> =
         userService.updatePassword(request = request)
 }

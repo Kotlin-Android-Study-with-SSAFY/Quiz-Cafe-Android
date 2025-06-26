@@ -88,7 +88,7 @@ class UserRepositoryImpl @Inject constructor(
         }
 
     override fun updatePassword(request: UpdatePasswordRequest): Flow<Resource<Unit>> = flow {
-        emptyApiResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
+        noContentResponseToResourceFlow { userRemoteDataSource.updatePassword(request.toDto()) }
             .collect { result ->
                 emit(result)
 
