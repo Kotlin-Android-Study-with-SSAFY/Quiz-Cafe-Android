@@ -8,7 +8,7 @@ data class MyPageUiState(
     val email: String = "",
     val quizCount: Int = 0,
     val quizBookCount: Int = 0,
-    val quizSolvingRecord: Map<String, Int> = emptyMap(),
+    val quizSolvings: Map<String, Int> = emptyMap(),
     val joinDateStr: String = "",
     val isLoading: Boolean = false,
     val errorMessage: String? = null

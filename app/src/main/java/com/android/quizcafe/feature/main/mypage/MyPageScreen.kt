@@ -39,9 +39,9 @@ fun MyPageScreen(
             }
         }
         Spacer(Modifier.height(28.dp))
-        Log.d("MyPage Screen", state.quizSolvingRecord.toString())
+        Log.d("MyPage Screen", state.quizSolvings.toString())
         QuizGrassGridByCalendar(
-            quizSolvingRecord = state.quizSolvingRecord,
+            quizSolvingRecord = state.quizSolvings,
             joinDateStr = state.joinDateStr
         )
     }
@@ -70,7 +70,7 @@ fun PreviewMyPageScreen() {
             nickname = "빵빠야",
             quizCount = 1205,
             quizBookCount = 5,
-            quizSolvingRecord = quizHistory,
+            quizSolvings = quizHistory,
             joinDateStr = sdf.format(start.time)
         ),
         onClick = {}

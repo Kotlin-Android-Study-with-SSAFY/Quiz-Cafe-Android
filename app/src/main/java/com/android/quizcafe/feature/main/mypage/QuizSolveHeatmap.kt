@@ -1,10 +1,23 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
+
 package com.android.quizcafe.feature.main.mypage
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -23,38 +36,37 @@ import com.android.quizcafe.core.designsystem.theme.grass2
 import com.android.quizcafe.core.designsystem.theme.grass3
 import com.android.quizcafe.core.designsystem.theme.gridBorder
 import com.android.quizcafe.core.designsystem.theme.weekLabelColor
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
-import java.util.TimeZone
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun QuizGrassGridByCalendar(
     quizSolvingRecord: Map<String, Int>,
     joinDateStr: String,
     modifier: Modifier = Modifier
 ) {
-    val kst = TimeZone.getTimeZone("Asia/Seoul")
-    val sdf = rememberSdf(kst)
-    val today = rememberTodayCalendar(kst)
-    val joinDate = rememberJoinDate(joinDateStr, sdf, today, kst)
-    val days = makeDayList(joinDate, today)
-    val weekLabels = weekLabelStrings()
-    val grid = makeQuizGrid(days)
-    val monthLabels = makeMonthLabels(grid)
-    val yearLabel = getYearLabel(joinDate, today)
+    // 1. parse join & today
+    val joinDate = parseJoinDate(joinDateStr)
+    val today = todayKst()
 
-    val (maxStreak, currentStreak) = calcStreakInfo(
+    // 2. days, grid, labels
+    val days = generateDayList(joinDate, today)
+    val grid = buildQuizGrid(days)
+    val monthLabels = createMonthLabels(grid)
+    val yearLabel = formatYearLabel(joinDate, today)
+    val weekLabels = weekLabelStrings()
+
+    // 3. streaks
+    val (maxStreak, currentStreak) = calculateStreak(
         record = quizSolvingRecord,
         start = joinDate,
-        end = today,
-        timeZone = kst
+        end = today
     )
-    val scrollState = rememberScrollState()
 
-    LaunchedEffect(grid) {
-        scrollState.scrollTo(scrollState.maxValue)
-    }
+    val scrollState = rememberScrollState()
+    LaunchedEffect(grid) { scrollState.scrollTo(scrollState.maxValue) }
 
     Column(modifier.fillMaxWidth()) {
         Text(
@@ -62,31 +74,21 @@ fun QuizGrassGridByCalendar(
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier
-                .padding(bottom = 2.dp)
                 .align(Alignment.CenterHorizontally)
+                .padding(bottom = 2.dp)
         )
         Text(
             text = yearLabel,
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray,
             modifier = Modifier
-                .padding(bottom = 10.dp)
                 .align(Alignment.CenterHorizontally)
+                .padding(bottom = 10.dp)
         )
         MonthRow(monthLabels, scrollState)
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Top
-        ) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
             WeekLabelColumn(weekLabels)
-            GrassGridContent(
-                grid = grid,
-                scrollState = scrollState,
-                quizSolvingRecord = quizSolvingRecord,
-                joinDate = joinDate,
-                today = today,
-                sdf = sdf
-            )
+            GrassGridContent(grid, scrollState, quizSolvingRecord, joinDate, today)
         }
         Box(
             modifier = Modifier
@@ -110,17 +112,11 @@ private fun MonthRow(monthLabels: List<String>, scrollState: ScrollState) {
     ) {
         monthLabels.forEachIndexed { idx, label ->
             Box(
-                modifier = Modifier
-                    .width(18.dp)
-                    .height(18.dp),
+                Modifier
+                    .size(18.dp),
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = Color.Gray,
-                    maxLines = 1
-                )
+                Text(label, style = MaterialTheme.typography.labelSmall, color = Color.Gray)
             }
             Spacer(modifier = Modifier.width(if (idx != monthLabels.lastIndex) 6.dp else 14.dp))
         }
@@ -136,30 +132,25 @@ private fun WeekLabelColumn(weekLabels: List<String>) {
         weekLabels.forEach { label ->
             Box(
                 Modifier
-                    .width(32.dp)
-                    .height(18.dp),
+                    .size(width = 32.dp, height = 18.dp),
                 contentAlignment = Alignment.CenterEnd
             ) {
-                Text(
-                    text = label,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = weekLabelColor,
-                    maxLines = 1
-                )
+                Text(label, style = MaterialTheme.typography.labelMedium, color = weekLabelColor)
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun GrassGridContent(
-    grid: List<List<Calendar?>>,
+    grid: List<List<LocalDate?>>,
     scrollState: ScrollState,
     quizSolvingRecord: Map<String, Int>,
-    joinDate: Calendar,
-    today: Calendar,
-    sdf: SimpleDateFormat
+    joinDate: LocalDate,
+    today: LocalDate
 ) {
+    val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -169,26 +160,23 @@ private fun GrassGridContent(
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         grid.forEach { week ->
-            Column(
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-                horizontalAlignment = Alignment.End
-            ) {
-                week.forEach { cal ->
-                    if (cal == null || cal.before(joinDate) || cal.after(today)) {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp), horizontalAlignment = Alignment.End) {
+                week.forEach { date ->
+                    if (date == null || date.isBefore(joinDate) || date.isAfter(today)) {
                         Box(
                             Modifier
                                 .size(18.dp)
                                 .background(Color.Transparent)
                         )
                     } else {
-                        val dateKey = sdf.format(cal.time)
-                        val count = quizSolvingRecord[dateKey] ?: 0
+                        val key = date.format(fmt)
+                        val count = quizSolvingRecord[key] ?: 0
                         GrassCell(count)
                     }
                 }
             }
         }
-        Spacer(modifier = Modifier.weight(1f, fill = true))
+        Spacer(Modifier.weight(1f))
     }
 }
 
@@ -197,9 +185,8 @@ private fun GrassCell(count: Int) {
     val color = getGrassColor(count)
     val border = if (count == 0) Modifier.border(1.dp, gridBorder, RoundedCornerShape(3.dp)) else Modifier
     Box(
-        modifier = Modifier
-            .size(18.dp)
-            .then(border)
+        border
+            .then(Modifier.size(18.dp))
             .background(color, RoundedCornerShape(3.dp))
     )
 }
@@ -232,55 +219,32 @@ private fun weekLabelStrings(): List<String> = listOf(
     stringResource(R.string.week_sun)
 )
 
-// --- Preview: 다양한 기간 프리셋 보여주기 ---
-
+// --- Previews ---
 @Preview(showBackground = true, name = "OneDayStreak")
 @Composable
-fun PreviewQuizGrassGridByCalendar_OneDay() {
-    PreviewQuizGrassGridByCalendar(days = 1)
-}
+fun PreviewOneDay() = PreviewQuizGrass(days = 1)
 
 @Preview(showBackground = true, name = "OneWeekStreak")
 @Composable
-fun PreviewQuizGrassGridByCalendar_Week() {
-    PreviewQuizGrassGridByCalendar(days = 7)
-}
+fun PreviewOneWeek() = PreviewQuizGrass(days = 7)
 
 @Preview(showBackground = true, name = "OneMonthStreak")
 @Composable
-fun PreviewQuizGrassGridByCalendar_Month() {
-    PreviewQuizGrassGridByCalendar(days = 30)
-}
-
-@Preview(showBackground = true, name = "ThreeMonthStreak")
-@Composable
-fun PreviewQuizGrassGridByCalendar_3Month() {
-    PreviewQuizGrassGridByCalendar(days = 90)
-}
+fun PreviewOneMonth() = PreviewQuizGrass(days = 30)
 
 @Composable
-private fun PreviewQuizGrassGridByCalendar(days: Int) {
-    val kst = TimeZone.getTimeZone("Asia/Seoul")
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply { timeZone = kst }
-    val today = Calendar.getInstance(kst).apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }
-    val start = (today.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, -(days - 1)) }
-    val quizHistory = mutableMapOf<String, Int>().apply {
-        repeat(days) { i ->
-            val cal = (start.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, i) }
-            put(sdf.format(cal.time), (0..90).random())
-        }
+private fun PreviewQuizGrass(days: Int) {
+    // generate mock record
+    val today = LocalDate.now(ZoneId.of("Asia/Seoul"))
+    val start = today.minusDays((days - 1).toLong())
+    val fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    val history = (0 until days).associate { i ->
+        val d = start.plusDays(i.toLong())
+        d.format(fmt) to (0..5).random()
     }
     Surface(color = Color(0xFFF6F6F6)) {
-        Box(modifier = Modifier.padding(16.dp)) {
-            QuizGrassGridByCalendar(
-                quizSolvingRecord = quizHistory,
-                joinDateStr = sdf.format(start.time)
-            )
+        Box(Modifier.padding(16.dp)) {
+            QuizGrassGridByCalendar(history, start.format(fmt))
         }
     }
 }

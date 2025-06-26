@@ -1,14 +1,27 @@
+@file:RequiresApi(Build.VERSION_CODES.O)
 package com.android.quizcafe.feature.main.mypage
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import com.android.quizcafe.core.designsystem.theme.grass1
 import com.android.quizcafe.core.designsystem.theme.grass2
 import com.android.quizcafe.core.designsystem.theme.grass3
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
+
+private val KST: ZoneId = ZoneId.of("Asia/Seoul")
+private val DATE_FMT: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+private val ISO_FMT: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
+private fun String.toLocalDate(): LocalDate? =
+    runCatching { LocalDate.parse(this, ISO_FMT) }
+        .recoverCatching { LocalDate.parse(this, DATE_FMT) }
+        .getOrNull()
+
+private fun LocalDate.formatKey(): String = this.format(DATE_FMT)
 
 fun getGrassColor(count: Int): Color = when {
     count == 0 -> Color.White
@@ -18,143 +31,82 @@ fun getGrassColor(count: Int): Color = when {
     else -> Color.LightGray
 }
 
-fun rememberSdf(timeZone: TimeZone): SimpleDateFormat =
-    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
-        this.timeZone = timeZone
-    }
+/** ISO 또는 yyyy-MM-dd 파싱, 실패 시 오늘−6일 반환 */
+fun parseJoinDate(joinDateStr: String): LocalDate =
+    joinDateStr.toLocalDate() ?: LocalDate.now(KST).minusDays(6)
 
-fun rememberTodayCalendar(timeZone: TimeZone): Calendar =
-    Calendar.getInstance(timeZone).apply {
-        set(Calendar.HOUR_OF_DAY, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
-    }
+/** KST 기준 오늘 */
+fun todayKst(): LocalDate = LocalDate.now(KST)
 
-fun rememberJoinDate(
-    joinDateStr: String,
-    sdf: SimpleDateFormat,
-    today: Calendar,
-    kst: TimeZone
-): Calendar {
-    val cal = Calendar.getInstance(kst)
+/** start…end 사이의 날짜 리스트 */
+fun generateDayList(start: LocalDate, end: LocalDate): List<LocalDate> {
+    val days = ChronoUnit.DAYS.between(start, end).toInt()
+    return (0..days).map { start.plusDays(it.toLong()) }
+}
 
-    // 1) ISO 포맷 먼저 시도 (예: 2025-06-20T06:48:33)
-    val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).apply {
-        timeZone = kst
-    }
-
-    val parsed: Date? = runCatching { isoFormat.parse(joinDateStr) }
-        .getOrNull()
-        // 2) ISO 실패 시, yyyy-MM-dd 로도 시도
-        ?: runCatching { sdf.parse(joinDateStr) }
-            .getOrNull()
-
-    return if (parsed != null) {
-        cal.time = parsed
-        // 시간은 0시로 초기화
-        cal.apply {
-            set(Calendar.HOUR_OF_DAY, 0)
-            set(Calendar.MINUTE, 0)
-            set(Calendar.SECOND, 0)
-            set(Calendar.MILLISECOND, 0)
-        }
-    } else {
-        // 둘 다 실패했을 땐 오늘-6일
-        (today.clone() as Calendar).apply {
-            add(Calendar.DAY_OF_YEAR, -6)
+/** 그리드: 주차별로 LocalDate or null 배치 */
+fun buildQuizGrid(days: List<LocalDate>): List<List<LocalDate?>> {
+    if (days.isEmpty()) return emptyList()
+    val firstDow = (days.first().dayOfWeek.value + 6) % 7
+    val totalCells = ((firstDow + days.size + 6) / 7) * 7
+    val weeks = totalCells / 7
+    return List(weeks) { w ->
+        List(7) { d ->
+            val idx = w * 7 + d - firstDow
+            days.getOrNull(idx)
         }
     }
 }
 
-fun makeDayList(start: Calendar, end: Calendar): List<Calendar> {
-    val list = mutableListOf<Calendar>()
-    val cal = (start.clone() as Calendar)
-    while (!cal.after(end)) {
-        list.add(cal.clone() as Calendar)
-        cal.add(Calendar.DAY_OF_YEAR, 1)
+/** 주차별 첫 비-널 날짜의 monthValue를 레이블로 */
+fun createMonthLabels(grid: List<List<LocalDate?>>): List<String> =
+    grid.mapIndexed { i, week ->
+        week.firstOrNull { it != null }?.monthValue
+            ?.takeIf { i == 0 || it != grid[i - 1].firstOrNull()?.monthValue }
+            ?.toString() ?: ""
     }
-    return list
-}
 
-fun makeQuizGrid(days: List<Calendar>): List<List<Calendar?>> {
-    val firstDayOfWeek = (days.first().get(Calendar.DAY_OF_WEEK) + 5) % 7
-    val totalGridCount = ((firstDayOfWeek + days.size + 6) / 7) * 7
-    val weekCount = totalGridCount / 7
-    return MutableList(weekCount) { MutableList<Calendar?>(7) { null } }.apply {
-        var week = 0
-        var dayOfWeek = firstDayOfWeek
-        for (day in days) {
-            this[week][dayOfWeek] = day
-            dayOfWeek++
-            if (dayOfWeek == 7) {
-                dayOfWeek = 0
-                week++
-            }
+/** "YYYY" 또는 "YYYY ~ YYYY" */
+fun formatYearLabel(joinDate: LocalDate, today: LocalDate): String =
+    joinDate.year.let { start ->
+        today.year.let { end ->
+            if (start == end) "$start" else "$start ~ $end"
         }
     }
-}
 
-fun makeMonthLabels(grid: List<List<Calendar?>>): List<String> {
-    val weekCount = grid.size
-    return MutableList(weekCount) { "" }.apply {
-        var prevMonth: Int? = null
-        for (w in grid.indices) {
-            val firstNotNull = grid[w].firstOrNull { it != null }
-            val month = firstNotNull?.get(Calendar.MONTH)
-            if (month != null && month != prevMonth) {
-                this[w] = (month + 1).toString()
-                prevMonth = month
-            }
-        }
-    }
-}
-
-fun getYearLabel(joinDate: Calendar, today: Calendar): String {
-    val startYear = joinDate.get(Calendar.YEAR)
-    val endYear = today.get(Calendar.YEAR)
-    return if (startYear == endYear) "$startYear" else "$startYear ~ $endYear"
-}
-
-fun calcStreakInfo(
+/**
+ * record의 "yyyy-MM-dd..." 키에서 날짜만 추출해 카운트,
+ * start→end 순으로 순회해 maxStreak, end→start 역순으로 currentStreak 계산
+ */
+fun calculateStreak(
     record: Map<String, Int>,
-    start: Calendar,
-    end: Calendar,
-    timeZone: TimeZone = TimeZone.getTimeZone("Asia/Seoul")
+    start: LocalDate,
+    end: LocalDate
 ): Pair<Int, Int> {
-    val simpleRecord = record.entries
-        .mapNotNull { (rawKey, value) ->
-            val dayKey = rawKey.substringBefore('T')
-            if (value > 0) dayKey to value else null
-        }
-        .toMap()
-
-    val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).apply {
-        this.timeZone = timeZone
-    }
+    val validDates = record
+        .mapNotNull { (k, v) -> k.substringBefore('T').takeIf { v > 0 } }
+        .toSet()
 
     var maxStreak = 0
-    var curStreak = 0
-
-    val iter = (start.clone() as Calendar)
-    while (!iter.after(end)) {
-        val key = sdf.format(iter.time)
-        if (simpleRecord[key] != null) {
-            curStreak++
-            if (curStreak > maxStreak) maxStreak = curStreak
+    var cur = 0
+    var d = start
+    while (!d.isAfter(end)) {
+        if (d.formatKey() in validDates) {
+            cur++
+            maxStreak = maxOf(maxStreak, cur)
         } else {
-            curStreak = 0
+            cur = 0
         }
-        iter.add(Calendar.DAY_OF_YEAR, 1)
+        d = d.plusDays(1)
     }
 
-    // 3. 끝→시작 거꾸로 순회하면서 currentStreak 계산
     var currentStreak = 0
-    val rev = (end.clone() as Calendar)
-    while (!rev.before(start) && simpleRecord[sdf.format(rev.time)] != null) {
+    d = end
+    while (!d.isBefore(start) && d.formatKey() in validDates) {
         currentStreak++
-        rev.add(Calendar.DAY_OF_YEAR, -1)
+        d = d.minusDays(1)
     }
+    if (currentStreak > 0 && maxStreak == 0) maxStreak = 1
 
     return maxStreak to currentStreak
 }

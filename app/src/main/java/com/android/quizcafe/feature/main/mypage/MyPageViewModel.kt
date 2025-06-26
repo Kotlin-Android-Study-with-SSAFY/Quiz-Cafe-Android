@@ -50,7 +50,7 @@ class MyPageViewModel @Inject constructor(
                 nickname = intent.data.nickname,
                 quizCount = intent.data.quizCount,
                 quizBookCount = intent.data.quizBookCount,
-                quizSolvingRecord = intent.data.quizSolvingRecord,
+                quizSolvings = intent.data.quizCountByDate,
                 joinDateStr = intent.data.joinDateStr,
                 isLoading = false,
                 errorMessage = null

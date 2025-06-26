@@ -2,6 +2,7 @@ package com.android.quizcafe.core.data.model.user.response
 
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
 import kotlinx.serialization.Serializable
+import java.util.SortedMap
 
 @Serializable
 data class UserInfoResponseDto(
@@ -13,12 +14,12 @@ data class UserInfoResponseDto(
 fun UserInfoResponseDto.toDomain(
     quizCount: Int,
     quizBookCount: Int,
-    quizSolvingRecord: Map<String, Int>
+    quizSolvingRecord: SortedMap<String, Int>
 ) = UserInfo(
     nickname = nickname,
     email = email,
     quizCount = quizCount,
     quizBookCount = quizBookCount,
     joinDateStr = createdAt,
-    quizSolvingRecord = quizSolvingRecord
+    quizCountByDate = quizSolvingRecord
 )

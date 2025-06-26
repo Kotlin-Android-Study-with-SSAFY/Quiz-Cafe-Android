@@ -119,13 +119,13 @@
     <string name="mypage_record_title">나의 기록</string>
     <string name="mypage_record_max_streak">한 번도 쉬지 않고 푼 최장 기록: %1$d일</string>
     <string name="mypage_record_current_streak">연속 풀이 챌린지 달성: %1$d일</string>
-    <string name="week_mon">mon</string>
-    <string name="week_tue">tue</string>
-    <string name="week_wed">wed</string>
-    <string name="week_thu">the</string>
-    <string name="week_fri">fri</string>
-    <string name="week_sat">sat</string>
-    <string name="week_sun">sun</string>
+    <string name="week_mon">Mon</string>
+    <string name="week_tue">Tue</string>
+    <string name="week_wed">Wed</string>
+    <string name="week_thu">Thu</string>
+    <string name="week_fri">Fri</string>
+    <string name="week_sat">Sat</string>
+    <string name="week_sun">Sun</string>
 
     <!-- 다이얼로그 -->
     <string name="dialog_message_logout">정말 로그아웃 하시겠습니까?</string>

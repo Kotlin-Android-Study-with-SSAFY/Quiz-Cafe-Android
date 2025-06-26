@@ -11,6 +11,7 @@ import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.datastore.LogoutReason
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.solving.toDailyCounts
 import com.android.quizcafe.core.domain.model.user.request.UpdateNicknameRequest
 import com.android.quizcafe.core.domain.model.user.request.UpdatePasswordRequest
 import com.android.quizcafe.core.domain.model.user.response.UserInfo
@@ -47,14 +48,10 @@ class UserRepositoryImpl @Inject constructor(
         val records = recordDtoList.map { it.toDomain() }
         val quizCount = records.sumOf { it.quizSolvingList.size }
         val quizBookCount = records.map { it.quizBookId }.distinct().count()
-        val quizSolvingRecord =
-            records.asSequence()
-                .flatMap { it.quizSolvingList }
-                .filter { it.completedAt.isNotBlank() }
-                .map { it.completedAt.take(10) }
-                .groupingBy { it }
-                .eachCount()
-                .toSortedMap()
+        val quizSolvingRecord = records
+            .asSequence()
+            .flatMap { it.quizSolvingList }
+            .toDailyCounts()
 
         emit(
             Resource.Success(
