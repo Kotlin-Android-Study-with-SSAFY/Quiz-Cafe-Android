@@ -39,6 +39,7 @@ import com.android.quizcafe.core.designsystem.theme.quizCafeTypography
 import com.android.quizcafe.core.designsystem.theme.scrimLight
 import com.android.quizcafe.core.designsystem.theme.surfaceVariantLight
 import com.android.quizcafe.core.designsystem.theme.tertiaryLight
+import com.android.quizcafe.core.ui.OptionSelector
 import kotlin.math.roundToInt
 
 @Composable
@@ -148,54 +149,6 @@ private fun SortOptionContent(
             onOptionSelected = { onOptionSelected(it) },
             optionToText = { it.stringResId }
         )
-    }
-}
-
-@Composable
-fun <T> OptionSelector(
-    options: List<T>,
-    selectedOption: T,
-    onOptionSelected: (T) -> Unit,
-    optionToText: (T) -> Int
-) {
-    Surface(
-        shape = RoundedCornerShape(16.dp),
-        color = surfaceVariantLight
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            options.forEachIndexed { index, option ->
-                val isSelected = selectedOption == option
-
-                Box(
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(if (isSelected) tertiaryLight else Color.Transparent) // 예시 색상
-                        .clickable {
-                            onOptionSelected(option)
-                        }
-                        .padding(horizontal = 12.dp, vertical = 6.dp)
-                ) {
-                    Text(
-                        text = stringResource(optionToText(option)),
-                        color = if (isSelected) onPrimaryLight else scrimLight,
-                        style = quizCafeTypography().labelSmall
-                    )
-                }
-
-                if (index < options.lastIndex) {
-                    VerticalDivider(
-                        modifier = Modifier
-                            .padding(horizontal = 6.dp)
-                            .height(16.dp)
-                            .width(1.dp),
-                        color = outlineVariantLight
-                    )
-                }
-            }
-        }
     }
 }
 
