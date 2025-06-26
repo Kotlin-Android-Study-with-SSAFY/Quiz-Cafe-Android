@@ -87,13 +87,13 @@ class UpdateUserInfoViewModel @Inject constructor(
             Regex("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#\$%^&*])[A-Za-z\\d!@#\$%^&*]{8,20}$")
         val nicknameRegex = Regex("^[a-zA-Z가-힣]{1,10}$")
 
-        val isCurrentValid = currentPassword.isNotBlank() && currentPassword.matches(passwordRegex)
+        val isCurrentValid = currentPassword.isNotBlank()
         val isNewValid = newPassword.isNotBlank() && newPassword.matches(passwordRegex)
         val isConfirmValid = confirmPassword == newPassword && confirmPassword.isNotBlank()
         val isNicknameValid = nickname.isNotBlank() && nickname.matches(nicknameRegex)
 
         return this.copy(
-            currentPasswordError = if (currentPassword.isNotBlank() && !isCurrentValid) "기존 비밀번호를 입력해주세요." else null,
+            currentPasswordError = if (!isCurrentValid) "비밀번호를 입력해주세요." else null,
             newPasswordError = if (newPassword.isNotBlank() && !isNewValid) "비밀번호는 8~20자의 영문, 숫자, 특수문자를 포함해야 합니다." else null,
             confirmPasswordError = if (confirmPassword.isNotBlank() && !isConfirmValid) "비밀번호가 일치하지 않습니다." else null,
             nicknameError = if (nickname.isNotBlank() && !isNicknameValid) "닉네임은 한글 또는 영문 10자 이내로 입력하세요." else null,
