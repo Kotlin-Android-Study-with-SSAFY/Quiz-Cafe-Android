@@ -107,7 +107,7 @@ fun MyPageMenu(
 ) {
     val menuItems = listOf(
         R.string.mypage_menu_change_user_info,
-        R.string.mypage_menu_my_quiz_set,
+        //R.string.mypage_menu_my_quiz_set,
         R.string.mypage_menu_logout,
         R.string.mypage_menu_withdrawal
     )
