@@ -49,8 +49,8 @@ fun QuizSolveScreen(
     Scaffold(
         topBar = {
             QuizTopBar(
-                currentQuestion = uiState.questionInfo.current,
-                totalQuestions = uiState.questionInfo.total,
+                currentQuestion = uiState.common.currentIndex+1,
+                totalQuestions = uiState.quizBook?.totalQuizzes ?: 0,
                 timeText = uiState.getTimeText(),
                 onBackClick = { onIntent(QuizSolveIntent.NavigateBack) },
                 onSideBarClick = { /* 사이드바 보여줘? 말어 */ },
@@ -58,7 +58,7 @@ fun QuizSolveScreen(
         },
         bottomBar = {
             QuizSolveBottomBar(
-                isEnabled = uiState.common.isButtonEnabled,
+                isEnabled = uiState.isButtonEnabled,
                 isLastQuestion = uiState.isLastQuestion,
                 isFirstQuestion = uiState.isFirstQuestion,
                 onClickActionPrev = { onIntent(QuizSolveIntent.NavigateToPreviousQuestion) },
@@ -84,13 +84,13 @@ fun QuizSolveScreen(
                     Spacer(Modifier.height(36.dp))
                 }
                 item {
-                    QuizTitleSection(questionText = uiState.questionInfo.text)
+                    QuizTitleSection(questionText = uiState.currentQuiz?.content ?: "")
                 }
                 item {
                     Spacer(Modifier.height(24.dp))
                 }
                 item {
-                    when (uiState.questionInfo.type) {
+                    when (uiState.questionType) {
                         QuestionType.OX -> {
                             SelectOXSection(uiState = uiState, onIntent = onIntent)
                         }
