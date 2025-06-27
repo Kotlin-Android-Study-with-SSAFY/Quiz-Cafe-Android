@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowForward
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
@@ -33,26 +31,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.designsystem.theme.onSurfaceLight
 import com.android.quizcafe.core.designsystem.theme.outlineLight
-import com.android.quizcafe.core.designsystem.theme.surfaceContainerHighestLight
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.feature.util.safeToRelativeTime
 
 @Composable
 fun LatestQuizBooksContent(
     quizBooks: List<QuizBook>,
-    onQuizBookClick: (QuizBook) -> Unit = {},
-    onSeeAllClick: () -> Unit = {}
+    onQuizBookClick: (QuizBook) -> Unit = {}
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable(onClick = onSeeAllClick)
                 .padding(horizontal = 12.dp, vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -61,11 +54,6 @@ fun LatestQuizBooksContent(
                 text = stringResource(R.string.latest_quiz_books),
                 style = MaterialTheme.typography.titleMedium,
                 color = MaterialTheme.colorScheme.onBackground
-            )
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowForward,
-                contentDescription = null,
-                tint = outlineLight
             )
         }
 
@@ -105,68 +93,98 @@ fun LatestQuizBookCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .height(88.dp)
+            .heightIn(min = 88.dp)
             .clickable(onClick = onClick),
         shape = RoundedCornerShape(12.dp),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = surfaceContainerHighestLight,
-            contentColor = onSurfaceLight
-        )
+        elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
+        Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = quizBook.title,
-                    style = MaterialTheme.typography.titleSmall,
-                    maxLines = 1
-                )
-                Spacer(modifier = Modifier.height(4.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = quizBook.title,
+                        style = MaterialTheme.typography.titleSmall,
+                        maxLines = 1
+                    )
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(
+                        text = stringResource(
+                            id = R.string.created_at,
+                            quizBook.createdAt.safeToRelativeTime()
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = outlineLight
+                    )
+                }
+                Spacer(modifier = Modifier.width(8.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = outlineLight
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = quizBook.totalComments.toString(),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Icon(
+                        imageVector = Icons.Filled.Favorite,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = outlineLight
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    Text(
+                        text = quizBook.totalSaves.toString(),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(
+                            id = R.string.quiz_count_description,
+                            quizBook.totalQuizzes
+                        ),
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(
+                        text = quizBook.level,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                }
                 Text(
                     text = stringResource(
-                        id = R.string.created_at,
-                        quizBook.createdAt.safeToRelativeTime()
+                        id = R.string.created_by_quiz_book,
+                        quizBook.ownerName
                     ),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = outlineLight
-                )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = outlineLight
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${quizBook.totalComments}",
-                    style = MaterialTheme.typography.bodySmall
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                Icon(
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = null,
-                    modifier = Modifier.size(16.dp),
-                    tint = outlineLight
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Text(
-                    text = "${quizBook.totalSaves}",
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.labelSmall
                 )
             }
         }
     }
 }
 
-// 샘플
 private fun sampleLatestQuizBooks() = listOf(
     QuizBook(
         id = 1L, version = 1L, category = "OS", title = "운영체제 기초",
@@ -194,14 +212,57 @@ private fun sampleLatestQuizBooks() = listOf(
     )
 )
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "LatestSection - Default")
 @Composable
-fun Preview_LatestSection() {
+fun Preview_LatestSection_Default() {
     QuizCafeTheme {
         LatestQuizBooksContent(
             quizBooks = sampleLatestQuizBooks(),
-            onQuizBookClick = {},
-            onSeeAllClick = {}
+            onQuizBookClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "LatestSection - Empty")
+@Composable
+fun Preview_LatestSection_Empty() {
+    QuizCafeTheme {
+        LatestQuizBooksContent(
+            quizBooks = emptyList(),
+            onQuizBookClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 320, name = "LatestSection - Narrow")
+@Composable
+fun Preview_LatestSection_Narrow() {
+    QuizCafeTheme {
+        LatestQuizBooksContent(
+            quizBooks = sampleLatestQuizBooks(),
+            onQuizBookClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, heightDp = 300, name = "LatestSection - Scrollable")
+@Composable
+fun Preview_LatestSection_Scrollable() {
+    QuizCafeTheme {
+        LatestQuizBooksContent(
+            quizBooks = sampleLatestQuizBooks(),
+            onQuizBookClick = {}
+        )
+    }
+}
+
+@Preview(uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES, showBackground = true, name = "LatestSection - Dark")
+@Composable
+fun Preview_LatestSection_Dark() {
+    QuizCafeTheme {
+        LatestQuizBooksContent(
+            quizBooks = sampleLatestQuizBooks(),
+            onQuizBookClick = {}
         )
     }
 }

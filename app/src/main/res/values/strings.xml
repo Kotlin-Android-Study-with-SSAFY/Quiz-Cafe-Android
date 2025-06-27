@@ -75,6 +75,7 @@
     <!--Quizpage Text -->
     <string name="latest_quiz_books">최신 문제집</string>
     <string name="no_latest_quiz_books">텅</string>
+    <string name="created_by_quiz_book">제작자: %1$s</string>
     <string name="created_at">%1$s에 생성됨</string>
     <string name="navigate_forward">앞으로 이동</string>
     <string name="desc_navigate_to">"%1$s 이동"</string>
