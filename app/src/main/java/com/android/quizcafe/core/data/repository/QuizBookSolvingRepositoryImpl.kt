@@ -1,6 +1,5 @@
 package com.android.quizcafe.core.data.repository
 
-import android.util.Log
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity

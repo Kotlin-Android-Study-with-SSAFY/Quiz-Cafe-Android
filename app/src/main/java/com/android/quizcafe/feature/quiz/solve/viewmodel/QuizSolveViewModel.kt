@@ -147,8 +147,9 @@ class QuizSolveViewModel @Inject constructor(
                         currentIndex = currentState.currentIndex + 1,
                         common = CommonState(false)
                     )
-                } else
+                } else {
                     currentState
+                }
             }
 
             else -> currentState
@@ -237,7 +238,7 @@ class QuizSolveViewModel @Inject constructor(
                 when (it) {
                     is Resource.Success -> {
                         sendIntent(QuizSolveIntent.GradeQuizSuccess)
-                        if(uiState.isLastQuestion){
+                        if (uiState.isLastQuestion) {
                             sendIntent(QuizSolveIntent.SubmitAnswer)
                         }
                         Log.d("getQuizBookGradeUseCase", "Get QuizBookDetail Success")
