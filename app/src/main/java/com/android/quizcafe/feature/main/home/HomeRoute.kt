@@ -18,7 +18,7 @@ fun HomeRoute(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(HomeIntent.FetchRecord)
+        viewModel.sendIntent(HomeIntent.FetchLatestQuizBook)
     }
 
     LaunchedEffect(Unit) {

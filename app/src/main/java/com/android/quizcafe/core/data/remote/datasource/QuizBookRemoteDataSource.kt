@@ -36,4 +36,7 @@ class QuizBookRemoteDataSource @Inject constructor(
 
     suspend fun unmarkQuizBook(quizBookId: Long): NetworkResult<Unit> =
         quizBookService.unmarkQuizBook(quizBookId)
+
+    suspend fun getLatestQuizBook(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>> =
+        quizBookService.getLatestQuizBook()
 }

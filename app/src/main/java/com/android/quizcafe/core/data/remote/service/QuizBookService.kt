@@ -50,4 +50,7 @@ interface QuizBookService {
     suspend fun unmarkQuizBook(
         @Query("quizBookId") quizBookId: Long
     ): NetworkResult<Unit>
+
+    @GET("quiz-book/latest")
+    suspend fun getLatestQuizBook(): NetworkResult<ApiResponse<List<QuizBookResponseDto>>>
 }

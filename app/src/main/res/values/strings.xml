@@ -73,10 +73,11 @@
     <string name="tab_title_mypage"> </string>
 
     <!--Quizpage Text -->
-    <string name="quiz_record">풀이기록</string>
+    <string name="latest_quiz_books">최신 문제집</string>
+    <string name="no_latest_quiz_books">텅</string>
+    <string name="created_at">%1$s에 생성됨</string>
     <string name="navigate_forward">앞으로 이동</string>
     <string name="desc_navigate_to">"%1$s 이동"</string>
-    <string name="quiz_record_empty">텅</string>
     <string name="quiz_result">%1$d문제 중 %2$d개 정답</string>
     <string name="quiz_solved_date">%1$s 풀이</string>
 

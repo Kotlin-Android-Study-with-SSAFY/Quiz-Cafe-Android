@@ -23,4 +23,6 @@ interface QuizBookRepository {
     fun markQuizBook(quizBookId: Long): Flow<Resource<Unit>>
 
     fun unmarkQuizBook(quizBookId: Long): Flow<Resource<Unit>>
+
+    fun getLatestQuizBook(): Flow<Resource<List<QuizBook>>>
 }
