@@ -50,11 +50,20 @@ fun LatestQuizBooksContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = stringResource(R.string.latest_quiz_books),
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Row(
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Text(
+                    text = stringResource(R.string.latest_quiz_books),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = stringResource(R.string.latest_quiz_info),
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
+
         }
 
         val itemHeight = 88.dp
