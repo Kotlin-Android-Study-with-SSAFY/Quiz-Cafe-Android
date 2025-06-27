@@ -15,6 +15,7 @@ import com.android.quizcafe.R
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.feature.quiz.solve.component.ExitSolvingDialog
 import com.android.quizcafe.feature.quiz.solve.component.ResumeSolvingDialog
+import com.android.quizcafe.feature.quiz.solve.viewmodel.IQuizSolveViewModel
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveEffect
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveIntent
 import com.android.quizcafe.feature.quiz.solve.viewmodel.QuizSolveViewModel
@@ -24,7 +25,7 @@ fun QuizSolveRoute(
     quizBookId: Long,
     navigateToBack: () -> Unit,
     navigateToQuizBookSolvingResult: (QuizBookGradeServerId) -> Unit,
-    viewModel: QuizSolveViewModel = hiltViewModel()
+    viewModel: IQuizSolveViewModel = hiltViewModel<QuizSolveViewModel>()
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()

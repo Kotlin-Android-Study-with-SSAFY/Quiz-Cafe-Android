@@ -24,7 +24,8 @@ class QuizSolveViewModel @Inject constructor(
     private val deleteQuizBookGradeUseCase: DeleteQuizBookGradeUseCase,
 ) : BaseViewModel<QuizSolveUiState, QuizSolveIntent, QuizSolveEffect>(
     initialState = QuizSolveUiState()
-) {
+),
+    IQuizSolveViewModel {
     init {
         viewModelScope.launch {
             while (true) {
@@ -201,7 +202,7 @@ class QuizSolveViewModel @Inject constructor(
                     val isResume = it.data.quizGrades.isNotEmpty()
                     if (isResume) {
                         emitEffect(QuizSolveEffect.ShowResumeDialog)
-                    }else{
+                    } else {
                         sendIntent(QuizSolveIntent.StartTimer)
                     }
                     sendIntent(QuizSolveIntent.SuccessGetQuizBookGrade(it.data))
