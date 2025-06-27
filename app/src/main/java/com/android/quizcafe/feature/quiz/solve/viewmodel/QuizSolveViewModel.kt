@@ -12,7 +12,6 @@ import com.android.quizcafe.core.domain.usecase.solving.GetQuizGradeUseCase
 import com.android.quizcafe.core.domain.usecase.solving.GradeQuizUseCase
 import com.android.quizcafe.core.domain.usecase.solving.SolveQuizBookUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
-import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,9 +69,19 @@ class QuizSolveViewModel @Inject constructor(
 
             QuizSolveIntent.NavigateToNextQuestion -> {
                 val currentState = state.value
-                saveQuizToLocal()
-                if (currentState.isLastQuestion) {
-                    submitQuizAnswer()
+                when {
+                    currentState.common.playMode == PlayMode.REVIEW_MODE && !currentState.review.showExplanation -> {
+                        saveQuizToLocal()
+                    }
+                    currentState.common.playMode == PlayMode.REVIEW_MODE && currentState.isLastQuestion -> {
+                        submitQuizAnswer()
+                    }
+                    else -> {
+                        saveQuizToLocal()
+                        if(currentState.isLastQuestion){
+                            submitQuizAnswer()
+                        }
+                    }
                 }
             }
 
@@ -81,8 +90,14 @@ class QuizSolveViewModel @Inject constructor(
             }
             is QuizSolveIntent.GradeQuizSuccess -> {
                 val currentState = state.value
-                if(!currentState.isLastQuestion){
-                    getQuizAnswer()
+                when {
+                    currentState.common.playMode == PlayMode.REVIEW_MODE -> {
+                        getQuizAnswer()
+                    }
+                    !currentState.isLastQuestion && currentState.common.playMode == PlayMode.DEFAULT -> {
+                        getQuizAnswer()
+                    }
+                    else -> Unit
                 }
             }
             is QuizSolveIntent.SelectAnswer,
@@ -115,9 +130,6 @@ class QuizSolveViewModel @Inject constructor(
                     mcq = currentState.mcq.copy(
                         selectedId = intent.option.id,
                         selectedContent = intent.option.text
-                    ),
-                    common = currentState.common.copy(
-                        isButtonEnabled = true
                     )
                 )
 
@@ -125,16 +137,15 @@ class QuizSolveViewModel @Inject constructor(
                 currentState.copy(
                     subjective = currentState.subjective.copy(
                         answer = intent.answer
-                    ),
-                    common = currentState.common.copy(
-                        isButtonEnabled = intent.answer.isNotBlank()
                     )
                 )
 
             is QuizSolveIntent.Initialize -> {
                 if (intent.quizBookId < 0) {
                     currentState.copy(
-                        playMode = PlayMode.REVIEW_MODE,
+                        common = currentState.common.copy(
+                            playMode = PlayMode.REVIEW_MODE
+                        ),
                         isLoading = true,
                         errorMessage = null
                     )
@@ -160,121 +171,22 @@ class QuizSolveViewModel @Inject constructor(
                 )
 
             QuizSolveIntent.NavigateToPreviousQuestion -> {
-                if (currentState.currentIndex > 0) {
-                    if (currentState.playMode == PlayMode.DEFAULT) {
-                        // DEFAULT_MODE에서는 이전 문제로 이동하고 상태 초기화
-                        // TODO: 확장함수로 분리
-                        currentState.copy(
-                            currentIndex = currentState.currentIndex - 1,
-                            common = CommonState(false),
-                            subjective = currentState.subjective.copy(
-                                answer = ""
-                            ),
-                            mcq = currentState.mcq.copy(
-                                selectedContent = ""
-                            ),
-                            review = ReviewState()
-                        )
-                    } else {
-                        currentState.copy(
-                            currentIndex = currentState.currentIndex - 1,
-                        )
-                    }
+                if (currentState.common.currentIndex > 0) {
+                    currentState.previousQuestionReset()
                 } else {
-                    // 첫 번째 문제에서는 이동하지 않음
                     currentState
                 }
             }
 
 
-            is QuizSolveIntent.GetQuizGradeSuccess -> {
-                val quizGrade = intent.quizGrade
-                if (quizGrade == null) {
-                    currentState
-                } else {
-                    when (currentState.playMode) {
-                        PlayMode.DEFAULT -> {
-                            currentState.copy(
-                                common = CommonState(true),
-                                subjective = currentState.subjective.copy(
-                                    answer = quizGrade.userAnswer
-                                ),
-                                mcq = currentState.mcq.copy(
-                                    selectedContent = quizGrade.userAnswer
-                                )
-                            )
-                        }
-
-                        PlayMode.REVIEW_MODE -> {
-                            if (currentState.review.showExplanation) {
-                                // 다음 문제 클릭했을때 reduce 로직
-                                if(currentState.currentGrade != null) {
-                                    currentState.copy(
-                                        currentGrade = null,
-                                        currentIndex = currentState.currentIndex + 1,
-                                        subjective = currentState.subjective.copy(
-                                            answer = ""
-                                        ),
-                                        mcq = currentState.mcq.copy(
-                                            selectedContent = ""
-                                        ),
-                                        review = ReviewState()
-                                    )
-                                }else{
-                                    // 이전 문제 클릭했을때 reduce 로직
-                                    currentState.copy(
-                                        currentGrade = quizGrade,
-                                        subjective = currentState.subjective.copy(
-                                            answer = quizGrade.userAnswer
-                                        ),
-                                        mcq = currentState.mcq.copy(
-                                            selectedContent = quizGrade.userAnswer
-                                        ),
-                                        review = currentState.review.copy(
-                                            answerState = if (quizGrade.isCorrect) AnswerState.CORRECT else AnswerState.INCORRECT,
-                                            showExplanation = true,
-                                            explanation = currentState.currentQuiz?.explanation ?: ""
-                                        )
-                                    )
-                                }
-                            } else {
-                                currentState.copy(
-                                    currentGrade = quizGrade,
-                                    subjective = currentState.subjective.copy(
-                                        answer = quizGrade.userAnswer,
-                                        correctAnswer = currentState.currentQuiz?.answer
-                                    ),
-                                    mcq = currentState.mcq.copy(
-                                        selectedContent = quizGrade.userAnswer,
-                                        correctContent = if(currentState.questionInfo.type == QuestionType.MULTIPLE_CHOICE)currentState.optionList[(currentState.currentQuiz?.answer ?: "0").toInt()-1].text else currentState.currentQuiz?.answer
-                                    ),
-                                    review = currentState.review.copy(
-                                        answerState = if (quizGrade.isCorrect) AnswerState.CORRECT else AnswerState.INCORRECT,
-                                        showExplanation = true,
-                                        explanation = currentState.currentQuiz?.explanation ?: ""
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            is QuizSolveIntent.GetQuizGradeSuccess ->
+                intent.quizGrade
+                    ?.let { currentState.applyFetchedGrade(it) }
+                    ?: currentState
 
 
             QuizSolveIntent.GradeQuizSuccess -> {
-                if (!currentState.isLastQuestion && currentState.playMode == PlayMode.DEFAULT) {
-                    currentState.copy(
-                        currentIndex = currentState.currentIndex + 1,
-                        common = CommonState(false),
-                        subjective = currentState.subjective.copy(
-                            answer = ""
-                        ),
-                        mcq = currentState.mcq.copy(
-                            selectedContent = ""
-                        )
-                    )
-                } else
-                    currentState
+                currentState.onLocalSaveSuccess()
             }
             is QuizSolveIntent.HandleError,
             QuizSolveIntent.NavigateBack,
@@ -352,7 +264,7 @@ class QuizSolveViewModel @Inject constructor(
         val uiState = state.value
         val quiz = uiState.currentQuiz
         val localId = uiState.quizBookLocalId
-        val userAnswer = when (uiState.questionInfo.type) {
+        val userAnswer = when (uiState.questionType) {
             QuestionType.SUBJECTIVE -> uiState.subjective.answer
             else -> uiState.mcq.selectedContent
         }

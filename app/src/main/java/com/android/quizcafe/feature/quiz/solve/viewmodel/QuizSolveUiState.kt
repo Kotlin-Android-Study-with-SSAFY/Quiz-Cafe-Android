@@ -18,17 +18,11 @@ data class QuizOption(
     val text: String
 )
 
-data class QuestionInfo(
-    val current: Int,
-    val total: Int,
-    val text: String,
-    val type: QuestionType
-)
-
 data class McqState(
-    val options: List<QuizOption>,
+    val options: List<QuizOption> = emptyList(),
     val selectedId: Long? = null,
     val selectedContent: String? = null,
+    val correctId: Long? = null,
     val correctContent: String? = null
 )
 
@@ -52,7 +46,8 @@ data class TimerState(
 )
 
 data class CommonState(
-    val isButtonEnabled: Boolean = false
+    val playMode: PlayMode = PlayMode.DEFAULT,
+    val currentIndex: Int = 0
 )
 
 data class QuizSolveUiState(
@@ -60,37 +55,26 @@ data class QuizSolveUiState(
     val errorMessage: String? = null,
     val quizBookLocalId: QuizBookGradeLocalId? = null,
     val quizBook: QuizBook? = null,
-    val playMode: PlayMode = PlayMode.DEFAULT,
-    val quizGrades: List<QuizGrade> = emptyList(),
-    val currentGrade: QuizGrade? = null,
-    val currentIndex: Int = 0,
-    val mcq: McqState = McqState(
-        options = listOf(
-            QuizOption(101L, "선택지 1"),
-            QuizOption(102L, "선택지 2"),
-            QuizOption(103L, "선택지 3"),
-            QuizOption(104L, "선택지 4")
-        )
-    ),
+    val quizGrades: List<QuizGrade>? = null,
     val subjective: SubjectiveState = SubjectiveState(),
+    val mcq: McqState = McqState(),
     val review: ReviewState = ReviewState(),
     val timer: TimerState = TimerState(),
-    val common: CommonState = CommonState()
+    val common: CommonState = CommonState(),
+    val currentGrade: QuizGrade? = null,
 ) : BaseContract.UiState {
-    val currentQuiz: Quiz?
-        get() = quizBook?.quizList?.getOrNull(currentIndex)
+    val isButtonEnabled: Boolean
+        get() = (subjective.answer != "" || mcq.selectedContent != null)
 
-    val questionInfo: QuestionInfo
-        get() = QuestionInfo(
-            current = currentIndex + 1,
-            total = quizBook?.totalQuizzes ?: 0,
-            text = currentQuiz?.content.orEmpty(),
-            type = when (currentQuiz?.questionType) {
-                "MCQ" -> QuestionType.MULTIPLE_CHOICE
-                "OX" -> QuestionType.OX
-                else -> QuestionType.SUBJECTIVE
-            }
-        )
+    val currentQuiz: Quiz?
+        get() = quizBook?.quizList?.getOrNull(common.currentIndex)
+
+    val questionType: QuestionType
+        get() = when (currentQuiz?.questionType) {
+            "MCQ" -> QuestionType.MULTIPLE_CHOICE
+            "OX" -> QuestionType.OX
+            else -> QuestionType.SUBJECTIVE
+        }
     val optionList: List<QuizOption>
         get() = currentQuiz?.mcqOption
             ?.map { QuizOption(id = it.quizId.value, text = it.optionContent) }
@@ -98,38 +82,11 @@ data class QuizSolveUiState(
                 QuizOption(0L, "O"),
                 QuizOption(1L, "X")
             )
-
-
-
-    private val currentPhase: AnswerPhase
-        get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
-
-    fun getOptionState(opt: QuizOption): AnswerState = when (currentPhase) {
-
-        AnswerPhase.ANSWERING -> {
-            if (opt.text == mcq.selectedContent) {
-                AnswerState.SELECTED
-            } else {
-                AnswerState.DEFAULT
-            }
-        }
-
-        AnswerPhase.REVIEW -> currentGrade?.let { gr ->
-            Log.d("test1234",mcq.correctContent.toString())
-            when {
-                gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.CORRECT
-                !gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.INCORRECT
-                opt.text == mcq.correctContent ->{
-                    AnswerState.CORRECT}
-                else -> AnswerState.DEFAULT
-            }
-        } ?: AnswerState.DEFAULT
-    }
     val isFirstQuestion: Boolean
-        get() = questionInfo.current == 1
+        get() = common.currentIndex == 0
 
     val isLastQuestion: Boolean
-        get() = questionInfo.current == questionInfo.total
+        get() = (common.currentIndex + 1) == (quizBook?.totalQuizzes)
 
     val isWrongAnswer: Boolean
         get() = !review.showExplanation && (currentGrade?.isCorrect == false || optionList.any { getOptionState(it) == AnswerState.INCORRECT })
@@ -140,4 +97,96 @@ data class QuizSolveUiState(
         val s = seconds % 60
         return String.format(Locale.KOREA, "%02d:%02d", m, s)
     }
+
+    private val currentPhase: AnswerPhase
+        get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
+
+
+    fun getOptionState(opt: QuizOption): AnswerState = when (currentPhase) {
+        AnswerPhase.ANSWERING -> {
+            if (opt.text == mcq.selectedContent) {
+                AnswerState.SELECTED
+            } else {
+                AnswerState.DEFAULT
+            }
+        }
+
+        AnswerPhase.REVIEW -> currentGrade?.let { gr ->
+            Log.d("test1234", mcq.correctContent.toString())
+            when {
+                gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.CORRECT
+                !gr.isCorrect && opt.text == gr.userAnswer -> AnswerState.INCORRECT
+                opt.text == mcq.correctContent -> {
+                    AnswerState.CORRECT
+                }
+
+                else -> AnswerState.DEFAULT
+            }
+        } ?: AnswerState.DEFAULT
+    }
 }
+
+fun QuizSolveUiState.previousQuestionReset(): QuizSolveUiState {
+    val newIndex = (common.currentIndex - 1).coerceAtLeast(0)
+    return copy(
+        common = common.copy(
+            currentIndex = newIndex
+        ),
+        mcq = McqState(),
+        subjective = SubjectiveState(),
+        review = ReviewState()
+    )
+}
+
+fun QuizSolveUiState.applyFetchedGrade(grade: QuizGrade): QuizSolveUiState =
+    when (common.playMode) {
+        PlayMode.DEFAULT -> copy(
+            subjective = subjective.copy(answer = grade.userAnswer),
+            mcq = mcq.copy(selectedContent = grade.userAnswer)
+        )
+
+        PlayMode.REVIEW_MODE -> if (review.showExplanation) {
+            copy(
+                currentGrade = null,
+                common = common.copy(
+                    currentIndex = common.currentIndex + 1
+                ),
+                subjective = SubjectiveState(),
+                mcq = McqState(),
+                review = ReviewState()
+            )
+        } else {
+            val correctContent = if (questionType == QuestionType.MULTIPLE_CHOICE)
+                optionList[(currentQuiz?.answer ?: "0").toInt() - 1].text
+            else
+                currentQuiz?.answer
+            copy(
+                currentGrade = grade,
+                subjective = subjective.copy(
+                    answer = grade.userAnswer,
+                    correctAnswer = currentQuiz?.answer
+                ),
+                mcq = mcq.copy(
+                    selectedContent = grade.userAnswer,
+                    correctContent = correctContent
+                ),
+                review = review.copy(
+                    answerState = if (grade.isCorrect) AnswerState.CORRECT else AnswerState.INCORRECT,
+                    showExplanation = true,
+                    explanation = currentQuiz?.explanation.orEmpty()
+                )
+            )
+        }
+    }
+
+
+fun QuizSolveUiState.onLocalSaveSuccess(): QuizSolveUiState =
+    if (!isLastQuestion && common.playMode == PlayMode.DEFAULT) {
+        copy(
+            common = common.copy(
+                currentIndex = common.currentIndex + 1
+            ),
+            subjective = SubjectiveState(),
+            mcq = McqState()
+        )
+    } else this
