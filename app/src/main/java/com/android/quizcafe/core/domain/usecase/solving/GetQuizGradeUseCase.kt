@@ -11,6 +11,6 @@ import javax.inject.Inject
 class GetQuizGradeUseCase @Inject constructor(
     private val quizBookSolvingRepository: QuizBookSolvingRepository
 ) {
-    operator fun invoke(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId,) =
+    operator fun invoke(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId) =
         quizBookSolvingRepository.getQuizGrade(quizBookGradeLocalId, quizId)
 }
