@@ -49,7 +49,7 @@ fun QuizSolveScreen(
     Scaffold(
         topBar = {
             QuizTopBar(
-                currentQuestion = uiState.common.currentIndex+1,
+                currentQuestion = uiState.common.currentIndex + 1,
                 totalQuestions = uiState.quizBook?.totalQuizzes ?: 0,
                 timeText = uiState.getTimeText(),
                 onBackClick = { onIntent(QuizSolveIntent.NavigateBack) },
@@ -110,8 +110,6 @@ fun QuizSolveScreen(
                     }
                 }
             }
-
-
         }
     }
 }

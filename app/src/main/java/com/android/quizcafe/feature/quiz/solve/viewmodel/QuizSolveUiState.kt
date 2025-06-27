@@ -101,7 +101,6 @@ data class QuizSolveUiState(
     private val currentPhase: AnswerPhase
         get() = if (currentGrade != null) AnswerPhase.REVIEW else AnswerPhase.ANSWERING
 
-
     fun getOptionState(opt: QuizOption): AnswerState = when (currentPhase) {
         AnswerPhase.ANSWERING -> {
             if (opt.text == mcq.selectedContent) {
@@ -156,10 +155,11 @@ fun QuizSolveUiState.applyFetchedGrade(grade: QuizGrade): QuizSolveUiState =
                 review = ReviewState()
             )
         } else {
-            val correctContent = if (questionType == QuestionType.MULTIPLE_CHOICE)
+            val correctContent = if (questionType == QuestionType.MULTIPLE_CHOICE) {
                 optionList[(currentQuiz?.answer ?: "0").toInt() - 1].text
-            else
+            } else {
                 currentQuiz?.answer
+            }
             copy(
                 currentGrade = grade,
                 subjective = subjective.copy(
@@ -179,7 +179,6 @@ fun QuizSolveUiState.applyFetchedGrade(grade: QuizGrade): QuizSolveUiState =
         }
     }
 
-
 fun QuizSolveUiState.onLocalSaveSuccess(): QuizSolveUiState =
     if (!isLastQuestion && common.playMode == PlayMode.DEFAULT) {
         copy(
@@ -189,4 +188,6 @@ fun QuizSolveUiState.onLocalSaveSuccess(): QuizSolveUiState =
             subjective = SubjectiveState(),
             mcq = McqState()
         )
-    } else this
+    } else {
+        this
+    }

@@ -58,7 +58,6 @@ class QuizSolveViewModel @Inject constructor(
                 getQuizBookGradeResult(intent.quizBookLocalId)
             }
 
-
             is QuizSolveIntent.SubmitQuizBookSuccess -> {
                 emitEffect(QuizSolveEffect.NavigateToQuizBookSolvingResult(intent.quizBookGradeServerId))
             }
@@ -78,7 +77,7 @@ class QuizSolveViewModel @Inject constructor(
                     }
                     else -> {
                         saveQuizToLocal()
-                        if(currentState.isLastQuestion){
+                        if (currentState.isLastQuestion) {
                             submitQuizAnswer()
                         }
                     }
@@ -86,7 +85,7 @@ class QuizSolveViewModel @Inject constructor(
             }
 
             QuizSolveIntent.NavigateToPreviousQuestion -> {
-               getQuizAnswer()
+                getQuizAnswer()
             }
             is QuizSolveIntent.GradeQuizSuccess -> {
                 val currentState = state.value
@@ -105,7 +104,6 @@ class QuizSolveViewModel @Inject constructor(
             is QuizSolveIntent.LoadQuizBookSuccess,
             is QuizSolveIntent.LoadQuizBookGradeSuccess,
             QuizSolveIntent.UpdateTimer -> {
-
             }
 
             is QuizSolveIntent.GetQuizGradeSuccess -> {
@@ -149,8 +147,9 @@ class QuizSolveViewModel @Inject constructor(
                         isLoading = true,
                         errorMessage = null
                     )
-                } else
+                } else {
                     currentState.copy(isLoading = true, errorMessage = null)
+                }
             }
 
             is QuizSolveIntent.LoadQuizBookSuccess -> {
@@ -178,12 +177,10 @@ class QuizSolveViewModel @Inject constructor(
                 }
             }
 
-
             is QuizSolveIntent.GetQuizGradeSuccess ->
                 intent.quizGrade
                     ?.let { currentState.applyFetchedGrade(it) }
                     ?: currentState
-
 
             QuizSolveIntent.GradeQuizSuccess -> {
                 currentState.onLocalSaveSuccess()

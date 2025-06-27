@@ -1,6 +1,5 @@
 package com.android.quizcafe.feature.main
 
-import android.util.Log
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding

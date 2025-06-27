@@ -13,23 +13,23 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
     data class LoadQuizBookSuccess(val quizBook: QuizBook) : QuizSolveIntent()
     data class LoadQuizBookGradeSuccess(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
     data class SetQuizBookLocalId(val quizBookLocalId: QuizBookGradeLocalId) : QuizSolveIntent()
-    
+
     // 문제 선택
     data class SelectAnswer(val option: QuizOption) : QuizSolveIntent()
     data class UpdateSubjectiveAnswer(val answer: String) : QuizSolveIntent()
-    
+
     // 네비게이션
     data object NavigateBack : QuizSolveIntent()
     data object NavigateToNextQuestion : QuizSolveIntent()
     data object NavigateToPreviousQuestion : QuizSolveIntent()
     data object NavigateToResult : QuizSolveIntent()
-    
+
     // 문제 제출, 풀이
-    data object GradeQuizSuccess: QuizSolveIntent()
+    data object GradeQuizSuccess : QuizSolveIntent()
     data class GetQuizGradeSuccess(val quizGrade: QuizGrade?) : QuizSolveIntent()
     data class SubmitQuizBookSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
     data class HandleError(val message: String?) : QuizSolveIntent()
-    
+
     // 타이머
     data object UpdateTimer : QuizSolveIntent()
 }

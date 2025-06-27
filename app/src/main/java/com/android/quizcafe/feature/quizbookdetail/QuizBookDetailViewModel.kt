@@ -23,10 +23,11 @@ class QuizBookDetailViewModel @Inject constructor(
         when (intent) {
             is QuizBookDetailIntent.ClickQuizSolve -> {
                 // 한문제씩 풀기 모드면 음수로 quizBookId 전달
-                if(state.value.isReviewModeChecked)
+                if (state.value.isReviewModeChecked) {
                     emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId * -1))
-                else
+                } else {
                     emitEffect(QuizBookDetailEffect.NavigateToQuizSolve(intent.quizBookId))
+                }
             }
             QuizBookDetailIntent.ClickMarkQuizBook -> markQuizBook()
             QuizBookDetailIntent.ClickUnmarkQuizBook -> unmarkQuizBook()

@@ -16,7 +16,8 @@ import androidx.room.PrimaryKey
     ],
     indices = [
         Index(value = ["quizBookGradeLocalId"]),
-        Index(value = ["quizId", "quizBookGradeLocalId"], unique = true)]
+        Index(value = ["quizId", "quizBookGradeLocalId"], unique = true)
+    ]
 )
 data class QuizGradeEntity(
     @PrimaryKey(autoGenerate = true)
