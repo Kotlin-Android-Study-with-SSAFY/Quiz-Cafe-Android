@@ -95,9 +95,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         }
         val quizBookGradeListWithQuizBook = quizBookGradeDao.getAllQuizBookGradeWithQuizBook(userEmail)
         val quizBookGrade = quizBookGradeListWithQuizBook.map { it.toDomain() }
-
-        Log.d("LoadWorkBookRepo", "$userEmail, $quizBookGrade")
-
         emit(Resource.Success(quizBookGrade))
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈북 정보를 포함한 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
