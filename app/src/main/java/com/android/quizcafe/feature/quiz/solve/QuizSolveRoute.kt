@@ -29,11 +29,12 @@ fun QuizSolveRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-    var showExitDialog by remember { mutableStateOf(false) }
-    var showResumeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(QuizSolveIntent.StartSolving(quizBookId))
+        viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
+        viewModel.sendIntent(QuizSolveIntent.GetQuizBookLocalId(quizBookId))
+    }
+    LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 QuizSolveEffect.ShowResumeDialog -> {
@@ -52,6 +53,7 @@ fun QuizSolveRoute(
                 is QuizSolveEffect.NavigateToQuizBookSolvingResult -> {
                     navigateToQuizBookSolvingResult(effect.quizBookGradeServerId)
                 }
+
                 is QuizSolveEffect.ShowErrorDialog -> {
                     Toast.makeText(
                         context,

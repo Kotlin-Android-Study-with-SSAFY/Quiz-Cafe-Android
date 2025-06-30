@@ -23,10 +23,17 @@ object AuthModule {
 
     @Provides
     @Singleton
+    fun provideGoogleAuthManager(
+        @ApplicationContext context: Context
+    ): GoogleAuthManager = GoogleAuthManager(context)
+
+    @Provides
+    @Singleton
     fun provideAuthManger(
         authDataStore: AuthDataStore,
+        googleAuthManager: GoogleAuthManager,
         @ApplicationScope applicationScope: CoroutineScope
-    ): AuthManager = AuthManager(authDataStore, applicationScope)
+    ): AuthManager = AuthManager(authDataStore, googleAuthManager, applicationScope)
 
     @Provides
     @Singleton

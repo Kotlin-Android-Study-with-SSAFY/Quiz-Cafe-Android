@@ -2,28 +2,36 @@ package com.android.quizcafe.feature.quiz.solve.viewmodel
 
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
+import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 sealed class QuizSolveIntent : BaseContract.ViewIntent {
+    // 초기화 작업
+    data class Initialize(val quizBookId: Long) : QuizSolveIntent()
+    data class LoadQuizBookSuccess(val quizBook: QuizBook) : QuizSolveIntent()
+    data class LoadQuizBookGradeSuccess(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
+    data class SetQuizBookLocalId(val quizBookLocalId: QuizBookGradeLocalId) : QuizSolveIntent()
     data class StartSolving(val quizBookId: Long) : QuizSolveIntent()
     data class ResumeSolving(val resumeWithNewSolving: Boolean) : QuizSolveIntent()
 
-    data class SuccessGetQuizBook(val data: QuizBook) : QuizSolveIntent()
-    data class SuccessGetQuizBookGrade(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
-    data object StartTimer : QuizSolveIntent()
 
-    data class SelectOption(val option: QuizOption) : QuizSolveIntent()
-    data class UpdatedSubjectiveAnswer(val answer: String) : QuizSolveIntent()
-    data object SubmitAnswer : QuizSolveIntent()
-    data object SubmitNext : QuizSolveIntent()
+    // 문제 선택
+    data class SelectAnswer(val option: QuizOption) : QuizSolveIntent()
+    data class UpdateSubjectiveAnswer(val answer: String) : QuizSolveIntent()
+
+    // 네비게이션
+    data object NavigateBack : QuizSolveIntent()
+    data object NavigateToNextQuestion : QuizSolveIntent()
+    data object NavigateToPreviousQuestion : QuizSolveIntent()
+    data object NavigateToResult : QuizSolveIntent()
+
+    // 문제 제출, 풀이
     data object GradeQuizSuccess : QuizSolveIntent()
-    data class SolveQuizSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
-    data class GradeQuizError(val message: String?) : QuizSolveIntent()
-    data object ShowExplanation : QuizSolveIntent()
+    data class GetQuizGradeSuccess(val quizGrade: QuizGrade?) : QuizSolveIntent()
+    data class SubmitQuizBookSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
+    data class HandleError(val message: String?) : QuizSolveIntent()
 
     data object OnBackClick : QuizSolveIntent()
     data object TickTime : QuizSolveIntent()
-    data object ExitWithDelete : QuizSolveIntent()
-    data object ExitWithSave : QuizSolveIntent()
 }

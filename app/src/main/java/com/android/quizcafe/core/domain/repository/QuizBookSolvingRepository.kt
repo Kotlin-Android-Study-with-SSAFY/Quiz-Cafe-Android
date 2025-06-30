@@ -7,6 +7,7 @@ import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import com.android.quizcafe.core.domain.model.value.QuizId
 import kotlinx.coroutines.flow.Flow
 
 interface QuizBookSolvingRepository {
@@ -15,6 +16,11 @@ interface QuizBookSolvingRepository {
 
     // 퀴즈북 풀이 로컬 기록 삭제하기
     fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>>
+    // 퀴즈 풀이 로컬 기록 가져오기
+    fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>>
+
+    // 퀴즈북 풀이 로컬 기록 가져오기
+    fun getQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<QuizBookGrade>>
 
     // 퀴즈북 풀이 완료 기록 가져오기 (서버)
     fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>>

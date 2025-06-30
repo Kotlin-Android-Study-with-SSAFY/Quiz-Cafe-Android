@@ -18,10 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -42,8 +38,6 @@ fun QuizBookDetailScreen(
 ) {
     val quizBookDetail = state.quizBookDetail
 
-    var isChecked by remember { mutableStateOf(false) }
-
     Scaffold(
         bottomBar = {
             Column(
@@ -52,14 +46,14 @@ fun QuizBookDetailScreen(
             ) {
                 Row(
                     modifier = Modifier.clickable {
-                        isChecked = !isChecked
+                        sendIntent(QuizBookDetailIntent.ClickReviewMode(!state.isReviewModeChecked))
                     },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        painter = painterResource(if (isChecked) R.drawable.ic_check_circle_fill else R.drawable.ic_check_circle_unfill),
+                        painter = painterResource(if (state.isReviewModeChecked) R.drawable.ic_check_circle_fill else R.drawable.ic_check_circle_unfill),
                         contentDescription = null,
-                        tint = if (isChecked) checkedColor else MaterialTheme.colorScheme.onSurface,
+                        tint = if (state.isReviewModeChecked) checkedColor else MaterialTheme.colorScheme.onSurface,
                     )
                     Spacer(Modifier.width(4.dp))
                     Text("즉시 채점 모드")
