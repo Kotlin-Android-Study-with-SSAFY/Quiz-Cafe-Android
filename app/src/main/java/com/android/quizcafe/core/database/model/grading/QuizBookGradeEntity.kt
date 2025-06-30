@@ -10,6 +10,7 @@ data class QuizBookGradeEntity(
     val localId: Long = 0,
     val serverId: Long? = null,
     val quizBookId: Long,
+    val userEmail: String,
     val elapsedTime: Duration = Duration.ZERO
 )
 

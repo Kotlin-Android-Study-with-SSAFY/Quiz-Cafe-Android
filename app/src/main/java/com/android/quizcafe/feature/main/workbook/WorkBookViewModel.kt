@@ -26,6 +26,8 @@ class WorkBookViewModel @Inject constructor(
 
             is WorkBookIntent.SuccessSolvedQuizBookList -> Unit
             is WorkBookIntent.SuccessSolvingQuizBookList -> Unit
+
+            is WorkBookIntent.FailLoadWorkBookList -> Unit
         }
     }
 
@@ -39,6 +41,8 @@ class WorkBookViewModel @Inject constructor(
 
             is WorkBookIntent.SuccessSolvedQuizBookList -> currentState.copy(solvedQuizBooks = intent.qbs, isLoading = false)
             is WorkBookIntent.SuccessSolvingQuizBookList -> currentState.copy(solvingQuizBooks = intent.qbg, isLoading = false)
+
+            is WorkBookIntent.FailLoadWorkBookList -> currentState.copy(errorMessage = intent.errorMessage, isLoading = false)
         }
     }
 
@@ -46,11 +50,16 @@ class WorkBookViewModel @Inject constructor(
         // 로컬에서 풀고있는 퀴즈북 목록 가져오기
         getAllQuizBookGradeWithQuizBookUseCase().collect {
             when (it) {
-                is Resource.Failure -> {}
-                Resource.Loading -> {}
                 is Resource.Success -> {
-                    Log.d("loadWorkBook", it.data.get(1).quizBookGrade.toString())
+                    Log.d("loadWorkBook", "성공")
                     sendIntent(WorkBookIntent.SuccessSolvingQuizBookList(it.data))
+                }
+                is Resource.Failure -> {
+                    Log.d("loadWorkBook", "실패")
+                    sendIntent(WorkBookIntent.FailLoadWorkBookList(it.errorMessage))
+                }
+                Resource.Loading -> {
+                    Log.d("loadWorkBook", "로딩")
                 }
             }
         }
@@ -64,6 +73,7 @@ class WorkBookViewModel @Inject constructor(
                 }
                 is Resource.Failure -> {
                     Log.d("LoadWorkBookFromServer", "실패")
+                    sendIntent(WorkBookIntent.FailLoadWorkBookList(it.errorMessage))
                 }
                 Resource.Loading -> {
                     Log.d("LoadWorkBookFromServer", "로딩")

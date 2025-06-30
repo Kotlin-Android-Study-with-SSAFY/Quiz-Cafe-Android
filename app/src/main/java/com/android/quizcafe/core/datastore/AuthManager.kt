@@ -13,6 +13,8 @@ class AuthManager @Inject constructor(
 ) {
     @Volatile
     private var cachedToken: String? = null
+    @Volatile
+    private var cachedUserEmail: String? = null
 
     private val _logoutEvent = MutableSharedFlow<LogoutReason>(extraBufferCapacity = 1)
     val logoutEvent: SharedFlow<LogoutReason> = _logoutEvent
@@ -21,6 +23,11 @@ class AuthManager @Inject constructor(
         applicationScope.launch {
             authDataStore.accessTokenFlow.collect { token ->
                 cachedToken = token
+            launch {
+                authDataStore.userEmailFlow.collect { email ->
+                    Log.d("Init AuthManager user email", "$email")
+                    cachedUserEmail = email
+                }
             }
         }
     }
@@ -29,12 +36,20 @@ class AuthManager @Inject constructor(
     suspend fun saveAccessToken(token: String) {
         authDataStore.saveAccessToken(token)
         cachedToken = token
+    fun getUserEmail(): String? = cachedUserEmail
     }
 
     suspend fun logout(reason: LogoutReason) {
         authDataStore.deleteAccessToken()
         cachedToken = null
+    fun saveUserEmail(email: String) {
+        Log.d("AuthManager", "save email")
+        cachedUserEmail = email
 
-        _logoutEvent.emit(reason)
+        CoroutineScope(Dispatchers.IO).launch {
+            authDataStore.saveUserEmail(email)
+        }
+    }
+
     }
 }

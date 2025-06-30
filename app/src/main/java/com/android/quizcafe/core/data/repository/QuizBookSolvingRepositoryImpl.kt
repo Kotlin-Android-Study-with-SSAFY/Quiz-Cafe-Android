@@ -1,5 +1,6 @@
 package com.android.quizcafe.core.data.repository
 
+import android.util.Log
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
 import com.android.quizcafe.core.data.mapper.quizbook.toDomain
@@ -17,6 +18,7 @@ import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
+import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
@@ -40,7 +42,8 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     private val quizDao: QuizDao,
     private val quizBookDao: QuizBookDao,
     private val quizBookGradeDao: QuizBookGradeDao,
-    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource
+    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource,
+    private val authManager: AuthManager
 ) : QuizBookSolvingRepository {
 
     /**
@@ -49,7 +52,12 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
      */
     override fun createEmptyQuizBookGrade(quizBookId: QuizBookId): Flow<Resource<QuizBookGradeLocalId>> = flow {
         emit(Resource.Loading)
-        val entity = QuizBookGradeEntity(quizBookId = quizBookId.value)
+        val userEmail = authManager.getUserEmail()
+        if (userEmail == null) {
+            emit(Resource.Failure(errorMessage = "사용자 이메일 조회 오류", code = LocalErrorCode.USER_EMAIL_NOT_FOUND))
+            return@flow
+        }
+        val entity = QuizBookGradeEntity(quizBookId = quizBookId.value, userEmail = userEmail)
         val generatedId = quizBookGradeDao.upsertQuizBookGrade(entity)
 
         if (generatedId <= 0L) {
@@ -76,13 +84,20 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
-    // 퀴즈북 풀이 기록 가져오기
+    // 퀴즈북 정보 + 풀이 기록 가져오기
     override fun getAllQuizBookGradeWithQuizBook(): Flow<Resource<List<QuizBookGradeWithQuizBook>>> = flow {
         emit(Resource.Loading)
-        val quizBookGradeListWithQuizBook = quizBookGradeDao.getAllQuizBookGradeWithQuizBook()
-            ?: throw IllegalStateException("QuizBookGradeWithQuizBook not found")
 
+        val userEmail = authManager.getUserEmail()
+        if (userEmail == null) {
+            emit(Resource.Failure(errorMessage = "사용자 이메일 조회 오류", code = LocalErrorCode.USER_EMAIL_NOT_FOUND))
+            return@flow
+        }
+        val quizBookGradeListWithQuizBook = quizBookGradeDao.getAllQuizBookGradeWithQuizBook(userEmail)
         val quizBookGrade = quizBookGradeListWithQuizBook.map { it.toDomain() }
+
+        Log.d("LoadWorkBookRepo", "$userEmail, $quizBookGrade")
+
         emit(Resource.Success(quizBookGrade))
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈북 정보를 포함한 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))

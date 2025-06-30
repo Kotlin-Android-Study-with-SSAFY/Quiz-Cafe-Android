@@ -26,6 +26,7 @@ SELECT
     QuizBookGradeEntity.serverId,
     QuizBookGradeEntity.quizBookId,
     QuizBookGradeEntity.elapsedTime,
+    QuizBookGradeEntity.userEmail, 
 
     quiz_book.id AS quiz_book_id,
     quiz_book.version AS quiz_book_version,
@@ -39,9 +40,10 @@ SELECT
 
 FROM QuizBookGradeEntity 
 JOIN quiz_book ON QuizBookGradeEntity.quizBookId = quiz_book.id
+WHERE QuizBookGradeEntity.userEmail LIKE :userEmail
 """
     )
-    suspend fun getAllQuizBookGradeWithQuizBook(): List<QuizBookGradeWithQuizBookData>
+    suspend fun getAllQuizBookGradeWithQuizBook(userEmail: String): List<QuizBookGradeWithQuizBookData>
 
     @Query("DELETE FROM QuizBookGradeEntity WHERE localId = :localId")
     suspend fun deleteQuizBookGrade(localId: Long)

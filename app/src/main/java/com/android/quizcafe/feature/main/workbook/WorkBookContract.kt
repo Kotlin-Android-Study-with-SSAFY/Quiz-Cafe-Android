@@ -30,6 +30,8 @@ sealed class WorkBookIntent : BaseContract.ViewIntent {
 
     data class SuccessSolvingQuizBookList(val qbg: List<QuizBookGradeWithQuizBook>) : WorkBookIntent()
     data class SuccessSolvedQuizBookList(val qbs: List<QuizBookSolving>) : WorkBookIntent()
+
+    data class FailLoadWorkBookList(val errorMessage: String?) : WorkBookIntent()
 }
 
 sealed class WorkBookEffect : BaseContract.ViewEffect {
