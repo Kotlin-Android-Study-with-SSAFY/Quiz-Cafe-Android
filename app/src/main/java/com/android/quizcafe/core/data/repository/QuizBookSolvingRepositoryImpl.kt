@@ -71,18 +71,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
-    override fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>> = flow {
-        emit(Resource.Loading)
-        val deletedCnt = quizBookGradeDao.deleteQuizBookGrade(id.value)
-        if (deletedCnt == 1) {
-            emit(Resource.Success(Unit))
-        } else {
-            emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류 : deletedCnt = $deletedCnt", code = LocalErrorCode.ROOM_ERROR))
-        }
-    }.catch { e ->
-        emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
-    }
-
     override fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>> = flow {
         emit(Resource.Loading)
         val quizGradeRelation = quizGradeDao.getQuizGradeByQuizId(quizId.value, quizBookGradeLocalId.value)
@@ -106,7 +94,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
-
     override fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>> = flow {
         val quizBookSolvingId = id.value
         if (quizBookSolvingId == null) {
@@ -125,7 +112,6 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         apiResponseListToResourceFlow(mapper = QuizBookSolvingResponseDto::toDomain) {
             quizBookSolvingRemoteDataSource.getAllQuizBookSolvingByUser()
         }
-    }
 
     // 퀴즈 1개 풀이 기록 저장 및 수정
     override fun upsertQuizGrade(quizGrade: QuizGrade): Flow<Resource<Unit>> = flow {
@@ -142,13 +128,25 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "퀴즈 풀이 기록 저장 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
+    override fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>> = flow {
+        emit(Resource.Loading)
+        val deletedCnt = quizBookGradeDao.deleteQuizBookGrade(id.value)
+        if (deletedCnt == 1) {
+            emit(Resource.Success(Unit))
+        } else {
+            emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류 : deletedCnt = $deletedCnt", code = LocalErrorCode.ROOM_ERROR))
+        }
+    }.catch { e ->
+        emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 삭제 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
+    }
+
     // 로컬에서 퀴즈북 풀이 기록 가져와 requestDto로 변환 후 퀴즈북 풀이 완료 API 요청하기
     override fun solveQuizBook(
         localId: QuizBookGradeLocalId,
         elapsedTimeInSeconds: Long
     ): Flow<Resource<QuizBookGradeServerId>> = flow {
         emit(Resource.Loading)
-        val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeData(localId)
+        val (quizBookGradeEntity, quizGradeEntities) = getQuizBookGradeRelation(localId)
         val quizBookEntity = getQuizBookEntity(quizBookGradeEntity.quizBookId)
 
         val requestDto = createQuizBookSolvingRequest(
@@ -176,10 +174,10 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
     }
 
     // 로컬에서 퀴즈북 풀이 기록 가져오기 - null 체크 추가
-    private suspend fun getQuizBookGradeData(
+    private suspend fun getQuizBookGradeRelation(
         localId: QuizBookGradeLocalId
     ): Pair<QuizBookGradeEntity, List<QuizGradeEntity>> {
-        val quizBookGradeRelation = quizBookGradeDao.getQuizBookGrade(localId.value)
+        val quizBookGradeRelation = quizBookGradeDao.getQuizBookGradeByLocalId(localId.value)
             ?: throw IllegalStateException("QuizBookGrade not found for localId: ${localId.value}")
 
         return Pair(

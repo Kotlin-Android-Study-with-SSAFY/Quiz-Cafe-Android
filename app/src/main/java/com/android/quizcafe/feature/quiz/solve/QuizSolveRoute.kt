@@ -11,6 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.android.quizcafe.R
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.feature.quiz.solve.component.ExitSolvingDialog
@@ -29,12 +30,11 @@ fun QuizSolveRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
+    var showExitDialog by remember { mutableStateOf(false) }
+    var showResumeDialog by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(QuizSolveIntent.LoadQuizBook(quizBookId))
-        viewModel.sendIntent(QuizSolveIntent.GetQuizBookLocalId(quizBookId))
-    }
-    LaunchedEffect(Unit) {
+        viewModel.sendIntent(QuizSolveIntent.StartSolving(quizBookId))
         viewModel.effect.collect { effect ->
             when (effect) {
                 QuizSolveEffect.ShowResumeDialog -> {
@@ -66,7 +66,7 @@ fun QuizSolveRoute(
     }
 
     BackHandler(enabled = !showExitDialog) {
-        viewModel.sendIntent(QuizSolveIntent.OnBackClick)
+        viewModel.sendIntent(QuizSolveIntent.NavigateBack)
     }
 
     if (showResumeDialog) {

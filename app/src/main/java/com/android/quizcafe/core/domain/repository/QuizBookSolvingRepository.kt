@@ -16,6 +16,7 @@ interface QuizBookSolvingRepository {
 
     // 퀴즈북 풀이 로컬 기록 삭제하기
     fun deleteQuizBookGrade(id: QuizBookGradeLocalId): Flow<Resource<Unit>>
+
     // 퀴즈 풀이 로컬 기록 가져오기
     fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>>
 

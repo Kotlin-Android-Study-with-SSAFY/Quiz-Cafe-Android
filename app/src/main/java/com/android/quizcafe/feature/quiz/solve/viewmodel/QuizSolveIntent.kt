@@ -1,20 +1,19 @@
 package com.android.quizcafe.feature.quiz.solve.viewmodel
 
+import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 sealed class QuizSolveIntent : BaseContract.ViewIntent {
     // 초기화 작업
-    data class Initialize(val quizBookId: Long) : QuizSolveIntent()
+    data class StartSolving(val quizBookId: Long) : QuizSolveIntent()
     data class LoadQuizBookSuccess(val quizBook: QuizBook) : QuizSolveIntent()
     data class LoadQuizBookGradeSuccess(val quizBookGrade: QuizBookGrade) : QuizSolveIntent()
-    data class SetQuizBookLocalId(val quizBookLocalId: QuizBookGradeLocalId) : QuizSolveIntent()
-    data class StartSolving(val quizBookId: Long) : QuizSolveIntent()
-    data class ResumeSolving(val resumeWithNewSolving: Boolean) : QuizSolveIntent()
 
+    data class ResumeSolving(val resumeWithNewSolving: Boolean) : QuizSolveIntent()
+    data object StartTimer : QuizSolveIntent()
 
     // 문제 선택
     data class SelectAnswer(val option: QuizOption) : QuizSolveIntent()
@@ -32,6 +31,7 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
     data class SubmitQuizBookSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
     data class HandleError(val message: String?) : QuizSolveIntent()
 
-    data object OnBackClick : QuizSolveIntent()
-    data object TickTime : QuizSolveIntent()
+    data object UpdateTimer : QuizSolveIntent()
+    data object ExitWithDelete : QuizSolveIntent()
+    data object ExitWithSave : QuizSolveIntent()
 }
