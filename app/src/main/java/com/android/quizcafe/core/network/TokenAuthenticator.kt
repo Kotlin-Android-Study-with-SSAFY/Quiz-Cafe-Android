@@ -4,7 +4,6 @@ import android.util.Log
 import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.datastore.LogoutReason
-import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -22,8 +21,7 @@ class TokenAuthenticator @Inject constructor(
             Log.d("TokenAuthenticator", "401 응답으로 인한 authenticate 호출")
             val currentAccessToken = authManager.getAccessToken() ?: throw Exception("accessToken is null")
             val currentRefreshToken = authManager.getRefreshToken() ?: throw Exception("refreshToken is null")
-            Log.d("TokenAuthenticator", "현재 accessToken : $currentAccessToken")
-            Log.d("TokenAuthenticator", "현재 refreshToken : $currentRefreshToken")
+            Log.d("TokenAuthenticator", "현재 accessToken : $currentAccessToken\n현재 refreshToken : $currentRefreshToken")
 
             synchronized(this) {
                 if (currentAccessToken != response.request.header("Authorization")?.removePrefix("Bearer ")) {
@@ -35,15 +33,12 @@ class TokenAuthenticator @Inject constructor(
 
                 val newTokenData = newTokenResponse.body() ?: throw Exception("토큰 갱신 응답 에러")
                 authManager.saveToken(newTokenData.accessToken, newTokenData.refreshToken)
-                Log.d("TokenAuthenticator", "갱신 accessToken : $currentAccessToken")
-                Log.d("TokenAuthenticator", "갱신 refreshToken : $currentRefreshToken")
+                Log.d("TokenAuthenticator", "갱신 accessToken : $currentAccessToken\n갱신 refreshToken : $currentRefreshToken")
 
                 return response.request.createRequestWithRenewedToken(newTokenData.accessToken)
             }
         } catch (e: Exception) {
-            runBlocking {
-                authManager.logout(LogoutReason.SessionExpired("세션이 만료되었습니다 : ${e.message}"))
-            }
+            authManager.logout(LogoutReason.SessionExpired("세션이 만료되었습니다 : ${e.message}"))
             return null
         }
     }

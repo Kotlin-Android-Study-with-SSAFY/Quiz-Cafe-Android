@@ -9,8 +9,8 @@ import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 enum class WorkBookState(@StringRes val resId: Int) {
-    SOLVING(R.string.solving),
-    SOLVED(R.string.solved)
+    SOLVING(R.string.solving_description),
+    SOLVED(R.string.solved_description)
 }
 
 data class WorkBookUiState(

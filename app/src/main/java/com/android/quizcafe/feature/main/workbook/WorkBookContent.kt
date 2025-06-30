@@ -117,7 +117,7 @@ fun WorkBookFooter(
         if (!isSolved) {
             QuizSolveProgressBar(solvedQuizzes = count, totalQuizzes = totalQuizzes)
         } else {
-            Text("내 결과 : $count/$totalQuizzes", style = MaterialTheme.typography.labelMedium)
+            Text("${stringResource(R.string.my_result)} : $count/$totalQuizzes", style = MaterialTheme.typography.labelMedium)
         }
 
         Spacer(modifier = Modifier.width(12.dp))
@@ -135,7 +135,7 @@ fun QuizSolveProgressBar(
     totalQuizzes: Int
 ) {
     Column {
-        Text("$solvedQuizzes/$totalQuizzes 풀이 중", style = MaterialTheme.typography.labelMedium)
+        Text("$solvedQuizzes/$totalQuizzes ${stringResource(R.string.solving)}", style = MaterialTheme.typography.labelMedium)
         Spacer(Modifier.height(4.dp))
         LinearProgressIndicator(
             progress = { if (totalQuizzes > 0) solvedQuizzes.toFloat() / totalQuizzes else 0f },
