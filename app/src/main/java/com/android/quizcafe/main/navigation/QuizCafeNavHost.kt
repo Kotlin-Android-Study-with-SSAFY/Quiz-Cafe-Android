@@ -16,6 +16,7 @@ import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.quiz.solvingResult.QuizBookSolvingResultRoute
+import com.android.quizcafe.feature.quizbookdetail.QuizBookDetailRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
@@ -70,6 +71,25 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
         route = MainRoute.Graph.route
     ) {
         composable(MainRoute.Home.route) { MainScreen(rootNavController = navController) }
+        composable(
+            route = "${MainRoute.QuizBookDetail.route}/{quizBookId}",
+            arguments = listOf(
+                navArgument("quizBookId") {
+                    type = NavType.LongType
+                    nullable = false
+                    defaultValue = 0L
+                }
+            )
+        ) { backStackEntry ->
+            val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
+
+            QuizBookDetailRoute(
+                quizBookId = quizBookId,
+                navigateToQuizBookPicker = {},
+                navigateToQuizSolve = { id -> navController.navigateSingleTopTo("${QuizSolveRoute.QuizSolve.route}/$id") },
+                navigateToUserPage = {}
+            )
+        }
         quizSolveGraph(navController)
     }
 }
