@@ -9,7 +9,7 @@ class AuthInterceptor @Inject constructor(
     private val authManager: AuthManager
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = authManager.getToken()
+        val token = authManager.getAccessToken()
 
         if (token == null) {
             Log.d("AuthInterceptor", "Token is null. Authorization header not added.")
@@ -18,6 +18,7 @@ class AuthInterceptor @Inject constructor(
         val request = chain.request().newBuilder()
             .apply {
                 if (!token.isNullOrEmpty()) {
+                    Log.d("AuthInterceptor", token)
                     addHeader("Authorization", "Bearer $token")
                 }
             }

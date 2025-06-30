@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.network.di
 
 import com.android.quizcafe.BuildConfig
+import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.datastore.AuthInterceptor
 import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.network.TokenAuthenticator
@@ -59,8 +60,9 @@ object NetworkModule {
     @Provides
     @Singleton
     fun provideAuthenticator(
-        authManager: AuthManager
-    ): Authenticator = TokenAuthenticator(authManager)
+        authManager: AuthManager,
+        authService: AuthService
+    ): Authenticator = TokenAuthenticator(authManager, authService)
 
     @Provides
     @Singleton
