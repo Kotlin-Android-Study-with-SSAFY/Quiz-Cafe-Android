@@ -1,5 +1,6 @@
 package com.android.quizcafe.feature.main.home
 
+import android.util.Log
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.usecase.solving.GetAllQuizBookSolvingUseCase
 import com.android.quizcafe.core.ui.base.BaseViewModel
@@ -18,15 +19,25 @@ class HomeViewModel @Inject constructor(
                 sendIntent(HomeIntent.LoadingFetchRecord)
                 getAllQuizBookSolvingUseCase().collect { resource ->
                     when (resource) {
-                        is Resource.Success -> sendIntent(HomeIntent.SuccessFetchRecord(resource.data))
-                        is Resource.Failure -> sendIntent(HomeIntent.FailFetchRecord(resource.errorMessage))
+                        is Resource.Success -> {
+                            sendIntent(HomeIntent.SuccessFetchRecord(resource.data))
+                            Log.d("HomeScreen", resource.data.toString())
+                        }
+
+                        is Resource.Failure -> {
+                            sendIntent(HomeIntent.FailFetchRecord(resource.errorMessage))
+                            Log.d("HomeScreen", resource.errorMessage)
+                        }
+
                         else -> Unit
                     }
                 }
             }
+
             is HomeIntent.FailFetchRecord -> {
                 emitEffect(HomeEffect.ShowErrorDialog(intent.errorMessage ?: "기록 불러오기 실패"))
             }
+
             is HomeIntent.ClickHomeCard -> emitEffect(HomeEffect.NavigateToCategory(intent.quizType))
             else -> Unit
         }
@@ -36,15 +47,18 @@ class HomeViewModel @Inject constructor(
         return when (intent) {
             HomeIntent.FetchRecord,
             is HomeIntent.LoadingFetchRecord -> currentState.copy(isLoading = true, errorMessage = null)
+
             is HomeIntent.SuccessFetchRecord -> currentState.copy(
                 isLoading = false,
                 quizSolvingList = intent.quizSolvingRecords,
                 errorMessage = null
             )
+
             is HomeIntent.FailFetchRecord -> currentState.copy(
                 isLoading = false,
                 errorMessage = intent.errorMessage
             )
+
             is HomeIntent.ClickHomeCard -> currentState
         }
     }
