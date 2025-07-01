@@ -5,6 +5,7 @@ import com.android.quizcafe.core.data.model.auth.request.GoogleLoginRequestDto
 import com.android.quizcafe.core.data.model.auth.request.toDto
 import com.android.quizcafe.core.data.remote.datasource.AuthRemoteDataSource
 import com.android.quizcafe.core.datastore.AuthManager
+import com.android.quizcafe.core.datastore.LogoutReason
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.auth.request.LoginRequest
 import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
@@ -68,6 +69,11 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun resetPassword(request: ResetPasswordRequest): Flow<Resource<Unit>> =
         emptyApiResponseToResourceFlow { remoteDataSource.resetPassword(request.toDto()) }
+
+    override fun logout(): Flow<Resource<Unit>> = flow {
+        emit(Resource.Success(Unit))
+        authManager.logout(LogoutReason.UserLogout)
+    }
 
     override fun googleLogin(idToken: String): Flow<Resource<Unit>> = flow {
         emit(Resource.Loading)

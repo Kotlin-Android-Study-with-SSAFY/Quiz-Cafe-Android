@@ -27,7 +27,7 @@ sealed class QuizSolveIntent : BaseContract.ViewIntent {
 
     // 문제 제출, 풀이
     data object GradeQuizSuccess : QuizSolveIntent()
-    data class GetQuizGradeSuccess(val quizGrade: QuizGrade?) : QuizSolveIntent()
+    data class GetQuizGradeSuccess(val quizGrade: QuizGrade) : QuizSolveIntent()
     data class SubmitQuizBookSuccess(val quizBookGradeServerId: QuizBookGradeServerId) : QuizSolveIntent()
     data class HandleError(val message: String?) : QuizSolveIntent()
 
