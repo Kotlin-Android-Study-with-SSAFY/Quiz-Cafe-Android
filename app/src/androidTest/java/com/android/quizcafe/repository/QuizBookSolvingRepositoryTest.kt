@@ -84,7 +84,7 @@ class QuizBookSolvingRepositoryTest {
         setupTestData(quizBookId)
 
         val results = mutableListOf<Resource<*>>()
-        repository.createEmptyQuizBookGrade(quizBookId).collect(results::add)
+        repository.getOrCreateQuizBookGrade(quizBookId).collect(results::add)
 
         assertEquals(2, results.size)
         assertTrue(results[0] is Resource.Loading)
@@ -98,8 +98,8 @@ class QuizBookSolvingRepositoryTest {
         setupTestData(quizBookId)
 
         // 먼저 퀴즈북 풀이 생성
-        val quizBookGradeLocalId = repository.createEmptyQuizBookGrade(quizBookId).first { it is Resource.Success }
-            .let { (it as Resource.Success).data }
+        val quizBookGradeLocalId = repository.getOrCreateQuizBookGrade(quizBookId).first { it is Resource.Success }
+            .let { (it as Resource.Success).data }.localId
 
         val quizGrade = QuizGrade(
             localId = 1L,
@@ -140,7 +140,7 @@ class QuizBookSolvingRepositoryTest {
         assertEquals(quizGrade.memo, savedQuizGrade.memo)
 
         // Repository를 통해 조회한 데이터와도 비교
-        val repositoryResult = repository.getQuizBookGrade(quizBookGradeLocalId)
+        val repositoryResult = repository.getOrCreateQuizBookGrade(quizBookId)
             .first { it is Resource.Success }
             .let { (it as Resource.Success).data }
 
@@ -162,9 +162,9 @@ class QuizBookSolvingRepositoryTest {
         val quizBookId = QuizBookId(1L)
         setupTestData(quizBookId)
 
-        val quizBookGradeLocalId = repository.createEmptyQuizBookGrade(quizBookId)
+        val quizBookGradeLocalId = repository.getOrCreateQuizBookGrade(quizBookId)
             .first { it is Resource.Success }
-            .let { (it as Resource.Success).data }
+            .let { (it as Resource.Success).data }.localId
 
         // 3개 문제 중 1번만 틀리고 나머지는 맞음
         val quizGrades = listOf(
@@ -204,7 +204,7 @@ class QuizBookSolvingRepositoryTest {
 
         // When
         val solveResults = mutableListOf<Resource<QuizBookGradeServerId>>()
-        repository.solveQuizBook(quizBookGradeLocalId).collect(solveResults::add)
+        repository.solveQuizBook(quizBookGradeLocalId, 1L).collect(solveResults::add)
 
         // Then
         assertEquals(2, solveResults.size)

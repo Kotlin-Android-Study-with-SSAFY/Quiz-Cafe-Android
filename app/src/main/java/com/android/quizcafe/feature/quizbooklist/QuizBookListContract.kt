@@ -1,6 +1,7 @@
 package com.android.quizcafe.feature.quizbooklist
 
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.base.BaseContract
 
 data class QuizBookListUiState(
@@ -14,7 +15,7 @@ data class QuizBookListUiState(
 
 sealed class QuizBookListIntent : BaseContract.ViewIntent {
     data object LoadQuizBooks : QuizBookListIntent()
-    data class ClickQuizBook(val quizBookId: Long) : QuizBookListIntent()
+    data class ClickQuizBook(val quizBookId: QuizBookId) : QuizBookListIntent()
 
     data class UpdateCategory(val category: String) : QuizBookListIntent()
     data class UpdateFilterOptions(val filterState: FilterState) : QuizBookListIntent()
@@ -26,5 +27,5 @@ sealed class QuizBookListIntent : BaseContract.ViewIntent {
 sealed class QuizBookListEffect : BaseContract.ViewEffect {
     data class ShowError(val message: String) : QuizBookListEffect()
     data object NavigateToCategory : QuizBookListEffect()
-    data class NavigateToQuizBookDetail(val quizBookId: Long) : QuizBookListEffect()
+    data class NavigateToQuizBookDetail(val quizBookId: QuizBookId) : QuizBookListEffect()
 }

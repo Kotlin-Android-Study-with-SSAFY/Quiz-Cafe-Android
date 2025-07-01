@@ -119,7 +119,9 @@ fun MainBottomNavHost(
 
             QuizBookListRoute(
                 category = category,
-                navigateToQuizBookDetail = { quizBookId -> bottomNavController.navigateSingleTopTo("${MainRoute.QuizBookDetail.route}/$quizBookId") },
+                navigateToQuizBookDetail = { quizBookId ->
+                    bottomNavController.navigateSingleTopTo("${MainRoute.QuizBookDetail.route}/${quizBookId.value}")
+                },
                 navigateToCategory = {},
             )
         }

@@ -4,7 +4,7 @@ import android.util.Log
 import com.android.quizcafe.core.domain.model.quiz.Quiz
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
-import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
+import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
 import com.android.quizcafe.core.ui.base.BaseContract
 import com.android.quizcafe.feature.quiz.solve.component.AnswerState
 import java.util.Locale
@@ -47,15 +47,15 @@ data class TimerState(
 
 data class CommonState(
     val playMode: PlayMode = PlayMode.DEFAULT,
+    val isTimerActive: Boolean = true,
     val currentIndex: Int = 0
 )
 
 data class QuizSolveUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val quizBookLocalId: QuizBookGradeLocalId? = null,
     val quizBook: QuizBook? = null,
-    val quizGrades: List<QuizGrade>? = null,
+    val quizBookGrade: QuizBookGrade? = null,
     val subjective: SubjectiveState = SubjectiveState(),
     val mcq: McqState = McqState(),
     val review: ReviewState = ReviewState(),

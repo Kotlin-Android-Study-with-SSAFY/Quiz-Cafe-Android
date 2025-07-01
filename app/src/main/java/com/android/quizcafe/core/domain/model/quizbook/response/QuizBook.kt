@@ -1,9 +1,10 @@
 package com.android.quizcafe.core.domain.model.quizbook.response
 
 import com.android.quizcafe.core.domain.model.quiz.Quiz
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 data class QuizBook(
-    val id: Long,
+    val id: QuizBookId,
     val version: Long,
     val category: String,
     val title: String,

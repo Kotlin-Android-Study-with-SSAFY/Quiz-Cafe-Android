@@ -7,9 +7,10 @@ import com.android.quizcafe.core.data.model.quizbook.response.QuizBookWithQuizze
 import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
 import com.android.quizcafe.core.database.model.quizbook.QuizBookWithQuizRelation
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
+import com.android.quizcafe.core.domain.model.value.QuizBookId
 
 fun QuizBookEntity.toDomain() = QuizBook(
-    id = id,
+    id = QuizBookId(id),
     version = version,
     category = category,
     title = title,
@@ -23,7 +24,7 @@ fun QuizBookEntity.toDomain() = QuizBook(
 )
 
 fun QuizBookResponseDto.toDomain() = QuizBook(
-    id = quizBookId,
+    id = QuizBookId(quizBookId),
     version = version,
     category = category,
     description = description,
@@ -49,7 +50,7 @@ fun QuizBookWithQuizzesResponseDto.toEntity() = QuizBookEntity(
 )
 
 fun QuizBookWithQuizzesResponseDto.toDomain() = QuizBook(
-    id = quizBookId,
+    id = QuizBookId(quizBookId),
     version = version,
     category = category,
     description = description,
@@ -64,7 +65,7 @@ fun QuizBookWithQuizzesResponseDto.toDomain() = QuizBook(
 )
 
 fun QuizBookWithQuizRelation.toDomain() = QuizBook(
-    id = quizBookEntity.id,
+    id = QuizBookId(quizBookEntity.id),
     version = quizBookEntity.version,
     category = quizBookEntity.category,
     title = quizBookEntity.title,

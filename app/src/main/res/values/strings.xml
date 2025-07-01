@@ -139,4 +139,20 @@
     <string name="dialog_password_change">비밀번호 변경</string>
     <string name="dialog_cancel">취소</string>
 
+    <!-- 다이얼로그 관련 문자열 추가 -->
+    <string name="dialog_close">닫기</string>
+    <string name="dialog_exit_title">기록을 저장하시겠습니까?</string>
+    <string name="dialog_exit_description">
+        기록을 저장하지 않고 종료하면 현재까지의 풀이 기록은 삭제됩니다.
+    </string>
+    <string name="dialog_resume_title">이전에 풀던 기록이 있어요</string>
+    <string name="dialog_resume_description">
+        이어서 푸시겠어요, 아니면 새로 시작하시겠어요?
+    </string>
+
+    <string name="dialog_exit_with_delete">삭제</string>
+    <string name="dialog_exit_with_save">저장</string>
+    <string name="dialog_resume_solving">이어서 풀기</string>"
+    <string name="dialog_start_new_solving">새로 풀기</string>
+
 </resources>
