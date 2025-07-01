@@ -196,9 +196,7 @@ class QuizSolveViewModel @Inject constructor(
             }
 
             is QuizSolveIntent.GetQuizGradeSuccess ->
-                intent.quizGrade
-                    ?.let { currentState.applyFetchedGrade(it) }
-                    ?: currentState
+                currentState.applyFetchedGrade(intent.quizGrade)
 
             QuizSolveIntent.GradeQuizSuccess -> {
                 currentState.onLocalSaveSuccess()
