@@ -1,9 +1,10 @@
 package com.android.quizcafe.core.data.repository
 
 import com.android.quizcafe.core.common.network.HttpStatus
+import com.android.quizcafe.core.data.mapper.quiz.toDomain
+import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
 import com.android.quizcafe.core.data.mapper.quizbook.toDomain
-import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.model.solving.request.McqOptionSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizBookSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizSolvingRequestDto
@@ -24,6 +25,7 @@ import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import com.android.quizcafe.core.domain.model.value.QuizId
 import com.android.quizcafe.core.domain.repository.QuizBookSolvingRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
 import com.android.quizcafe.core.network.mapper.apiResponseToResource
@@ -33,6 +35,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
+import kotlin.collections.map
 
 class QuizBookSolvingRepositoryImpl @Inject constructor(
     private val quizGradeDao: QuizGradeDao,
@@ -58,6 +61,19 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         }
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
+    }
+
+    override fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade>> = flow {
+        emit(Resource.Loading)
+        val quizGradeRelation = quizGradeDao.getQuizGradeByQuizId(quizId.value, quizBookGradeLocalId.value)
+        val quizGrade = quizGradeRelation?.toDomain()
+        if (quizGrade == null) {
+            emit(Resource.Failure(errorMessage = "퀴즈 Grade 조회 실패", code = LocalErrorCode.ROOM_ERROR))
+        } else {
+            emit(Resource.Success(quizGrade))
+        }
+    }.catch { e ->
+        emit(Resource.Failure(errorMessage = "퀴즈 한문제씩 가져오다가 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
     // 퀴즈북 풀이 기록 가져오기

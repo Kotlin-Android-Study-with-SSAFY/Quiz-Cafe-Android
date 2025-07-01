@@ -24,7 +24,7 @@ fun QuizResponseDto.toDomain() = Quiz(
     content = content,
     answer = answer,
     explanation = explanation,
-    mcqOption = mcqOption.fastMap { it.toDomain() }
+    mcqOption = mcqOption?.fastMap { it.toDomain() }
 )
 
 fun QuizWithMcqOptionsRelation.toDomain() = Quiz(

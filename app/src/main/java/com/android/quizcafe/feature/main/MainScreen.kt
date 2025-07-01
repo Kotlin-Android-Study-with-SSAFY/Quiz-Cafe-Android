@@ -134,7 +134,6 @@ fun MainBottomNavHost(
             )
         ) { backStackEntry ->
             val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
-
             QuizBookDetailRoute(
                 quizBookId = quizBookId,
                 navigateToQuizBookPicker = {},
