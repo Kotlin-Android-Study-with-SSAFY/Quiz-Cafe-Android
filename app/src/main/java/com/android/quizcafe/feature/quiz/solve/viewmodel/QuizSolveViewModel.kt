@@ -72,9 +72,11 @@ class QuizSolveViewModel @Inject constructor(
                     currentState.common.playMode == PlayMode.REVIEW_MODE && !currentState.review.showExplanation -> {
                         saveQuizToLocal()
                     }
+
                     currentState.common.playMode == PlayMode.REVIEW_MODE && currentState.isLastQuestion -> {
                         submitQuizAnswer()
                     }
+
                     else -> {
                         saveQuizToLocal()
                         if (currentState.isLastQuestion) {
@@ -87,18 +89,22 @@ class QuizSolveViewModel @Inject constructor(
             QuizSolveIntent.NavigateToPreviousQuestion -> {
                 getQuizAnswer()
             }
+
             is QuizSolveIntent.GradeQuizSuccess -> {
                 val currentState = state.value
                 when {
                     currentState.common.playMode == PlayMode.REVIEW_MODE -> {
                         getQuizAnswer()
                     }
+
                     !currentState.isLastQuestion && currentState.common.playMode == PlayMode.DEFAULT -> {
                         getQuizAnswer()
                     }
+
                     else -> Unit
                 }
             }
+
             is QuizSolveIntent.SelectAnswer,
             is QuizSolveIntent.UpdateSubjectiveAnswer,
             is QuizSolveIntent.LoadQuizBookSuccess,
@@ -178,13 +184,13 @@ class QuizSolveViewModel @Inject constructor(
             }
 
             is QuizSolveIntent.GetQuizGradeSuccess ->
-                intent.quizGrade
-                    ?.let { currentState.applyFetchedGrade(it) }
-                    ?: currentState
+                currentState.applyFetchedGrade(intent.quizGrade)
+
 
             QuizSolveIntent.GradeQuizSuccess -> {
                 currentState.onLocalSaveSuccess()
             }
+
             is QuizSolveIntent.HandleError,
             QuizSolveIntent.NavigateBack,
             QuizSolveIntent.NavigateToNextQuestion,

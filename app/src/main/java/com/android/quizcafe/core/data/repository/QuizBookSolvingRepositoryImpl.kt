@@ -63,11 +63,14 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         emit(Resource.Failure(errorMessage = "QuizBookGrade 생성 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
-    override fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade?>> = flow {
+    override fun getQuizGrade(quizBookGradeLocalId: QuizBookGradeLocalId, quizId: QuizId): Flow<Resource<QuizGrade>> = flow {
         emit(Resource.Loading)
         val quizGradeRelation = quizGradeDao.getQuizGradeByQuizId(quizId.value, quizBookGradeLocalId.value)
         val quizGrade = quizGradeRelation?.toDomain()
-        emit(Resource.Success(quizGrade))
+        if(quizGrade == null)
+            emit(Resource.Failure(errorMessage = "퀴즈 Grade 조회 실패", code = LocalErrorCode.ROOM_ERROR))
+        else
+            emit(Resource.Success(quizGrade))
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈 한문제씩 가져오다가 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
