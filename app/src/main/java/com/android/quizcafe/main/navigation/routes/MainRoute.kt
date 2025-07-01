@@ -31,6 +31,10 @@ sealed interface MainRoute : NavRoute {
         override val route = "${Graph.route}/quiz-book-detail"
     }
 
+    data object UpdateUserInfo : MainRoute {
+        override val route = "${Graph.route}/update-user-info"
+    }
+
     companion object {
         val startDestination = Home.route
     }

@@ -1,6 +1,7 @@
 package com.android.quizcafe.core.domain.model.solving
 
 import com.android.quizcafe.core.domain.model.value.QuizBookId
+import java.util.SortedMap
 import kotlin.time.Duration
 
 data class QuizBookSolving(
@@ -37,3 +38,22 @@ data class QuizBookSolving(
         }
     }
 }
+
+/**
+ * completedAt 문자열(예: "2025-06-25T11:21:03.530Z")에서
+ * YYYY-MM-DD 부분만 잘라내어 반환합니다.
+ */
+fun QuizSolving.getCompletedDate(): String =
+    this.completedAt.take(10)
+
+/**
+ * 연속된 QuizSolving 시퀀스에서 일자별 풀이 횟수를 집계하여
+ * 날짜(키)순으로 정렬된 맵을 반환합니다.
+ */
+fun Sequence<QuizSolving>.toDailyCounts(): SortedMap<String, Int> =
+    this
+        .filter { it.completedAt.isNotBlank() }
+        .map { it.getCompletedDate() }
+        .groupingBy { it }
+        .eachCount()
+        .toSortedMap()
