@@ -23,7 +23,6 @@ import com.android.quizcafe.feature.quizbooklist.QuizBookListRoute
 import com.android.quizcafe.main.navigation.navigatePopUpToStartDestination
 import com.android.quizcafe.main.navigation.navigateSingleTopTo
 import com.android.quizcafe.main.navigation.routes.MainRoute
-import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 import com.android.quizcafe.main.navigation.routes.UpdateRoute
 
 data class MainTab(
