@@ -63,7 +63,6 @@ fun LatestQuizBooksContent(
                     style = MaterialTheme.typography.labelMedium
                 )
             }
-
         }
 
         val itemHeight = 88.dp
