@@ -12,7 +12,7 @@ class McqGradingStrategy : GradingStrategy {
     override fun grade(quiz: Quiz, userAnswer: String): Boolean {
         return try {
             val correctIndex = quiz.answer.toInt() - 1
-            val correctAnswer = quiz.mcqOption[correctIndex].optionContent
+            val correctAnswer = quiz.mcqOption?.get(correctIndex)?.optionContent
             correctAnswer.equals(userAnswer, ignoreCase = true)
         } catch (e: Exception) {
             false

@@ -19,7 +19,9 @@ fun HomeRoute(
 
     LaunchedEffect(Unit) {
         viewModel.sendIntent(HomeIntent.FetchRecord)
+    }
 
+    LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
                 is HomeEffect.ShowErrorDialog -> {

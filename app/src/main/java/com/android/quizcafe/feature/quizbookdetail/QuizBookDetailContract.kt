@@ -6,6 +6,7 @@ import com.android.quizcafe.core.ui.base.BaseContract
 data class QuizBookDetailUiState(
     val quizBookId: Long = 2,
     val quizBookDetail: QuizBookDetail = QuizBookDetail(),
+    val isReviewModeChecked: Boolean = false,
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
 ) : BaseContract.UiState
@@ -13,6 +14,7 @@ data class QuizBookDetailUiState(
 sealed class QuizBookDetailIntent : BaseContract.ViewIntent {
     data object LoadQuizBookDetail : QuizBookDetailIntent()
     data class ClickQuizSolve(val quizBookId: Long) : QuizBookDetailIntent()
+    data class ClickReviewMode(val isChecked: Boolean) : QuizBookDetailIntent()
     data object ClickMarkQuizBook : QuizBookDetailIntent()
     data object ClickUnmarkQuizBook : QuizBookDetailIntent()
     data object ClickUser : QuizBookDetailIntent()
