@@ -1,14 +1,13 @@
 package com.android.quizcafe.core.domain.usecase.auth
 
 import com.android.quizcafe.core.domain.model.Resource
-import com.android.quizcafe.core.domain.model.auth.request.ResetPasswordRequest
 import com.android.quizcafe.core.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class ResetPasswordUseCase @Inject constructor(
+class LogoutUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    operator fun invoke(email: String): Flow<Resource<Unit>> =
-        authRepository.resetPassword(ResetPasswordRequest(email = email))
+    operator fun invoke(): Flow<Resource<Unit>> =
+        authRepository.logout()
 }

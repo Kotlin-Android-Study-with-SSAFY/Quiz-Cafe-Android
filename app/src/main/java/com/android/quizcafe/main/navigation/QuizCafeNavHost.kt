@@ -14,12 +14,14 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.android.quizcafe.feature.login.LoginRoute
 import com.android.quizcafe.feature.main.MainScreen
+import com.android.quizcafe.feature.main.updateuserinfo.UpdateUserInfoRoute
 import com.android.quizcafe.feature.quiz.solve.QuizSolveRoute
 import com.android.quizcafe.feature.quiz.solvingResult.QuizBookSolvingResultRoute
 import com.android.quizcafe.feature.signup.SignUpRoute
 import com.android.quizcafe.main.navigation.routes.AuthRoute
 import com.android.quizcafe.main.navigation.routes.MainRoute
 import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
+import com.android.quizcafe.main.navigation.routes.UpdateRoute
 
 @Composable
 fun QuizCafeNavHost(
@@ -71,6 +73,7 @@ fun NavGraphBuilder.mainGraph(navController: NavHostController) {
     ) {
         composable(MainRoute.Home.route) { MainScreen(rootNavController = navController) }
         quizSolveGraph(navController)
+        updateUserInfoGraph(navController)
     }
 }
 
@@ -119,6 +122,27 @@ fun NavGraphBuilder.quizSolveGraph(navController: NavHostController) {
                 navigateToMain = {
                     navController.navigateAndClearBackStack(MainRoute.Graph.route)
                 }
+            )
+        }
+    }
+}
+
+// 사용자 정보 변경 그래프
+fun NavGraphBuilder.updateUserInfoGraph(navController: NavHostController) {
+    navigation(
+        startDestination = UpdateRoute.startDestination,
+        route = UpdateRoute.Graph.route
+    ) {
+        composable(UpdateRoute.UpdatePasswords.route) {
+            UpdateUserInfoRoute(
+                step = 0,
+                onNavigateBack = { navController.popBackStack() }
+            )
+        }
+        composable(UpdateRoute.UpdateNickname.route) {
+            UpdateUserInfoRoute(
+                step = 1,
+                onNavigateBack = { navController.popBackStack() }
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.android.quizcafe.feature.main.home
+package com.android.quizcafe.feature.main.updateuserinfo
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable
@@ -10,33 +10,32 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun HomeRoute(
-    navigateToCategory: (String) -> Unit,
-    viewModel: HomeViewModel = hiltViewModel()
+fun UpdateUserInfoRoute(
+    step: Int,
+    onNavigateBack: () -> Unit,
+    viewModel: UpdateUserInfoViewModel = hiltViewModel()
 ) {
-    val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-
-    LaunchedEffect(Unit) {
-        viewModel.sendIntent(HomeIntent.FetchRecord)
-    }
+    val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
         viewModel.effect.collectLatest { effect ->
             when (effect) {
-                is HomeEffect.ShowErrorDialog -> {
+                is UpdateUserInfoEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
-                is HomeEffect.NavigateToCategory -> {
-                    navigateToCategory(effect.quizType)
+                is UpdateUserInfoEffect.NavigateBack -> {
+                    onNavigateBack()
                 }
             }
         }
     }
 
-    HomeScreen(
+    UpdateUserInfoScreen(
+        step = step,
         state = state,
-        sendIntent = viewModel::sendIntent
+        intent = viewModel::sendIntent,
+        onNavigateBack = onNavigateBack
     )
 }
