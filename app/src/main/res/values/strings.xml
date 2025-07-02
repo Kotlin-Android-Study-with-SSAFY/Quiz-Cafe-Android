@@ -26,7 +26,8 @@
     <string name="resend">재전송</string>
     <string name="quiz_topbar_title">문제 %1$d of %2$d</string>
     <string name="quiz_time_format">%1$02d:%2$02d</string>
-    <string name="solve_btn_next_text">다음 문제</string>
+    <string name="solve_btn_next_text">다음</string>
+    <string name="solve_btn_prev_text">이전</string>
     <string name="pick_category">카테고리 선택</string>
     <string name="filter">필터</string>
     <string name="quiz_book_count_description">%1$s개의 문제집이 있어요</string>
@@ -90,7 +91,10 @@
     <string name="quiz_book_description">문제집 설명</string>
     <string name="quiz_list">문제 목록</string>
     <string name="solve_now">바로 문제 풀기</string>
-    <string name="error">오류</string>
+    <string name="notification">알림</string>
+    <string name="dialog_message_user_logout">성공적으로 로그아웃하였습니다.</string>
+    <string name="dialog_message_user_withdrawal">성공적으로 회원탈퇴하였습니다.</string>
+    <string name="dialog_message_password_updated">비밀번호가 변경되어 다시 로그인해주세요.</string>
     <string name="confirm">확인</string>
     <string name="solving_description">풀고있어요</string>
     <string name="solved_description">풀어봤어요</string>
@@ -99,5 +103,47 @@
     <string name="no_solved_quizbook">풀어본 문제가 없어요.</string>
     <string name="my_result">내 결과</string>
     <string name="solving">풀이 중</string>
+
+
+    <!-- MyPage -->
+    <string name="mypage_solved_problem">푼 문제</string>
+    <string name="mypage_my_quiz_set">문제집</string>
+    <string name="mypage_menu_stats">학습 통계</string>
+    <string name="mypage_menu_alarm">알림 설정</string>
+    <string name="mypage_menu_change_user_info">회원 정보 변경</string>
+    <string name="mypage_menu_my_quiz_set">내가 만든 문제집 보기</string>
+    <string name="mypage_menu_logout">로그아웃</string>
+    <string name="mypage_menu_withdrawal">회원 탈퇴</string>
+
+    <string name="update_nickname_title">닉네임 변경</string>
+    <string name="update_password_title">비밀번호 변경</string>
+    <string name="current_password">기존 비밀번호</string>
+    <string name="new_password">새 비밀번호</string>
+    <string name="new_password_confirm">새 비밀번호 확인</string>
+    <string name="update">변경하기</string>
+    <string name="update_nickname_button">닉네임 변경</string>
+    <string name="update_password_button">비밀번호 변경</string>
+
+    <string name="mypage_record_title">나의 기록</string>
+    <string name="mypage_record_max_streak">한 번도 쉬지 않고 푼 최장 기록: %1$d일</string>
+    <string name="mypage_record_current_streak">연속 풀이 챌린지 달성: %1$d일</string>
+    <string name="week_mon">Mon</string>
+    <string name="week_tue">Tue</string>
+    <string name="week_wed">Wed</string>
+    <string name="week_thu">Thu</string>
+    <string name="week_fri">Fri</string>
+    <string name="week_sat">Sat</string>
+    <string name="week_sun">Sun</string>
+
+    <!-- 다이얼로그 -->
+    <string name="dialog_message_logout">정말 로그아웃 하시겠습니까?</string>
+    <string name="dialog_message_withdrawal_first">정말 회원탈퇴를 하시겠습니까?</string>
+    <string name="dialog_message_withdrawal_final">회원탈퇴를 하시면 \n이전 계정은 복구가 되지 않습니다.\n정말 탈퇴하시겠습니까?</string>
+    <string name="dialog_yes">네</string>
+    <string name="dialog_no">아니오</string>
+    <string name="update_user_info">회원정보 변경</string>
+    <string name="dialog_nickname_change">닉네임 변경</string>
+    <string name="dialog_password_change">비밀번호 변경</string>
+    <string name="dialog_cancel">취소</string>
 
 </resources>

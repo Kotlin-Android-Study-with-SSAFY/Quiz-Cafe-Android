@@ -2,6 +2,7 @@ package com.android.quizcafe.core.datastore
 
 import android.util.Log
 import com.android.quizcafe.core.common.network.di.ApplicationScope
+import com.android.quizcafe.core.datastore.di.GoogleAuthManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,6 +12,7 @@ import javax.inject.Inject
 
 class AuthManager @Inject constructor(
     private val authDataStore: AuthDataStore,
+    private val googleAuthManager: GoogleAuthManager,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     @Volatile
@@ -88,5 +90,13 @@ class AuthManager @Inject constructor(
 
             _logoutEvent.emit(reason)
         }
+    }
+
+    suspend fun signInWithGoogle(): String? {
+        return googleAuthManager.signInWithGoogle()
+    }
+
+    suspend fun googleLogout() {
+        googleAuthManager.googleLogout()
     }
 }

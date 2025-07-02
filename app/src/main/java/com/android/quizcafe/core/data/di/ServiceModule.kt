@@ -4,6 +4,7 @@ import com.android.quizcafe.core.data.remote.service.AuthService
 import com.android.quizcafe.core.data.remote.service.QuizBookService
 import com.android.quizcafe.core.data.remote.service.QuizBookSolvingService
 import com.android.quizcafe.core.data.remote.service.QuizService
+import com.android.quizcafe.core.data.remote.service.UserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +28,12 @@ object ServiceModule {
     fun provideQuizBookService(
         @Named("token") retrofit: Retrofit
     ): QuizBookService = retrofit.create(QuizBookService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserService(
+        @Named("token") retrofit: Retrofit
+    ): UserService = retrofit.create(UserService::class.java)
 
     @Provides
     @Singleton

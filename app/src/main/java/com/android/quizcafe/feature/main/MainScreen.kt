@@ -25,6 +25,7 @@ import com.android.quizcafe.main.navigation.navigatePopUpToStartDestination
 import com.android.quizcafe.main.navigation.navigateSingleTopTo
 import com.android.quizcafe.main.navigation.routes.MainRoute
 import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
+import com.android.quizcafe.main.navigation.routes.UpdateRoute
 
 data class MainTab(
     val route: String,
@@ -87,9 +88,14 @@ fun MainBottomNavHost(
         }
         composable(MainRoute.MyPage.route) {
             MyPageRoute(
-//                navigateToSetting = {
-//                    navController.navigateSingleTopTo()
-//                }
+                navigateToUpdateUserInfo = { step ->
+                    val target = when (step) {
+                        0 -> UpdateRoute.UpdatePasswords.route
+                        1 -> UpdateRoute.UpdateNickname.route
+                        else -> UpdateRoute.Graph.route
+                    }
+                    rootNavController.navigateSingleTopTo(target)
+                }
             )
         }
         composable(MainRoute.CategoryList.route) {
@@ -127,7 +133,6 @@ fun MainBottomNavHost(
             )
         ) { backStackEntry ->
             val quizBookId = backStackEntry.arguments?.getLong("quizBookId") ?: 0L
-
             QuizBookDetailRoute(
                 quizBookId = quizBookId,
                 navigateToQuizBookPicker = {},
