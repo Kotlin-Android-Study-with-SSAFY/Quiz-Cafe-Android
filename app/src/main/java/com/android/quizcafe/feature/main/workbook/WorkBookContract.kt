@@ -22,9 +22,7 @@ data class WorkBookUiState(
 ) : BaseContract.UiState
 
 sealed class WorkBookIntent : BaseContract.ViewIntent {
-    data object LoadWorkBookList : WorkBookIntent()
-    data class UpdateWorkBookState(val workBookState: WorkBookState) : WorkBookIntent()
-
+    data class ClickWorkBookFilter(val workBookState: WorkBookState) : WorkBookIntent()
     data class ClickSolvingCard(val id: QuizBookId) : WorkBookIntent()
     data class ClickSolvedCard(val id: QuizBookGradeServerId) : WorkBookIntent()
 

@@ -42,7 +42,7 @@ fun WorkbookScreen(
             modifier = Modifier.fillMaxWidth(),
             options = WorkBookState.entries,
             selectedOption = state.currentWorkBookState,
-            onOptionSelected = { sendIntent(WorkBookIntent.UpdateWorkBookState(it)) },
+            onOptionSelected = { sendIntent(WorkBookIntent.ClickWorkBookFilter(it)) },
             optionToText = { it.resId }
         )
         Spacer(modifier = Modifier.height(16.dp))

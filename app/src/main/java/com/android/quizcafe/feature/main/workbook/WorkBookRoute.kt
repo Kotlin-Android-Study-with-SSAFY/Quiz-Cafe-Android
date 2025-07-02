@@ -14,10 +14,6 @@ fun WorkBookRoute(
     viewModel: WorkBookViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.sendIntent(WorkBookIntent.LoadWorkBookList)
-    }
-
-    LaunchedEffect(Unit) {
         viewModel.effect.collect {
             when (it) {
                 is WorkBookEffect.NavigateToSolveQuiz -> navigateToSolveQuiz(it.id)
