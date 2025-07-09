@@ -14,8 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.android.quizcafe.R
 import com.android.quizcafe.core.designsystem.theme.QuizCafeTheme
-import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
-import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.ui.TitleWithUnderLine
 
 @Composable
@@ -33,7 +31,7 @@ fun HomeScreen(
         LazyColumn(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            item { QuizRecordContent(quizSolving = state.quizSolvingList) }
+            item { LatestQuizBooksContent(quizBooks = state.latestQuizBooks) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item { QuizModeContent { sendIntent(HomeIntent.ClickHomeCard("")) } }
         }
@@ -46,22 +44,7 @@ fun HomeScreenPreview() {
     QuizCafeTheme {
         HomeScreen(
             state = HomeUiState(
-                quizSolvingList = listOf(
-                    QuizBookSolving(
-                        id = 1,
-                        userId = 1,
-                        quizBookId = QuizBookId(1),
-                        version = 1,
-                        level = "EASY",
-                        category = "운영체제",
-                        title = "성준이의 운영체제",
-                        description = "",
-                        totalQuizzes = 20,
-                        correctCount = 16,
-                        completedAt = "2025-06-09T05:14:05.986Z",
-                        quizSolvingList = emptyList()
-                    ),
-                )
+                latestQuizBooks = emptyList()
             ),
             sendIntent = {}
         )

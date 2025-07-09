@@ -10,15 +10,15 @@ import com.android.quizcafe.core.data.model.quizbook.response.QuizBookWithQuizze
 import com.android.quizcafe.core.data.model.quizbook.response.toDomain
 import com.android.quizcafe.core.data.remote.datasource.QuizBookRemoteDataSource
 import com.android.quizcafe.core.data.util.LocalErrorCode
-import com.android.quizcafe.core.database.dao.quizBook.QuizBookDao
 import com.android.quizcafe.core.database.dao.quiz.QuizDao
+import com.android.quizcafe.core.database.dao.quizBook.QuizBookDao
 import com.android.quizcafe.core.domain.model.Resource
+import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
 import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookDetailRequest
+import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.domain.model.quizbook.response.Category
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBook
 import com.android.quizcafe.core.domain.model.quizbook.response.QuizBookDetail
-import com.android.quizcafe.core.domain.model.quizbook.request.CategoryRequest
-import com.android.quizcafe.core.domain.model.quizbook.request.QuizBookRequest
 import com.android.quizcafe.core.domain.model.value.QuizBookId
 import com.android.quizcafe.core.domain.repository.QuizBookRepository
 import com.android.quizcafe.core.network.mapper.apiResponseListToResourceFlow
@@ -74,6 +74,11 @@ class QuizBookRepositoryImpl @Inject constructor(
 
     override fun unmarkQuizBook(quizBookId: Long): Flow<Resource<Unit>> =
         noContentResponseToResourceFlow { quizBookRemoteDataSource.unmarkQuizBook(quizBookId) }
+
+    override fun getLatestQuizBook(): Flow<Resource<List<QuizBook>>> =
+        apiResponseListToResourceFlow(mapper = { it.toDomain() }) {
+            quizBookRemoteDataSource.getLatestQuizBook()
+        }
 
     // 서버 데이터를 로컬 DB에 저장
     private suspend fun saveQuizBookToLocal(quizBookDto: QuizBookWithQuizzesResponseDto) {
