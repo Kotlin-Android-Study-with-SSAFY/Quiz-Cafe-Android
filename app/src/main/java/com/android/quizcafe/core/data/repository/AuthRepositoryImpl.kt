@@ -47,7 +47,8 @@ class AuthRepositoryImpl @Inject constructor(
                 .onSuccess { response ->
                     response.data?.let { it ->
                         emit(Resource.Success(Unit))
-                        authManager.saveAccessToken(it.accessToken)
+                        authManager.saveToken(it.accessToken, it.refreshToken)
+                        authManager.saveUserEmail(it.userEmail)
                     } ?: emit(Resource.Failure(errorMessage = "LoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
                 }
                 .onError { code, message ->
@@ -81,7 +82,8 @@ class AuthRepositoryImpl @Inject constructor(
             remoteDataSource.googleLogin(GoogleLoginRequestDto(idToken))
                 .onSuccess { response ->
                     response.data?.let {
-                        authManager.saveAccessToken(it.accessToken)
+                        authManager.saveToken(it.accessToken, it.refreshToken)
+                        authManager.saveUserEmail(it.userEmail)
                         emit(Resource.Success(Unit))
                     } ?: emit(Resource.Failure("GoogleLoginResponse data is null", HttpStatus.INTERNAL_SERVER_ERROR))
                 }

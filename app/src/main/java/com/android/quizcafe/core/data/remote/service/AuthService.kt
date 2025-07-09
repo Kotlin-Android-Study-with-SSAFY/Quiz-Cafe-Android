@@ -8,6 +8,7 @@ import com.android.quizcafe.core.data.model.auth.request.VerifyCodeRequestDto
 import com.android.quizcafe.core.data.model.auth.response.LoginResponseDto
 import com.android.quizcafe.core.network.model.ApiResponse
 import com.android.quizcafe.core.network.model.NetworkResult
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -43,4 +44,9 @@ interface AuthService {
     suspend fun resetPassword(
         @Query("email") email: String
     ): NetworkResult<ApiResponse<Unit>>
+
+    @POST("auth/reissue")
+    fun renewToken(
+        @Body refreshToken: String
+    ): Response<LoginResponseDto>
 }

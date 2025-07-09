@@ -22,14 +22,19 @@ class AuthDataStore @Inject constructor(
     companion object {
         private val ACCESS_TOKEN = stringPreferencesKey("access_token")
         private val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
+        private val USER_EMAIL = stringPreferencesKey("user_email")
     }
 
     val accessTokenFlow = ACCESS_TOKEN.flowIn(dataStore)
     val refreshTokenFlow = REFRESH_TOKEN.flowIn(dataStore)
+    val userEmailFlow = USER_EMAIL.flowIn(dataStore)
 
     suspend fun saveAccessToken(token: String) = ACCESS_TOKEN.saveTo(dataStore, token)
     suspend fun deleteAccessToken() = ACCESS_TOKEN.deleteFrom(dataStore)
 
     suspend fun saveRefreshToken(token: String) = REFRESH_TOKEN.saveTo(dataStore, token)
     suspend fun deleteRefreshToken() = REFRESH_TOKEN.deleteFrom(dataStore)
+
+    suspend fun saveUserEmail(email: String) = USER_EMAIL.saveTo(dataStore, email)
+    suspend fun deleteUserEmail() = USER_EMAIL.deleteFrom(dataStore)
 }

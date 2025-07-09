@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 var startDestination: String? by remember { mutableStateOf(null) }
 
                 LaunchedEffect(Unit) {
-                    val accessToken = authManager.getToken()
+                    val accessToken = authManager.getAccessToken()
                     startDestination = if (accessToken != null) MainRoute.Graph.route else AuthRoute.Graph.route
                 }
                 startDestination?.let {

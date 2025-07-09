@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "e8b0c98f11a3e10bbae77fa64b2c1a67",
+    "identityHash": "b1ae2b37ba98f5333b243124f865a08b",
     "entities": [
       {
         "tableName": "quiz",
@@ -218,7 +218,7 @@
       },
       {
         "tableName": "QuizBookGradeEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `serverId` INTEGER, `quizBookId` INTEGER NOT NULL, `elapsedTime` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`localId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `serverId` INTEGER, `quizBookId` INTEGER NOT NULL, `userEmail` TEXT NOT NULL, `elapsedTime` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "localId",
@@ -236,6 +236,12 @@
             "fieldPath": "quizBookId",
             "columnName": "quizBookId",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userEmail",
+            "columnName": "userEmail",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -324,7 +330,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e8b0c98f11a3e10bbae77fa64b2c1a67')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b1ae2b37ba98f5333b243124f865a08b')"
     ]
   }
 }

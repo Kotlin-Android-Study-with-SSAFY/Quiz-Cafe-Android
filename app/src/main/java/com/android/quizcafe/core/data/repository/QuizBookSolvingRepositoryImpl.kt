@@ -2,9 +2,9 @@ package com.android.quizcafe.core.data.repository
 
 import com.android.quizcafe.core.common.network.HttpStatus
 import com.android.quizcafe.core.data.mapper.quiz.toDomain
-import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.mapper.quiz.toEntity
 import com.android.quizcafe.core.data.mapper.quizbook.toDomain
+import com.android.quizcafe.core.data.mapper.solving.toDomain
 import com.android.quizcafe.core.data.model.solving.request.McqOptionSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizBookSolvingRequestDto
 import com.android.quizcafe.core.data.model.solving.request.QuizSolvingRequestDto
@@ -18,9 +18,11 @@ import com.android.quizcafe.core.database.dao.quizBook.QuizBookGradeDao
 import com.android.quizcafe.core.database.model.grading.QuizBookGradeEntity
 import com.android.quizcafe.core.database.model.grading.QuizGradeEntity
 import com.android.quizcafe.core.database.model.quizbook.QuizBookEntity
+import com.android.quizcafe.core.datastore.AuthManager
 import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
+import com.android.quizcafe.core.domain.model.solving.QuizBookGradeWithQuizBook
 import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
@@ -35,14 +37,14 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
-import kotlin.collections.map
 
 class QuizBookSolvingRepositoryImpl @Inject constructor(
     private val quizGradeDao: QuizGradeDao,
     private val quizDao: QuizDao,
     private val quizBookDao: QuizBookDao,
     private val quizBookGradeDao: QuizBookGradeDao,
-    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource
+    private val quizBookSolvingRemoteDataSource: QuizBookSolvingRemoteDataSource,
+    private val authManager: AuthManager
 ) : QuizBookSolvingRepository {
 
     /**
@@ -51,7 +53,14 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
      */
     override fun createEmptyQuizBookGrade(id: QuizBookId): Flow<Resource<QuizBookGradeLocalId>> = flow {
         emit(Resource.Loading)
-        val entity = QuizBookGradeEntity(quizBookId = id.value)
+        
+        val userEmail = authManager.getUserEmail()
+        if (userEmail == null) {
+            emit(Resource.Failure(errorMessage = "사용자 이메일 조회 오류", code = LocalErrorCode.USER_EMAIL_NOT_FOUND))
+            return@flow
+        }
+        
+        val entity = QuizBookGradeEntity(quizBookId = id.value, userEmail = userEmail)
         val generatedId = quizBookGradeDao.upsertQuizBookGrade(entity)
 
         if (generatedId <= 0L) {
@@ -89,6 +98,22 @@ class QuizBookSolvingRepositoryImpl @Inject constructor(
         }
     }.catch { e ->
         emit(Resource.Failure(errorMessage = "퀴즈북 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
+    }
+
+    // 퀴즈북 정보 + 풀이 기록 가져오기
+    override fun getAllQuizBookGradeWithQuizBook(): Flow<Resource<List<QuizBookGradeWithQuizBook>>> = flow {
+        emit(Resource.Loading)
+
+        val userEmail = authManager.getUserEmail()
+        if (userEmail == null) {
+            emit(Resource.Failure(errorMessage = "사용자 이메일 조회 오류", code = LocalErrorCode.USER_EMAIL_NOT_FOUND))
+            return@flow
+        }
+        val quizBookGradeListWithQuizBook = quizBookGradeDao.getAllQuizBookGradeWithQuizBook(userEmail)
+        val quizBookGrade = quizBookGradeListWithQuizBook.map { it.toDomain() }
+        emit(Resource.Success(quizBookGrade))
+    }.catch { e ->
+        emit(Resource.Failure(errorMessage = "퀴즈북 정보를 포함한 풀이 기록 조회 중 오류: ${e.message}", code = LocalErrorCode.ROOM_ERROR))
     }
 
     override fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>> = flow {

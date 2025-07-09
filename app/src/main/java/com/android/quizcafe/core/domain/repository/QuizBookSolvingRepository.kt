@@ -4,6 +4,7 @@ import com.android.quizcafe.core.domain.model.Resource
 import com.android.quizcafe.core.domain.model.quiz.QuizGrade
 import com.android.quizcafe.core.domain.model.solving.QuizBookSolving
 import com.android.quizcafe.core.domain.model.solving.QuizBookGrade
+import com.android.quizcafe.core.domain.model.solving.QuizBookGradeWithQuizBook
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeLocalId
 import com.android.quizcafe.core.domain.model.value.QuizBookGradeServerId
 import com.android.quizcafe.core.domain.model.value.QuizBookId
@@ -22,6 +23,9 @@ interface QuizBookSolvingRepository {
 
     // 퀴즈북 풀이 완료 기록 가져오기 (서버)
     fun getQuizBookSolving(id: QuizBookGradeServerId): Flow<Resource<QuizBookSolving>>
+
+    // 사용자의 퀴즈 풀이 기록 + 퀴즈북 정보 가져오기
+    fun getAllQuizBookGradeWithQuizBook(): Flow<Resource<List<QuizBookGradeWithQuizBook>>>
 
     // 사용자의 퀴즈북 풀이 전부 가져오기
     fun getAllQuizBookSolving(): Flow<Resource<List<QuizBookSolving>>>

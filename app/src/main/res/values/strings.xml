@@ -99,6 +99,13 @@
     <string name="dialog_message_user_withdrawal">성공적으로 회원탈퇴하였습니다.</string>
     <string name="dialog_message_password_updated">비밀번호가 변경되어 다시 로그인해주세요.</string>
     <string name="confirm">확인</string>
+    <string name="solving_description">풀고있어요</string>
+    <string name="solved_description">풀어봤어요</string>
+    <string name="no_solving_quizbook">풀고있는 문제가 없어요.</string>
+    <string name="solving_history">풀이 기록</string>
+    <string name="no_solved_quizbook">풀어본 문제가 없어요.</string>
+    <string name="my_result">내 결과</string>
+    <string name="solving">풀이 중</string>
 
 
     <!-- MyPage -->
