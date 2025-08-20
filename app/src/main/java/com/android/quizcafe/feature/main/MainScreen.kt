@@ -24,6 +24,7 @@ import com.android.quizcafe.main.navigation.navigatePopUpToStartDestination
 import com.android.quizcafe.main.navigation.navigateSingleTopTo
 import com.android.quizcafe.main.navigation.routes.MainRoute
 import com.android.quizcafe.main.navigation.routes.UpdateRoute
+import com.android.quizcafe.main.navigation.routes.QuizSolveRoute
 
 data class MainTab(
     val route: String,
